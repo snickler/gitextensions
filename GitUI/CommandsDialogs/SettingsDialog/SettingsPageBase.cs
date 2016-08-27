@@ -11,15 +11,15 @@ namespace GitUI.CommandsDialogs.SettingsDialog
     /// </summary>
     public class SettingsPageBase : GitExtensionsControl, ISettingsPage
     {
-        private ISettingsPageHost _PageHost;
+        private ISettingsPageHost _pageHost;
         protected ISettingsPageHost PageHost
         {
             get
             {
-                if (_PageHost == null)
+                if (_pageHost == null)
                     throw new InvalidOperationException("PageHost instance was not passed to page: " + GetType().FullName);
 
-                return _PageHost;
+                return _pageHost;
             }
         }
 
@@ -31,7 +31,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
 
         protected virtual void Init(ISettingsPageHost aPageHost)
         {
-            _PageHost = aPageHost;
+            _pageHost = aPageHost;
         }
 
         public static T Create<T>(ISettingsPageHost aPageHost) where T : SettingsPageBase, new()

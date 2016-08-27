@@ -44,6 +44,10 @@ namespace BackgroundFetch
 
         private void OnPostSettings(object sender, GitUIPostActionEventArgs e)
         {
+            if (!e.ActionDone)
+            {
+                return;
+            }
             RecreateObservable();
         }
 

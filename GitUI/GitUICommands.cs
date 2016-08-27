@@ -1246,9 +1246,8 @@ namespace GitUI
         {
             Func<bool> action = () =>
             {
-                FormSettings.ShowSettingsDialog(this, owner, initialPage);
-
-                return true;
+                var result = FormSettings.ShowSettingsDialog(this, owner, initialPage);
+                return result == DialogResult.OK;
             };
 
             return DoActionOnRepo(owner, false, true, PreSettings, PostSettings, action);
