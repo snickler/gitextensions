@@ -2223,9 +2223,9 @@ namespace GitUI.CommandsDialogs
             var item = GitTree.SelectedNode.Tag as GitItem;
 
             if (item.IsCommit)
-	        {
+            {
                 SpawnCommitBrowser(item);
-	        }
+            }
         }
 
         public void SaveAsOnClick(object sender, EventArgs e)

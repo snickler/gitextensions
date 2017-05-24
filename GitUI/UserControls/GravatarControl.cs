@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Threading;
 using System.Windows.Forms;
 using GitUI.Properties;
@@ -38,6 +39,18 @@ namespace GitUI
             ImageFileName = string.Concat(Email, ".png");
             UpdateGravatar();
         }
+
+
+        //protected override void OnResize(EventArgs e)
+        //{
+        //    base.OnResize(e);
+        //    using (var gp = new GraphicsPath())
+        //    {
+        //        gp.AddEllipse(0, 0, _gravatarImg.Width - 3, _gravatarImg.Height - 3);
+        //        _gravatarImg.Region = new Region(gp);
+        //    }
+        //}
+
 
         /// <summary>
         ///   Update the Gravatar anytime an attribute is changed
