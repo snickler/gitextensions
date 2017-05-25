@@ -47,7 +47,8 @@ namespace GitUI.CommitInfo
         public CommitInfo()
         {
             InitializeComponent();
-            txtHash.BackColor = tableLayoutPanel1.BackColor;
+            txtHash.BackColor =
+                RevisionInfo.BackColor = tlpnlCommitInfoLeft.BackColor;
             Translate();
             GitUICommandsSourceSet += (a, uiCommandsSource) =>
             {
@@ -57,6 +58,10 @@ namespace GitUI.CommitInfo
             _pnlCommitInfoPanelControls = new Control[] {
                 txtHash, llblAuthor, llblCommitter,lblCreatedBy,lblAuthorDate,lblCommitter,lblCommitterDate,lblSpacer1,lblSpacer2
             };
+            _pnlCommitInfoPanelControls.ForEach(c =>
+            {
+                c.Font = AppSettings.Font;
+            });
         }
 
 
@@ -90,15 +95,15 @@ namespace GitUI.CommitInfo
 
         public void DisplayAvatarOnRight()
         {
-            tableLayout.SuspendLayout();
-            tableLayout.ColumnStyles.Clear();
-            tableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayout.ColumnStyles.Add(new ColumnStyle());
-            tableLayout.SetColumn(gravatar1, 1);
-            tableLayout.SetColumn(RevisionInfo, 0);
-            tableLayout.SetRowSpan(gravatar1, 1);
-            tableLayout.SetColumnSpan(RevisionInfo, 2);
-            tableLayout.ResumeLayout(true);
+            //tableLayout.SuspendLayout();
+            //tableLayout.ColumnStyles.Clear();
+            //tableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            //tableLayout.ColumnStyles.Add(new ColumnStyle());
+            //tableLayout.SetColumn(gravatar1, 1);
+            //tableLayout.SetColumn(RevisionInfo, 0);
+            //tableLayout.SetRowSpan(gravatar1, 1);
+            //tableLayout.SetColumnSpan(RevisionInfo, 2);
+            //tableLayout.ResumeLayout(true);
 
         }
 
@@ -150,9 +155,27 @@ namespace GitUI.CommitInfo
 
             txtHash.Text = data.Guid; //$"# {data.Guid}";
 
+            flpnlCommitInfoRight.SuspendLayout();
+            elpnlParents.AddRange(data.ParentGuids.Select(x => x.Substring(0, Math.Min(x.Length, 10))));
+
+            if (data.ChildrenGuids.Count < 1)
+            {
+                elpnlChildren.Visible =
+                    lblCommitChildren.Visible =
+                        lblDivider4.Visible = false;
+            }
+            else
+            {
+                elpnlChildren.AddRange(data.ChildrenGuids.Select(x => x.Substring(0, Math.Min(x.Length, 10))));
+                elpnlChildren.Visible =
+                    lblCommitChildren.Visible =
+                        lblDivider4.Visible = true;
+            }
+            flpnlCommitInfoRight.ResumeLayout(true);
+
             ApplyCommitInfoPanelLayout();
 
-            _revisionInfo = commitInformation.Body;
+            _revisionInfo = commitInformation.Body.Trim();
             UpdateText();
             LoadAuthorImage(data.Author ?? data.Committer);
 
@@ -227,7 +250,24 @@ namespace GitUI.CommitInfo
         private void LoadTagInfo(string revision)
         {
             _tags = Module.GetAllTagsWhichContainGivenCommit(revision).ToList();
-            this.InvokeAsync(UpdateText);
+            this.InvokeAsync(() =>
+            {
+                if (_tags.Count > 0)
+                {
+                    elpnlTags.AddRange(_tags);
+                    elpnlTags.Visible =
+                        lblCommitTags.Visible =
+                            label5.Visible = true;
+                }
+                else
+                {
+                    elpnlTags.Visible =
+                        lblCommitTags.Visible =
+                            label5.Visible = false;
+                }
+
+                UpdateText();
+            });
         }
 
         private void LoadBranchInfo(string revision)
@@ -239,7 +279,24 @@ namespace GitUI.CommitInfo
             bool getRemote = AppSettings.CommitInfoShowContainedInBranchesRemote ||
                              AppSettings.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
             _branches = Module.GetAllBranchesWhichContainGivenCommit(revision, getLocal, getRemote).ToList();
-            this.InvokeAsync(UpdateText);
+            this.InvokeAsync(() =>
+            {
+                if (_branches.Count > 0)
+                {
+                    elpnlBranches.AddRange(_branches);
+                    elpnlBranches.Visible =
+                        lblCommitBranches.Visible =
+                            label3.Visible = true;
+                }
+                else
+                {
+                    elpnlBranches.Visible =
+                        lblCommitBranches.Visible =
+                            label3.Visible = false;
+                }
+
+                UpdateText();
+            });
         }
 
         private void LoadLinksForRevision(GitRevision revision)
@@ -548,13 +605,13 @@ namespace GitUI.CommitInfo
         {
             // TODO: can be optimised
             var widthHash = TextRenderer.MeasureText(new string('a', txtHash.Text.Length), txtHash.Font).Width;
-            var sideColumnWidth = tableLayoutPanel1.ColumnStyles[0].Width + tableLayoutPanel1.ColumnStyles[2].Width;
+            var sideColumnWidth = tlpnlCommitInfoLeft.ColumnStyles[0].Width + tlpnlCommitInfoLeft.ColumnStyles[2].Width;
             var widthAvatar = AppSettings.AuthorImageSize + sideColumnWidth;
 
-            var width = (int)(Math.Max(widthHash, widthAvatar) + tableLayoutPanel1.Padding.Left + tableLayoutPanel1.Padding.Right);
+            var width = (int)(Math.Max(widthHash, widthAvatar) + tlpnlCommitInfoLeft.Padding.Left + tlpnlCommitInfoLeft.Padding.Right);
 
-            tableLayoutPanel1.ColumnStyles[1].SizeType = SizeType.Absolute;
-            tableLayoutPanel1.ColumnStyles[1].Width = width - sideColumnWidth;
+            tlpnlCommitInfoLeft.ColumnStyles[1].SizeType = SizeType.Absolute;
+            tlpnlCommitInfoLeft.ColumnStyles[1].Width = width - sideColumnWidth;
         }
 
 
@@ -567,7 +624,7 @@ namespace GitUI.CommitInfo
         {
             try
             {
-                tableLayoutPanel1.SuspendLayout();
+                tlpnlCommitInfoLeft.SuspendLayout();
 
                 _pnlCommitInfoPanelControls.ForEach(c =>
                 {
@@ -582,16 +639,21 @@ namespace GitUI.CommitInfo
                     c.Anchor = AnchorStyles.Left | AnchorStyles.Right;
                 });
 
-                var padding = ((int)tableLayoutPanel1.ColumnStyles[1].Width - AppSettings.AuthorImageSize) / 2;
+                var padding = ((int)tlpnlCommitInfoLeft.ColumnStyles[1].Width - AppSettings.AuthorImageSize) / 2;
                 gravatar1.Margin = new Padding(padding, 4, padding, 4);
             }
             finally
             {
-                tableLayoutPanel1.ResumeLayout(true);
+                tlpnlCommitInfoLeft.ResumeLayout(true);
 
-                AutoScrollMinSize = new System.Drawing.Size(tableLayoutPanel1.Width,
-                                                            lblCommitterDate.Top + lblCommitterDate.Height + tableLayoutPanel1.Margin.Bottom);
+                AutoScrollMinSize = new System.Drawing.Size(tlpnlCommitInfoLeft.Width,
+                                                            lblCommitterDate.Top + lblCommitterDate.Height + tlpnlCommitInfoLeft.Margin.Bottom);
             }
+        }
+
+        private void RevisionInfo_VScroll(object sender, EventArgs e)
+        {
+            Console.WriteLine("RevisionInfo_VScroll");
         }
     }
 }

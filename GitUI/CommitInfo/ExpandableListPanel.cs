@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using GitCommands;
 
 namespace GitUI.CommitInfo
 {
@@ -55,17 +56,25 @@ namespace GitUI.CommitInfo
         public void AddRange(IEnumerable<object> items)
         {
             _items.Clear();
+            Controls.Clear();
             if (items != null)
             {
-                _items.AddRange(items);
+                _items.AddRange(items.Where(i => i != null));
             }
             Render();
         }
 
         public void Render()
         {
-            _items.Take(_itemsToShow).ForEach(AddItem);
-            Controls.Add(itemMore);
+            SuspendLayout();
+
+            _items.Take(ItemsToShow).ForEach(AddItem);
+            if (_items.Count > ItemsToShow)
+            {
+                Controls.Add(itemMore);
+            }
+
+            ResumeLayout(true);
         }
 
 
@@ -78,6 +87,11 @@ namespace GitUI.CommitInfo
 
             var c = new LinkLabel
             {
+                AutoSize = true,
+                //BorderStyle = BorderStyle.FixedSingle,
+                Font = new Font(AppSettings.Font.FontFamily, AppSettings.Font.SizeInPoints - 1),
+                LinkColor = SystemColors.HotTrack,
+                Margin = new Padding(0),
                 Text = item.ToString()
             };
 
@@ -92,7 +106,7 @@ namespace GitUI.CommitInfo
         private void itemMore_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Controls.Remove(itemMore);
-            _items.Skip(_itemsToShow).ForEach(AddItem);
+            _items.Skip(ItemsToShow).ForEach(AddItem);
         }
     }
 }
