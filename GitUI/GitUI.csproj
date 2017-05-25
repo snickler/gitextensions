@@ -223,6 +223,12 @@
     <Compile Include="CommandsDialogs\SettingsDialog\Pages\FormBrowseRepoSettingsPage.Designer.cs">
       <DependentUpon>FormBrowseRepoSettingsPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="CommitInfo\ExpandableListPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CommitInfo\ExpandableListPanel.Designer.cs">
+      <DependentUpon>ExpandableListPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormStatusOutputLog.cs" />
     <Compile Include="CommandsDialogs\WorktreeDialog\FormCreateWorktree.cs">
       <SubType>Form</SubType>
@@ -1143,6 +1149,9 @@
     <EmbeddedResource Include="CommandsDialogs\WorktreeDialog\FormManageWorktree.resx">
       <DependentUpon>FormManageWorktree.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CommitInfo\ExpandableListPanel.resx">
+      <DependentUpon>ExpandableListPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="HelperDialogs\FormBuildServerCredentials.resx">
       <DependentUpon>FormBuildServerCredentials.cs</DependentUpon>

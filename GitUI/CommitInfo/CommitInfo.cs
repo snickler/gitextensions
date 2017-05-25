@@ -38,8 +38,7 @@ namespace GitUI.CommitInfo
         private List<string> _branches;
         private string _branchInfo;
         private IList<string> _sortedRefs;
-        private System.Drawing.Rectangle _headerResize; // Cache desired size for commit header
-        private int[] _revisionHeaderTabStops;
+        private readonly Control[] _pnlCommitInfoPanelControls;
 
 
         public event EventHandler<CommandEventArgs> CommandClick;
@@ -48,10 +47,15 @@ namespace GitUI.CommitInfo
         public CommitInfo()
         {
             InitializeComponent();
+            txtHash.BackColor = tableLayoutPanel1.BackColor;
             Translate();
             GitUICommandsSourceSet += (a, uiCommandsSource) =>
             {
                 _sortedRefs = null;
+            };
+
+            _pnlCommitInfoPanelControls = new Control[] {
+                txtHash, llblAuthor, llblCommitter,lblCreatedBy,lblAuthorDate,lblCommitter,lblCommitterDate,lblSpacer1,lblSpacer2
             };
         }
 
@@ -91,7 +95,6 @@ namespace GitUI.CommitInfo
             tableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayout.ColumnStyles.Add(new ColumnStyle());
             tableLayout.SetColumn(gravatar1, 1);
-            tableLayout.SetColumn(_RevisionHeader, 0);
             tableLayout.SetColumn(RevisionInfo, 0);
             tableLayout.SetRowSpan(gravatar1, 1);
             tableLayout.SetColumnSpan(RevisionInfo, 2);
@@ -109,8 +112,6 @@ namespace GitUI.CommitInfo
 
         private void ReloadCommitInfo()
         {
-            _RevisionHeader.BackColor = ColorHelper.MakeColorDarker(BackColor);
-
             showContainedInBranchesToolStripMenuItem.Checked = AppSettings.CommitInfoShowContainedInBranchesLocal;
             showContainedInBranchesRemoteToolStripMenuItem.Checked = AppSettings.CommitInfoShowContainedInBranchesRemote;
             showContainedInBranchesRemoteIfNoLocalToolStripMenuItem.Checked = AppSettings.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
@@ -121,10 +122,6 @@ namespace GitUI.CommitInfo
 
             if (string.IsNullOrEmpty(_revision.Guid))
                 return; //is it regular case or should throw an exception
-
-            _RevisionHeader.SelectionTabs = GetRevisionHeaderTabStops();
-            _RevisionHeader.Text = string.Empty;
-            _RevisionHeader.Refresh();
 
             string error = "";
             CommitData data = CommitData.CreateFromRevision(_revision);
@@ -151,27 +148,10 @@ namespace GitUI.CommitInfo
                 LocalizationHelpers.GetRelativeDateString(DateTime.UtcNow, data.CommitDate.UtcDateTime) +
                 $@" ({LocalizationHelpers.GetFullDateString(data.CommitDate)})";
 
-            lblHash.Text = data.Guid;
+            txtHash.Text = data.Guid; //$"# {data.Guid}";
 
-            try
-            {
-                tableLayoutPanel1.SuspendLayout();
+            ApplyCommitInfoPanelLayout();
 
-                lblCreatedBy.Anchor =
-                    lblAuthorDate.Anchor =
-                        lblCommitter.Anchor =
-                            lblCommitterDate.Anchor =
-                                lblSpacer1.Anchor =
-                                    lblSpacer2.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-                tableLayoutPanel1.MinimumSize = new System.Drawing.Size((int) (AppSettings.AuthorImageSize * 1.1), 0);
-            }
-            finally
-            {
-                tableLayoutPanel1.ResumeLayout(true);
-            }
-
-            _RevisionHeader.SetXHTMLText(commitInformation.Header);
-            _RevisionHeader.Height = GetRevisionHeaderHeight();
             _revisionInfo = commitInformation.Body;
             UpdateText();
             LoadAuthorImage(data.Author ?? data.Committer);
@@ -184,43 +164,6 @@ namespace GitUI.CommitInfo
 
             if (AppSettings.CommitInfoShowContainedInTags)
                 ThreadPool.QueueUserWorkItem(_ => LoadTagInfo(_revision.Guid));
-        }
-
-        /// <summary>
-        /// Returns an array of strings contains titles of fields field returned by GetHeader.
-        /// Used to calculate layout in advance
-        /// </summary>
-        /// <returns></returns>
-        private static string[] GetPossibleHeaders()
-        {
-            return new[]
-                   {
-                       Strings.GetAuthorText(), Strings.GetAuthorDateText(), Strings.GetCommitterText(),
-                       Strings.GetCommitDateText(), Strings.GetCommitHashText(), Strings.GetChildrenText(),
-                       Strings.GetParentsText()
-                   };
-        }
-
-        private int[] GetRevisionHeaderTabStops()
-        {
-            if (_revisionHeaderTabStops != null)
-                return _revisionHeaderTabStops;
-            int tabStop = 0;
-            foreach (string s in GetPossibleHeaders())
-            {
-                tabStop = Math.Max(tabStop, TextRenderer.MeasureText(s + "  ", _RevisionHeader.Font).Width);
-            }
-            // simulate a two column layout even when there's more then one tab used
-            _revisionHeaderTabStops = new[] { tabStop, tabStop + 1, tabStop + 2, tabStop + 3 };
-            return _revisionHeaderTabStops;
-        }
-
-        private int GetRevisionHeaderHeight()
-        {
-            if (EnvUtils.IsMonoRuntime())
-                return (int)(_RevisionHeader.Lines.Length * (0.8 + _RevisionHeader.Font.GetHeight()));
-
-            return _headerResize.Height;
         }
 
         private void LoadSortedRefs()
@@ -493,7 +436,7 @@ namespace GitUI.CommitInfo
 
         private void copyCommitInfoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(string.Concat(_RevisionHeader.GetPlaintText(), Environment.NewLine, RevisionInfo.GetPlaintText()));
+            //Clipboard.SetText(string.Concat(_RevisionHeader.GetPlaintText(), Environment.NewLine, RevisionInfo.GetPlaintText()));
         }
 
         private void showContainedInBranchesRemoteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -574,12 +517,6 @@ namespace GitUI.CommitInfo
             }
         }
 
-        private void _RevisionHeader_ContentsResized(object sender, ContentsResizedEventArgs e)
-        {
-            // Cache desired size for commit header
-            _headerResize = e.NewRectangle;
-        }
-
         private class ItemTpComparer : IComparer<string>
         {
             private readonly IList<string> _otherList;
@@ -607,5 +544,54 @@ namespace GitUI.CommitInfo
             }
         }
 
+        private void ResizeCommitInfoPanel()
+        {
+            // TODO: can be optimised
+            var widthHash = TextRenderer.MeasureText(new string('a', txtHash.Text.Length), txtHash.Font).Width;
+            var sideColumnWidth = tableLayoutPanel1.ColumnStyles[0].Width + tableLayoutPanel1.ColumnStyles[2].Width;
+            var widthAvatar = AppSettings.AuthorImageSize + sideColumnWidth;
+
+            var width = (int)(Math.Max(widthHash, widthAvatar) + tableLayoutPanel1.Padding.Left + tableLayoutPanel1.Padding.Right);
+
+            tableLayoutPanel1.ColumnStyles[1].SizeType = SizeType.Absolute;
+            tableLayoutPanel1.ColumnStyles[1].Width = width - sideColumnWidth;
+        }
+
+
+        private void gravatar1_GravatarSizeChanged(object sender, EventArgs e)
+        {
+            ApplyCommitInfoPanelLayout();
+        }
+
+        private void ApplyCommitInfoPanelLayout()
+        {
+            try
+            {
+                tableLayoutPanel1.SuspendLayout();
+
+                _pnlCommitInfoPanelControls.ForEach(c =>
+                {
+                    c.Anchor = AnchorStyles.Left;
+                    c.Width = 100;
+                });
+
+                ResizeCommitInfoPanel();
+
+                _pnlCommitInfoPanelControls.ForEach(c =>
+                {
+                    c.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+                });
+
+                var padding = ((int)tableLayoutPanel1.ColumnStyles[1].Width - AppSettings.AuthorImageSize) / 2;
+                gravatar1.Margin = new Padding(padding, 4, padding, 4);
+            }
+            finally
+            {
+                tableLayoutPanel1.ResumeLayout(true);
+
+                AutoScrollMinSize = new System.Drawing.Size(tableLayoutPanel1.Width,
+                                                            lblCommitterDate.Top + lblCommitterDate.Height + tableLayoutPanel1.Margin.Bottom);
+            }
+        }
     }
 }

@@ -15,6 +15,10 @@ namespace GitUI
     {
         private readonly SynchronizationContext _syncContext;
 
+
+        public event EventHandler GravatarSizeChanged;
+
+
         public GravatarControl()
         {
             _syncContext = SynchronizationContext.Current;
@@ -119,12 +123,14 @@ namespace GitUI
         }
 
 
-        private void toolStripMenuItemClick(object sender, EventArgs e)
+        private void gravatarSizeChange_Click(object sender, EventArgs e)
         {
             var toolStripItem = (ToolStripItem)sender;
             Settings.AuthorImageSize = int.Parse((string)toolStripItem.Tag);
             GravatarService.ClearImageCache();
             UpdateGravatar();
+
+            GravatarSizeChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void identiconToolStripMenuItem_Click(object sender, EventArgs e)

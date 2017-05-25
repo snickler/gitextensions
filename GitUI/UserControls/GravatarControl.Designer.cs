@@ -55,7 +55,7 @@
             this._gravatarImg.ContextMenuStrip = this.contextMenuStrip;
             this._gravatarImg.Image = global::GitUI.Properties.Resources.User;
             this._gravatarImg.Location = new System.Drawing.Point(0, 0);
-            this._gravatarImg.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this._gravatarImg.MinimumSize = new System.Drawing.Size(80, 80);
             this._gravatarImg.Name = "_gravatarImg";
             this._gravatarImg.Size = new System.Drawing.Size(93, 92);
             this._gravatarImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -72,19 +72,19 @@
             this.toolStripSeparator1,
             this.registerAtGravatarcomToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(241, 152);
+            this.contextMenuStrip.Size = new System.Drawing.Size(203, 120);
             // 
             // refreshToolStripMenuItem
             // 
             this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(240, 24);
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.refreshToolStripMenuItem.Text = "Refresh image";
             this.refreshToolStripMenuItem.Click += new System.EventHandler(this.RefreshToolStripMenuItemClick);
             // 
             // clearImagecacheToolStripMenuItem
             // 
             this.clearImagecacheToolStripMenuItem.Name = "clearImagecacheToolStripMenuItem";
-            this.clearImagecacheToolStripMenuItem.Size = new System.Drawing.Size(240, 24);
+            this.clearImagecacheToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.clearImagecacheToolStripMenuItem.Text = "Clear image cache";
             this.clearImagecacheToolStripMenuItem.Click += new System.EventHandler(this.ClearImagecacheToolStripMenuItemClick);
             // 
@@ -96,40 +96,40 @@
             this.largeToolStripMenuItem,
             this.extraLargeToolStripMenuItem});
             this.imageSizeToolStripMenuItem.Name = "imageSizeToolStripMenuItem";
-            this.imageSizeToolStripMenuItem.Size = new System.Drawing.Size(240, 24);
+            this.imageSizeToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.imageSizeToolStripMenuItem.Text = "Image size";
             // 
             // smallToolStripMenuItem
             // 
             this.smallToolStripMenuItem.Name = "smallToolStripMenuItem";
-            this.smallToolStripMenuItem.Size = new System.Drawing.Size(221, 24);
+            this.smallToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.smallToolStripMenuItem.Tag = "80";
             this.smallToolStripMenuItem.Text = "Small (80x80)";
-            this.smallToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItemClick);
+            this.smallToolStripMenuItem.Click += new System.EventHandler(this.gravatarSizeChange_Click);
             // 
             // normalToolStripMenuItem
             // 
             this.normalToolStripMenuItem.Name = "normalToolStripMenuItem";
-            this.normalToolStripMenuItem.Size = new System.Drawing.Size(221, 24);
+            this.normalToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.normalToolStripMenuItem.Tag = "160";
             this.normalToolStripMenuItem.Text = "Normal (160x160)";
-            this.normalToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItemClick);
+            this.normalToolStripMenuItem.Click += new System.EventHandler(this.gravatarSizeChange_Click);
             // 
             // largeToolStripMenuItem
             // 
             this.largeToolStripMenuItem.Name = "largeToolStripMenuItem";
-            this.largeToolStripMenuItem.Size = new System.Drawing.Size(221, 24);
+            this.largeToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.largeToolStripMenuItem.Tag = "240";
             this.largeToolStripMenuItem.Text = "Large (240x240)";
-            this.largeToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItemClick);
+            this.largeToolStripMenuItem.Click += new System.EventHandler(this.gravatarSizeChange_Click);
             // 
             // extraLargeToolStripMenuItem
             // 
             this.extraLargeToolStripMenuItem.Name = "extraLargeToolStripMenuItem";
-            this.extraLargeToolStripMenuItem.Size = new System.Drawing.Size(221, 24);
+            this.extraLargeToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.extraLargeToolStripMenuItem.Tag = "320";
             this.extraLargeToolStripMenuItem.Text = "Extra Large (320x320)";
-            this.extraLargeToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItemClick);
+            this.extraLargeToolStripMenuItem.Click += new System.EventHandler(this.gravatarSizeChange_Click);
             // 
             // noImageGeneratorToolStripMenuItem
             // 
@@ -140,63 +140,65 @@
             this.wavatarToolStripMenuItem,
             this.retroToolStripMenuItem});
             this.noImageGeneratorToolStripMenuItem.Name = "noImageGeneratorToolStripMenuItem";
-            this.noImageGeneratorToolStripMenuItem.Size = new System.Drawing.Size(240, 24);
+            this.noImageGeneratorToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.noImageGeneratorToolStripMenuItem.Text = "No image service";
             // 
             // noneToolStripMenuItem
             // 
             this.noneToolStripMenuItem.Name = "noneToolStripMenuItem";
-            this.noneToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.noneToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.noneToolStripMenuItem.Text = "None";
             this.noneToolStripMenuItem.Click += new System.EventHandler(this.noneToolStripMenuItem_Click);
             // 
             // identiconToolStripMenuItem
             // 
             this.identiconToolStripMenuItem.Name = "identiconToolStripMenuItem";
-            this.identiconToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.identiconToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.identiconToolStripMenuItem.Text = "Identicon";
             this.identiconToolStripMenuItem.Click += new System.EventHandler(this.identiconToolStripMenuItem_Click);
             // 
             // monsterIdToolStripMenuItem
             // 
             this.monsterIdToolStripMenuItem.Name = "monsterIdToolStripMenuItem";
-            this.monsterIdToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.monsterIdToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.monsterIdToolStripMenuItem.Text = "Monster Id";
             this.monsterIdToolStripMenuItem.Click += new System.EventHandler(this.monsterIdToolStripMenuItem_Click);
             // 
             // wavatarToolStripMenuItem
             // 
             this.wavatarToolStripMenuItem.Name = "wavatarToolStripMenuItem";
-            this.wavatarToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.wavatarToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.wavatarToolStripMenuItem.Text = "Wavatar";
             this.wavatarToolStripMenuItem.Click += new System.EventHandler(this.wavatarToolStripMenuItem_Click);
             // 
             // retroToolStripMenuItem
             // 
             this.retroToolStripMenuItem.Name = "retroToolStripMenuItem";
-            this.retroToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.retroToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.retroToolStripMenuItem.Text = "Retro";
             this.retroToolStripMenuItem.Click += new System.EventHandler(this.retroToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(237, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(199, 6);
             // 
             // registerAtGravatarcomToolStripMenuItem
             // 
             this.registerAtGravatarcomToolStripMenuItem.Name = "registerAtGravatarcomToolStripMenuItem";
-            this.registerAtGravatarcomToolStripMenuItem.Size = new System.Drawing.Size(240, 24);
+            this.registerAtGravatarcomToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.registerAtGravatarcomToolStripMenuItem.Text = "Register at gravatar.com";
             this.registerAtGravatarcomToolStripMenuItem.Click += new System.EventHandler(this.RegisterAtGravatarcomToolStripMenuItemClick);
             // 
             // GravatarControl
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this._gravatarImg);
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.DoubleBuffered = true;
             this.Name = "GravatarControl";
-            this.Size = new System.Drawing.Size(175, 172);
+            this.Size = new System.Drawing.Size(96, 95);
             ((System.ComponentModel.ISupportInitialize)(this._gravatarImg)).EndInit();
             this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
