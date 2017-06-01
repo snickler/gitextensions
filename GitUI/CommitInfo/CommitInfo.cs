@@ -38,7 +38,7 @@ namespace GitUI.CommitInfo
         private List<string> _branches;
         private string _branchInfo;
         private IList<string> _sortedRefs;
-        private readonly Control[] _pnlCommitInfoPanelControls;
+        private readonly Control[] _pnlCommitInfoPanelControls, _pnlCommitInfoPanelDynamicControls;
 
 
         public event EventHandler<CommandEventArgs> CommandClick;
@@ -55,14 +55,18 @@ namespace GitUI.CommitInfo
                 _sortedRefs = null;
             };
 
-            _pnlCommitInfoPanelControls = new Control[] {
-                txtHash, llblAuthor, llblCommitter, lblCreatedBy, lblAuthorDate, lblCommitter, lblCommitterDate, lblSpacer1, lblSpacer2
+            _pnlCommitInfoPanelDynamicControls = new Control[]
+            {
+                txtHash, llblAuthor, llblCommitter, lblAuthorDate, lblCommitterDate
             };
+            _pnlCommitInfoPanelControls = _pnlCommitInfoPanelDynamicControls.Union(new Control[]
+            {
+                lblCreatedBy, lblCommitter, lblSpacer1, lblSpacer2
+            }).ToArray();
             _pnlCommitInfoPanelControls.ForEach(c =>
             {
                 c.Anchor = AnchorStyles.Left | AnchorStyles.Right;
                 c.Font = AppSettings.Font;
-                c.Text = string.Empty;
             });
         }
 
@@ -213,7 +217,7 @@ namespace GitUI.CommitInfo
             }
         }
 
-        private void RenderCommitParents(IList<string>  parents)
+        private void RenderCommitParents(IList<string> parents)
         {
             if (parents == null || parents.Count < 1)
             {
@@ -418,7 +422,7 @@ namespace GitUI.CommitInfo
             RenderCommitParents(null);
             RenderCommitTags(null);
 
-            _pnlCommitInfoPanelControls.ForEach(c =>
+            _pnlCommitInfoPanelDynamicControls.ForEach(c =>
             {
                 c.Text = string.Empty;
             });
@@ -647,34 +651,24 @@ namespace GitUI.CommitInfo
 
         private void ResizeCommitInfoPanel()
         {
-            Console.WriteLine("Resizing");
-            Console.WriteLine($"{tlpnlCommitInfoLeft.Size}: {tlpnlCommitInfoLeft.ColumnStyles[0].Width} + {tlpnlCommitInfoLeft.ColumnStyles[1].Width} + {tlpnlCommitInfoLeft.ColumnStyles[2].Width}");
-
-            tlpnlCommitInfoLeft.SuspendLayout();
+            // TODO: needed fo Mono?
+            //tlpnlCommitInfoLeft.SuspendLayout();
 
             // TODO: can be optimised
             var widthHash = TextRenderer.MeasureText(new string('a', txtHash.Text.Length), txtHash.Font).Width;
-            var sideColumnWidth = tlpnlCommitInfoLeft.ColumnStyles[0].Width + tlpnlCommitInfoLeft.ColumnStyles[2].Width;
-            var widthAvatar = AppSettings.AuthorImageSize + sideColumnWidth;
+            var widthSideColumns = tlpnlCommitInfoLeft.ColumnStyles[0].Width + tlpnlCommitInfoLeft.ColumnStyles[2].Width;
+            var widthAvatarEx = AppSettings.AuthorImageSize + widthSideColumns;
 
-            var width = (int)(Math.Max(widthHash, widthAvatar) + tlpnlCommitInfoLeft.Padding.Left + tlpnlCommitInfoLeft.Padding.Right);
+            var tableWidth = Math.Max(tlpnlCommitInfoLeft.MinimumSize.Width,
+                                      (int)(Math.Max(widthHash, widthAvatarEx) + tlpnlCommitInfoLeft.Padding.Left + tlpnlCommitInfoLeft.Padding.Right));
+            tlpnlCommitInfoLeft.Width = tableWidth;
+            var midColumnWidth = tableWidth - widthSideColumns - tlpnlCommitInfoLeft.Padding.Left - tlpnlCommitInfoLeft.Padding.Right;
 
-            tlpnlCommitInfoLeft.ColumnStyles[1].SizeType = SizeType.Absolute;
-            tlpnlCommitInfoLeft.ColumnStyles[1].Width = width - sideColumnWidth;
-            tlpnlCommitInfoLeft.Width = width;
+            var avatarPadding = ((int)midColumnWidth - AppSettings.AuthorImageSize) / 2;
+            gravatar1.Margin = new Padding(avatarPadding, 4, avatarPadding, 4);
 
-            var padding = ((int)tlpnlCommitInfoLeft.ColumnStyles[1].Width - AppSettings.AuthorImageSize) / 2;
-            gravatar1.Margin = new Padding(padding, 4, padding, 4);
-
-            Console.WriteLine("Recalc");
-            Console.WriteLine($"{tlpnlCommitInfoLeft.Size}: {tlpnlCommitInfoLeft.ColumnStyles[0].Width} + {tlpnlCommitInfoLeft.ColumnStyles[1].Width} + {tlpnlCommitInfoLeft.ColumnStyles[2].Width}");
-
-            tlpnlCommitInfoLeft.ResumeLayout(false);
-            tlpnlCommitInfoLeft.PerformLayout();
-
-            Console.WriteLine("Resized");
-            Console.WriteLine($"{tlpnlCommitInfoLeft.Size}: {tlpnlCommitInfoLeft.ColumnStyles[0].Width} + {tlpnlCommitInfoLeft.ColumnStyles[1].Width} + {tlpnlCommitInfoLeft.ColumnStyles[2].Width}");
-            Console.WriteLine(".");
+            //tlpnlCommitInfoLeft.ResumeLayout(false);
+            //tlpnlCommitInfoLeft.PerformLayout();
         }
 
 
@@ -687,6 +681,7 @@ namespace GitUI.CommitInfo
         {
             try
             {
+                // TODO: needed fo Mono?
                 //_pnlCommitInfoPanelControls.ForEach(c =>
                 //{
                 //    c.Anchor = AnchorStyles.Left;
