@@ -56,11 +56,13 @@ namespace GitUI.CommitInfo
             };
 
             _pnlCommitInfoPanelControls = new Control[] {
-                txtHash, llblAuthor, llblCommitter,lblCreatedBy,lblAuthorDate,lblCommitter,lblCommitterDate,lblSpacer1,lblSpacer2
+                txtHash, llblAuthor, llblCommitter, lblCreatedBy, lblAuthorDate, lblCommitter, lblCommitterDate, lblSpacer1, lblSpacer2
             };
             _pnlCommitInfoPanelControls.ForEach(c =>
             {
+                c.Anchor = AnchorStyles.Left | AnchorStyles.Right;
                 c.Font = AppSettings.Font;
+                c.Text = string.Empty;
             });
         }
 
@@ -153,25 +155,13 @@ namespace GitUI.CommitInfo
                 LocalizationHelpers.GetRelativeDateString(DateTime.UtcNow, data.CommitDate.UtcDateTime) +
                 $@" ({LocalizationHelpers.GetFullDateString(data.CommitDate)})";
 
-            txtHash.Text = data.Guid; //$"# {data.Guid}";
+            txtHash.Text = (data.Guid ?? "").Substring(0, Math.Min(data.Guid.Length, 10)); //$"# {data.Guid}";
 
             flpnlCommitInfoRight.SuspendLayout();
-            elpnlParents.AddRange(data.ParentGuids.Select(x => x.Substring(0, Math.Min(x.Length, 10))));
-
-            if (data.ChildrenGuids.Count < 1)
-            {
-                elpnlChildren.Visible =
-                    lblCommitChildren.Visible =
-                        lblDivider4.Visible = false;
-            }
-            else
-            {
-                elpnlChildren.AddRange(data.ChildrenGuids.Select(x => x.Substring(0, Math.Min(x.Length, 10))));
-                elpnlChildren.Visible =
-                    lblCommitChildren.Visible =
-                        lblDivider4.Visible = true;
-            }
-            flpnlCommitInfoRight.ResumeLayout(true);
+            RenderCommitParents(data.ParentGuids);
+            RenderCommitChidren(data.ChildrenGuids);
+            flpnlCommitInfoRight.ResumeLayout(false);
+            flpnlCommitInfoRight.PerformLayout();
 
             ApplyCommitInfoPanelLayout();
 
@@ -188,6 +178,76 @@ namespace GitUI.CommitInfo
             if (AppSettings.CommitInfoShowContainedInTags)
                 ThreadPool.QueueUserWorkItem(_ => LoadTagInfo(_revision.Guid));
         }
+
+        private void RenderCommitBranches(IList<string> branches)
+        {
+            if (branches == null || branches.Count < 1)
+            {
+                elpnlBranches.Visible =
+                    lblCommitBranches.Visible =
+                        lblDividerBranches.Visible = false;
+            }
+            else
+            {
+                elpnlBranches.AddRange(_branches);
+                elpnlBranches.Visible =
+                    lblCommitBranches.Visible =
+                        lblDividerBranches.Visible = true;
+            }
+        }
+
+        private void RenderCommitChidren(IList<string> children)
+        {
+            if (children == null || children.Count < 1)
+            {
+                elpnlChildren.Visible =
+                    lblCommitChildren.Visible =
+                        lblDivider4.Visible = false;
+            }
+            else
+            {
+                elpnlChildren.AddRange(children.Select(x => x.Substring(0, Math.Min(x.Length, 10))));
+                elpnlChildren.Visible =
+                    lblCommitChildren.Visible =
+                        lblDivider4.Visible = true;
+            }
+        }
+
+        private void RenderCommitParents(IList<string>  parents)
+        {
+            if (parents == null || parents.Count < 1)
+            {
+                elpnlParents.Visible =
+                    lblCommitParents.Visible =
+                        lblDivider3.Visible = false;
+            }
+            else
+            {
+                elpnlParents.AddRange(parents.Select(x => x.Substring(0, Math.Min(x.Length, 10))));
+                elpnlParents.Visible =
+                    lblCommitParents.Visible =
+                        lblDivider3.Visible = true;
+            }
+        }
+
+        private void RenderCommitTags(IList<string> tags)
+        {
+            if (tags == null || tags.Count < 1)
+            {
+                elpnlTags.Visible =
+                    lblCommitTags.Visible =
+                        label5.Visible = false;
+            }
+            else
+            {
+                elpnlTags.AddRange(_tags);
+                elpnlTags.Visible =
+                    lblCommitTags.Visible =
+                        label5.Visible = true;
+            }
+        }
+
+
 
         private void LoadSortedRefs()
         {
@@ -211,18 +271,18 @@ namespace GitUI.CommitInfo
             foreach (var gitRef in revision.Refs)
             {
                 #region Note on annotated tags
-                // Notice that for the annotated tags, gitRef's come in pairs because they're produced 
-                // by the "show-ref --dereference" command. GitRef's in such pair have the same Name, 
+                // Notice that for the annotated tags, gitRef's come in pairs because they're produced
+                // by the "show-ref --dereference" command. GitRef's in such pair have the same Name,
                 // a bit different CompleteName's, and completely different checksums:
                 //      GitRef_1:
-                //      { 
+                //      {
                 //          Name: "some_tag"
                 //          CompleteName: "refs/tags/some_tag"
                 //          Guid: <some_tag_checksum>
                 //      },
-                //       
+                //
                 //      GitRef_2:
-                //      { 
+                //      {
                 //          Name: "some_tag"
                 //          CompleteName: "refs/tags/some_tag^{}"   <- by "^{}", IsDereference is true.
                 //          Guid: <target_object_checksum>
@@ -230,7 +290,7 @@ namespace GitUI.CommitInfo
                 //
                 // The 2nd one is a dereference: a link between the tag and the object which it references.
                 // GitRevions.Refs by design contains GitRef's where Guid's are equal to the GitRevision.Guid,
-                // so this collection contains only derefencing GitRef's - just because GitRef_2 has the same 
+                // so this collection contains only derefencing GitRef's - just because GitRef_2 has the same
                 // Guid as the GitRevision, while GitRef_1 doesn't. So annotated tag's GitRef would always be
                 // of 2nd type in GitRevision.Refs collection, i.e. the one that has IsDereference==true.
                 #endregion
@@ -252,21 +312,8 @@ namespace GitUI.CommitInfo
             _tags = Module.GetAllTagsWhichContainGivenCommit(revision).ToList();
             this.InvokeAsync(() =>
             {
-                if (_tags.Count > 0)
-                {
-                    elpnlTags.AddRange(_tags);
-                    elpnlTags.Visible =
-                        lblCommitTags.Visible =
-                            label5.Visible = true;
-                }
-                else
-                {
-                    elpnlTags.Visible =
-                        lblCommitTags.Visible =
-                            label5.Visible = false;
-                }
-
-                UpdateText();
+                RenderCommitTags(_tags);
+                //UpdateText();
             });
         }
 
@@ -281,21 +328,8 @@ namespace GitUI.CommitInfo
             _branches = Module.GetAllBranchesWhichContainGivenCommit(revision, getLocal, getRemote).ToList();
             this.InvokeAsync(() =>
             {
-                if (_branches.Count > 0)
-                {
-                    elpnlBranches.AddRange(_branches);
-                    elpnlBranches.Visible =
-                        lblCommitBranches.Visible =
-                            label3.Visible = true;
-                }
-                else
-                {
-                    elpnlBranches.Visible =
-                        lblCommitBranches.Visible =
-                            label3.Visible = false;
-                }
-
-                UpdateText();
+                RenderCommitBranches(_branches);
+                //UpdateText();
             });
         }
 
@@ -379,6 +413,16 @@ namespace GitUI.CommitInfo
 
         private void ResetTextAndImage()
         {
+            RenderCommitBranches(null);
+            RenderCommitChidren(null);
+            RenderCommitParents(null);
+            RenderCommitTags(null);
+
+            _pnlCommitInfoPanelControls.ForEach(c =>
+            {
+                c.Text = string.Empty;
+            });
+
             _revisionInfo = string.Empty;
             _linksInfo = string.Empty;
             _branchInfo = string.Empty;
@@ -603,6 +647,11 @@ namespace GitUI.CommitInfo
 
         private void ResizeCommitInfoPanel()
         {
+            Console.WriteLine("Resizing");
+            Console.WriteLine($"{tlpnlCommitInfoLeft.Size}: {tlpnlCommitInfoLeft.ColumnStyles[0].Width} + {tlpnlCommitInfoLeft.ColumnStyles[1].Width} + {tlpnlCommitInfoLeft.ColumnStyles[2].Width}");
+
+            tlpnlCommitInfoLeft.SuspendLayout();
+
             // TODO: can be optimised
             var widthHash = TextRenderer.MeasureText(new string('a', txtHash.Text.Length), txtHash.Font).Width;
             var sideColumnWidth = tlpnlCommitInfoLeft.ColumnStyles[0].Width + tlpnlCommitInfoLeft.ColumnStyles[2].Width;
@@ -612,6 +661,20 @@ namespace GitUI.CommitInfo
 
             tlpnlCommitInfoLeft.ColumnStyles[1].SizeType = SizeType.Absolute;
             tlpnlCommitInfoLeft.ColumnStyles[1].Width = width - sideColumnWidth;
+            tlpnlCommitInfoLeft.Width = width;
+
+            var padding = ((int)tlpnlCommitInfoLeft.ColumnStyles[1].Width - AppSettings.AuthorImageSize) / 2;
+            gravatar1.Margin = new Padding(padding, 4, padding, 4);
+
+            Console.WriteLine("Recalc");
+            Console.WriteLine($"{tlpnlCommitInfoLeft.Size}: {tlpnlCommitInfoLeft.ColumnStyles[0].Width} + {tlpnlCommitInfoLeft.ColumnStyles[1].Width} + {tlpnlCommitInfoLeft.ColumnStyles[2].Width}");
+
+            tlpnlCommitInfoLeft.ResumeLayout(false);
+            tlpnlCommitInfoLeft.PerformLayout();
+
+            Console.WriteLine("Resized");
+            Console.WriteLine($"{tlpnlCommitInfoLeft.Size}: {tlpnlCommitInfoLeft.ColumnStyles[0].Width} + {tlpnlCommitInfoLeft.ColumnStyles[1].Width} + {tlpnlCommitInfoLeft.ColumnStyles[2].Width}");
+            Console.WriteLine(".");
         }
 
 
@@ -624,28 +687,22 @@ namespace GitUI.CommitInfo
         {
             try
             {
-                tlpnlCommitInfoLeft.SuspendLayout();
-
-                _pnlCommitInfoPanelControls.ForEach(c =>
-                {
-                    c.Anchor = AnchorStyles.Left;
-                    c.Width = 100;
-                });
+                //_pnlCommitInfoPanelControls.ForEach(c =>
+                //{
+                //    c.Anchor = AnchorStyles.Left;
+                //    c.Width = 100;
+                //});
 
                 ResizeCommitInfoPanel();
 
-                _pnlCommitInfoPanelControls.ForEach(c =>
-                {
-                    c.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-                });
+                //_pnlCommitInfoPanelControls.ForEach(c =>
+                //{
+                //    c.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+                //});
 
-                var padding = ((int)tlpnlCommitInfoLeft.ColumnStyles[1].Width - AppSettings.AuthorImageSize) / 2;
-                gravatar1.Margin = new Padding(padding, 4, padding, 4);
             }
             finally
             {
-                tlpnlCommitInfoLeft.ResumeLayout(true);
-
                 AutoScrollMinSize = new System.Drawing.Size(tlpnlCommitInfoLeft.Width,
                                                             lblCommitterDate.Top + lblCommitterDate.Height + tlpnlCommitInfoLeft.Margin.Bottom);
             }

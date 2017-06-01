@@ -55,18 +55,28 @@ namespace GitUI.CommitInfo
 
         public void AddRange(IEnumerable<object> items)
         {
-            _items.Clear();
-            Controls.Clear();
-            if (items != null)
+            Render(() =>
             {
-                _items.AddRange(items.Where(i => i != null));
-            }
-            Render();
+                _items.Clear();
+                Controls.Clear();
+                if (items != null)
+                {
+                    _items.AddRange(items.Where(i => i != null));
+                }
+            });
         }
 
         public void Render()
         {
+            Render(null);
+        }
+
+
+        private void Render(Action action)
+        {
             SuspendLayout();
+
+            action?.Invoke();
 
             _items.Take(ItemsToShow).ForEach(AddItem);
             if (_items.Count > ItemsToShow)
@@ -74,9 +84,9 @@ namespace GitUI.CommitInfo
                 Controls.Add(itemMore);
             }
 
-            ResumeLayout(true);
+            ResumeLayout(false);
+            PerformLayout();
         }
-
 
         private void AddItem(object item)
         {
@@ -89,7 +99,7 @@ namespace GitUI.CommitInfo
             {
                 AutoSize = true,
                 //BorderStyle = BorderStyle.FixedSingle,
-                Font = new Font(AppSettings.Font.FontFamily, AppSettings.Font.SizeInPoints - 1),
+                Font = AppSettings.Font, //new Font(AppSettings.Font.FontFamily, AppSettings.Font.SizeInPoints - 1),
                 LinkColor = SystemColors.HotTrack,
                 Margin = new Padding(0),
                 Text = item.ToString()
