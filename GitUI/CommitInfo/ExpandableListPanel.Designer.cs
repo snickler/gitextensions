@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.itemMore = new System.Windows.Forms.LinkLabel();
+            this.lblHeading = new System.Windows.Forms.Label();
+            this.lblDivider = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // itemMore
@@ -42,12 +44,36 @@
             this.itemMore.TabStop = true;
             this.itemMore.Text = "[...]";
             this.itemMore.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.itemMore_LinkClicked);
+            // 
+            // lblHeading
+            // 
+            this.lblHeading.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblHeading.AutoSize = true;
+            this.lblHeading.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblHeading.Location = new System.Drawing.Point(11, 144);
+            this.lblHeading.Margin = new System.Windows.Forms.Padding(3, 16, 3, 0);
+            this.lblHeading.Name = "lblHeading";
+            this.lblHeading.Size = new System.Drawing.Size(166, 13);
+            this.lblHeading.TabIndex = 15;
+            this.lblHeading.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblDivider
+            // 
+            this.lblDivider.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblDivider.Location = new System.Drawing.Point(11, 159);
+            this.lblDivider.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.lblDivider.Name = "lblDivider";
+            this.lblDivider.Size = new System.Drawing.Size(166, 1);
+            this.lblDivider.TabIndex = 17;
+            this.lblDivider.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
+        private System.Windows.Forms.Label lblDivider;
+        private System.Windows.Forms.Label lblHeading;
         private System.Windows.Forms.LinkLabel itemMore;
     }
 }

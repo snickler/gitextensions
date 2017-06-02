@@ -65,9 +65,11 @@ namespace GitUI.CommitInfo
             }).ToArray();
             _pnlCommitInfoPanelControls.ForEach(c =>
             {
-                c.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+                //c.Anchor = AnchorStyles.Left | AnchorStyles.Right;
                 c.Font = AppSettings.Font;
             });
+
+            ResetTextAndImage();
         }
 
 

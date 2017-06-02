@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using GitCommands;
 
@@ -13,25 +11,15 @@ namespace GitUI.CommitInfo
     public partial class ExpandableListPanel : FlowLayoutPanel
     {
         private readonly List<object> _items = new List<object>();
-        //private string _displayMember;
         private int _itemsToShow = 3;
 
 
         public ExpandableListPanel()
         {
             InitializeComponent();
-            this.Controls.Clear();
-        }
+            Controls.Remove(itemMore);
 
-        //public string DisplayMember
-        //{
-        //    get { return _displayMember; }
-        //    set
-        //    {
-        //        _displayMember = value;
-        //        Invalidate();
-        //    }
-        //}
+        }
 
         [DefaultValue(3)]
         public int ItemsToShow
@@ -58,7 +46,7 @@ namespace GitUI.CommitInfo
             Render(() =>
             {
                 _items.Clear();
-                Controls.Clear();
+                Controls.Remove(itemMore);
                 if (items != null)
                 {
                     _items.AddRange(items.Where(i => i != null));
