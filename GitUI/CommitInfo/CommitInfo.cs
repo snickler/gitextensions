@@ -132,6 +132,7 @@ namespace GitUI.CommitInfo
             showMessagesOfAnnotatedTagsToolStripMenuItem.Checked = AppSettings.ShowAnnotatedTagsMessages;
 
             ResetTextAndImage();
+            commitDetails1.Reset();
 
             if (string.IsNullOrEmpty(_revision.Guid))
                 return; //is it regular case or should throw an exception
@@ -163,94 +164,15 @@ namespace GitUI.CommitInfo
 
             txtHash.Text = (data.Guid ?? "").Substring(0, Math.Min(data.Guid.Length, 10)); //$"# {data.Guid}";
 
-            flpnlCommitInfoRight.SuspendLayout();
-            RenderCommitParents(data.ParentGuids);
-            RenderCommitChidren(data.ChildrenGuids);
-            flpnlCommitInfoRight.ResumeLayout(false);
-            flpnlCommitInfoRight.PerformLayout();
-
+            commitDetails1.ShowDetails(_revision.Guid, data.ParentGuids, data.ChildrenGuids);
             ApplyCommitInfoPanelLayout();
 
             _revisionInfo = commitInformation.Body.Trim();
             UpdateText();
             LoadAuthorImage(data.Author ?? data.Committer);
 
-            if (AppSettings.CommitInfoShowContainedInBranches)
-                ThreadPool.QueueUserWorkItem(_ => LoadBranchInfo(_revision.Guid));
-
             if (AppSettings.ShowAnnotatedTagsMessages)
                 ThreadPool.QueueUserWorkItem(_ => LoadAnnotatedTagInfo(_revision));
-
-            if (AppSettings.CommitInfoShowContainedInTags)
-                ThreadPool.QueueUserWorkItem(_ => LoadTagInfo(_revision.Guid));
-        }
-
-        private void RenderCommitBranches(IList<string> branches)
-        {
-            if (branches == null || branches.Count < 1)
-            {
-                elpnlBranches.Visible =
-                    lblCommitBranches.Visible =
-                        lblDividerBranches.Visible = false;
-            }
-            else
-            {
-                elpnlBranches.AddRange(_branches);
-                elpnlBranches.Visible =
-                    lblCommitBranches.Visible =
-                        lblDividerBranches.Visible = true;
-            }
-        }
-
-        private void RenderCommitChidren(IList<string> children)
-        {
-            if (children == null || children.Count < 1)
-            {
-                elpnlChildren.Visible =
-                    lblCommitChildren.Visible =
-                        lblDivider4.Visible = false;
-            }
-            else
-            {
-                elpnlChildren.AddRange(children.Select(x => x.Substring(0, Math.Min(x.Length, 10))));
-                elpnlChildren.Visible =
-                    lblCommitChildren.Visible =
-                        lblDivider4.Visible = true;
-            }
-        }
-
-        private void RenderCommitParents(IList<string> parents)
-        {
-            if (parents == null || parents.Count < 1)
-            {
-                elpnlParents.Visible =
-                    lblCommitParents.Visible =
-                        lblDivider3.Visible = false;
-            }
-            else
-            {
-                elpnlParents.AddRange(parents.Select(x => x.Substring(0, Math.Min(x.Length, 10))));
-                elpnlParents.Visible =
-                    lblCommitParents.Visible =
-                        lblDivider3.Visible = true;
-            }
-        }
-
-        private void RenderCommitTags(IList<string> tags)
-        {
-            if (tags == null || tags.Count < 1)
-            {
-                elpnlTags.Visible =
-                    lblCommitTags.Visible =
-                        label5.Visible = false;
-            }
-            else
-            {
-                elpnlTags.AddRange(_tags);
-                elpnlTags.Visible =
-                    lblCommitTags.Visible =
-                        label5.Visible = true;
-            }
         }
 
 
@@ -313,31 +235,7 @@ namespace GitUI.CommitInfo
             return result;
         }
 
-        private void LoadTagInfo(string revision)
-        {
-            _tags = Module.GetAllTagsWhichContainGivenCommit(revision).ToList();
-            this.InvokeAsync(() =>
-            {
-                RenderCommitTags(_tags);
-                //UpdateText();
-            });
-        }
 
-        private void LoadBranchInfo(string revision)
-        {
-            // Include local branches if explicitly requested or when needed to decide whether to show remotes
-            bool getLocal = AppSettings.CommitInfoShowContainedInBranchesLocal ||
-                            AppSettings.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
-            // Include remote branches if requested
-            bool getRemote = AppSettings.CommitInfoShowContainedInBranchesRemote ||
-                             AppSettings.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
-            _branches = Module.GetAllBranchesWhichContainGivenCommit(revision, getLocal, getRemote).ToList();
-            this.InvokeAsync(() =>
-            {
-                RenderCommitBranches(_branches);
-                //UpdateText();
-            });
-        }
 
         private void LoadLinksForRevision(GitRevision revision)
         {
@@ -419,10 +317,7 @@ namespace GitUI.CommitInfo
 
         private void ResetTextAndImage()
         {
-            RenderCommitBranches(null);
-            RenderCommitChidren(null);
-            RenderCommitParents(null);
-            RenderCommitTags(null);
+            commitDetails1.Reset();
 
             _pnlCommitInfoPanelDynamicControls.ForEach(c =>
             {
@@ -703,6 +598,12 @@ namespace GitUI.CommitInfo
                 AutoScrollMinSize = new System.Drawing.Size(tlpnlCommitInfoLeft.Width,
                                                             lblCommitterDate.Top + lblCommitterDate.Height + tlpnlCommitInfoLeft.Margin.Bottom);
             }
+        }
+
+        private void CommitInfo_SizeChanged(object sender, EventArgs e)
+        {
+            splitter1.MinExtra = 500;
+            splitter1.MinSize = 100;
         }
 
         private void RevisionInfo_VScroll(object sender, EventArgs e)

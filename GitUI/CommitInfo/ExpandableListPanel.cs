@@ -10,18 +10,18 @@ namespace GitUI.CommitInfo
 {
     public partial class ExpandableListPanel : FlowLayoutPanel
     {
+        private const int DefaultItemsToShow = 3;
         private readonly List<object> _items = new List<object>();
-        private int _itemsToShow = 3;
+        private int _itemsToShow = DefaultItemsToShow;
 
 
         public ExpandableListPanel()
         {
             InitializeComponent();
-            Controls.Remove(itemMore);
-
+            Controls.Clear();
         }
 
-        [DefaultValue(3)]
+        [DefaultValue(DefaultItemsToShow)]
         public int ItemsToShow
         {
             get { return _itemsToShow; }
@@ -46,7 +46,7 @@ namespace GitUI.CommitInfo
             Render(() =>
             {
                 _items.Clear();
-                Controls.Remove(itemMore);
+                Controls.Clear();
                 if (items != null)
                 {
                     _items.AddRange(items.Where(i => i != null));
@@ -87,15 +87,11 @@ namespace GitUI.CommitInfo
             {
                 AutoSize = true,
                 //BorderStyle = BorderStyle.FixedSingle,
-                Font = AppSettings.Font, //new Font(AppSettings.Font.FontFamily, AppSettings.Font.SizeInPoints - 1),
+                Font = AppSettings.Font,
                 LinkColor = SystemColors.HotTrack,
                 Margin = new Padding(0),
                 Text = item.ToString()
             };
-
-            //else if (!string.IsNullOrWhiteSpace(_displayMember) && )
-            //{
-            //}
 
             Controls.Add(c);
         }
