@@ -62,27 +62,24 @@ namespace GitUI.CommitInfo
 
         private void Render(Action action)
         {
-            SuspendLayout();
+            //SuspendLayout();
 
             action?.Invoke();
 
-            _items.Take(ItemsToShow).ForEach(AddItem);
+
+            Control[] items = _items.Take(ItemsToShow).Select(CreateItem).ToArray();
+            Controls.AddRange(items);
             if (_items.Count > ItemsToShow)
             {
                 Controls.Add(itemMore);
             }
 
-            ResumeLayout(false);
-            PerformLayout();
+            //ResumeLayout(false);
+            //PerformLayout();
         }
 
-        private void AddItem(object item)
+        private Control CreateItem(object item)
         {
-            if (item == null)
-            {
-                return;
-            }
-
             var c = new LinkLabel
             {
                 AutoSize = true,
@@ -92,15 +89,15 @@ namespace GitUI.CommitInfo
                 Margin = new Padding(0),
                 Text = item.ToString()
             };
-
-            Controls.Add(c);
+            return c;
         }
 
 
         private void itemMore_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Controls.Remove(itemMore);
-            _items.Skip(ItemsToShow).ForEach(AddItem);
+            Control[] items = _items.Skip(ItemsToShow).Select(CreateItem).ToArray();
+            Controls.AddRange(items);
         }
     }
 }

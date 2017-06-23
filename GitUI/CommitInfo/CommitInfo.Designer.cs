@@ -359,7 +359,7 @@
             // 
             // commitDetails1
             // 
-            this.commitDetails1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.commitDetails1.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.commitDetails1.Dock = System.Windows.Forms.DockStyle.Right;
             this.commitDetails1.Location = new System.Drawing.Point(669, 0);
             this.commitDetails1.Name = "commitDetails1";

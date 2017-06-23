@@ -603,7 +603,7 @@ namespace GitUI.CommitInfo
         private void CommitInfo_SizeChanged(object sender, EventArgs e)
         {
             splitter1.MinExtra = 500;
-            splitter1.MinSize = 100;
+            splitter1.MinSize = 300;
         }
 
         private void RevisionInfo_VScroll(object sender, EventArgs e)
