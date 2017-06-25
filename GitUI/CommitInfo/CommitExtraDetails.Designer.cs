@@ -1,6 +1,6 @@
 ﻿namespace GitUI.CommitInfo
 {
-    partial class CommitDetails
+    partial class CommitExtraDetails
     {
         /// <summary> 
         /// Required designer variable.
@@ -378,13 +378,12 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(292, 253);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
-            // CommitDetails
+            // CommitExtraDetails
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.Controls.Add(this.tableLayoutPanel1);
             this.DoubleBuffered = true;
-            this.Name = "CommitDetails";
+            this.Name = "CommitExtraDetails";
             this.Size = new System.Drawing.Size(292, 253);
             this.elpnlParents.ResumeLayout(false);
             this.elpnlParents.PerformLayout();

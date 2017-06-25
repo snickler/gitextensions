@@ -7,17 +7,21 @@ using GitCommands;
 
 namespace GitUI.CommitInfo
 {
-    public partial class CommitDetails : GitModuleControl
+    public partial class CommitExtraDetails : GitModuleControl
     {
         private readonly object _syncRoot = new object();
 
-        public CommitDetails()
+        public CommitExtraDetails()
         {
             InitializeComponent();
-
             SetStyle(ControlStyles.ContainerControl | ControlStyles.OptimizedDoubleBuffer, true);
+            Translate();
         }
 
+
+        /// <summary>
+        /// Resets all rendered data.
+        /// </summary>
         public void Reset()
         {
             RenderCommitBranches(null);
@@ -26,6 +30,12 @@ namespace GitUI.CommitInfo
             RenderCommitTags(null);
         }
 
+        /// <summary>
+        /// Shows the data about the commits parents, children, branches and tags, if any.
+        /// </summary>
+        /// <param name="revisionGuid">The revision unique identifier.</param>
+        /// <param name="parentGuids">The parent guids.</param>
+        /// <param name="childrenGuids">The children guids.</param>
         public void ShowDetails(string revisionGuid, IList<string> parentGuids, IList<string> childrenGuids)
         {
             tableLayoutPanel1.SuspendLayout();

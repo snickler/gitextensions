@@ -54,7 +54,7 @@
             this.lblDivider1 = new System.Windows.Forms.Label();
             this.lblDivider2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.commitDetails1 = new GitUI.CommitInfo.CommitDetails();
+            this.commitDetails1 = new GitUI.CommitInfo.CommitExtraDetails();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.commitInfoContextMenuStrip.SuspendLayout();
             this.tlpnlCommitInfoLeft.SuspendLayout();
@@ -429,7 +429,7 @@
         private System.Windows.Forms.Label lblDivider1;
         private System.Windows.Forms.Label lblDivider2;
         private System.Windows.Forms.Panel panel1;
-        private CommitDetails commitDetails1;
+        private CommitExtraDetails commitDetails1;
         private System.Windows.Forms.Splitter splitter1;
     }
 }

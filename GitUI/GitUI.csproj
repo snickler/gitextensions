@@ -223,11 +223,17 @@
     <Compile Include="CommandsDialogs\SettingsDialog\Pages\FormBrowseRepoSettingsPage.Designer.cs">
       <DependentUpon>FormBrowseRepoSettingsPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="CommitInfo\CommitDetails.cs">
+    <Compile Include="CommitInfo\CommitBasicDetails.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="CommitInfo\CommitDetails.Designer.cs">
-      <DependentUpon>CommitDetails.cs</DependentUpon>
+    <Compile Include="CommitInfo\CommitBasicDetails.Designer.cs">
+      <DependentUpon>CommitBasicDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CommitInfo\CommitExtraDetails.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CommitInfo\CommitExtraDetails.Designer.cs">
+      <DependentUpon>CommitExtraDetails.cs</DependentUpon>
     </Compile>
     <Compile Include="CommitInfo\ExpandableListPanel.cs">
       <SubType>Component</SubType>
@@ -1156,8 +1162,11 @@
       <DependentUpon>FormManageWorktree.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="CommitInfo\CommitDetails.resx">
-      <DependentUpon>CommitDetails.cs</DependentUpon>
+    <EmbeddedResource Include="CommitInfo\CommitBasicDetails.resx">
+      <DependentUpon>CommitBasicDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CommitInfo\CommitExtraDetails.resx">
+      <DependentUpon>CommitExtraDetails.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CommitInfo\ExpandableListPanel.resx">
       <DependentUpon>ExpandableListPanel.cs</DependentUpon>
