@@ -16,10 +16,7 @@ namespace GitUI.CommitInfo
             InitializeComponent();
 
             SetStyle(ControlStyles.ContainerControl | ControlStyles.OptimizedDoubleBuffer, true);
-
-            ReorderControls();
         }
-
 
         public void Reset()
         {
@@ -31,31 +28,29 @@ namespace GitUI.CommitInfo
 
         public void ShowDetails(string revisionGuid, IList<string> parentGuids, IList<string> childrenGuids)
         {
+            tableLayoutPanel1.SuspendLayout();
+
             Reset();
             if (string.IsNullOrWhiteSpace(revisionGuid))
             {
                 return;
             }
 
-            flpnlCommitInfoRight.SuspendLayout();
             RenderCommitParents(parentGuids);
             RenderCommitChidren(childrenGuids);
 
-            flpnlCommitInfoRight.Controls[0].Width = flpnlCommitInfoRight.Width - 22;
-            flpnlCommitInfoRight.ResumeLayout(false);
-            flpnlCommitInfoRight.PerformLayout();
-
             if (AppSettings.CommitInfoShowContainedInBranches)
             {
-                LoadBranchInfo(revisionGuid);
-                //ThreadPool.QueueUserWorkItem(_ => LoadBranchInfo(revisionGuid));
+                ThreadPool.QueueUserWorkItem(_ => LoadBranchInfo(revisionGuid));
             }
 
             if (AppSettings.CommitInfoShowContainedInTags)
             {
-                LoadTagInfo(revisionGuid);
-                //ThreadPool.QueueUserWorkItem(_ => LoadTagInfo(revisionGuid));
+                ThreadPool.QueueUserWorkItem(_ => LoadTagInfo(revisionGuid));
             }
+
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
         }
 
 
@@ -99,8 +94,6 @@ namespace GitUI.CommitInfo
                     elpnlBranches.Visible =
                         lblCommitBranches.Visible =
                             lblDividerBranches.Visible = true;
-
-                    ReorderControls();
                 }
             }
         }
@@ -121,7 +114,6 @@ namespace GitUI.CommitInfo
                     elpnlChildren.Visible =
                         lblCommitChildren.Visible =
                             lblDivider4.Visible = true;
-                    ReorderControls();
                 }
             }
         }
@@ -142,7 +134,6 @@ namespace GitUI.CommitInfo
                     elpnlParents.Visible =
                         lblCommitParents.Visible =
                             lblDivider3.Visible = true;
-                    ReorderControls();
                 }
             }
         }
@@ -163,16 +154,7 @@ namespace GitUI.CommitInfo
                     elpnlTags.Visible =
                         lblCommitTags.Visible =
                             label5.Visible = true;
-                    ReorderControls();
                 }
-            }
-        }
-
-        private void ReorderControls()
-        {
-            foreach (var c in flpnlCommitInfoRight.Controls.Cast<Control>().OrderByDescending(x => x.TabIndex))
-            {
-                //c.BringToFront();
             }
         }
     }

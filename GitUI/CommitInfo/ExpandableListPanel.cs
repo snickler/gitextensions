@@ -18,8 +18,10 @@ namespace GitUI.CommitInfo
         public ExpandableListPanel()
         {
             InitializeComponent();
+            SetStyle(ControlStyles.ContainerControl | ControlStyles.OptimizedDoubleBuffer, true);
             Controls.Clear();
         }
+
 
         [DefaultValue(DefaultItemsToShow)]
         public int ItemsToShow
@@ -62,8 +64,6 @@ namespace GitUI.CommitInfo
 
         private void Render(Action action)
         {
-            //SuspendLayout();
-
             action?.Invoke();
 
 
@@ -73,9 +73,6 @@ namespace GitUI.CommitInfo
             {
                 Controls.Add(itemMore);
             }
-
-            //ResumeLayout(false);
-            //PerformLayout();
         }
 
         private Control CreateItem(object item)

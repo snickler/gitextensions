@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.flpnlCommitInfoRight = new System.Windows.Forms.FlowLayoutPanel();
             this.lblCommitParents = new System.Windows.Forms.Label();
             this.lblDivider3 = new System.Windows.Forms.Label();
             this.elpnlParents = new GitUI.CommitInfo.ExpandableListPanel();
@@ -53,49 +52,22 @@
             this.linkLabel10 = new System.Windows.Forms.LinkLabel();
             this.linkLabel11 = new System.Windows.Forms.LinkLabel();
             this.linkLabel12 = new System.Windows.Forms.LinkLabel();
-            this.lblBottomSpacer = new System.Windows.Forms.Label();
-            this.flpnlCommitInfoRight.SuspendLayout();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.elpnlParents.SuspendLayout();
             this.elpnlChildren.SuspendLayout();
             this.elpnlBranches.SuspendLayout();
             this.elpnlTags.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // flpnlCommitInfoRight
-            // 
-            this.flpnlCommitInfoRight.AutoScroll = true;
-            this.flpnlCommitInfoRight.AutoScrollMargin = new System.Drawing.Size(0, 60);
-            this.flpnlCommitInfoRight.Controls.Add(this.lblCommitParents);
-            this.flpnlCommitInfoRight.Controls.Add(this.lblDivider3);
-            this.flpnlCommitInfoRight.Controls.Add(this.elpnlParents);
-            this.flpnlCommitInfoRight.Controls.Add(this.lblCommitChildren);
-            this.flpnlCommitInfoRight.Controls.Add(this.lblDivider4);
-            this.flpnlCommitInfoRight.Controls.Add(this.elpnlChildren);
-            this.flpnlCommitInfoRight.Controls.Add(this.lblCommitBranches);
-            this.flpnlCommitInfoRight.Controls.Add(this.lblDividerBranches);
-            this.flpnlCommitInfoRight.Controls.Add(this.elpnlBranches);
-            this.flpnlCommitInfoRight.Controls.Add(this.lblCommitTags);
-            this.flpnlCommitInfoRight.Controls.Add(this.label5);
-            this.flpnlCommitInfoRight.Controls.Add(this.elpnlTags);
-            this.flpnlCommitInfoRight.Controls.Add(this.lblBottomSpacer);
-            this.flpnlCommitInfoRight.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flpnlCommitInfoRight.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flpnlCommitInfoRight.Location = new System.Drawing.Point(0, 0);
-            this.flpnlCommitInfoRight.Name = "flpnlCommitInfoRight";
-            this.flpnlCommitInfoRight.Padding = new System.Windows.Forms.Padding(8);
-            this.flpnlCommitInfoRight.Size = new System.Drawing.Size(263, 200);
-            this.flpnlCommitInfoRight.TabIndex = 0;
-            this.flpnlCommitInfoRight.WrapContents = false;
             // 
             // lblCommitParents
             // 
             this.lblCommitParents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblCommitParents.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblCommitParents.ForeColor = System.Drawing.SystemColors.GrayText;
             this.lblCommitParents.Location = new System.Drawing.Point(11, 8);
             this.lblCommitParents.Name = "lblCommitParents";
-            this.lblCommitParents.Size = new System.Drawing.Size(214, 13);
+            this.lblCommitParents.Size = new System.Drawing.Size(270, 13);
             this.lblCommitParents.TabIndex = 0;
             this.lblCommitParents.Text = "Parent(s):";
             // 
@@ -106,7 +78,7 @@
             this.lblDivider3.Location = new System.Drawing.Point(11, 23);
             this.lblDivider3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lblDivider3.Name = "lblDivider3";
-            this.lblDivider3.Size = new System.Drawing.Size(214, 1);
+            this.lblDivider3.Size = new System.Drawing.Size(270, 1);
             this.lblDivider3.TabIndex = 1;
             this.lblDivider3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -115,7 +87,6 @@
             this.elpnlParents.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.elpnlParents.AutoSize = true;
             this.elpnlParents.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.elpnlParents.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.elpnlParents.Controls.Add(this.linkLabel1);
             this.elpnlParents.Controls.Add(this.linkLabel2);
             this.elpnlParents.Controls.Add(this.linkLabel3);
@@ -123,7 +94,7 @@
             this.elpnlParents.Location = new System.Drawing.Point(28, 29);
             this.elpnlParents.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.elpnlParents.Name = "elpnlParents";
-            this.elpnlParents.Size = new System.Drawing.Size(197, 32);
+            this.elpnlParents.Size = new System.Drawing.Size(253, 15);
             this.elpnlParents.TabIndex = 2;
             // 
             // linkLabel1
@@ -152,7 +123,7 @@
             // 
             this.linkLabel3.AutoSize = true;
             this.linkLabel3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel3.Location = new System.Drawing.Point(3, 15);
+            this.linkLabel3.Location = new System.Drawing.Point(152, 0);
             this.linkLabel3.Name = "linkLabel3";
             this.linkLabel3.Size = new System.Drawing.Size(67, 15);
             this.linkLabel3.TabIndex = 2;
@@ -163,12 +134,11 @@
             // 
             this.lblCommitChildren.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCommitChildren.AutoSize = true;
-            this.lblCommitChildren.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblCommitChildren.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.lblCommitChildren.Location = new System.Drawing.Point(11, 80);
+            this.lblCommitChildren.Location = new System.Drawing.Point(11, 63);
             this.lblCommitChildren.Margin = new System.Windows.Forms.Padding(3, 16, 3, 0);
             this.lblCommitChildren.Name = "lblCommitChildren";
-            this.lblCommitChildren.Size = new System.Drawing.Size(214, 15);
+            this.lblCommitChildren.Size = new System.Drawing.Size(270, 13);
             this.lblCommitChildren.TabIndex = 3;
             this.lblCommitChildren.Text = "Children:";
             // 
@@ -176,10 +146,10 @@
             // 
             this.lblDivider4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDivider4.BackColor = System.Drawing.SystemColors.Control;
-            this.lblDivider4.Location = new System.Drawing.Point(11, 97);
+            this.lblDivider4.Location = new System.Drawing.Point(11, 78);
             this.lblDivider4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lblDivider4.Name = "lblDivider4";
-            this.lblDivider4.Size = new System.Drawing.Size(214, 1);
+            this.lblDivider4.Size = new System.Drawing.Size(270, 1);
             this.lblDivider4.TabIndex = 4;
             this.lblDivider4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -188,15 +158,14 @@
             this.elpnlChildren.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.elpnlChildren.AutoSize = true;
             this.elpnlChildren.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.elpnlChildren.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.elpnlChildren.Controls.Add(this.linkLabel4);
             this.elpnlChildren.Controls.Add(this.linkLabel5);
             this.elpnlChildren.Controls.Add(this.linkLabel6);
             this.elpnlChildren.ItemsToShow = 2;
-            this.elpnlChildren.Location = new System.Drawing.Point(28, 103);
+            this.elpnlChildren.Location = new System.Drawing.Point(28, 84);
             this.elpnlChildren.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.elpnlChildren.Name = "elpnlChildren";
-            this.elpnlChildren.Size = new System.Drawing.Size(197, 15);
+            this.elpnlChildren.Size = new System.Drawing.Size(253, 13);
             this.elpnlChildren.TabIndex = 5;
             // 
             // linkLabel4
@@ -233,14 +202,13 @@
             // 
             this.lblCommitBranches.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCommitBranches.AutoSize = true;
-            this.lblCommitBranches.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblCommitBranches.ForeColor = System.Drawing.SystemColors.GrayText;
             this.lblCommitBranches.Image = global::GitUI.Properties.Resources.Icon_35;
             this.lblCommitBranches.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblCommitBranches.Location = new System.Drawing.Point(11, 137);
+            this.lblCommitBranches.Location = new System.Drawing.Point(11, 116);
             this.lblCommitBranches.Margin = new System.Windows.Forms.Padding(3, 16, 3, 0);
             this.lblCommitBranches.Name = "lblCommitBranches";
-            this.lblCommitBranches.Size = new System.Drawing.Size(214, 15);
+            this.lblCommitBranches.Size = new System.Drawing.Size(270, 13);
             this.lblCommitBranches.TabIndex = 6;
             this.lblCommitBranches.Text = "       Contained in branches:";
             this.lblCommitBranches.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -249,10 +217,10 @@
             // 
             this.lblDividerBranches.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDividerBranches.BackColor = System.Drawing.SystemColors.Control;
-            this.lblDividerBranches.Location = new System.Drawing.Point(11, 154);
+            this.lblDividerBranches.Location = new System.Drawing.Point(11, 131);
             this.lblDividerBranches.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lblDividerBranches.Name = "lblDividerBranches";
-            this.lblDividerBranches.Size = new System.Drawing.Size(214, 1);
+            this.lblDividerBranches.Size = new System.Drawing.Size(270, 1);
             this.lblDividerBranches.TabIndex = 7;
             this.lblDividerBranches.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -261,15 +229,14 @@
             this.elpnlBranches.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.elpnlBranches.AutoSize = true;
             this.elpnlBranches.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.elpnlBranches.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.elpnlBranches.Controls.Add(this.linkLabel7);
             this.elpnlBranches.Controls.Add(this.linkLabel8);
             this.elpnlBranches.Controls.Add(this.linkLabel9);
             this.elpnlBranches.ItemsToShow = 2;
-            this.elpnlBranches.Location = new System.Drawing.Point(28, 160);
+            this.elpnlBranches.Location = new System.Drawing.Point(28, 137);
             this.elpnlBranches.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.elpnlBranches.Name = "elpnlBranches";
-            this.elpnlBranches.Size = new System.Drawing.Size(197, 15);
+            this.elpnlBranches.Size = new System.Drawing.Size(253, 13);
             this.elpnlBranches.TabIndex = 8;
             // 
             // linkLabel7
@@ -306,14 +273,13 @@
             // 
             this.lblCommitTags.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCommitTags.AutoSize = true;
-            this.lblCommitTags.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblCommitTags.ForeColor = System.Drawing.SystemColors.GrayText;
             this.lblCommitTags.Image = global::GitUI.Properties.Resources.Icon_33;
             this.lblCommitTags.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblCommitTags.Location = new System.Drawing.Point(11, 194);
+            this.lblCommitTags.Location = new System.Drawing.Point(11, 169);
             this.lblCommitTags.Margin = new System.Windows.Forms.Padding(3, 16, 3, 0);
             this.lblCommitTags.Name = "lblCommitTags";
-            this.lblCommitTags.Size = new System.Drawing.Size(214, 15);
+            this.lblCommitTags.Size = new System.Drawing.Size(270, 13);
             this.lblCommitTags.TabIndex = 9;
             this.lblCommitTags.Text = "       Contained in tags:";
             this.lblCommitTags.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -322,10 +288,10 @@
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.BackColor = System.Drawing.SystemColors.Control;
-            this.label5.Location = new System.Drawing.Point(11, 211);
+            this.label5.Location = new System.Drawing.Point(11, 184);
             this.label5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(214, 1);
+            this.label5.Size = new System.Drawing.Size(270, 1);
             this.label5.TabIndex = 10;
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -334,15 +300,14 @@
             this.elpnlTags.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.elpnlTags.AutoSize = true;
             this.elpnlTags.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.elpnlTags.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.elpnlTags.Controls.Add(this.linkLabel10);
             this.elpnlTags.Controls.Add(this.linkLabel11);
             this.elpnlTags.Controls.Add(this.linkLabel12);
             this.elpnlTags.ItemsToShow = 2;
-            this.elpnlTags.Location = new System.Drawing.Point(28, 217);
+            this.elpnlTags.Location = new System.Drawing.Point(28, 190);
             this.elpnlTags.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.elpnlTags.Name = "elpnlTags";
-            this.elpnlTags.Size = new System.Drawing.Size(197, 15);
+            this.elpnlTags.Size = new System.Drawing.Size(253, 13);
             this.elpnlTags.TabIndex = 11;
             // 
             // linkLabel10
@@ -375,25 +340,52 @@
             this.linkLabel12.TabStop = true;
             this.linkLabel12.Text = "linkLabel12";
             // 
-            // lblBottomSpacer
+            // tableLayoutPanel1
             // 
-            this.lblBottomSpacer.AutoSize = true;
-            this.lblBottomSpacer.Location = new System.Drawing.Point(11, 255);
-            this.lblBottomSpacer.Margin = new System.Windows.Forms.Padding(3, 20, 3, 0);
-            this.lblBottomSpacer.Name = "lblBottomSpacer";
-            this.lblBottomSpacer.Size = new System.Drawing.Size(0, 13);
-            this.lblBottomSpacer.TabIndex = 12;
+            this.tableLayoutPanel1.AutoScroll = true;
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.elpnlTags, 0, 11);
+            this.tableLayoutPanel1.Controls.Add(this.label5, 0, 10);
+            this.tableLayoutPanel1.Controls.Add(this.lblCommitTags, 0, 9);
+            this.tableLayoutPanel1.Controls.Add(this.elpnlBranches, 0, 8);
+            this.tableLayoutPanel1.Controls.Add(this.lblDividerBranches, 0, 7);
+            this.tableLayoutPanel1.Controls.Add(this.lblCommitBranches, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.elpnlChildren, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.lblDivider4, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.lblCommitChildren, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.elpnlParents, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.lblDivider3, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.lblCommitParents, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(8);
+            this.tableLayoutPanel1.RowCount = 13;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(292, 253);
+            this.tableLayoutPanel1.TabIndex = 1;
             // 
             // CommitDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.flpnlCommitInfoRight);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.DoubleBuffered = true;
             this.Name = "CommitDetails";
-            this.Size = new System.Drawing.Size(263, 200);
-            this.flpnlCommitInfoRight.ResumeLayout(false);
-            this.flpnlCommitInfoRight.PerformLayout();
+            this.Size = new System.Drawing.Size(292, 253);
             this.elpnlParents.ResumeLayout(false);
             this.elpnlParents.PerformLayout();
             this.elpnlChildren.ResumeLayout(false);
@@ -402,13 +394,13 @@
             this.elpnlBranches.PerformLayout();
             this.elpnlTags.ResumeLayout(false);
             this.elpnlTags.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.FlowLayoutPanel flpnlCommitInfoRight;
         private System.Windows.Forms.Label lblCommitParents;
         private System.Windows.Forms.Label lblDivider3;
         private ExpandableListPanel elpnlParents;
@@ -433,6 +425,6 @@
         private System.Windows.Forms.LinkLabel linkLabel10;
         private System.Windows.Forms.LinkLabel linkLabel11;
         private System.Windows.Forms.LinkLabel linkLabel12;
-        private System.Windows.Forms.Label lblBottomSpacer;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }
 }

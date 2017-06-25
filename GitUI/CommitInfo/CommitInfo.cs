@@ -50,6 +50,9 @@ namespace GitUI.CommitInfo
             txtHash.BackColor =
                 RevisionInfo.BackColor = tlpnlCommitInfoLeft.BackColor;
             Translate();
+
+            SetStyle(ControlStyles.ContainerControl | ControlStyles.OptimizedDoubleBuffer, true);
+
             GitUICommandsSourceSet += (a, uiCommandsSource) =>
             {
                 _sortedRefs = null;
@@ -72,6 +75,16 @@ namespace GitUI.CommitInfo
             ResetTextAndImage();
         }
 
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams handleParam = base.CreateParams;
+                handleParam.ExStyle |= 0x02000000;   // WS_EX_COMPOSITED       
+                return handleParam;
+            }
+        }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
