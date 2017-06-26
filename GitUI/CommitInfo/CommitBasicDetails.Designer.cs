@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpnlCommitInfoLeft = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.gravatar1 = new GitUI.GravatarControl();
             this.lblCommitterDate = new System.Windows.Forms.Label();
             this.llblAuthor = new System.Windows.Forms.LinkLabel();
@@ -39,49 +39,48 @@
             this.lblCommitter = new System.Windows.Forms.Label();
             this.lblSpacer2 = new System.Windows.Forms.Label();
             this.txtHash = new System.Windows.Forms.TextBox();
-            this.tlpnlCommitInfoLeft.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tlpnlCommitInfoLeft
+            // tableLayoutPanel1
             // 
-            this.tlpnlCommitInfoLeft.AutoSize = true;
-            this.tlpnlCommitInfoLeft.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tlpnlCommitInfoLeft.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.tlpnlCommitInfoLeft.ColumnCount = 3;
-            this.tlpnlCommitInfoLeft.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 16F));
-            this.tlpnlCommitInfoLeft.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpnlCommitInfoLeft.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 16F));
-            this.tlpnlCommitInfoLeft.Controls.Add(this.gravatar1, 1, 4);
-            this.tlpnlCommitInfoLeft.Controls.Add(this.lblCommitterDate, 1, 11);
-            this.tlpnlCommitInfoLeft.Controls.Add(this.llblAuthor, 1, 5);
-            this.tlpnlCommitInfoLeft.Controls.Add(this.lblAuthorDate, 1, 6);
-            this.tlpnlCommitInfoLeft.Controls.Add(this.llblCommitter, 1, 10);
-            this.tlpnlCommitInfoLeft.Controls.Add(this.lblCreatedBy, 0, 2);
-            this.tlpnlCommitInfoLeft.Controls.Add(this.lblSpacer1, 0, 3);
-            this.tlpnlCommitInfoLeft.Controls.Add(this.lblCommitter, 0, 8);
-            this.tlpnlCommitInfoLeft.Controls.Add(this.lblSpacer2, 0, 9);
-            this.tlpnlCommitInfoLeft.Controls.Add(this.txtHash, 0, 0);
-            this.tlpnlCommitInfoLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.tlpnlCommitInfoLeft.Location = new System.Drawing.Point(0, 0);
-            this.tlpnlCommitInfoLeft.MinimumSize = new System.Drawing.Size(250, 0);
-            this.tlpnlCommitInfoLeft.Name = "tlpnlCommitInfoLeft";
-            this.tlpnlCommitInfoLeft.Padding = new System.Windows.Forms.Padding(8);
-            this.tlpnlCommitInfoLeft.RowCount = 13;
-            this.tlpnlCommitInfoLeft.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpnlCommitInfoLeft.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpnlCommitInfoLeft.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpnlCommitInfoLeft.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpnlCommitInfoLeft.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpnlCommitInfoLeft.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpnlCommitInfoLeft.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpnlCommitInfoLeft.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpnlCommitInfoLeft.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpnlCommitInfoLeft.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpnlCommitInfoLeft.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpnlCommitInfoLeft.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpnlCommitInfoLeft.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpnlCommitInfoLeft.Size = new System.Drawing.Size(250, 305);
-            this.tlpnlCommitInfoLeft.TabIndex = 5;
+            this.tableLayoutPanel1.AutoScroll = true;
+            this.tableLayoutPanel1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tableLayoutPanel1.Controls.Add(this.gravatar1, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.lblCommitterDate, 1, 11);
+            this.tableLayoutPanel1.Controls.Add(this.llblAuthor, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.lblAuthorDate, 1, 6);
+            this.tableLayoutPanel1.Controls.Add(this.llblCommitter, 1, 10);
+            this.tableLayoutPanel1.Controls.Add(this.lblCreatedBy, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.lblSpacer1, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.lblCommitter, 0, 8);
+            this.tableLayoutPanel1.Controls.Add(this.lblSpacer2, 0, 9);
+            this.tableLayoutPanel1.Controls.Add(this.txtHash, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.MinimumSize = new System.Drawing.Size(250, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(8);
+            this.tableLayoutPanel1.RowCount = 13;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(266, 305);
+            this.tableLayoutPanel1.TabIndex = 5;
             // 
             // gravatar1
             // 
@@ -98,7 +97,7 @@
             // 
             this.lblCommitterDate.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblCommitterDate.AutoEllipsis = true;
-            this.tlpnlCommitInfoLeft.SetColumnSpan(this.lblCommitterDate, 2);
+            this.tableLayoutPanel1.SetColumnSpan(this.lblCommitterDate, 2);
             this.lblCommitterDate.Location = new System.Drawing.Point(27, 175);
             this.lblCommitterDate.Name = "lblCommitterDate";
             this.lblCommitterDate.Size = new System.Drawing.Size(173, 13);
@@ -110,7 +109,7 @@
             // 
             this.llblAuthor.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.llblAuthor.AutoEllipsis = true;
-            this.tlpnlCommitInfoLeft.SetColumnSpan(this.llblAuthor, 2);
+            this.tableLayoutPanel1.SetColumnSpan(this.llblAuthor, 2);
             this.llblAuthor.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.llblAuthor.LinkColor = System.Drawing.SystemColors.HotTrack;
             this.llblAuthor.Location = new System.Drawing.Point(27, 96);
@@ -125,7 +124,7 @@
             // 
             this.lblAuthorDate.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblAuthorDate.AutoEllipsis = true;
-            this.tlpnlCommitInfoLeft.SetColumnSpan(this.lblAuthorDate, 2);
+            this.tableLayoutPanel1.SetColumnSpan(this.lblAuthorDate, 2);
             this.lblAuthorDate.Location = new System.Drawing.Point(27, 109);
             this.lblAuthorDate.Name = "lblAuthorDate";
             this.lblAuthorDate.Size = new System.Drawing.Size(169, 13);
@@ -137,7 +136,7 @@
             // 
             this.llblCommitter.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.llblCommitter.AutoEllipsis = true;
-            this.tlpnlCommitInfoLeft.SetColumnSpan(this.llblCommitter, 2);
+            this.tableLayoutPanel1.SetColumnSpan(this.llblCommitter, 2);
             this.llblCommitter.LinkColor = System.Drawing.SystemColors.HotTrack;
             this.llblCommitter.Location = new System.Drawing.Point(27, 162);
             this.llblCommitter.Name = "llblCommitter";
@@ -150,7 +149,7 @@
             // lblCreatedBy
             // 
             this.lblCreatedBy.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.tlpnlCommitInfoLeft.SetColumnSpan(this.lblCreatedBy, 2);
+            this.tableLayoutPanel1.SetColumnSpan(this.lblCreatedBy, 2);
             this.lblCreatedBy.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCreatedBy.ForeColor = System.Drawing.SystemColors.GrayText;
             this.lblCreatedBy.Location = new System.Drawing.Point(11, 48);
@@ -163,7 +162,7 @@
             // 
             this.lblSpacer1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblSpacer1.BackColor = System.Drawing.SystemColors.Control;
-            this.tlpnlCommitInfoLeft.SetColumnSpan(this.lblSpacer1, 2);
+            this.tableLayoutPanel1.SetColumnSpan(this.lblSpacer1, 2);
             this.lblSpacer1.Location = new System.Drawing.Point(11, 65);
             this.lblSpacer1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lblSpacer1.Name = "lblSpacer1";
@@ -174,7 +173,7 @@
             // lblCommitter
             // 
             this.lblCommitter.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.tlpnlCommitInfoLeft.SetColumnSpan(this.lblCommitter, 2);
+            this.tableLayoutPanel1.SetColumnSpan(this.lblCommitter, 2);
             this.lblCommitter.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCommitter.ForeColor = System.Drawing.SystemColors.GrayText;
             this.lblCommitter.Location = new System.Drawing.Point(11, 142);
@@ -188,11 +187,11 @@
             // 
             this.lblSpacer2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSpacer2.BackColor = System.Drawing.SystemColors.Control;
-            this.tlpnlCommitInfoLeft.SetColumnSpan(this.lblSpacer2, 2);
+            this.tableLayoutPanel1.SetColumnSpan(this.lblSpacer2, 2);
             this.lblSpacer2.Location = new System.Drawing.Point(11, 159);
             this.lblSpacer2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lblSpacer2.Name = "lblSpacer2";
-            this.lblSpacer2.Size = new System.Drawing.Size(212, 1);
+            this.lblSpacer2.Size = new System.Drawing.Size(228, 1);
             this.lblSpacer2.TabIndex = 12;
             this.lblSpacer2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -201,34 +200,32 @@
             this.txtHash.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.txtHash.BackColor = System.Drawing.SystemColors.ControlLight;
             this.txtHash.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tlpnlCommitInfoLeft.SetColumnSpan(this.txtHash, 3);
+            this.tableLayoutPanel1.SetColumnSpan(this.txtHash, 3);
             this.txtHash.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtHash.ForeColor = System.Drawing.SystemColors.GrayText;
             this.txtHash.Location = new System.Drawing.Point(11, 11);
             this.txtHash.Name = "txtHash";
             this.txtHash.ReadOnly = true;
-            this.txtHash.Size = new System.Drawing.Size(228, 15);
+            this.txtHash.Size = new System.Drawing.Size(244, 15);
             this.txtHash.TabIndex = 12;
             this.txtHash.Text = "253564567567678";
             this.txtHash.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // CommitBasicDetails
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.tlpnlCommitInfoLeft);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "CommitBasicDetails";
             this.Size = new System.Drawing.Size(266, 305);
-            this.tlpnlCommitInfoLeft.ResumeLayout(false);
-            this.tlpnlCommitInfoLeft.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpnlCommitInfoLeft;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private GravatarControl gravatar1;
         private System.Windows.Forms.Label lblCommitterDate;
         private System.Windows.Forms.LinkLabel llblAuthor;

@@ -38,7 +38,6 @@ namespace GitUI.CommitInfo
         private List<string> _branches;
         private string _branchInfo;
         private IList<string> _sortedRefs;
-        private readonly Control[] _pnlCommitInfoPanelControls, _pnlCommitInfoPanelDynamicControls;
 
 
         public event EventHandler<CommandEventArgs> CommandClick;
@@ -47,8 +46,8 @@ namespace GitUI.CommitInfo
         public CommitInfo()
         {
             InitializeComponent();
-            txtHash.BackColor =
-                RevisionInfo.BackColor = tlpnlCommitInfoLeft.BackColor;
+            //txtHash.BackColor =
+            //    RevisionInfo.BackColor = tlpnlCommitInfoLeft.BackColor;
             Translate();
 
             SetStyle(ControlStyles.ContainerControl | ControlStyles.OptimizedDoubleBuffer, true);
@@ -58,30 +57,18 @@ namespace GitUI.CommitInfo
                 _sortedRefs = null;
             };
 
-            _pnlCommitInfoPanelDynamicControls = new Control[]
-            {
-                txtHash, llblAuthor, llblCommitter, lblAuthorDate, lblCommitterDate
-            };
-            _pnlCommitInfoPanelControls = _pnlCommitInfoPanelDynamicControls.Union(new Control[]
-            {
-                lblCreatedBy, lblCommitter, lblSpacer1, lblSpacer2
-            }).ToArray();
-            _pnlCommitInfoPanelControls.ForEach(c =>
-            {
-                //c.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-                c.Font = AppSettings.Font;
-            });
 
             ResetTextAndImage();
         }
 
 
+        // NB: required to reduce horrible flicker
         protected override CreateParams CreateParams
         {
             get
             {
                 CreateParams handleParam = base.CreateParams;
-                handleParam.ExStyle |= 0x02000000;   // WS_EX_COMPOSITED       
+                handleParam.ExStyle |= 0x02000000;   // WS_EX_COMPOSITED
                 return handleParam;
             }
         }
@@ -166,23 +153,12 @@ namespace GitUI.CommitInfo
             data.ChildrenGuids = _children;
             CommitInformation commitInformation = CommitInformation.GetCommitInfo(data, CommandClick != null, Module);
 
-            llblAuthor.Text = data.Author; //$"{_revision.Author}\r\n{_revision.AuthorEmail}"; //
-            llblCommitter.Text = data.Committer;
-            lblAuthorDate.Text =
-                LocalizationHelpers.GetRelativeDateString(DateTime.UtcNow, data.AuthorDate.UtcDateTime) +
-                $@" ({LocalizationHelpers.GetFullDateString(data.AuthorDate)})";
-            lblCommitterDate.Text =
-                LocalizationHelpers.GetRelativeDateString(DateTime.UtcNow, data.CommitDate.UtcDateTime) +
-                $@" ({LocalizationHelpers.GetFullDateString(data.CommitDate)})";
-
-            txtHash.Text = (data.Guid ?? "").Substring(0, Math.Min(data.Guid.Length, 10)); //$"# {data.Guid}";
-
+            commitBasicDetails1.ShowDetails(data);
             commitDetails1.ShowDetails(_revision.Guid, data.ParentGuids, data.ChildrenGuids);
             ApplyCommitInfoPanelLayout();
 
             _revisionInfo = commitInformation.Body.Trim();
             UpdateText();
-            LoadAuthorImage(data.Author ?? data.Committer);
 
             if (AppSettings.ShowAnnotatedTagsMessages)
                 ThreadPool.QueueUserWorkItem(_ => LoadAnnotatedTagInfo(_revision));
@@ -332,10 +308,6 @@ namespace GitUI.CommitInfo
         {
             commitDetails1.Reset();
 
-            _pnlCommitInfoPanelDynamicControls.ForEach(c =>
-            {
-                c.Text = string.Empty;
-            });
 
             _revisionInfo = string.Empty;
             _linksInfo = string.Empty;
@@ -346,18 +318,8 @@ namespace GitUI.CommitInfo
             _annotatedTagsMessages = null;
             _tags = null;
             UpdateText();
-            gravatar1.LoadImageForEmail("");
         }
 
-        private void LoadAuthorImage(string author)
-        {
-            var matches = Regex.Matches(author, @"<([\w\-\.]+@[\w\-\.]+)>");
-
-            if (matches.Count == 0)
-                return;
-
-            gravatar1.LoadImageForEmail(matches[0].Groups[1].Value);
-        }
 
         private string GetBranchesWhichContainsThisCommit(IEnumerable<string> branches, bool showBranchesAsLinks)
         {
@@ -559,27 +521,6 @@ namespace GitUI.CommitInfo
             }
         }
 
-        private void ResizeCommitInfoPanel()
-        {
-            // TODO: needed fo Mono?
-            //tlpnlCommitInfoLeft.SuspendLayout();
-
-            // TODO: can be optimised
-            var widthHash = TextRenderer.MeasureText(new string('a', txtHash.Text.Length), txtHash.Font).Width;
-            var widthSideColumns = tlpnlCommitInfoLeft.ColumnStyles[0].Width + tlpnlCommitInfoLeft.ColumnStyles[2].Width;
-            var widthAvatarEx = AppSettings.AuthorImageSize + widthSideColumns;
-
-            var tableWidth = Math.Max(tlpnlCommitInfoLeft.MinimumSize.Width,
-                                      (int)(Math.Max(widthHash, widthAvatarEx) + tlpnlCommitInfoLeft.Padding.Left + tlpnlCommitInfoLeft.Padding.Right));
-            tlpnlCommitInfoLeft.Width = tableWidth;
-            var midColumnWidth = tableWidth - widthSideColumns - tlpnlCommitInfoLeft.Padding.Left - tlpnlCommitInfoLeft.Padding.Right;
-
-            var avatarPadding = ((int)midColumnWidth - AppSettings.AuthorImageSize) / 2;
-            gravatar1.Margin = new Padding(avatarPadding, 4, avatarPadding, 4);
-
-            //tlpnlCommitInfoLeft.ResumeLayout(false);
-            //tlpnlCommitInfoLeft.PerformLayout();
-        }
 
 
         private void gravatar1_GravatarSizeChanged(object sender, EventArgs e)
@@ -598,7 +539,7 @@ namespace GitUI.CommitInfo
                 //    c.Width = 100;
                 //});
 
-                ResizeCommitInfoPanel();
+                //ResizeCommitInfoPanel();
 
                 //_pnlCommitInfoPanelControls.ForEach(c =>
                 //{
@@ -608,8 +549,8 @@ namespace GitUI.CommitInfo
             }
             finally
             {
-                AutoScrollMinSize = new System.Drawing.Size(tlpnlCommitInfoLeft.Width,
-                                                            lblCommitterDate.Top + lblCommitterDate.Height + tlpnlCommitInfoLeft.Margin.Bottom);
+                //AutoScrollMinSize = new System.Drawing.Size(tlpnlCommitInfoLeft.Width,
+                //                                            lblCommitterDate.Top + lblCommitterDate.Height + tlpnlCommitInfoLeft.Margin.Bottom);
             }
         }
 
