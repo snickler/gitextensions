@@ -58,7 +58,7 @@
             this.RevisionInfo.Location = new System.Drawing.Point(8, 8);
             this.RevisionInfo.Name = "RevisionInfo";
             this.RevisionInfo.ReadOnly = true;
-            this.RevisionInfo.Size = new System.Drawing.Size(371, 370);
+            this.RevisionInfo.Size = new System.Drawing.Size(372, 370);
             this.RevisionInfo.TabIndex = 0;
             this.RevisionInfo.Text = "";
             this.RevisionInfo.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.RevisionInfoLinkClicked);
@@ -157,7 +157,7 @@
             // 
             this.lblDivider2.BackColor = System.Drawing.SystemColors.Control;
             this.lblDivider2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lblDivider2.Location = new System.Drawing.Point(665, 0);
+            this.lblDivider2.Location = new System.Drawing.Point(666, 0);
             this.lblDivider2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lblDivider2.Name = "lblDivider2";
             this.lblDivider2.Padding = new System.Windows.Forms.Padding(0, 8, 0, 8);
@@ -172,7 +172,7 @@
             this.panel1.Location = new System.Drawing.Point(278, 0);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(8);
-            this.panel1.Size = new System.Drawing.Size(387, 386);
+            this.panel1.Size = new System.Drawing.Size(388, 386);
             this.panel1.TabIndex = 15;
             // 
             // commitDetails1
@@ -189,9 +189,10 @@
             // 
             this.splitter1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter1.Location = new System.Drawing.Point(666, 0);
+            this.splitter1.Location = new System.Drawing.Point(667, 0);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 386);
+            this.splitter1.Padding = new System.Windows.Forms.Padding(0, 12, 0, 12);
+            this.splitter1.Size = new System.Drawing.Size(2, 386);
             this.splitter1.TabIndex = 17;
             this.splitter1.TabStop = false;
             // 

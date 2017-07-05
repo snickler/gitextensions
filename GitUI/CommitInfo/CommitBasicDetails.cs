@@ -33,6 +33,11 @@ namespace GitUI.CommitInfo
                 c.Anchor = AnchorStyles.Left | AnchorStyles.Right;
                 c.Font = AppSettings.Font;
             });
+
+            var widthSideColumns = tableLayoutPanel1.ColumnStyles[0].Width + tableLayoutPanel1.ColumnStyles[2].Width;
+            var midColumnWidth = tableLayoutPanel1.Width - widthSideColumns - tableLayoutPanel1.Padding.Left - tableLayoutPanel1.Padding.Right;
+            var avatarPadding = ((int)midColumnWidth - AppSettings.AuthorImageSize) / 2;
+            gravatar1.Margin = new Padding(avatarPadding, 4, avatarPadding, 4);
         }
 
 

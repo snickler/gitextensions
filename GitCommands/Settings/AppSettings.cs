@@ -383,6 +383,12 @@ namespace GitCommands
             set { SetBool("commitinfoshowcontainedintags", value); }
         }
 
+        public static bool CommitInfoShowLinks
+        {
+            get { return GetBool("commitinfoshowlinks", false); }
+            set { SetBool("commitinfoshowlinks", value); }
+        }
+
         public static string GravatarCachePath
         {
             get { return Path.Combine(ApplicationDataPath.Value, "Images\\"); }

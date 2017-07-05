@@ -33,11 +33,11 @@ namespace GitUI.CommitInfo
         private string _linksInfo;
         private IDictionary<string, string> _annotatedTagsMessages;
         private string _annotatedTagsInfo;
-        private List<string> _tags;
+        //private List<string> _tags;
         private string _tagInfo;
-        private List<string> _branches;
+        //private List<string> _branches;
         private string _branchInfo;
-        private IList<string> _sortedRefs;
+        //private IList<string> _sortedRefs;
 
 
         public event EventHandler<CommandEventArgs> CommandClick;
@@ -52,10 +52,10 @@ namespace GitUI.CommitInfo
 
             SetStyle(ControlStyles.ContainerControl | ControlStyles.OptimizedDoubleBuffer, true);
 
-            GitUICommandsSourceSet += (a, uiCommandsSource) =>
-            {
-                _sortedRefs = null;
-            };
+            //GitUICommandsSourceSet += (a, uiCommandsSource) =>
+            //{
+            //    _sortedRefs = null;
+            //};
 
 
             ResetTextAndImage();
@@ -132,6 +132,7 @@ namespace GitUI.CommitInfo
             showMessagesOfAnnotatedTagsToolStripMenuItem.Checked = AppSettings.ShowAnnotatedTagsMessages;
 
             ResetTextAndImage();
+            commitBasicDetails1.Reset();
             commitDetails1.Reset();
 
             if (string.IsNullOrEmpty(_revision.Guid))
@@ -145,19 +146,20 @@ namespace GitUI.CommitInfo
                 _revision.Body = data.Body;
             }
 
-            ThreadPool.QueueUserWorkItem(_ => LoadLinksForRevision(_revision));
+            //ThreadPool.QueueUserWorkItem(_ => LoadLinksForRevision(_revision));
 
-            if (_sortedRefs == null)
-                ThreadPool.QueueUserWorkItem(_ => LoadSortedRefs());
+            //if (_sortedRefs == null)
+            //    ThreadPool.QueueUserWorkItem(_ => LoadSortedRefs());
 
-            data.ChildrenGuids = _children;
-            CommitInformation commitInformation = CommitInformation.GetCommitInfo(data, CommandClick != null, Module);
+            //data.ChildrenGuids = _children;
+           // CommitInformation commitInformation = CommitInformation.GetCommitInfo(data, CommandClick != null, Module);
 
             commitBasicDetails1.ShowDetails(data);
-            commitDetails1.ShowDetails(_revision.Guid, data.ParentGuids, data.ChildrenGuids);
-            ApplyCommitInfoPanelLayout();
+            commitDetails1.ShowDetails(_revision, _children);
 
-            _revisionInfo = commitInformation.Body.Trim();
+            //ApplyCommitInfoPanelLayout();
+
+            _revisionInfo = data.Body;// commitInformation.Body.Trim();
             UpdateText();
 
             if (AppSettings.ShowAnnotatedTagsMessages)
@@ -166,11 +168,11 @@ namespace GitUI.CommitInfo
 
 
 
-        private void LoadSortedRefs()
-        {
-            _sortedRefs = Module.GetSortedRefs();
-            this.InvokeAsync(UpdateText);
-        }
+        //private void LoadSortedRefs()
+        //{
+        //    _sortedRefs = Module.GetSortedRefs();
+        //    this.InvokeAsync(UpdateText);
+        //}
 
         private void LoadAnnotatedTagInfo(GitRevision revision)
         {
@@ -226,83 +228,86 @@ namespace GitUI.CommitInfo
 
 
 
-        private void LoadLinksForRevision(GitRevision revision)
-        {
-            if (revision == null)
-                return;
+        //private void LoadLinksForRevision(GitRevision revision)
+        //{
+        //    if (revision == null)
+        //        return;
 
-            _linksInfo = GetLinksForRevision(revision);
-            this.InvokeAsync(UpdateText);
-        }
+        //    _linksInfo = GetLinksForRevision(revision);
+        //    this.InvokeAsync(UpdateText);
+        //}
 
         private void UpdateText()
         {
             Debug.WriteLine("Update text");
-            if (_sortedRefs != null)
-            {
-                if (_annotatedTagsMessages != null &&
-                    _annotatedTagsMessages.Any() &&
-                    string.IsNullOrEmpty(_annotatedTagsInfo) &&
-                    Revision != null)
-                {
-                    // having both lightweight & annotated tags in thisRevisionTagNames,
-                    // but GetAnnotatedTagsInfo will process annotated only:
-                    List<string> thisRevisionTagNames =
-                        Revision
-                        .Refs
-                        .Where(r => r.IsTag)
-                        .Select(r => r.LocalName)
-                        .ToList();
+            RevisionInfo.SetXHTMLText(_revisionInfo + Environment.NewLine + Environment.NewLine + _linksInfo);
+            return;
 
-                    thisRevisionTagNames.Sort(new ItemTpComparer(_sortedRefs, "refs/tags/"));
-                    _annotatedTagsInfo = GetAnnotatedTagsInfo(thisRevisionTagNames, _annotatedTagsMessages);
-                }
-                if (_tags != null && string.IsNullOrEmpty(_tagInfo))
-                {
-                    _tags.Sort(new ItemTpComparer(_sortedRefs, "refs/tags/"));
-                    if (_tags.Count > MaximumDisplayedRefs)
-                    {
-                        _tags[MaximumDisplayedRefs - 2] = "…";
-                        _tags[MaximumDisplayedRefs - 1] = _tags[_tags.Count - 1];
-                        _tags.RemoveRange(MaximumDisplayedRefs, _tags.Count - MaximumDisplayedRefs);
-                    }
-                    _tagInfo = GetTagsWhichContainsThisCommit(_tags, ShowBranchesAsLinks);
-                }
-                if (_branches != null && string.IsNullOrEmpty(_branchInfo))
-                {
-                    _branches.Sort(new ItemTpComparer(_sortedRefs, "refs/heads/"));
-                    if (_branches.Count > MaximumDisplayedRefs)
-                    {
-                        _branches[MaximumDisplayedRefs - 2] = "…";
-                        _branches[MaximumDisplayedRefs - 1] = _branches[_branches.Count - 1];
-                        _branches.RemoveRange(MaximumDisplayedRefs, _branches.Count - MaximumDisplayedRefs);
-                    }
-                    _branchInfo = GetBranchesWhichContainsThisCommit(_branches, ShowBranchesAsLinks);
-                }
-            }
-            RevisionInfo.SuspendLayout();
-            RevisionInfo.SetXHTMLText(_revisionInfo + "\n" + _annotatedTagsInfo + _linksInfo + _branchInfo + _tagInfo);
-            RevisionInfo.SelectionStart = 0; //scroll up
-            RevisionInfo.ScrollToCaret();    //scroll up
-            RevisionInfo.ResumeLayout(true);
+            //if (_sortedRefs != null)
+            //{
+            //    if (_annotatedTagsMessages != null &&
+            //        _annotatedTagsMessages.Any() &&
+            //        string.IsNullOrEmpty(_annotatedTagsInfo) &&
+            //        Revision != null)
+            //    {
+            //        // having both lightweight & annotated tags in thisRevisionTagNames,
+            //        // but GetAnnotatedTagsInfo will process annotated only:
+            //        List<string> thisRevisionTagNames =
+            //            Revision
+            //            .Refs
+            //            .Where(r => r.IsTag)
+            //            .Select(r => r.LocalName)
+            //            .ToList();
+
+            //        thisRevisionTagNames.Sort(new ItemTpComparer(_sortedRefs, "refs/tags/"));
+            //        _annotatedTagsInfo = GetAnnotatedTagsInfo(thisRevisionTagNames, _annotatedTagsMessages);
+            //    }
+            //    if (_tags != null && string.IsNullOrEmpty(_tagInfo))
+            //    {
+            //        _tags.Sort(new ItemTpComparer(_sortedRefs, "refs/tags/"));
+            //        if (_tags.Count > MaximumDisplayedRefs)
+            //        {
+            //            _tags[MaximumDisplayedRefs - 2] = "…";
+            //            _tags[MaximumDisplayedRefs - 1] = _tags[_tags.Count - 1];
+            //            _tags.RemoveRange(MaximumDisplayedRefs, _tags.Count - MaximumDisplayedRefs);
+            //        }
+            //        _tagInfo = GetTagsWhichContainsThisCommit(_tags, ShowBranchesAsLinks);
+            //    }
+            //    if (_branches != null && string.IsNullOrEmpty(_branchInfo))
+            //    {
+            //        _branches.Sort(new ItemTpComparer(_sortedRefs, "refs/heads/"));
+            //        if (_branches.Count > MaximumDisplayedRefs)
+            //        {
+            //            _branches[MaximumDisplayedRefs - 2] = "…";
+            //            _branches[MaximumDisplayedRefs - 1] = _branches[_branches.Count - 1];
+            //            _branches.RemoveRange(MaximumDisplayedRefs, _branches.Count - MaximumDisplayedRefs);
+            //        }
+            //        _branchInfo = GetBranchesWhichContainsThisCommit(_branches, ShowBranchesAsLinks);
+            //    }
+            //}
+            //RevisionInfo.SuspendLayout();
+            //RevisionInfo.SetXHTMLText(_revisionInfo + "\n" + _annotatedTagsInfo + _linksInfo + _branchInfo + _tagInfo);
+            //RevisionInfo.SelectionStart = 0; //scroll up
+            //RevisionInfo.ScrollToCaret();    //scroll up
+            //RevisionInfo.ResumeLayout(true);
         }
 
-        private static string GetAnnotatedTagsInfo(IEnumerable<string> tagNames, IDictionary<string, string> annotatedTagsMessages)
-        {
-            string result = string.Empty;
+        //private static string GetAnnotatedTagsInfo(IEnumerable<string> tagNames, IDictionary<string, string> annotatedTagsMessages)
+        //{
+        //    string result = string.Empty;
 
-            foreach (string tag in tagNames)
-            {
-                string annotatedContents;
-                if (annotatedTagsMessages.TryGetValue(tag, out annotatedContents))
-                    result += "<u>" + tag + "</u>: " + annotatedContents + Environment.NewLine;
-            }
+        //    foreach (string tag in tagNames)
+        //    {
+        //        string annotatedContents;
+        //        if (annotatedTagsMessages.TryGetValue(tag, out annotatedContents))
+        //            result += "<u>" + tag + "</u>: " + annotatedContents + Environment.NewLine;
+        //    }
 
-            if (result.IsNullOrEmpty())
-                return string.Empty;
+        //    if (result.IsNullOrEmpty())
+        //        return string.Empty;
 
-            return Environment.NewLine + result;
-        }
+        //    return Environment.NewLine + result;
+        //}
 
         private void ResetTextAndImage()
         {
@@ -314,89 +319,89 @@ namespace GitUI.CommitInfo
             _branchInfo = string.Empty;
             _annotatedTagsInfo = string.Empty;
             _tagInfo = string.Empty;
-            _branches = null;
+            //_branches = null;
             _annotatedTagsMessages = null;
-            _tags = null;
+            //_tags = null;
             UpdateText();
         }
 
 
-        private string GetBranchesWhichContainsThisCommit(IEnumerable<string> branches, bool showBranchesAsLinks)
-        {
-            const string remotesPrefix = "remotes/";
-            // Include local branches if explicitly requested or when needed to decide whether to show remotes
-            bool getLocal = AppSettings.CommitInfoShowContainedInBranchesLocal ||
-                            AppSettings.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
-            // Include remote branches if requested
-            bool getRemote = AppSettings.CommitInfoShowContainedInBranchesRemote ||
-                             AppSettings.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
-            var links = new List<string>();
-            bool allowLocal = AppSettings.CommitInfoShowContainedInBranchesLocal;
-            bool allowRemote = getRemote;
+        //private string GetBranchesWhichContainsThisCommit(IEnumerable<string> branches, bool showBranchesAsLinks)
+        //{
+        //    const string remotesPrefix = "remotes/";
+        //    // Include local branches if explicitly requested or when needed to decide whether to show remotes
+        //    bool getLocal = AppSettings.CommitInfoShowContainedInBranchesLocal ||
+        //                    AppSettings.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
+        //    // Include remote branches if requested
+        //    bool getRemote = AppSettings.CommitInfoShowContainedInBranchesRemote ||
+        //                     AppSettings.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
+        //    var links = new List<string>();
+        //    bool allowLocal = AppSettings.CommitInfoShowContainedInBranchesLocal;
+        //    bool allowRemote = getRemote;
 
-            foreach (var branch in branches)
-            {
-                string noPrefixBranch = branch;
-                bool branchIsLocal;
-                if (getLocal && getRemote)
-                {
-                    // "git branch -a" prefixes remote branches with "remotes/"
-                    // It is possible to create a local branch named "remotes/origin/something"
-                    // so this check is not 100% reliable.
-                    // This shouldn't be a big problem if we're only displaying information.
-                    branchIsLocal = !branch.StartsWith(remotesPrefix);
-                    if (!branchIsLocal)
-                        noPrefixBranch = branch.Substring(remotesPrefix.Length);
-                }
-                else
-                {
-                    branchIsLocal = !getRemote;
-                }
+        //    foreach (var branch in branches)
+        //    {
+        //        string noPrefixBranch = branch;
+        //        bool branchIsLocal;
+        //        if (getLocal && getRemote)
+        //        {
+        //            // "git branch -a" prefixes remote branches with "remotes/"
+        //            // It is possible to create a local branch named "remotes/origin/something"
+        //            // so this check is not 100% reliable.
+        //            // This shouldn't be a big problem if we're only displaying information.
+        //            branchIsLocal = !branch.StartsWith(remotesPrefix);
+        //            if (!branchIsLocal)
+        //                noPrefixBranch = branch.Substring(remotesPrefix.Length);
+        //        }
+        //        else
+        //        {
+        //            branchIsLocal = !getRemote;
+        //        }
 
-                if ((branchIsLocal && allowLocal) || (!branchIsLocal && allowRemote))
-                {
-                    string branchText;
-                    if (showBranchesAsLinks)
-                        branchText = LinkFactory.CreateBranchLink(noPrefixBranch);
-                    else
-                        branchText = WebUtility.HtmlEncode(noPrefixBranch);
-                    links.Add(branchText);
-                }
+        //        if ((branchIsLocal && allowLocal) || (!branchIsLocal && allowRemote))
+        //        {
+        //            string branchText;
+        //            if (showBranchesAsLinks)
+        //                branchText = LinkFactory.CreateBranchLink(noPrefixBranch);
+        //            else
+        //                branchText = WebUtility.HtmlEncode(noPrefixBranch);
+        //            links.Add(branchText);
+        //        }
 
-                if (branchIsLocal && AppSettings.CommitInfoShowContainedInBranchesRemoteIfNoLocal)
-                    allowRemote = false;
-            }
-            if (links.Any())
-                return Environment.NewLine + WebUtility.HtmlEncode(containedInBranches.Text) + " " + links.Join(", ");
-            return Environment.NewLine + WebUtility.HtmlEncode(containedInNoBranch.Text);
-        }
+        //        if (branchIsLocal && AppSettings.CommitInfoShowContainedInBranchesRemoteIfNoLocal)
+        //            allowRemote = false;
+        //    }
+        //    if (links.Any())
+        //        return Environment.NewLine + WebUtility.HtmlEncode(containedInBranches.Text) + " " + links.Join(", ");
+        //    return Environment.NewLine + WebUtility.HtmlEncode(containedInNoBranch.Text);
+        //}
 
-        private string GetTagsWhichContainsThisCommit(IEnumerable<string> tags, bool showBranchesAsLinks)
-        {
-            var tagString = tags
-                .Select(s => showBranchesAsLinks ? LinkFactory.CreateTagLink(s) : WebUtility.HtmlEncode(s)).Join(", ");
+        //private string GetTagsWhichContainsThisCommit(IEnumerable<string> tags, bool showBranchesAsLinks)
+        //{
+        //    var tagString = tags
+        //        .Select(s => showBranchesAsLinks ? LinkFactory.CreateTagLink(s) : WebUtility.HtmlEncode(s)).Join(", ");
 
-            if (!String.IsNullOrEmpty(tagString))
-                return Environment.NewLine + WebUtility.HtmlEncode(containedInTags.Text) + " " + tagString;
-            return Environment.NewLine + WebUtility.HtmlEncode(containedInNoTag.Text);
-        }
+        //    if (!String.IsNullOrEmpty(tagString))
+        //        return Environment.NewLine + WebUtility.HtmlEncode(containedInTags.Text) + " " + tagString;
+        //    return Environment.NewLine + WebUtility.HtmlEncode(containedInNoTag.Text);
+        //}
 
-        private string GetLinksForRevision(GitRevision revision)
-        {
-            GitExtLinksParser parser = new GitExtLinksParser(Module.EffectiveSettings);
-            var links = parser.Parse(revision).Distinct();
-            var linksString = string.Empty;
+        //private string GetLinksForRevision(GitRevision revision)
+        //{
+        //    GitExtLinksParser parser = new GitExtLinksParser(Module.EffectiveSettings);
+        //    var links = parser.Parse(revision).Distinct();
+        //    var linksString = string.Empty;
 
-            foreach (var link in links)
-            {
-                linksString = linksString.Combine(", ", LinkFactory.CreateLink(link.Caption, link.URI));
-            }
+        //    foreach (var link in links)
+        //    {
+        //        linksString = linksString.Combine(", ", LinkFactory.CreateLink(link.Caption, link.URI));
+        //    }
 
-            if (linksString.IsNullOrEmpty())
-                return string.Empty;
-            else
-                return Environment.NewLine + WebUtility.HtmlEncode(trsLinksRelatedToRevision.Text) + " " + linksString;
-        }
+        //    if (linksString.IsNullOrEmpty())
+        //        return string.Empty;
+        //    else
+        //        return Environment.NewLine + WebUtility.HtmlEncode(trsLinksRelatedToRevision.Text) + " " + linksString;
+        //}
 
 
         private void showContainedInBranchesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -494,65 +499,65 @@ namespace GitUI.CommitInfo
             }
         }
 
-        private class ItemTpComparer : IComparer<string>
-        {
-            private readonly IList<string> _otherList;
-            private readonly string _prefix;
+        //private class ItemTpComparer : IComparer<string>
+        //{
+        //    private readonly IList<string> _otherList;
+        //    private readonly string _prefix;
 
-            public ItemTpComparer(IList<string> otherList, string prefix)
-            {
-                _otherList = otherList;
-                _prefix = prefix;
-            }
+        //    public ItemTpComparer(IList<string> otherList, string prefix)
+        //    {
+        //        _otherList = otherList;
+        //        _prefix = prefix;
+        //    }
 
-            public int Compare(string a, string b)
-            {
-                if (a.StartsWith("remotes/"))
-                    a = "refs/" + a;
-                else
-                    a = _prefix + a;
-                if (b.StartsWith("remotes/"))
-                    b = "refs/" + b;
-                else
-                    b = _prefix + b;
-                int i = _otherList.IndexOf(a);
-                int j = _otherList.IndexOf(b);
-                return i - j;
-            }
-        }
+        //    public int Compare(string a, string b)
+        //    {
+        //        if (a.StartsWith("remotes/"))
+        //            a = "refs/" + a;
+        //        else
+        //            a = _prefix + a;
+        //        if (b.StartsWith("remotes/"))
+        //            b = "refs/" + b;
+        //        else
+        //            b = _prefix + b;
+        //        int i = _otherList.IndexOf(a);
+        //        int j = _otherList.IndexOf(b);
+        //        return i - j;
+        //    }
+        //}
 
 
 
-        private void gravatar1_GravatarSizeChanged(object sender, EventArgs e)
-        {
-            ApplyCommitInfoPanelLayout();
-        }
+        //private void gravatar1_GravatarSizeChanged(object sender, EventArgs e)
+        //{
+        //    ApplyCommitInfoPanelLayout();
+        //}
 
-        private void ApplyCommitInfoPanelLayout()
-        {
-            try
-            {
-                // TODO: needed fo Mono?
-                //_pnlCommitInfoPanelControls.ForEach(c =>
-                //{
-                //    c.Anchor = AnchorStyles.Left;
-                //    c.Width = 100;
-                //});
+        //private void ApplyCommitInfoPanelLayout()
+        //{
+        //    try
+        //    {
+        //        // TODO: needed fo Mono?
+        //        //_pnlCommitInfoPanelControls.ForEach(c =>
+        //        //{
+        //        //    c.Anchor = AnchorStyles.Left;
+        //        //    c.Width = 100;
+        //        //});
 
-                //ResizeCommitInfoPanel();
+        //        //ResizeCommitInfoPanel();
 
-                //_pnlCommitInfoPanelControls.ForEach(c =>
-                //{
-                //    c.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-                //});
+        //        //_pnlCommitInfoPanelControls.ForEach(c =>
+        //        //{
+        //        //    c.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        //        //});
 
-            }
-            finally
-            {
-                //AutoScrollMinSize = new System.Drawing.Size(tlpnlCommitInfoLeft.Width,
-                //                                            lblCommitterDate.Top + lblCommitterDate.Height + tlpnlCommitInfoLeft.Margin.Bottom);
-            }
-        }
+        //    }
+        //    finally
+        //    {
+        //        //AutoScrollMinSize = new System.Drawing.Size(tlpnlCommitInfoLeft.Width,
+        //        //                                            lblCommitterDate.Top + lblCommitterDate.Height + tlpnlCommitInfoLeft.Margin.Bottom);
+        //    }
+        //}
 
         private void CommitInfo_SizeChanged(object sender, EventArgs e)
         {

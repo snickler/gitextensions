@@ -45,68 +45,68 @@ namespace ResourceManager
             return RemoveRedundancies(header.ToString());
         }
 
-        /// <summary>
-        /// Generate header.
-        /// </summary>
-        /// <returns></returns>
-        public static string GetHeader(this CommitData commitData, bool showRevisionsAsLinks)
-        {
-            StringBuilder header = new StringBuilder();
-            string authorEmail = GetEmail(commitData.Author);
-            header.AppendLine(
-                FillToLength(WebUtility.HtmlEncode(Strings.GetAuthorText()) + ":", COMMITHEADER_STRING_LENGTH) +
-                "<a href='mailto:" + WebUtility.HtmlEncode(authorEmail) + "'>" +
-                WebUtility.HtmlEncode(commitData.Author) + "</a>");
-            header.AppendLine(
-                FillToLength(WebUtility.HtmlEncode(Strings.GetAuthorDateText()) + ":",
-                    COMMITHEADER_STRING_LENGTH) +
-                WebUtility.HtmlEncode(
-                    LocalizationHelpers.GetRelativeDateString(DateTime.UtcNow, commitData.AuthorDate.UtcDateTime) + " (" +
-                    LocalizationHelpers.GetFullDateString(commitData.AuthorDate) + ")"));
-            string committerEmail = GetEmail(commitData.Committer);
-            header.AppendLine(
-                FillToLength(WebUtility.HtmlEncode(Strings.GetCommitterText()) + ":",
-                    COMMITHEADER_STRING_LENGTH) +
-                "<a href='mailto:" + WebUtility.HtmlEncode(committerEmail) + "'>" +
-                WebUtility.HtmlEncode(commitData.Committer) + "</a>");
-            header.AppendLine(
-                FillToLength(WebUtility.HtmlEncode(Strings.GetCommitDateText()) + ":",
-                    COMMITHEADER_STRING_LENGTH) +
-                WebUtility.HtmlEncode(
-                    LocalizationHelpers.GetRelativeDateString(DateTime.UtcNow, commitData.CommitDate.UtcDateTime) + " (" +
-                    LocalizationHelpers.GetFullDateString(commitData.CommitDate) + ")"));
-            header.Append(
-                FillToLength(WebUtility.HtmlEncode(Strings.GetCommitHashText()) + ":",
-                    COMMITHEADER_STRING_LENGTH) +
-                WebUtility.HtmlEncode(commitData.Guid));
+        ///// <summary>
+        ///// Generate header.
+        ///// </summary>
+        ///// <returns></returns>
+        //public static string GetHeader(this CommitData commitData, bool showRevisionsAsLinks)
+        //{
+        //    StringBuilder header = new StringBuilder();
+        //    string authorEmail = GetEmail(commitData.Author);
+        //    header.AppendLine(
+        //        FillToLength(WebUtility.HtmlEncode(Strings.GetAuthorText()) + ":", COMMITHEADER_STRING_LENGTH) +
+        //        "<a href='mailto:" + WebUtility.HtmlEncode(authorEmail) + "'>" +
+        //        WebUtility.HtmlEncode(commitData.Author) + "</a>");
+        //    header.AppendLine(
+        //        FillToLength(WebUtility.HtmlEncode(Strings.GetAuthorDateText()) + ":",
+        //            COMMITHEADER_STRING_LENGTH) +
+        //        WebUtility.HtmlEncode(
+        //            LocalizationHelpers.GetRelativeDateString(DateTime.UtcNow, commitData.AuthorDate.UtcDateTime) + " (" +
+        //            LocalizationHelpers.GetFullDateString(commitData.AuthorDate) + ")"));
+        //    string committerEmail = GetEmail(commitData.Committer);
+        //    header.AppendLine(
+        //        FillToLength(WebUtility.HtmlEncode(Strings.GetCommitterText()) + ":",
+        //            COMMITHEADER_STRING_LENGTH) +
+        //        "<a href='mailto:" + WebUtility.HtmlEncode(committerEmail) + "'>" +
+        //        WebUtility.HtmlEncode(commitData.Committer) + "</a>");
+        //    header.AppendLine(
+        //        FillToLength(WebUtility.HtmlEncode(Strings.GetCommitDateText()) + ":",
+        //            COMMITHEADER_STRING_LENGTH) +
+        //        WebUtility.HtmlEncode(
+        //            LocalizationHelpers.GetRelativeDateString(DateTime.UtcNow, commitData.CommitDate.UtcDateTime) + " (" +
+        //            LocalizationHelpers.GetFullDateString(commitData.CommitDate) + ")"));
+        //    header.Append(
+        //        FillToLength(WebUtility.HtmlEncode(Strings.GetCommitHashText()) + ":",
+        //            COMMITHEADER_STRING_LENGTH) +
+        //        WebUtility.HtmlEncode(commitData.Guid));
 
-            if (commitData.ChildrenGuids != null && commitData.ChildrenGuids.Count != 0)
-            {
-                header.AppendLine();
-                string commitsString;
-                if (showRevisionsAsLinks)
-                    commitsString = commitData.ChildrenGuids.Select(g => LinkFactory.CreateCommitLink(g)).Join(" ");
-                else
-                    commitsString = commitData.ChildrenGuids.Select(guid => guid.Substring(0, 10)).Join(" ");
-                header.Append(FillToLength(WebUtility.HtmlEncode(Strings.GetChildrenText()) + ":",
-                    COMMITHEADER_STRING_LENGTH) + commitsString);
-            }
+        //    if (commitData.ChildrenGuids != null && commitData.ChildrenGuids.Count != 0)
+        //    {
+        //        header.AppendLine();
+        //        string commitsString;
+        //        if (showRevisionsAsLinks)
+        //            commitsString = commitData.ChildrenGuids.Select(g => LinkFactory.CreateCommitLink(g)).Join(" ");
+        //        else
+        //            commitsString = commitData.ChildrenGuids.Select(guid => guid.Substring(0, 10)).Join(" ");
+        //        header.Append(FillToLength(WebUtility.HtmlEncode(Strings.GetChildrenText()) + ":",
+        //            COMMITHEADER_STRING_LENGTH) + commitsString);
+        //    }
 
-            var parentGuids = commitData.ParentGuids.Where(s => !String.IsNullOrEmpty(s));
-            if (parentGuids.Any())
-            {
-                header.AppendLine();
-                string commitsString;
-                if (showRevisionsAsLinks)
-                    commitsString = parentGuids.Select(g => LinkFactory.CreateCommitLink(g)).Join(" ");
-                else
-                    commitsString = parentGuids.Select(guid => guid.Substring(0, 10)).Join(" ");
-                header.Append(FillToLength(WebUtility.HtmlEncode(Strings.GetParentsText()) + ":",
-                    COMMITHEADER_STRING_LENGTH) + commitsString);
-            }
+        //    var parentGuids = commitData.ParentGuids.Where(s => !String.IsNullOrEmpty(s));
+        //    if (parentGuids.Any())
+        //    {
+        //        header.AppendLine();
+        //        string commitsString;
+        //        if (showRevisionsAsLinks)
+        //            commitsString = parentGuids.Select(g => LinkFactory.CreateCommitLink(g)).Join(" ");
+        //        else
+        //            commitsString = parentGuids.Select(guid => guid.Substring(0, 10)).Join(" ");
+        //        header.Append(FillToLength(WebUtility.HtmlEncode(Strings.GetParentsText()) + ":",
+        //            COMMITHEADER_STRING_LENGTH) + commitsString);
+        //    }
 
-            return RemoveRedundancies(header.ToString());
-        }
+        //    return RemoveRedundancies(header.ToString());
+        //}
 
         private static string RemoveRedundancies(string info)
         {
