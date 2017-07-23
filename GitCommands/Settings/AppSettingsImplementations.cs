@@ -166,7 +166,7 @@ namespace GitCommands.Settings
         bool ShowDiffForAllParents { get; set; }
         string RecentWorkingDir { get; set; }
         bool StartWithRecentWorkingDir { get; set; }
-        CommandLogger GitLog { get; }
+        ICommandLogger GitLog { get; }
         string Plink { get; set; }
         string Puttygen { get; set; }
 
@@ -243,7 +243,6 @@ namespace GitCommands.Settings
 
         //private  RepoDistSettings _SettingsContainer;
         //public  RepoDistSettings SettingsContainer { get { return _SettingsContainer; } }
-        private readonly SettingsPath DetailedSettingsPath;// = new AppSettingsPath(this, "Detailed");
 
         public int BranchDropDownMinWidth => 300;
         public int BranchDropDownMaxWidth => 600;
@@ -258,15 +257,16 @@ namespace GitCommands.Settings
             RepoDistSettings settings,
             ICommandLogger commandLogger)
         {
+            GitLog = commandLogger;
             ApplicationDataPath = new Lazy<string>(applicationDataPathResolver.Resolve);
             SettingsContainer = settings;
 
-            DetailedSettingsPath = new AppSettingsPath(settings, "Detailed");
-            ShowConEmuTab = new BoolNullableSetting("ShowConEmuTab", DetailedSettingsPath, true);
-            ConEmuStyle = new StringSetting("ConEmuStyle", DetailedSettingsPath, "<Solarized Light>");
-            ConEmuTerminal = new StringSetting("ConEmuTerminal", DetailedSettingsPath, "bash");
-            ConEmuFontSize = new StringSetting("ConEmuFontSize", DetailedSettingsPath, "12");
-            ShowRevisionInfoNextToRevisionGrid = new BoolNullableSetting("ShowRevisionInfoNextToRevisionGrid", DetailedSettingsPath, false);
+            SettingsPath detailedSettingsPath = new AppSettingsPath(settings, "Detailed");
+            ShowConEmuTab = new BoolNullableSetting("ShowConEmuTab", detailedSettingsPath, true);
+            ConEmuStyle = new StringSetting("ConEmuStyle", detailedSettingsPath, "<Solarized Light>");
+            ConEmuTerminal = new StringSetting("ConEmuTerminal", detailedSettingsPath, "bash");
+            ConEmuFontSize = new StringSetting("ConEmuFontSize", detailedSettingsPath, "12");
+            ShowRevisionInfoNextToRevisionGrid = new BoolNullableSetting("ShowRevisionInfoNextToRevisionGrid", detailedSettingsPath, false);
         }
 
         public AppSettingsImplementations()
@@ -1200,7 +1200,7 @@ namespace GitCommands.Settings
             set { SettingsContainer.SetBool("StartWithRecentWorkingDir", value); }
         }
 
-        public CommandLogger GitLog { get; private set; }
+        public ICommandLogger GitLog { get; private set; }
 
         public string Plink
         {

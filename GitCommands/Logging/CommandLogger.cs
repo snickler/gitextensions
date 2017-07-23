@@ -6,6 +6,8 @@ namespace GitCommands.Logging
 {
     public interface ICommandLogger
     {
+        event EventHandler CommandsChanged;
+        CommandLogEntry[] GetCommands();
         void Log(string command, DateTime executionStartTimestamp, DateTime executionEndTimestamp);
     }
 
