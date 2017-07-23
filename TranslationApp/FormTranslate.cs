@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using GitCommands.Settings;
 using GitUI;
 using ResourceManager;
 using ResourceManager.Xliff;
@@ -47,7 +48,7 @@ namespace TranslationApp
             FillNeutralTranslation();
             _allCategories.Name = allText.Text;
             UpdateCategoriesList();
-            translations.SelectedItem = GitCommands.AppSettings.Instance.Translation; // should be called after FillNeutralTranslation()
+            translations.SelectedItem = AppSettings.Current.Translation; // should be called after FillNeutralTranslation()
             if (_translation == null)
                 LoadTranslation();
             translateCategories.SelectedItem = _allCategories;
@@ -157,7 +158,7 @@ namespace TranslationApp
             try
             {
                 //Set language to neutral to get neutral translations
-                GitCommands.AppSettings.Instance.CurrentTranslation = "";
+                AppSettings.Current.CurrentTranslation = "";
 
                 var translatableTypes = TranslationUtl.GetTranslatableTypes();
                 progressBar.Maximum = translatableTypes.Sum(types => types.Value.Count);
@@ -191,7 +192,7 @@ namespace TranslationApp
             finally
             {
                 //Restore translation
-                GitCommands.AppSettings.Instance.CurrentTranslation = null;
+                AppSettings.Current.CurrentTranslation = null;
                 progressBar.Visible = false;
             }
         }

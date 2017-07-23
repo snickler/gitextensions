@@ -1,18 +1,8 @@
 ﻿using System;
-using System.Reflection;
 using System.Windows.Forms;
-using GitCommands.Settings;
 
-namespace GitCommands
+namespace GitCommands.Settings
 {
-    public enum LocalChangesAction
-    {
-        DontChange,
-        Merge,
-        Reset,
-        Stash
-    }
-
     public static class AppSettings
     {
         public static readonly char PosixPathSeparator = '/';
@@ -25,19 +15,9 @@ namespace GitCommands
             return Properties.Settings.Default.IsPortable;
         }
 
-        public static IAppSettings Instance => new AppSettingsImplementations();
+        public static IAppSettings Current => new AppSettingsImplementations();
     }
 
-
-    public enum PullAction
-    {
-        None,
-        Merge,
-        Rebase,
-        Fetch,
-        FetchAll,
-        Default
-    }
 
     internal class AppSettingsPath : SettingsPath
     {

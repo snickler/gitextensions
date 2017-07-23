@@ -1,4 +1,5 @@
 ﻿using GitCommands;
+using GitCommands.Settings;
 
 namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 {
@@ -21,27 +22,27 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         protected override void SettingsToPage()
         {
-            chkAlwaysShowCheckoutDlg.Checked = AppSettings.Instance.AlwaysShowCheckoutBranchDlg;
-            chkUseLocalChangesAction.Checked = AppSettings.Instance.UseDefaultCheckoutBranchAction;
-            chkDontSHowHelpImages.Checked = AppSettings.Instance.DontShowHelpImages;
-            chkAlwaysShowAdvOpt.Checked = AppSettings.Instance.AlwaysShowAdvOpt;
-            chkCheckForRCVersions.Checked = AppSettings.Instance.CheckForReleaseCandidates;
-            chkConsoleEmulator.Checked = AppSettings.Instance.UseConsoleEmulatorForCommands;
-            chkAutoNormaliseBranchName.Checked = AppSettings.Instance.AutoNormaliseBranchName;
+            chkAlwaysShowCheckoutDlg.Checked = AppSettings.Current.AlwaysShowCheckoutBranchDlg;
+            chkUseLocalChangesAction.Checked = AppSettings.Current.UseDefaultCheckoutBranchAction;
+            chkDontSHowHelpImages.Checked = AppSettings.Current.DontShowHelpImages;
+            chkAlwaysShowAdvOpt.Checked = AppSettings.Current.AlwaysShowAdvOpt;
+            chkCheckForRCVersions.Checked = AppSettings.Current.CheckForReleaseCandidates;
+            chkConsoleEmulator.Checked = AppSettings.Current.UseConsoleEmulatorForCommands;
+            chkAutoNormaliseBranchName.Checked = AppSettings.Current.AutoNormaliseBranchName;
             cboAutoNormaliseSymbol.Enabled = chkAutoNormaliseBranchName.Checked;
-            cboAutoNormaliseSymbol.SelectedValue = AppSettings.Instance.AutoNormaliseSymbol;
+            cboAutoNormaliseSymbol.SelectedValue = AppSettings.Current.AutoNormaliseSymbol;
         }
 
         protected override void PageToSettings()
         {
-            AppSettings.Instance.AlwaysShowCheckoutBranchDlg = chkAlwaysShowCheckoutDlg.Checked;
-            AppSettings.Instance.UseDefaultCheckoutBranchAction = chkUseLocalChangesAction.Checked;
-            AppSettings.Instance.DontShowHelpImages = chkDontSHowHelpImages.Checked;
-            AppSettings.Instance.AlwaysShowAdvOpt = chkAlwaysShowAdvOpt.Checked;
-            AppSettings.Instance.CheckForReleaseCandidates = chkCheckForRCVersions.Checked;
-            AppSettings.Instance.UseConsoleEmulatorForCommands = chkConsoleEmulator.Checked;
-            AppSettings.Instance.AutoNormaliseBranchName = chkAutoNormaliseBranchName.Checked;
-            AppSettings.Instance.AutoNormaliseSymbol = (string)cboAutoNormaliseSymbol.SelectedValue;
+            AppSettings.Current.AlwaysShowCheckoutBranchDlg = chkAlwaysShowCheckoutDlg.Checked;
+            AppSettings.Current.UseDefaultCheckoutBranchAction = chkUseLocalChangesAction.Checked;
+            AppSettings.Current.DontShowHelpImages = chkDontSHowHelpImages.Checked;
+            AppSettings.Current.AlwaysShowAdvOpt = chkAlwaysShowAdvOpt.Checked;
+            AppSettings.Current.CheckForReleaseCandidates = chkCheckForRCVersions.Checked;
+            AppSettings.Current.UseConsoleEmulatorForCommands = chkConsoleEmulator.Checked;
+            AppSettings.Current.AutoNormaliseBranchName = chkAutoNormaliseBranchName.Checked;
+            AppSettings.Current.AutoNormaliseSymbol = (string)cboAutoNormaliseSymbol.SelectedValue;
         }
 
         public static SettingsPageReference GetPageReference()

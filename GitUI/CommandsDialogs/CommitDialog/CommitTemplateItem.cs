@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml;
 using System.Xml.Serialization;
+using GitCommands.Settings;
 using GitCommands.Utils;
 
 namespace GitUI.CommandsDialogs.CommitDialog
@@ -52,12 +53,12 @@ namespace GitUI.CommandsDialogs.CommitDialog
         public static void SaveToSettings(CommitTemplateItem[] items)
         {
             string strVal = SerializeCommitTemplates(items);
-            GitCommands.AppSettings.Instance.CommitTemplates = strVal ?? string.Empty;
+            AppSettings.Current.CommitTemplates = strVal ?? string.Empty;
         }
 
         public static CommitTemplateItem[] LoadFromSettings()
         {
-            string serializedString = GitCommands.AppSettings.Instance.CommitTemplates;
+            string serializedString = AppSettings.Current.CommitTemplates;
             bool shouldBeUpdated;
             var templates = DeserializeCommitTemplates(serializedString, out shouldBeUpdated);
             if (shouldBeUpdated)

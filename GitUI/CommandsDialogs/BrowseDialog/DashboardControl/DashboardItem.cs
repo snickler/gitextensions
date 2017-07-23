@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using GitCommands.Repository;
 using GitUI.Properties;
 using GitCommands;
+using GitCommands.Settings;
 using ResourceManager;
 
 namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
@@ -31,7 +32,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             Bitmap icon = GetRepositoryIcon(repository);
 
 
-            if (AppSettings.Instance.DashboardShowCurrentBranch)
+            if (AppSettings.Current.DashboardShowCurrentBranch)
             {
                 _branchNameLoader = new AsyncLoader();
                 _branchNameLoader.Load(() =>

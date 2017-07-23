@@ -7,6 +7,7 @@ using GitCommands;
 using GitCommands.Git;
 using ResourceManager;
 using System.Drawing;
+using GitCommands.Settings;
 using GitUI.Script;
 using GitCommands.Utils;
 using GitUIPluginInterfaces;
@@ -45,7 +46,7 @@ namespace GitUI.CommandsDialogs
         private string _newLocalBranchName = "";
         private string _localBranchName = "";
         private readonly IGitBranchNameNormaliser _branchNameNormaliser;
-        private readonly GitBranchNameOptions _gitBranchNameOptions = new GitBranchNameOptions(AppSettings.Instance.AutoNormaliseSymbol);
+        private readonly GitBranchNameOptions _gitBranchNameOptions = new GitBranchNameOptions(AppSettings.Current.AutoNormaliseSymbol);
 
         private IEnumerable<IGitRef> _localBranches;
         private IEnumerable<IGitRef> _remoteBranches;
@@ -103,14 +104,14 @@ namespace GitUI.CommandsDialogs
 
                 //The dirty check is very expensive on large repositories. Without this setting
                 //the checkout branch dialog is too slow.
-                if (AppSettings.Instance.CheckForUncommittedChangesInCheckoutBranch)
+                if (AppSettings.Current.CheckForUncommittedChangesInCheckoutBranch)
                     _isDirtyDir = Module.IsDirtyDir();
                 else
                     _isDirtyDir = null;
 
                 localChangesGB.Visible = IsThereUncommittedChanges();
-                ChangesMode = AppSettings.Instance.CheckoutBranchAction;
-                rbCreateBranchWithCustomName.Checked = AppSettings.Instance.CreateLocalBranchForRemote;
+                ChangesMode = AppSettings.Current.CheckoutBranchAction;
+                rbCreateBranchWithCustomName.Checked = AppSettings.Current.CreateLocalBranchForRemote;
 
                 FinishFormLayout();
             }
@@ -169,8 +170,8 @@ namespace GitUI.CommandsDialogs
         public DialogResult DoDefaultActionOrShow(IWin32Window owner)
         {
             bool localBranchSelected = !Branches.Text.IsNullOrWhiteSpace() && !Remotebranch.Checked;
-            if (!AppSettings.Instance.AlwaysShowCheckoutBranchDlg && localBranchSelected &&
-                (!IsThereUncommittedChanges() || AppSettings.Instance.UseDefaultCheckoutBranchAction))
+            if (!AppSettings.Current.AlwaysShowCheckoutBranchDlg && localBranchSelected &&
+                (!IsThereUncommittedChanges() || AppSettings.Current.UseDefaultCheckoutBranchAction))
                 return OkClick();
             else
                 return ShowDialog(owner);
@@ -310,10 +311,10 @@ namespace GitUI.CommandsDialogs
             if (changes != LocalChangesAction.Reset &&
                 chkSetLocalChangesActionAsDefault.Checked)
             {
-                AppSettings.Instance.CheckoutBranchAction = changes;
+                AppSettings.Current.CheckoutBranchAction = changes;
             }
 
-            if ((Visible || AppSettings.Instance.UseDefaultCheckoutBranchAction) && IsThereUncommittedChanges())
+            if ((Visible || AppSettings.Current.UseDefaultCheckoutBranchAction) && IsThereUncommittedChanges())
                 cmd.LocalChanges = changes;
             else
                 cmd.LocalChanges = LocalChangesAction.DontChange;
@@ -327,7 +328,7 @@ namespace GitUI.CommandsDialogs
                     _isDirtyDir = Module.IsDirtyDir();
                 stash = _isDirtyDir == true;
                 if (stash)
-                    UICommands.StashSave(owner, AppSettings.Instance.IncludeUntrackedFilesInAutoStash);
+                    UICommands.StashSave(owner, AppSettings.Current.IncludeUntrackedFilesInAutoStash);
             }
 
             ScriptManager.RunEventScripts(this, ScriptEvent.BeforeCheckout);
@@ -336,7 +337,7 @@ namespace GitUI.CommandsDialogs
             {
                 if (stash)
                 {
-                    bool? messageBoxResult = AppSettings.Instance.AutoPopStashAfterCheckoutBranch;
+                    bool? messageBoxResult = AppSettings.Current.AutoPopStashAfterCheckoutBranch;
                     if (messageBoxResult == null)
                     {
                         DialogResult res = PSTaskDialog.cTaskDialog.MessageBox(
@@ -352,7 +353,7 @@ namespace GitUI.CommandsDialogs
                             PSTaskDialog.eSysIcons.Question);
                         messageBoxResult = (res == DialogResult.Yes);
                         if (PSTaskDialog.cTaskDialog.VerificationChecked)
-                            AppSettings.Instance.AutoPopStashAfterCheckoutBranch = messageBoxResult;
+                            AppSettings.Current.AutoPopStashAfterCheckoutBranch = messageBoxResult;
                     }
                     if (messageBoxResult ?? false)
                     {
@@ -523,7 +524,7 @@ namespace GitUI.CommandsDialogs
 
         private void txtCustomBranchName_Leave(object sender, EventArgs e)
         {
-            if (!AppSettings.Instance.AutoNormaliseBranchName || !txtCustomBranchName.Text.Any(GitBranchNameNormaliser.IsValidChar))
+            if (!AppSettings.Current.AutoNormaliseBranchName || !txtCustomBranchName.Text.Any(GitBranchNameNormaliser.IsValidChar))
             {
                 return;
             }

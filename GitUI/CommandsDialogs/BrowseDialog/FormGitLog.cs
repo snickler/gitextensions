@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 using ResourceManager;
 
 namespace GitUI.CommandsDialogs.BrowseDialog
@@ -38,7 +39,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
         private void RefreshLogItems()
         {
             if (TabControl.SelectedTab == tabPageCommandLog)
-                RefreshListBox(LogItems, AppSettings.Instance.GitLog.GetCommands().Select(cle => cle.ToString()).ToArray());
+                RefreshListBox(LogItems, AppSettings.Current.GitLog.GetCommands().Select(cle => cle.ToString()).ToArray());
         }
 
         private void RefreshCommandCacheItems()
@@ -91,13 +92,13 @@ namespace GitUI.CommandsDialogs.BrowseDialog
 
         private void UnsubscribeFromEvents()
         {
-            AppSettings.Instance.GitLog.CommandsChanged -= OnCommandsLogChanged;
+            AppSettings.Current.GitLog.CommandsChanged -= OnCommandsLogChanged;
             GitCommandCache.CachedCommandsChanged -= OnCachedCommandsLogChanged;
         }
 
         private void SubscribeToEvents()
         {
-            AppSettings.Instance.GitLog.CommandsChanged += OnCommandsLogChanged;
+            AppSettings.Current.GitLog.CommandsChanged += OnCommandsLogChanged;
             GitCommandCache.CachedCommandsChanged += OnCachedCommandsLogChanged;
         }
 

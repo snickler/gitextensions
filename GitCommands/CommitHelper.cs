@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using GitCommands.Settings;
 
 namespace GitCommands
 {
@@ -46,7 +47,7 @@ namespace GitCommands
             {
                 textWriter.Write(commitMessageText);
             }
-            if(AppSettings.Instance.RememberAmendCommitState && amendCommit)
+            if(AppSettings.Current.RememberAmendCommitState && amendCommit)
                 File.WriteAllText(GetAmendPath(module), true.ToString());
             else if(File.Exists(GetAmendPath(module)))
                 File.Delete(GetAmendPath(module));
@@ -80,7 +81,7 @@ namespace GitCommands
         public static bool GetAmendState(GitModule module)
         {
             bool amendState = false;
-            if (AppSettings.Instance.RememberAmendCommitState && File.Exists(CommitHelper.GetAmendPath(module)))
+            if (AppSettings.Current.RememberAmendCommitState && File.Exists(CommitHelper.GetAmendPath(module)))
             {
                 var amendSaveStateFilePath = CommitHelper.GetAmendPath(module);
                 bool.TryParse(File.ReadAllText(amendSaveStateFilePath), out amendState);

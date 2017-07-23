@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using GitCommands.Settings;
 
 namespace GitCommands.Repository
 {
@@ -25,8 +26,8 @@ namespace GitCommands.Repository
 
         private static RepositoryHistory LoadRepositoryHistory()
         {
-            int size = AppSettings.Instance.RepositoryHistorySize;
-            object setting = AppSettings.Instance.RepositoryHistory;
+            int size = AppSettings.Current.RepositoryHistorySize;
+            object setting = AppSettings.Current.RepositoryHistory;
             if (setting == null)
             {
                 return new RepositoryHistory(size);
@@ -40,7 +41,7 @@ namespace GitCommands.Repository
             AssignRepositoryHistoryFromCategories(repositoryHistory, null);
 
             // migration from old version (move URL history to _remoteRepositoryHistory)
-            if (AppSettings.Instance.RemoteRepositoryHistory == null)
+            if (AppSettings.Current.RemoteRepositoryHistory == null)
             {
                 _remoteRepositoryHistory = new RepositoryHistory(size);
                 foreach (Repository repo in repositoryHistory.Repositories)
@@ -78,7 +79,7 @@ namespace GitCommands.Repository
                     _repositoryHistory.Wait();
                 if (_remoteRepositoryHistory == null)
                 {
-                    object setting = AppSettings.Instance.RemoteRepositoryHistory;
+                    object setting = AppSettings.Current.RemoteRepositoryHistory;
                     if (setting != null)
                     {
                         _remoteRepositoryHistory = DeserializeHistoryFromXml(setting.ToString());
@@ -124,7 +125,7 @@ namespace GitCommands.Repository
             {
                 if (_repositoryCategories == null)
                 {
-                    object setting = AppSettings.Instance.Repositories;
+                    object setting = AppSettings.Current.Repositories;
                     if (setting != null)
                     {
                         _repositoryCategories = DeserializeRepositories(setting.ToString());
@@ -241,11 +242,11 @@ namespace GitCommands.Repository
         public static void SaveSettings()
         {
             if (_repositoryHistory != null)
-                AppSettings.Instance.RepositoryHistory = SerializeHistoryIntoXml(_repositoryHistory.Result);
+                AppSettings.Current.RepositoryHistory = SerializeHistoryIntoXml(_repositoryHistory.Result);
             if (_remoteRepositoryHistory != null)
-                AppSettings.Instance.RemoteRepositoryHistory = SerializeHistoryIntoXml(_remoteRepositoryHistory);
+                AppSettings.Current.RemoteRepositoryHistory = SerializeHistoryIntoXml(_remoteRepositoryHistory);
             if (_repositoryCategories != null)
-                AppSettings.Instance.Repositories = SerializeRepositories(_repositoryCategories);
+                AppSettings.Current.Repositories = SerializeRepositories(_repositoryCategories);
         }
 
         public static void AddCategory(string title)

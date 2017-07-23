@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using GitCommands;
-
+using GitCommands.Settings;
 using GitUI.Editor;
 
 using JetBrains.Annotations;
@@ -240,7 +240,7 @@ namespace GitUI.CommandsDialogs
 
             private Globalized()
             {
-                Translator.Translate(this, AppSettings.Instance.CurrentTranslation);
+                Translator.Translate(this, AppSettings.Current.CurrentTranslation);
             }
 
             public readonly TranslationString Cancel = new TranslationString("Cancel");

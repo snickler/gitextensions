@@ -34,10 +34,10 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         protected override void SettingsToPage()
         {
-            PlinkPath.Text = AppSettings.Instance.Plink;
-            PuttygenPath.Text = AppSettings.Instance.Puttygen;
-            PageantPath.Text = AppSettings.Instance.Pageant;
-            AutostartPageant.Checked = AppSettings.Instance.AutoStartPageant;
+            PlinkPath.Text = AppSettings.Current.Plink;
+            PuttygenPath.Text = AppSettings.Current.Puttygen;
+            PageantPath.Text = AppSettings.Current.Pageant;
+            AutostartPageant.Checked = AppSettings.Current.AutoStartPageant;
 
             if (string.IsNullOrEmpty(GitCommandHelpers.GetSsh()))
                 OpenSSH.Checked = true;
@@ -54,10 +54,10 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         protected override void PageToSettings()
         {
-            AppSettings.Instance.Plink = PlinkPath.Text;
-            AppSettings.Instance.Puttygen = PuttygenPath.Text;
-            AppSettings.Instance.Pageant = PageantPath.Text;
-            AppSettings.Instance.AutoStartPageant = AutostartPageant.Checked;
+            AppSettings.Current.Plink = PlinkPath.Text;
+            AppSettings.Current.Puttygen = PuttygenPath.Text;
+            AppSettings.Current.Pageant = PageantPath.Text;
+            AppSettings.Current.AutoStartPageant = AutostartPageant.Checked;
 
             if (OpenSSH.Checked)
                 GitCommandHelpers.UnsetSsh();

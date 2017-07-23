@@ -1,5 +1,6 @@
 ﻿using System;
 using GitCommands;
+using GitCommands.Settings;
 using GitUIPluginInterfaces;
 
 namespace GitUI
@@ -28,7 +29,7 @@ namespace GitUI
         {
             get
             {
-                return _settingsSource ?? AppSettings.Instance.SettingsContainer;
+                return _settingsSource ?? AppSettings.Current.SettingsContainer;
             }
         }
 

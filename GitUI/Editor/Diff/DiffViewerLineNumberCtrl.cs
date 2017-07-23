@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using GitCommands;
+using GitCommands.Settings;
 using GitCommands.Utils;
 using ICSharpCode.TextEditor;
 
@@ -78,13 +79,13 @@ namespace GitUI.Editor.Diff
                     switch (diffLine.Style)
                     {
                         case DiffLineNum.DiffLineStyle.Plus:
-                            brush = new SolidBrush(AppSettings.Instance.DiffAddedColor);
+                            brush = new SolidBrush(AppSettings.Current.DiffAddedColor);
                             break;
                         case DiffLineNum.DiffLineStyle.Minus:
-                            brush = new SolidBrush(AppSettings.Instance.DiffRemovedColor);
+                            brush = new SolidBrush(AppSettings.Current.DiffRemovedColor);
                             break;
                         case DiffLineNum.DiffLineStyle.Header:
-                            brush = new SolidBrush(AppSettings.Instance.DiffSectionColor);
+                            brush = new SolidBrush(AppSettings.Current.DiffSectionColor);
                             break;
                     }
 

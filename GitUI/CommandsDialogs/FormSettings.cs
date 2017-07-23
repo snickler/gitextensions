@@ -122,7 +122,7 @@ namespace GitUI.CommandsDialogs
             using (var form = new FormSettings(uiCommands, initalPage))
             {
 
-                AppSettings.Instance.UsingContainer(form._commonLogic.RepoDistSettingsSet.GlobalSettings, () =>
+                AppSettings.Current.UsingContainer(form._commonLogic.RepoDistSettingsSet.GlobalSettings, () =>
                 {
                      result = form.ShowDialog(owner);
                 });
@@ -243,7 +243,7 @@ namespace GitUI.CommandsDialogs
             GitCommandHelpers.SetEnvironmentVariable(true);
 
             // TODO: this method has a generic sounding name but only saves some specific settings
-            AppSettings.Instance.SaveSettings();
+            AppSettings.Current.SaveSettings();
 
             return true;
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Security.Permissions;
+using GitCommands.Settings;
 
 namespace GitCommands
 {
@@ -38,7 +39,7 @@ namespace GitCommands
                 //process used to execute external commands
                 var process = new Process();
                 var startInfo = GitCommandHelpers.CreateProcessStartInfo(cmd, arguments, WorkingDirectory, GitModule.SystemEncoding);
-                startInfo.CreateNoWindow = (!ssh && !AppSettings.Instance.ShowGitCommandLine);
+                startInfo.CreateNoWindow = (!ssh && !AppSettings.Current.ShowGitCommandLine);
                 process.StartInfo = startInfo;
 
                 process.EnableRaisingEvents = true;
@@ -49,7 +50,7 @@ namespace GitCommands
                 process.Exited += (sender, args) =>
                 {
                   var executionEndTimestamp = DateTime.Now;
-                  AppSettings.Instance.GitLog.Log (quotedCmd + " " + arguments, executionStartTimestamp, executionEndTimestamp);
+                  AppSettings.Current.GitLog.Log (quotedCmd + " " + arguments, executionStartTimestamp, executionEndTimestamp);
                 };
 
                 process.Start();

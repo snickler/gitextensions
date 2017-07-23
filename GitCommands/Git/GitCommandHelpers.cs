@@ -55,18 +55,18 @@ namespace GitCommands
         public static void SetEnvironmentVariable(bool reload = false)
         {
             string path = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process);
-            if (!string.IsNullOrEmpty(AppSettings.Instance.GitBinDir) && !path.Contains(AppSettings.Instance.GitBinDir))
-                Environment.SetEnvironmentVariable("PATH", string.Concat(path, ";", AppSettings.Instance.GitBinDir), EnvironmentVariableTarget.Process);
+            if (!string.IsNullOrEmpty(AppSettings.Current.GitBinDir) && !path.Contains(AppSettings.Current.GitBinDir))
+                Environment.SetEnvironmentVariable("PATH", string.Concat(path, ";", AppSettings.Current.GitBinDir), EnvironmentVariableTarget.Process);
 
-            if (!string.IsNullOrEmpty(AppSettings.Instance.CustomHomeDir))
+            if (!string.IsNullOrEmpty(AppSettings.Current.CustomHomeDir))
             {
                 Environment.SetEnvironmentVariable(
                     "HOME",
-                    AppSettings.Instance.CustomHomeDir);
+                    AppSettings.Current.CustomHomeDir);
                 return;
             }
 
-            if (AppSettings.Instance.UserProfileHomeDir)
+            if (AppSettings.Current.UserProfileHomeDir)
             {
                 Environment.SetEnvironmentVariable(
                     "HOME",
@@ -160,7 +160,7 @@ namespace GitCommands
             startProcess.Exited += (sender, args) =>
             {
                 var executionEndTimestamp = DateTime.Now;
-                AppSettings.Instance.GitLog.Log(quotedCmd + " " + arguments, executionStartTimestamp, executionEndTimestamp);
+                AppSettings.Current.GitLog.Log(quotedCmd + " " + arguments, executionStartTimestamp, executionEndTimestamp);
             };
 
             return startProcess;
@@ -354,7 +354,7 @@ namespace GitCommands
             {
                 if (_versionInUse == null || _versionInUse.IsUnknown)
                 {
-                    var result = RunCmd(AppSettings.Instance.GitCommand, "--version");
+                    var result = RunCmd(AppSettings.Current.GitCommand, "--version");
                     _versionInUse = new GitVersion(result);
                 }
 
@@ -1205,7 +1205,7 @@ namespace GitCommands
         public static string FindRenamesOpt()
         {
             string result = " --find-renames";
-            if (AppSettings.Instance.FollowRenamesInFileHistoryExactOnly)
+            if (AppSettings.Current.FollowRenamesInFileHistoryExactOnly)
             {
                 result += "=\"100%\"";
             }
@@ -1216,7 +1216,7 @@ namespace GitCommands
         public static string FindRenamesAndCopiesOpts()
         {
             string findCopies = " --find-copies";
-            if (AppSettings.Instance.FollowRenamesInFileHistoryExactOnly)
+            if (AppSettings.Current.FollowRenamesInFileHistoryExactOnly)
             {
                 findCopies += "=\"100%\"";
             }

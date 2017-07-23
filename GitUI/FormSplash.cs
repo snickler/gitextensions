@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 using GitCommands.Utils;
 using ResourceManager;
 

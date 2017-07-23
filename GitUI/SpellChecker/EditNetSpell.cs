@@ -70,7 +70,7 @@ namespace GitUI.SpellChecker
 
             EnabledChanged += EditNetSpellEnabledChanged;
 
-            if(AppSettings.Instance.ProvideAutocompletion)
+            if(AppSettings.Current.ProvideAutocompletion)
               InitializeAutoCompleteWordsTask();
         }
 
@@ -225,7 +225,7 @@ namespace GitUI.SpellChecker
             {
                 return IsUICommandsInitialized ?
                     Module.EffectiveSettings:
-                    AppSettings.Instance.SettingsContainer;
+                    AppSettings.Current.SettingsContainer;
             }
         }
 
@@ -249,7 +249,7 @@ namespace GitUI.SpellChecker
                         IgnoreWordsWithDigits = true
                     };
 
-            if(AppSettings.Instance.ProvideAutocompletion)
+            if(AppSettings.Current.ProvideAutocompletion)
                 _autoCompleteListTask.ContinueWith(
                 w =>
                 {
@@ -328,7 +328,7 @@ namespace GitUI.SpellChecker
 
         private void MarkLines()
         {
-            if (!AppSettings.Instance.MarkIllFormedLinesInCommitMsg)
+            if (!AppSettings.Current.MarkIllFormedLinesInCommitMsg)
                 return;
             var numLines = TextBox.Lines.Length;
             var chars = 0;
@@ -510,7 +510,7 @@ namespace GitUI.SpellChecker
             var mi =
                 new ToolStripMenuItem(markIllFormedLinesText.Text)
                     {
-                        Checked = AppSettings.Instance.MarkIllFormedLinesInCommitMsg
+                        Checked = AppSettings.Current.MarkIllFormedLinesInCommitMsg
                     };
             mi.Click += MarkIllFormedLinesInCommitMsgClick;
             SpellCheckContextMenu.Items.Add(mi);
@@ -548,7 +548,7 @@ namespace GitUI.SpellChecker
 
         private void MarkIllFormedLinesInCommitMsgClick(object sender, EventArgs e)
         {
-            AppSettings.Instance.MarkIllFormedLinesInCommitMsg = !AppSettings.Instance.MarkIllFormedLinesInCommitMsg;
+            AppSettings.Current.MarkIllFormedLinesInCommitMsg = !AppSettings.Current.MarkIllFormedLinesInCommitMsg;
             CheckSpelling();
         }
 
@@ -683,7 +683,7 @@ namespace GitUI.SpellChecker
             {
                 UndoHighlighting();
             }
-            else if (e.Control && !e.Alt && e.KeyCode == Keys.Space && AppSettings.Instance.ProvideAutocompletion)
+            else if (e.Control && !e.Alt && e.KeyCode == Keys.Space && AppSettings.Current.ProvideAutocompletion)
             {
                 UpdateOrShowAutoComplete(true);
                 e.Handled = true;
@@ -815,7 +815,7 @@ namespace GitUI.SpellChecker
 
         public void RefreshAutoCompleteWords()
         {
-            if (AppSettings.Instance.ProvideAutocompletion)
+            if (AppSettings.Current.ProvideAutocompletion)
                 InitializeAutoCompleteWordsTask();
         }
 
@@ -935,7 +935,7 @@ namespace GitUI.SpellChecker
                 return;
             }
 
-            if (_autoCompleteListTask == null || !AppSettings.Instance.ProvideAutocompletion)
+            if (_autoCompleteListTask == null || !AppSettings.Current.ProvideAutocompletion)
                 return;
 
             if (!_autoCompleteListTask.IsCompleted)

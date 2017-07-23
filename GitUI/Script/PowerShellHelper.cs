@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using GitCommands.Settings;
 
 namespace GitUI.Script
 {
@@ -30,7 +31,7 @@ namespace GitUI.Script
             startProcess.Exited += (sender, args) =>
             {
                 var executionEndTimestamp = DateTime.Now;
-                AppSettings.Instance.GitLog.Log(filename + " " + psarguments, executionStartTimestamp, executionEndTimestamp);
+                AppSettings.Current.GitLog.Log(filename + " " + psarguments, executionStartTimestamp, executionEndTimestamp);
             };
 
         }

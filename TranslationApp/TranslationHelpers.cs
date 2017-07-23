@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using GitCommands.Settings;
 using ResourceManager;
 using ResourceManager.Xliff;
 using TranslationUtl = ResourceManager.Xliff.TranslationUtl;
@@ -16,7 +17,7 @@ namespace TranslationApp
             try
             {
                 //Set language to neutral to get neutral translations
-                GitCommands.AppSettings.Instance.CurrentTranslation = "";
+                AppSettings.Current.CurrentTranslation = "";
 
                 var translatableTypes = TranslationUtl.GetTranslatableTypes();
                 foreach (var types in translatableTypes)
@@ -44,7 +45,7 @@ namespace TranslationApp
             finally
             {
                 //Restore translation
-                GitCommands.AppSettings.Instance.CurrentTranslation = null;
+                AppSettings.Current.CurrentTranslation = null;
             }
 
             return GetItemsDictionary(neutralTranslation);
@@ -149,7 +150,7 @@ namespace TranslationApp
             var ext = Path.GetExtension(filename);
             foreach (var pair in items)
             {
-                var foreignTranslation = new TranslationFile(GitCommands.AppSettings.ProductVersion, "en", targetLanguageCode);
+                var foreignTranslation = new TranslationFile(AppSettings.ProductVersion, "en", targetLanguageCode);
                 foreach (var translateItem in pair.Value)
                 {
                     var item = translateItem.GetTranslationItem();

@@ -471,7 +471,7 @@ namespace GitUI.Script
             //Make sure we are able to run git, even if git is not in the path
             if (originalCommand.Equals("git", StringComparison.CurrentCultureIgnoreCase) ||
                 originalCommand.Equals("{git}", StringComparison.CurrentCultureIgnoreCase))
-                return AppSettings.Instance.GitCommand;
+                return AppSettings.Current.GitCommand;
 
             if (originalCommand.Equals("gitextensions", StringComparison.CurrentCultureIgnoreCase) ||
                 originalCommand.Equals("{gitextensions}", StringComparison.CurrentCultureIgnoreCase) ||

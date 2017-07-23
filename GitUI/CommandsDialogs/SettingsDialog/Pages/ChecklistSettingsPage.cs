@@ -250,7 +250,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
                 return;
             }
 
-            MessageBox.Show(this, String.Format(_shCanBeRun.Text, AppSettings.Instance.GitBinDir), _shCanBeRunCaption.Text);
+            MessageBox.Show(this, String.Format(_shCanBeRun.Text, AppSettings.Current.GitBinDir), _shCanBeRunCaption.Text);
             ////GitBinPath.Text = Settings.GitBinDir;
             PageHost.LoadAll(); // apply settings to dialog controls (otherwise the later called SaveAndRescan_Click would overwrite settings again)
             SaveAndRescan_Click(null, null);
@@ -403,7 +403,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
                 return;
             }
 
-            MessageBox.Show(this, String.Format(_gitCanBeRun.Text, AppSettings.Instance.GitCommandValue), _gitCanBeRunCaption.Text);
+            MessageBox.Show(this, String.Format(_gitCanBeRun.Text, AppSettings.Current.GitCommandValue), _gitCanBeRunCaption.Text);
 
             PageHost.GotoPage(GitSettingsPage.GetPageReference());
             SaveAndRescan_Click(null, null);
@@ -420,7 +420,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         private void CheckAtStartup_CheckedChanged(object sender, EventArgs e)
         {
-            AppSettings.Instance.CheckSettings = CheckAtStartup.Checked;
+            AppSettings.Current.CheckSettings = CheckAtStartup.Checked;
         }
 
         public bool CheckSettings()
@@ -457,11 +457,11 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         private static bool IsCheckAtStartupChecked(bool bValid)
         {
-            var retValue = AppSettings.Instance.CheckSettings;
+            var retValue = AppSettings.Current.CheckSettings;
 
             if (bValid && retValue)
             {
-                AppSettings.Instance.CheckSettings = false;
+                AppSettings.Current.CheckSettings = false;
                 retValue = false;
             }
             return retValue;
@@ -469,9 +469,9 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         private bool CheckTranslationConfigSettings()
         {
-            return RenderSettingSetUnset(() => string.IsNullOrEmpty(AppSettings.Instance.Translation),
+            return RenderSettingSetUnset(() => string.IsNullOrEmpty(AppSettings.Current.Translation),
                                     translationConfig, translationConfig_Fix,
-                                    _noLanguageConfigured.Text, string.Format(_languageConfigured.Text, AppSettings.Instance.Translation));
+                                    _noLanguageConfigured.Text, string.Format(_languageConfigured.Text, AppSettings.Current.Translation));
         }
 
         private bool CheckSSHSettings()
@@ -479,7 +479,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             SshConfig.Visible = true;
             if (GitCommandHelpers.Plink())
             {
-                return RenderSettingSetUnset(() => !File.Exists(AppSettings.Instance.Plink) || !File.Exists(AppSettings.Instance.Puttygen) || !File.Exists(AppSettings.Instance.Pageant),
+                return RenderSettingSetUnset(() => !File.Exists(AppSettings.Current.Plink) || !File.Exists(AppSettings.Current.Puttygen) || !File.Exists(AppSettings.Current.Pageant),
                                         SshConfig, SshConfig_Fix,
                                         _plinkputtyGenpageantNotFound.Text,
                                         _puttyConfigured.Text);
@@ -492,7 +492,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         private bool CheckGitExe()
         {
-            return RenderSettingSetUnset(() => !File.Exists(AppSettings.Instance.GitBinDir + "sh.exe") && !File.Exists(AppSettings.Instance.GitBinDir + "sh") &&
+            return RenderSettingSetUnset(() => !File.Exists(AppSettings.Current.GitBinDir + "sh.exe") && !File.Exists(AppSettings.Current.GitBinDir + "sh") &&
                                          !CheckSettingsLogic.CheckIfFileIsInPath("sh.exe") && !CheckSettingsLogic.CheckIfFileIsInPath("sh"),
                                    GitBinFound, GitBinFound_Fix,
                                    _linuxToolsSshNotFound.Text, _linuxToolsSshFound.Text);

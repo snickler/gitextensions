@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using GitCommands.Settings;
 
 namespace GitUI.CommandsDialogs
 {
@@ -40,7 +41,7 @@ namespace GitUI.CommandsDialogs
 
         public void Translate()
         {
-            Translator.Translate(this, AppSettings.Instance.CurrentTranslation);
+            Translator.Translate(this, AppSettings.Current.CurrentTranslation);
         }
 
         public virtual void AddTranslationItems(ITranslation translation)

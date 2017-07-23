@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GitCommands.Settings;
 
 namespace GitUI.CommandsDialogs.BrowseDialog
 {
@@ -14,7 +15,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
 
         public void Translate()
         {
-            Translator.Translate(this, AppSettings.Instance.CurrentTranslation);
+            Translator.Translate(this, AppSettings.Current.CurrentTranslation);
         }
 
         public virtual void AddTranslationItems(ITranslation translation)

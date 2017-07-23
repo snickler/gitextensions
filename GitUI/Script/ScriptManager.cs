@@ -8,6 +8,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using GitCommands;
 using System.Collections.Generic;
+using GitCommands.Settings;
 
 namespace GitUI.Script
 {
@@ -19,7 +20,7 @@ namespace GitUI.Script
         {
             if (Scripts == null)
             {
-                DeserializeFromXml(AppSettings.Instance.ownScripts);
+                DeserializeFromXml(AppSettings.Current.ownScripts);
                 if (Scripts != null)
                     FixAmbiguousHotkeyCommandIdentifiers(Scripts);
             }

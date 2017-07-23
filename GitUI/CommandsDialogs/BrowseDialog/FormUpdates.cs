@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Git.hub;
 using GitCommands.Config;
 using GitCommands;
+using GitCommands.Settings;
 using GitUIPluginInterfaces;
 using ResourceManager;
 
@@ -92,7 +93,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
         void CheckForNewerVersion(string releases)
         {
             var versions = ReleaseVersion.Parse(releases);
-            var updates = ReleaseVersion.GetNewerVersions(CurrentVersion, AppSettings.Instance.CheckForReleaseCandidates, versions);
+            var updates = ReleaseVersion.GetNewerVersions(CurrentVersion, AppSettings.Current.CheckForReleaseCandidates, versions);
 
             var update = updates.OrderBy(version => version.Version).LastOrDefault();
             if (update != null)

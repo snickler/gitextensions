@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using GitCommands.Settings;
 
 namespace GitUI.CommandsDialogs.SettingsDialog
 {
@@ -21,7 +22,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
 
         private void LoadEncoding()
         {
-            var includedEncoding = AppSettings.Instance.AvailableEncodings;
+            var includedEncoding = AppSettings.Current.AvailableEncodings;
             ListIncludedEncodings.BeginUpdate();
             try
             {
@@ -69,10 +70,10 @@ namespace GitUI.CommandsDialogs.SettingsDialog
 
         private void ButtonOk_Click(object sender, EventArgs e)
         {
-            AppSettings.Instance.AvailableEncodings.Clear();
+            AppSettings.Current.AvailableEncodings.Clear();
             foreach(Encoding encoding in ListIncludedEncodings.Items)
             {
-                AppSettings.Instance.AvailableEncodings.Add(encoding.HeaderName, encoding);
+                AppSettings.Current.AvailableEncodings.Add(encoding.HeaderName, encoding);
             }
 
             DialogResult = DialogResult.OK;

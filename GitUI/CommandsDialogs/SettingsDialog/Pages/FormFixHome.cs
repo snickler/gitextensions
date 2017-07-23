@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 using ResourceManager;
 
 namespace GitUI.CommandsDialogs.SettingsDialog.Pages
@@ -105,13 +106,13 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         private void LoadSettings()
         {
-            if (!string.IsNullOrEmpty(AppSettings.Instance.CustomHomeDir))
+            if (!string.IsNullOrEmpty(AppSettings.Current.CustomHomeDir))
             {
                 defaultHome.Checked = userprofileHome.Checked = false;
                 otherHome.Checked = true;
-                otherHomeDir.Text = AppSettings.Instance.CustomHomeDir;
+                otherHomeDir.Text = AppSettings.Current.CustomHomeDir;
             }
-            else if (AppSettings.Instance.UserProfileHomeDir)
+            else if (AppSettings.Current.UserProfileHomeDir)
             {
                 defaultHome.Checked = otherHome.Checked = false;
                 userprofileHome.Checked = true;
@@ -201,12 +202,12 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
                     MessageBox.Show(this, _noHomeDirectorySpecified.Text);
                     return;
                 }
-                AppSettings.Instance.CustomHomeDir = otherHomeDir.Text;
+                AppSettings.Current.CustomHomeDir = otherHomeDir.Text;
             }
             else
-                AppSettings.Instance.CustomHomeDir = "";
+                AppSettings.Current.CustomHomeDir = "";
 
-            AppSettings.Instance.UserProfileHomeDir = userprofileHome.Checked;
+            AppSettings.Current.UserProfileHomeDir = userprofileHome.Checked;
 
             GitCommandHelpers.SetEnvironmentVariable(true);
             string path = Environment.GetEnvironmentVariable("HOME");

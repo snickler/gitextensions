@@ -1,5 +1,6 @@
 ﻿using GitCommands;
 using System.Windows.Forms;
+using GitCommands.Settings;
 
 namespace GitUI.CommandsDialogs
 {
@@ -9,7 +10,7 @@ namespace GitUI.CommandsDialogs
         {
             if (aCommands.Module.InTheMiddleOfConflictedMerge())
             {
-                if (AppSettings.Instance.DontConfirmResolveConflicts || MessageBoxes.UnresolvedMergeConflicts(owner))
+                if (AppSettings.Current.DontConfirmResolveConflicts || MessageBoxes.UnresolvedMergeConflicts(owner))
                 {
                     SolveMergeConflicts(aCommands, owner, offerCommit);
                 }

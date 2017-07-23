@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using GitCommands.Settings;
 using GitUI.Properties;
 using GitUI.CommandsDialogs.AboutBoxDialog;
 using ResourceManager;
@@ -71,7 +72,7 @@ namespace GitUI.CommandsDialogs
             base.OnLoad(e);
 
             _NO_TRANSLATE_labelVersionInfo.Text = string.Format("{0}{1}", _NO_TRANSLATE_labelVersionInfo.Text,
-                GitCommands.AppSettings.ProductVersion);
+                AppSettings.ProductVersion);
         }
 
         private readonly string[] _contributersList;

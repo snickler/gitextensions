@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 using ResourceManager;
 
 namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
@@ -14,7 +15,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
 
         private void FormDashboardEditor_FormClosing(object sender, FormClosingEventArgs e)
         {
-            AppSettings.Instance.SaveSettings();
+            AppSettings.Current.SaveSettings();
         }
     }
 }

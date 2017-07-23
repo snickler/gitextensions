@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using GitUIPluginInterfaces;
 using ResourceManager;
-using Settings = GitCommands.AppSettings;
+using Settings = GitCommands.Settings.AppSettings;
 
 namespace ProxySwitcher
 {

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using GitUI.Properties;
 using ResourceManager;
-using Settings = GitCommands.AppSettings;
+using Settings = GitCommands.Settings.AppSettings;
 #if !__MonoCS__
 using Microsoft.WindowsAPICodePack.Taskbar;
 #endif
@@ -20,7 +20,7 @@ namespace GitUI
     /// </remarks></summary>
     public class GitExtensionsForm : GitExtensionsFormBase
     {
-        internal static Icon ApplicationIcon = GetApplicationIcon(Settings.Instance.IconStyle, Settings.Instance.IconColor);
+        internal static Icon ApplicationIcon = GetApplicationIcon(Settings.Current.IconStyle, Settings.Current.IconColor);
 
         /// <summary>indicates whether the <see cref="Form"/>'s position will be restored</summary>
         readonly bool _enablePositionRestore;
@@ -74,7 +74,7 @@ namespace GitUI
 
         protected void RotateApplicationIcon()
         {
-            ApplicationIcon = GetApplicationIcon(Settings.Instance.IconStyle, Settings.Instance.IconColor);
+            ApplicationIcon = GetApplicationIcon(Settings.Current.IconStyle, Settings.Current.IconColor);
             Icon = ApplicationIcon;
         }
 

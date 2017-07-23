@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using GitCommands.Settings;
 using GitUI.Properties;
 
 namespace GitUI
@@ -8,7 +9,7 @@ namespace GitUI
     {
         public static Bitmap GetPictureBoxImage(DateTime currentDate)
         {
-            if (GitCommands.AppSettings.Instance.IconStyle.Equals("Cow", StringComparison.OrdinalIgnoreCase))
+            if (AppSettings.Current.IconStyle.Equals("Cow", StringComparison.OrdinalIgnoreCase))
             {
                 // Lemmings
                 // Also, we removed repeated calls to DateTime.Now and made this method testable

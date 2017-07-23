@@ -1,4 +1,5 @@
 ﻿using GitCommands;
+using GitCommands.Settings;
 using GitUIPluginInterfaces;
 
 namespace GitUI.CommandsDialogs.SettingsDialog.Pages
@@ -23,7 +24,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
         protected override bool AreEffectiveSettings => true;
         protected override SettingsSource GetCurrentSettings()
         {
-            return AppSettings.Instance.SettingsContainer;
+            return AppSettings.Current.SettingsContainer;
         }
     }
 }

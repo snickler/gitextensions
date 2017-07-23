@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 using GitUI;
 using GitUIPluginInterfaces;
 using JetBrains.Annotations;
@@ -46,7 +47,7 @@ namespace Gerrit
             var sshCmd = GitCommandHelpers.GetSsh();
             if (GitCommandHelpers.Plink())
             {
-                sshCmd = AppSettings.Instance.Plink;
+                sshCmd = AppSettings.Current.Plink;
             }
             if (string.IsNullOrEmpty(sshCmd))
             {
@@ -99,7 +100,7 @@ namespace Gerrit
 
             if (GitCommandHelpers.Plink())
             {
-                if (!File.Exists(AppSettings.Instance.Pageant))
+                if (!File.Exists(AppSettings.Current.Pageant))
                     MessageBoxes.PAgentNotFound(owner);
                 else
                     aModule.StartPageantForRemote(remote);

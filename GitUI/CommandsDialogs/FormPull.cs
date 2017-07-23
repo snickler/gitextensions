@@ -10,6 +10,7 @@ using GitCommands;
 using GitCommands.Config;
 using GitCommands.Repository;
 using GitCommands.Remote;
+using GitCommands.Settings;
 using GitUI.Properties;
 using GitUI.Script;
 using GitUI.UserControls;
@@ -110,7 +111,7 @@ namespace GitUI.CommandsDialogs
             InitializeComponent();
             Translate();
 
-            helpImageDisplayUserControl1.Visible = !AppSettings.Instance.DontShowHelpImages;
+            helpImageDisplayUserControl1.Visible = !AppSettings.Current.DontShowHelpImages;
             helpImageDisplayUserControl1.IsOnHoverShowImage2NoticeText = _hoverShowImageLabelText.Text;
 
             if (aCommands != null)
@@ -119,12 +120,12 @@ namespace GitUI.CommandsDialogs
                 Init(defaultRemote);
             }
 
-            Merge.Checked = AppSettings.Instance.FormPullAction == PullAction.Merge;
-            Rebase.Checked = AppSettings.Instance.FormPullAction == PullAction.Rebase;
-            Fetch.Checked = AppSettings.Instance.FormPullAction == PullAction.Fetch;
+            Merge.Checked = AppSettings.Current.FormPullAction == PullAction.Merge;
+            Rebase.Checked = AppSettings.Current.FormPullAction == PullAction.Rebase;
+            Fetch.Checked = AppSettings.Current.FormPullAction == PullAction.Fetch;
             localBranch.Enabled = Fetch.Checked;
-            AutoStash.Checked = AppSettings.Instance.AutoStash;
-            Prune.Enabled = AppSettings.Instance.FormPullAction == PullAction.Merge || AppSettings.Instance.FormPullAction == PullAction.Fetch;
+            AutoStash.Checked = AppSettings.Current.AutoStash;
+            Prune.Enabled = AppSettings.Current.FormPullAction == PullAction.Merge || AppSettings.Current.FormPullAction == PullAction.Fetch;
 
             ErrorOccurred = false;
 
@@ -160,7 +161,7 @@ namespace GitUI.CommandsDialogs
             _NO_TRANSLATE_Remotes.DataSource = new[] { new GitRemote { Name = AllRemotes } }.Union(_gitRemoteController.Remotes).ToList();
             _NO_TRANSLATE_Remotes.DisplayMember = "Name";
             _NO_TRANSLATE_Remotes.SelectedIndex = -1;
-            ComboBoxHelper.ResizeComboBoxDropDownWidth(_NO_TRANSLATE_Remotes, AppSettings.Instance.BranchDropDownMinWidth, AppSettings.Instance.BranchDropDownMaxWidth);
+            ComboBoxHelper.ResizeComboBoxDropDownWidth(_NO_TRANSLATE_Remotes, AppSettings.Current.BranchDropDownMinWidth, AppSettings.Current.BranchDropDownMaxWidth);
 
             if (selectedRemoteName.IsNullOrEmpty())
             {
@@ -199,7 +200,7 @@ namespace GitUI.CommandsDialogs
 
         private void MergetoolClick(object sender, EventArgs e)
         {
-            Module.RunExternalCmdShowConsole(AppSettings.Instance.GitCommand, "mergetool");
+            Module.RunExternalCmdShowConsole(AppSettings.Current.GitCommand, "mergetool");
 
             if (MessageBox.Show(this, _allMergeConflictSolvedQuestion.Text, _allMergeConflictSolvedQuestionCaption.Text,
                                 MessageBoxButtons.YesNo) != DialogResult.Yes)
@@ -252,7 +253,7 @@ namespace GitUI.CommandsDialogs
             _heads.Insert(0, GitRef.NoHead(Module));
             Branches.DataSource = _heads;
 
-            ComboBoxHelper.ResizeComboBoxDropDownWidth(Branches, AppSettings.Instance.BranchDropDownMinWidth, AppSettings.Instance.BranchDropDownMaxWidth);
+            ComboBoxHelper.ResizeComboBoxDropDownWidth(Branches, AppSettings.Current.BranchDropDownMinWidth, AppSettings.Current.BranchDropDownMaxWidth);
 
             Cursor.Current = Cursors.Default;
         }
@@ -308,7 +309,7 @@ namespace GitUI.CommandsDialogs
             if (ErrorOccurred || Module.InTheMiddleOfAction())
                 return;
 
-            bool? messageBoxResult = AppSettings.Instance.AutoPopStashAfterPull;
+            bool? messageBoxResult = AppSettings.Current.AutoPopStashAfterPull;
             if (messageBoxResult == null)
             {
                 DialogResult res = PSTaskDialog.cTaskDialog.MessageBox(
@@ -324,7 +325,7 @@ namespace GitUI.CommandsDialogs
                     PSTaskDialog.eSysIcons.Question);
                 messageBoxResult = (res == DialogResult.Yes);
                 if (PSTaskDialog.cTaskDialog.VerificationChecked)
-                    AppSettings.Instance.AutoPopStashAfterPull = messageBoxResult;
+                    AppSettings.Current.AutoPopStashAfterPull = messageBoxResult;
             }
             if ((bool)messageBoxResult)
             {
@@ -460,7 +461,7 @@ namespace GitUI.CommandsDialogs
             if (!Fetch.Checked && AutoStash.Checked && !Module.IsBareRepository() &&
                 Module.GitStatus(UntrackedFilesMode.No, IgnoreSubmodulesMode.Default).Count > 0)
             {
-                UICommands.StashSave(owner, AppSettings.Instance.IncludeUntrackedFilesInAutoStash);
+                UICommands.StashSave(owner, AppSettings.Current.IncludeUntrackedFilesInAutoStash);
                 return true;
             }
             return false;
@@ -659,13 +660,13 @@ namespace GitUI.CommandsDialogs
         private void UpdateSettingsDuringPull()
         {
             if (Merge.Checked)
-                AppSettings.Instance.FormPullAction = PullAction.Merge;
+                AppSettings.Current.FormPullAction = PullAction.Merge;
             if (Rebase.Checked)
-                AppSettings.Instance.FormPullAction = PullAction.Rebase;
+                AppSettings.Current.FormPullAction = PullAction.Rebase;
             if (Fetch.Checked)
-                AppSettings.Instance.FormPullAction = PullAction.Fetch;
+                AppSettings.Current.FormPullAction = PullAction.Fetch;
 
-            AppSettings.Instance.AutoStash = AutoStash.Checked;
+            AppSettings.Current.AutoStash = AutoStash.Checked;
         }
 
         private IEnumerable<string> GetSelectedRemotes()
@@ -699,7 +700,7 @@ namespace GitUI.CommandsDialogs
             if (!GitCommandHelpers.Plink())
                 return;
 
-            if (File.Exists(AppSettings.Instance.Pageant))
+            if (File.Exists(AppSettings.Current.Pageant))
             {
                 HashSet<string> files = new HashSet<string>(PathUtil.CreatePathEqualityComparer());
                 foreach (var remote in GetSelectedRemotes())

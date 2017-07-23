@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using GitCommands;
 using GitCommands.Repository;
+using GitCommands.Settings;
 using GitUI.Properties;
 using GitUIPluginInterfaces.RepositoryHosts;
 using ResourceManager;
@@ -111,7 +112,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             //
             var showCurrentBranchMenuItem = new ToolStripMenuItem(_showCurrentBranch.Text);
             showCurrentBranchMenuItem.Click += showCurrentBranchMenuItem_Click;
-            showCurrentBranchMenuItem.Checked = GitCommands.AppSettings.Instance.DashboardShowCurrentBranch;
+            showCurrentBranchMenuItem.Checked = AppSettings.Current.DashboardShowCurrentBranch;
 
             var menuStrip = FindControl<MenuStrip>(Parent.Parent.Parent, p => true); // TODO: improve: Parent.Parent.Parent == FormBrowse
             var dashboardMenu = (ToolStripMenuItem)menuStrip.Items.Cast<ToolStripItem>().SingleOrDefault(p => p.Name == "dashboardToolStripMenuItem");
@@ -258,8 +259,8 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
 
         void showCurrentBranchMenuItem_Click(object sender, EventArgs e)
         {
-            bool newValue = !GitCommands.AppSettings.Instance.DashboardShowCurrentBranch;
-            GitCommands.AppSettings.Instance.DashboardShowCurrentBranch = newValue;
+            bool newValue = !AppSettings.Current.DashboardShowCurrentBranch;
+            AppSettings.Current.DashboardShowCurrentBranch = newValue;
             ((ToolStripMenuItem)sender).Checked = newValue;
             Refresh();
         }

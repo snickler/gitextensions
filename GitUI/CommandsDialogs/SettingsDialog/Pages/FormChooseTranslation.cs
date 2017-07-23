@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 using ResourceManager;
 
 namespace GitUI.CommandsDialogs.SettingsDialog.Pages
@@ -76,14 +77,14 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         void translationImage_Click(object sender, EventArgs e)
         {
-            AppSettings.Instance.Translation = ((Control)sender).Tag.ToString();
+            AppSettings.Current.Translation = ((Control)sender).Tag.ToString();
             Close();
         }
 
         private void FormChooseTranslation_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (string.IsNullOrEmpty(AppSettings.Instance.Translation))
-                AppSettings.Instance.Translation = "English";
+            if (string.IsNullOrEmpty(AppSettings.Current.Translation))
+                AppSettings.Current.Translation = "English";
         }
     }
 }

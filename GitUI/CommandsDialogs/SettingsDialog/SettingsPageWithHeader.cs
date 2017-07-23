@@ -1,6 +1,7 @@
 ﻿using System.Windows.Forms;
 using GitUIPluginInterfaces;
 using GitCommands;
+using GitCommands.Settings;
 
 namespace GitUI.CommandsDialogs.SettingsDialog
 {
@@ -28,7 +29,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
         protected override bool AreEffectiveSettings => true;
         protected override SettingsSource GetCurrentSettings()
         {
-            return AppSettings.Instance.SettingsContainer;
+            return AppSettings.Current.SettingsContainer;
         }
     }
 }

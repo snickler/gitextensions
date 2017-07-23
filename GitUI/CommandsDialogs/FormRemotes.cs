@@ -7,6 +7,7 @@ using GitCommands;
 using GitCommands.Config;
 using GitCommands.Repository;
 using GitCommands.Remote;
+using GitCommands.Settings;
 using GitUIPluginInterfaces;
 using ResourceManager;
 
@@ -384,7 +385,7 @@ Inactive remote is completely invisible to git.");
 
             Module.RunExternalCmdDetachedShowConsole(
                 "cmd.exe",
-                string.Format("/k \"\"{0}\" -T {1}\"", AppSettings.Instance.Plink, url));
+                string.Format("/k \"\"{0}\" -T {1}\"", AppSettings.Current.Plink, url));
         }
 
         private void PruneClick(object sender, EventArgs e)

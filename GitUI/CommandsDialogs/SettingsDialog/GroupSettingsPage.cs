@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
+using GitCommands.Settings;
 using ResourceManager;
 
 namespace GitUI.CommandsDialogs.SettingsDialog
@@ -14,7 +15,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
         protected GroupSettingsPage(string aTitle)
         {
             Title = aTitle;
-            Translator.Translate(this, GitCommands.AppSettings.Instance.CurrentTranslation);
+            Translator.Translate(this, AppSettings.Current.CurrentTranslation);
         }
 
         public string GetTitle()

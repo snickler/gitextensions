@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using GitCommands;
 using GitCommands.Repository;
+using GitCommands.Settings;
 using ResourceManager;
 
 namespace GitUI.CommandsDialogs
@@ -34,7 +35,7 @@ namespace GitUI.CommandsDialogs
 
             if (string.IsNullOrEmpty(dir))
             {
-                Directory.Text = AppSettings.Instance.DefaultCloneDestinationPath;
+                Directory.Text = AppSettings.Current.DefaultCloneDestinationPath;
             }
             else
             {

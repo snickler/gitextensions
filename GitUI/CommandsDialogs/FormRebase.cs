@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 using GitUI.HelperDialogs;
 using ResourceManager;
 
@@ -36,9 +37,9 @@ namespace GitUI.CommandsDialogs
         {
             InitializeComponent();
             Translate();
-            helpImageDisplayUserControl1.Visible = !AppSettings.Instance.DontShowHelpImages;
+            helpImageDisplayUserControl1.Visible = !AppSettings.Current.DontShowHelpImages;
             helpImageDisplayUserControl1.IsOnHoverShowImage2NoticeText = _hoverShowImageLabelText.Text;
-            if (AppSettings.Instance.AlwaysShowAdvOpt)
+            if (AppSettings.Current.AlwaysShowAdvOpt)
                 ShowOptions_LinkClicked(null, null);
         }
 
@@ -85,7 +86,7 @@ namespace GitUI.CommandsDialogs
             var autosquashSetting = Module.GetEffectiveSetting("rebase.autosquash");
             chkAutosquash.Checked = "true" == autosquashSetting.Trim().ToLower();
 
-            chkStash.Checked = AppSettings.Instance.RebaseAutoStash;
+            chkStash.Checked = AppSettings.Current.RebaseAutoStash;
         }
 
         private void EnableButtons()
@@ -204,7 +205,7 @@ namespace GitUI.CommandsDialogs
                 return;
             }
 
-            AppSettings.Instance.RebaseAutoStash = chkStash.Checked;
+            AppSettings.Current.RebaseAutoStash = chkStash.Checked;
 
             string rebaseCmd;
             if (chkSpecificRange.Checked && !String.IsNullOrWhiteSpace(txtFrom.Text) && !String.IsNullOrWhiteSpace(cboTo.Text))

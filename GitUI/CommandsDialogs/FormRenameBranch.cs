@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using GitCommands;
 using GitCommands.Git;
+using GitCommands.Settings;
 using ResourceManager;
 
 namespace GitUI.CommandsDialogs
@@ -12,7 +13,7 @@ namespace GitUI.CommandsDialogs
     {
         private readonly TranslationString _branchRenameFailed = new TranslationString("Rename failed.");
         private readonly IGitBranchNameNormaliser _branchNameNormaliser;
-        private readonly GitBranchNameOptions _gitBranchNameOptions = new GitBranchNameOptions(AppSettings.Instance.AutoNormaliseSymbol);
+        private readonly GitBranchNameOptions _gitBranchNameOptions = new GitBranchNameOptions(AppSettings.Current.AutoNormaliseSymbol);
         private readonly string _oldName;
 
 
@@ -30,7 +31,7 @@ namespace GitUI.CommandsDialogs
 
         private void BranchNameTextBox_Leave(object sender, EventArgs e)
         {
-            if (!AppSettings.Instance.AutoNormaliseBranchName || !BranchNameTextBox.Text.Any(GitBranchNameNormaliser.IsValidChar))
+            if (!AppSettings.Current.AutoNormaliseBranchName || !BranchNameTextBox.Text.Any(GitBranchNameNormaliser.IsValidChar))
             {
                 return;
             }

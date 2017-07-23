@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 
 namespace ResourceManager
 {
@@ -12,7 +13,7 @@ namespace ResourceManager
     {
         public GitExtensionsControl()
         {
-            Font = AppSettings.Instance.Font;
+            Font = AppSettings.Current.Font;
 
             Load += GitExtensionsControl_Load;
         }
@@ -80,7 +81,7 @@ namespace ResourceManager
         /// <summary>Translates the <see cref="UserControl"/>'s elements.</summary>
         protected void Translate()
         {
-            Translator.Translate(this, GitCommands.AppSettings.Instance.CurrentTranslation);
+            Translator.Translate(this, AppSettings.Current.CurrentTranslation);
             translated = true;
         }
 

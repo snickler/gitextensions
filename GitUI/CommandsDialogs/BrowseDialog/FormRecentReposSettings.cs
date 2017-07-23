@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using GitCommands;
 using GitCommands.Repository;
+using GitCommands.Settings;
 
 namespace GitUI.CommandsDialogs.BrowseDialog
 {
@@ -22,20 +23,20 @@ namespace GitUI.CommandsDialogs.BrowseDialog
 
         private void LoadSettings()
         {
-            SetShorteningStrategy(AppSettings.Instance.ShorteningRecentRepoPathStrategy);
-            sortMostRecentRepos.Checked = AppSettings.Instance.SortMostRecentRepos;
-            sortLessRecentRepos.Checked = AppSettings.Instance.SortLessRecentRepos;
-            _NO_TRANSLATE_maxRecentRepositories.Value = AppSettings.Instance.MaxMostRecentRepositories;
-            comboMinWidthEdit.Value = AppSettings.Instance.RecentReposComboMinWidth;
+            SetShorteningStrategy(AppSettings.Current.ShorteningRecentRepoPathStrategy);
+            sortMostRecentRepos.Checked = AppSettings.Current.SortMostRecentRepos;
+            sortLessRecentRepos.Checked = AppSettings.Current.SortLessRecentRepos;
+            _NO_TRANSLATE_maxRecentRepositories.Value = AppSettings.Current.MaxMostRecentRepositories;
+            comboMinWidthEdit.Value = AppSettings.Current.RecentReposComboMinWidth;
         }
 
         private void SaveSettings()
         {
-            AppSettings.Instance.ShorteningRecentRepoPathStrategy = GetShorteningStrategy();
-            AppSettings.Instance.SortMostRecentRepos = sortMostRecentRepos.Checked;
-            AppSettings.Instance.SortLessRecentRepos = sortLessRecentRepos.Checked;
-            AppSettings.Instance.MaxMostRecentRepositories = (int)_NO_TRANSLATE_maxRecentRepositories.Value;
-            AppSettings.Instance.RecentReposComboMinWidth = (int)comboMinWidthEdit.Value;
+            AppSettings.Current.ShorteningRecentRepoPathStrategy = GetShorteningStrategy();
+            AppSettings.Current.SortMostRecentRepos = sortMostRecentRepos.Checked;
+            AppSettings.Current.SortLessRecentRepos = sortLessRecentRepos.Checked;
+            AppSettings.Current.MaxMostRecentRepositories = (int)_NO_TRANSLATE_maxRecentRepositories.Value;
+            AppSettings.Current.RecentReposComboMinWidth = (int)comboMinWidthEdit.Value;
         }
 
         private string GetShorteningStrategy()

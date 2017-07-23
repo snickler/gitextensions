@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using GitCommands;
+using GitCommands.Settings;
 using ResourceManager;
 
 namespace GitUI.CommandsDialogs
@@ -20,9 +21,9 @@ namespace GitUI.CommandsDialogs
             InitializeComponent();
             Translate();
             currentBranchLabel.Font = new Font(currentBranchLabel.Font, FontStyle.Bold);
-            noCommit.Checked = AppSettings.Instance.DontCommitMerge;
+            noCommit.Checked = AppSettings.Current.DontCommitMerge;
             helpImageDisplayUserControl1.IsOnHoverShowImage2NoticeText = _formMergeBranchHoverShowImageLabelText.Text;
-            helpImageDisplayUserControl1.Visible = !AppSettings.Instance.DontShowHelpImages;
+            helpImageDisplayUserControl1.Visible = !AppSettings.Current.DontShowHelpImages;
             _defaultBranch = defaultBranch;
 
             if (aCommands != null)
@@ -32,7 +33,7 @@ namespace GitUI.CommandsDialogs
                 nbMessages.Value = Module.EffectiveSettings.Detailed.MergeLogMessagesCount.ValueOrDefault;
             }
 
-            advanced.Checked = AppSettings.Instance.AlwaysShowAdvOpt;
+            advanced.Checked = AppSettings.Current.AlwaysShowAdvOpt;
             advanced_CheckedChanged(null, null);
         }
 
@@ -63,7 +64,7 @@ namespace GitUI.CommandsDialogs
         private void OkClick(object sender, EventArgs e)
         {
             Module.EffectiveSettings.NoFastForwardMerge = noFastForward.Checked;
-            AppSettings.Instance.DontCommitMerge = noCommit.Checked;
+            AppSettings.Current.DontCommitMerge = noCommit.Checked;
 
             var successfullyMerged = FormProcess.ShowDialog(this, GitCommandHelpers.MergeBranchCmd(Branches.GetSelectedText(),
                                                                                                    fastForward.Checked,

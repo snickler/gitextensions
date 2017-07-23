@@ -5,6 +5,7 @@ using System.Net.Mail;
 using System.Windows.Forms;
 using GitCommands;
 using GitCommands.Config;
+using GitCommands.Settings;
 using GitUI.CommandsDialogs.FormatPatchDialog;
 using ResourceManager;
 
@@ -60,7 +61,7 @@ namespace GitUI.CommandsDialogs
 
         private void FormFormatPath_Load(object sender, EventArgs e)
         {
-            OutputPath.Text = AppSettings.Instance.LastFormatPatchDir;
+            OutputPath.Text = AppSettings.Current.LastFormatPatchDir;
             string selectedHead = Module.GetSelectedBranch();
             SelectedBranch.Text = _currentBranchText.Text + " " + selectedHead;
 
@@ -72,7 +73,7 @@ namespace GitUI.CommandsDialogs
         private void OutputPath_TextChanged(object sender, EventArgs e)
         {
             if (Directory.Exists(OutputPath.Text))
-               AppSettings.Instance.LastFormatPatchDir = OutputPath.Text;
+               AppSettings.Current.LastFormatPatchDir = OutputPath.Text;
         }
 
         private void FormatPatch_Click(object sender, EventArgs e)
@@ -95,7 +96,7 @@ namespace GitUI.CommandsDialogs
                 return;
             }
 
-            if (!SaveToDir.Checked && string.IsNullOrEmpty(AppSettings.Instance.SmtpServer))
+            if (!SaveToDir.Checked && string.IsNullOrEmpty(AppSettings.Current.SmtpServer))
             {
                 MessageBox.Show(this, _wrongSmtpSettingsText.Text);
                 return;
@@ -199,9 +200,9 @@ namespace GitUI.CommandsDialogs
                         mail.Attachments.Add(attacheMent);
                     }
 
-                    var smtpClient = new SmtpClient(AppSettings.Instance.SmtpServer);
-                    smtpClient.Port = AppSettings.Instance.SmtpPort;
-                    smtpClient.EnableSsl = AppSettings.Instance.SmtpUseSsl;
+                    var smtpClient = new SmtpClient(AppSettings.Current.SmtpServer);
+                    smtpClient.Port = AppSettings.Current.SmtpPort;
+                    smtpClient.EnableSsl = AppSettings.Current.SmtpUseSsl;
                     using (var credentials = new SmtpCredentials())
                     {
                         credentials.login.Text = from;

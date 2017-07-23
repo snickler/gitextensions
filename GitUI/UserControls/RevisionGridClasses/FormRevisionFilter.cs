@@ -1,5 +1,6 @@
 ﻿using System;
 using GitCommands;
+using GitCommands.Settings;
 using ResourceManager;
 
 namespace GitUI.RevisionGridClasses
@@ -11,8 +12,8 @@ namespace GitUI.RevisionGridClasses
             InitializeComponent();
             Translate();
 
-            LimitCheck.Checked = AppSettings.Instance.MaxRevisionGraphCommits > 0;
-            _NO_TRANSLATE_Limit.Value = AppSettings.Instance.MaxRevisionGraphCommits;
+            LimitCheck.Checked = AppSettings.Current.MaxRevisionGraphCommits > 0;
+            _NO_TRANSLATE_Limit.Value = AppSettings.Current.MaxRevisionGraphCommits;
         }
 
         private void FormRevisionFilterLoad(object sender, EventArgs e)
@@ -27,19 +28,19 @@ namespace GitUI.RevisionGridClasses
 
         private void OnBranchFilterCheckedChanged(object sender, EventArgs e)
         {
-            AppSettings.Instance.BranchFilterEnabled = BranchFilterCheck.Checked;
+            AppSettings.Current.BranchFilterEnabled = BranchFilterCheck.Checked;
             EnableFilters();
         }
 
         private void OnShowCurrentBranchOnlyCheckedChanged(object sender, EventArgs e)
         {
-            AppSettings.Instance.ShowCurrentBranchOnly = CurrentBranchOnlyCheck.Checked;
+            AppSettings.Current.ShowCurrentBranchOnly = CurrentBranchOnlyCheck.Checked;
             EnableFilters();
         }
 
         private void OnSimplifyByDecorationCheckedChanged(object sender, EventArgs e)
         {
-            AppSettings.Instance.ShowSimplifyByDecoration = SimplifyByDecorationCheck.Checked;
+            AppSettings.Current.ShowSimplifyByDecoration = SimplifyByDecorationCheck.Checked;
             EnableFilters();
         }
 
@@ -53,9 +54,9 @@ namespace GitUI.RevisionGridClasses
             _NO_TRANSLATE_Limit.Enabled = LimitCheck.Checked;
             FileFilter.Enabled = FileFilterCheck.Checked;
 
-            BranchFilterCheck.Checked = AppSettings.Instance.BranchFilterEnabled;
-            CurrentBranchOnlyCheck.Checked = AppSettings.Instance.ShowCurrentBranchOnly;
-            SimplifyByDecorationCheck.Checked = AppSettings.Instance.ShowSimplifyByDecoration;
+            BranchFilterCheck.Checked = AppSettings.Current.BranchFilterEnabled;
+            CurrentBranchOnlyCheck.Checked = AppSettings.Current.ShowCurrentBranchOnly;
+            SimplifyByDecorationCheck.Checked = AppSettings.Current.ShowSimplifyByDecoration;
 
             CurrentBranchOnlyCheck.Enabled = BranchFilterCheck.Checked;
             SimplifyByDecorationCheck.Enabled = BranchFilterCheck.Checked;
@@ -135,7 +136,7 @@ namespace GitUI.RevisionGridClasses
 
         public string GetBranchFilter()
         {
-            if (!AppSettings.Instance.BranchFilterEnabled || AppSettings.Instance.ShowCurrentBranchOnly)
+            if (!AppSettings.Current.BranchFilterEnabled || AppSettings.Current.ShowCurrentBranchOnly)
                 return String.Empty;
 
             return BranchFilter.Text;

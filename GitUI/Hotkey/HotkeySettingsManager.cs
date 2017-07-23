@@ -9,6 +9,7 @@ using GitUI.CommandsDialogs;
 using GitUI.Editor;
 using ResourceManager;
 using GitCommands;
+using GitCommands.Settings;
 
 namespace GitUI.Hotkey
 {
@@ -112,7 +113,7 @@ namespace GitUI.Hotkey
                 using (StringWriter writer = new StringWriter(strBuilder))
                 {
                     Serializer.Serialize(writer, settings);
-                    AppSettings.Instance.SerializedHotkeys = strBuilder.ToString();
+                    AppSettings.Current.SerializedHotkeys = strBuilder.ToString();
                 }
             }
             catch { }
@@ -169,8 +170,8 @@ namespace GitUI.Hotkey
 
             MigrateSettings();
 
-            if (!string.IsNullOrWhiteSpace(AppSettings.Instance.SerializedHotkeys))
-                settings = LoadSerializedSettings(AppSettings.Instance.SerializedHotkeys);
+            if (!string.IsNullOrWhiteSpace(AppSettings.Current.SerializedHotkeys))
+                settings = LoadSerializedSettings(AppSettings.Current.SerializedHotkeys);
 
             return settings;
         }
@@ -193,7 +194,7 @@ namespace GitUI.Hotkey
 
         private static void MigrateSettings()
         {
-            if (AppSettings.Instance.SerializedHotkeys == null)
+            if (AppSettings.Current.SerializedHotkeys == null)
             {
                 Properties.Settings.Default.Upgrade();
                 if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Hotkeys))
@@ -201,7 +202,7 @@ namespace GitUI.Hotkey
                     HotkeySettings[] settings = LoadSerializedSettings(Properties.Settings.Default.Hotkeys);
                     if (settings == null)
                     {
-                        AppSettings.Instance.SerializedHotkeys = " ";//mark settings as migrated
+                        AppSettings.Current.SerializedHotkeys = " ";//mark settings as migrated
                     }
                     else
                     {
@@ -210,7 +211,7 @@ namespace GitUI.Hotkey
                 }
                 else
                 {
-                    AppSettings.Instance.SerializedHotkeys = " ";//mark settings as migrated
+                    AppSettings.Current.SerializedHotkeys = " ";//mark settings as migrated
                 }
             }
         }

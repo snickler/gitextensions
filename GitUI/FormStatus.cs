@@ -10,6 +10,7 @@ using JetBrains.Annotations;
 
 using ResourceManager;
 using System.Windows.Threading;
+using GitCommands.Settings;
 #if !__MonoCS__
 using Microsoft.WindowsAPICodePack.Taskbar;
 #endif
@@ -51,7 +52,7 @@ namespace GitUI
             InitializeComponent();
             Translate();
             if (UseDialogSettings)
-                KeepDialogOpen.Checked = !GitCommands.AppSettings.Instance.CloseProcessDialog;
+                KeepDialogOpen.Checked = !AppSettings.Current.CloseProcessDialog;
             else
                 KeepDialogOpen.Hide();
         }
@@ -173,7 +174,7 @@ namespace GitUI
 
                 errorOccurred = !isSuccess;
 
-                if (isSuccess && !showOnError && (UseDialogSettings && AppSettings.Instance.CloseProcessDialog))
+                if (isSuccess && !showOnError && (UseDialogSettings && AppSettings.Current.CloseProcessDialog))
                 {
                     Close();
                 }
@@ -292,7 +293,7 @@ namespace GitUI
 
         private void KeepDialogOpen_CheckedChanged(object sender, EventArgs e)
         {
-            AppSettings.Instance.CloseProcessDialog = !KeepDialogOpen.Checked;
+            AppSettings.Current.CloseProcessDialog = !KeepDialogOpen.Checked;
 
             // Maintain the invariant: if changing to "don't keep" and conditions are such that the dialog would have closed in dont-keep mode, then close it
             if ((!KeepDialogOpen.Checked /* keep off */) && (Ok.Enabled /* done */) && (!errorOccurred /* and successful */)) /* not checking for UseDialogSettings because checkbox is only visible with True */

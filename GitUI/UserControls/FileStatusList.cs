@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 using GitUI.Properties;
 using GitUI.UserControls;
 using ResourceManager;
@@ -554,7 +555,7 @@ namespace GitUI
         {
             if (DoubleClick == null)
             {
-                if (AppSettings.Instance.OpenSubmoduleDiffInSeparateWindow && SelectedItem.IsSubmodule)
+                if (AppSettings.Current.OpenSubmoduleDiffInSeparateWindow && SelectedItem.IsSubmodule)
                 {
                     OpenSubmodule();
                 }
@@ -595,7 +596,7 @@ namespace GitUI
 
             if (isSubmoduleSelected)
             {
-                _openSubmoduleMenuItem.Font = AppSettings.Instance.OpenSubmoduleDiffInSeparateWindow ? 
+                _openSubmoduleMenuItem.Font = AppSettings.Current.OpenSubmoduleDiffInSeparateWindow ? 
                     new Font(_openSubmoduleMenuItem.Font,  FontStyle.Bold) : 
                     new Font(_openSubmoduleMenuItem.Font, FontStyle.Regular);
             }
@@ -1018,7 +1019,7 @@ namespace GitUI
 
                         //Only add the first parent to the dictionary if the setting to show diffs
                         //for app parents is disabled
-                        if (!AppSettings.Instance.ShowDiffForAllParents)
+                        if (!AppSettings.Current.ShowDiffForAllParents)
                             break;
                     }
                     var isMergeCommit = revision.ParentGuids.Count() == 2;

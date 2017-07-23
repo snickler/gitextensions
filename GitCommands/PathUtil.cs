@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using GitCommands.Settings;
 using GitCommands.Utils;
 
 namespace GitCommands
@@ -231,7 +232,7 @@ namespace GitCommands
             if (PathUtil.PathExists(shellPath))
                 return true;
 
-            shellPath = Path.Combine(AppSettings.Instance.GitBinDir, shell);
+            shellPath = Path.Combine(AppSettings.Current.GitBinDir, shell);
             if (PathUtil.PathExists(shellPath))
                 return true;
 

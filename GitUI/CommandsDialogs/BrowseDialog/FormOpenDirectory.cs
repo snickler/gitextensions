@@ -6,6 +6,7 @@ using GitCommands.Repository;
 using ResourceManager;
 using System.Collections.Generic;
 using System.Linq;
+using GitCommands.Settings;
 
 namespace GitUI.CommandsDialogs.BrowseDialog
 {
@@ -36,9 +37,9 @@ namespace GitUI.CommandsDialogs.BrowseDialog
         {
             List<string> directories = new List<string>();
 
-            if (AppSettings.Instance.DefaultCloneDestinationPath.IsNotNullOrWhitespace())
+            if (AppSettings.Current.DefaultCloneDestinationPath.IsNotNullOrWhitespace())
             {
-                directories.Add(PathUtil.EnsureTrailingPathSeparator(AppSettings.Instance.DefaultCloneDestinationPath));
+                directories.Add(PathUtil.EnsureTrailingPathSeparator(AppSettings.Current.DefaultCloneDestinationPath));
             }
 
             if (currentModule != null && !string.IsNullOrWhiteSpace(currentModule.WorkingDir))
@@ -54,9 +55,9 @@ namespace GitUI.CommandsDialogs.BrowseDialog
 
             if (directories.Count == 0)
             {
-                if (AppSettings.Instance.RecentWorkingDir.IsNotNullOrWhitespace())
+                if (AppSettings.Current.RecentWorkingDir.IsNotNullOrWhitespace())
                 {
-                    directories.Add(PathUtil.EnsureTrailingPathSeparator(AppSettings.Instance.RecentWorkingDir));
+                    directories.Add(PathUtil.EnsureTrailingPathSeparator(AppSettings.Current.RecentWorkingDir));
                 }
 
                 string homeDir = GitCommandHelpers.GetHomeDir();

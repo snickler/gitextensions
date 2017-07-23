@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 using GitUI.HelperDialogs;
 using ResourceManager;
 
@@ -42,8 +43,8 @@ namespace GitUI.CommandsDialogs
 
         private void LoadSettings()
         {
-            AutoCommit.Checked = AppSettings.Instance.CommitAutomaticallyAfterCherryPick;
-            checkAddReference.Checked = AppSettings.Instance.AddCommitReferenceToCherryPick;
+            AutoCommit.Checked = AppSettings.Current.CommitAutomaticallyAfterCherryPick;
+            checkAddReference.Checked = AppSettings.Current.AddCommitReferenceToCherryPick;
         } 
 
         private void OnRevisionChanged()
@@ -134,8 +135,8 @@ namespace GitUI.CommandsDialogs
 
         void SaveSettings()
         {
-            AppSettings.Instance.CommitAutomaticallyAfterCherryPick = AutoCommit.Checked;
-            AppSettings.Instance.AddCommitReferenceToCherryPick = checkAddReference.Checked;
+            AppSettings.Current.CommitAutomaticallyAfterCherryPick = AutoCommit.Checked;
+            AppSettings.Current.AddCommitReferenceToCherryPick = checkAddReference.Checked;
         }
     }
 }

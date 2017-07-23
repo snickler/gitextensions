@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using GitCommands;
 using GitCommands.Repository;
+using GitCommands.Settings;
 using ResourceManager;
 
 namespace GitUI.CommandsDialogs
@@ -36,7 +37,7 @@ namespace GitUI.CommandsDialogs
 
         protected override void OnRuntimeLoad(EventArgs e)
         {
-            _NO_TRANSLATE_destinationComboBox.Text = AppSettings.Instance.DefaultCloneDestinationPath;
+            _NO_TRANSLATE_destinationComboBox.Text = AppSettings.Current.DefaultCloneDestinationPath;
         }
 
         private void okButton_Click(object sender, EventArgs e)
@@ -65,7 +66,7 @@ namespace GitUI.CommandsDialogs
                 if (!int.TryParse(tbFrom.Text, out from))
                     from = 0;
                 
-                var errorOccurred = !FormProcess.ShowDialog(this, AppSettings.Instance.GitCommand, 
+                var errorOccurred = !FormProcess.ShowDialog(this, AppSettings.Current.GitCommand, 
                     GitSvnCommandHelpers.CloneCmd(_NO_TRANSLATE_SvnFrom.Text, dirTo,
                     tbUsername.Text, authorsfile, from,
                     cbTrunk.Checked ? _NO_TRANSLATE_tbTrunk.Text : null,

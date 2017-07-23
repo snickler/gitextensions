@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 
 namespace GitUI.RevisionGridClasses
 {
@@ -730,9 +731,9 @@ namespace GitUI.RevisionGridClasses
                     // branch needed to be rendered (and this filter actually works),
                     // it is much more readable to limit max lanes to 1.
                     int maxLanes = 
-                        (AppSettings.Instance.ShowFirstParent && 
-                        AppSettings.Instance.ShowCurrentBranchOnly && 
-                        AppSettings.Instance.BranchFilterEnabled) ? 1: MaxLanes;
+                        (AppSettings.Current.ShowFirstParent && 
+                        AppSettings.Current.ShowCurrentBranchOnly && 
+                        AppSettings.Current.BranchFilterEnabled) ? 1: MaxLanes;
                     laneCount = Math.Min(Math.Max(laneCount, width), maxLanes);
                 }
                 if (GraphColumn.Width != _laneWidth*laneCount && _laneWidth*laneCount > GraphColumn.MinimumWidth)
@@ -768,7 +769,7 @@ namespace GitUI.RevisionGridClasses
             {
                 if (_revisionGraphDrawStyle == RevisionGraphDrawStyleEnum.HighlightSelected)
                     return _revisionGraphDrawStyle;
-                if (AppSettings.Instance.RevisionGraphDrawNonRelativesGray)
+                if (AppSettings.Current.RevisionGraphDrawNonRelativesGray)
                     return RevisionGraphDrawStyleEnum.DrawNonRelativesGray;
                 return RevisionGraphDrawStyleEnum.Normal;
             }
@@ -790,8 +791,8 @@ namespace GitUI.RevisionGridClasses
             if (!aJunction.HighLight && revisionGraphDrawStyleCache == RevisionGraphDrawStyleEnum.HighlightSelected)
                 return _nonRelativeColor;
 
-            if (!AppSettings.Instance.MulticolorBranches)
-                return AppSettings.Instance.GraphColor;
+            if (!AppSettings.Current.MulticolorBranches)
+                return AppSettings.Current.GraphColor;
 
             // This is the order to grab the colors in.
             int[] preferedColors = { 4, 8, 6, 10, 2, 5, 7, 3, 9, 1, 11 };
@@ -1066,9 +1067,9 @@ namespace GitUI.RevisionGridClasses
                     Pen brushLineColorPen = null;
                     try
                     {
-                        bool drawBorder = highLight && AppSettings.Instance.BranchBorders; //hide border for "non-relatives"
+                        bool drawBorder = highLight && AppSettings.Current.BranchBorders; //hide border for "non-relatives"
 
-                        if (curColors.Count == 1 || !AppSettings.Instance.StripedBranchChange)
+                        if (curColors.Count == 1 || !AppSettings.Current.StripedBranchChange)
                         {
                             if (curColors[0] != _nonRelativeColor)
                             {
@@ -1182,7 +1183,7 @@ namespace GitUI.RevisionGridClasses
                                  (revisionGraphDrawStyleCache == RevisionGraphDrawStyleEnum.HighlightSelected && row.Node.Ancestors.Any(j => j.HighLight)) ||
                                  (revisionGraphDrawStyleCache == RevisionGraphDrawStyleEnum.Normal);
 
-                bool drawBorder = AppSettings.Instance.BranchBorders && highlight;
+                bool drawBorder = AppSettings.Current.BranchBorders && highlight;
 
                 if (nodeColors.Count == 1)
                 {

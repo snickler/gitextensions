@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 using GitUI.HelperDialogs;
 using ResourceManager;
 
@@ -52,8 +53,8 @@ namespace GitUI.CommandsDialogs
             _headRevision = new GitRevision(Module, headCommitSha);
             _mergeBase = new GitRevision(Module, Module.GetMergeBase(_baseRevision.Guid, _headRevision.Guid));
 
-            lblBaseCommit.BackColor = AppSettings.Instance.DiffRemovedColor;
-            lblHeadCommit.BackColor = AppSettings.Instance.DiffAddedColor;
+            lblBaseCommit.BackColor = AppSettings.Current.DiffRemovedColor;
+            lblHeadCommit.BackColor = AppSettings.Current.DiffAddedColor;
 
             DiffFiles.SelectedIndexChanged += DiffFiles_SelectedIndexChanged;
 

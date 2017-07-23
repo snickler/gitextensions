@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using GitCommands.Settings;
 using GitUIPluginInterfaces;
 using JetBrains.Annotations;
 using ResourceManager;
@@ -30,7 +31,7 @@ namespace Gerrit
         // public only because of FormTranslate
         public GerritSettings(IGitModule aModule)
         {
-            Translator.Translate(this, GitCommands.AppSettings.Instance.CurrentTranslation);
+            Translator.Translate(this, AppSettings.Current.CurrentTranslation);
             Module = aModule;
             Port = 29418;
             DefaultBranch = "master";

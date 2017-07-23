@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using GitCommands.Settings;
 using GitUIPluginInterfaces;
 
 namespace GitCommands
@@ -147,7 +148,7 @@ namespace GitCommands
             // the filename is the next line after the commit-format defined above.
 
             string logParam;
-            if (AppSettings.Instance.OrderRevisionByDate)
+            if (AppSettings.Current.OrderRevisionByDate)
             {
                 logParam = " --date-order";
             }

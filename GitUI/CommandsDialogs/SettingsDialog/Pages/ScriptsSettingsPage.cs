@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 using GitCommands.Utils;
 using GitUI.Script;
 using ResourceManager;
@@ -117,7 +118,7 @@ Current Branch:
 
         private void SaveScripts()
         {
-            AppSettings.Instance.ownScripts = ScriptManager.SerializeIntoXml();
+            AppSettings.Current.ownScripts = ScriptManager.SerializeIntoXml();
         }
 
         private void LoadScripts()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using GitCommands.Settings;
 
 namespace GitCommands.Repository
 {
@@ -68,11 +69,11 @@ namespace GitCommands.Repository
 
         public RecentRepoSplitter()
         {
-            MaxRecentRepositories = AppSettings.Instance.MaxMostRecentRepositories;
-            ShorteningStrategy = AppSettings.Instance.ShorteningRecentRepoPathStrategy;
-            SortMostRecentRepos = AppSettings.Instance.SortMostRecentRepos;
-            SortLessRecentRepos = AppSettings.Instance.SortLessRecentRepos;
-            RecentReposComboMinWidth = AppSettings.Instance.RecentReposComboMinWidth;
+            MaxRecentRepositories = AppSettings.Current.MaxMostRecentRepositories;
+            ShorteningStrategy = AppSettings.Current.ShorteningRecentRepoPathStrategy;
+            SortMostRecentRepos = AppSettings.Current.SortMostRecentRepos;
+            SortLessRecentRepos = AppSettings.Current.SortLessRecentRepos;
+            RecentReposComboMinWidth = AppSettings.Current.RecentReposComboMinWidth;
         }
 
         public void SplitRecentRepos(ICollection<Repository> recentRepositories, List<RecentRepoInfo> mostRecentRepoList, List<RecentRepoInfo> lessRecentRepoList)

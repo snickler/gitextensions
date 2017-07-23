@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 
 namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 {
@@ -14,30 +15,30 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         protected override void SettingsToPage()
         {
-            chkAmend.Checked = AppSettings.Instance.DontConfirmAmend;
-            chkCommitIfNoBranch.Checked = AppSettings.Instance.DontConfirmCommitIfNoBranch;
-            chkAutoPopStashAfterPull.CheckState = AppSettings.Instance.AutoPopStashAfterPull.ToCheckboxState();
-            chkAutoPopStashAfterCheckout.CheckState = AppSettings.Instance.AutoPopStashAfterCheckoutBranch.ToCheckboxState();
-            chkPushNewBranch.Checked = AppSettings.Instance.DontConfirmPushNewBranch;
-            chkAddTrackingRef.Checked = AppSettings.Instance.DontConfirmAddTrackingRef;
-            chkUpdateModules.CheckState = AppSettings.Instance.UpdateSubmodulesOnCheckout.ToCheckboxState();
-            chkResolveConflicts.Checked = AppSettings.Instance.DontConfirmResolveConflicts;
-            chkCommitAfterConflictsResolved.Checked = AppSettings.Instance.DontConfirmCommitAfterConflictsResolved;
-            chkSecondAbortConfirmation.Checked = AppSettings.Instance.DontConfirmSecondAbortConfirmation;
+            chkAmend.Checked = AppSettings.Current.DontConfirmAmend;
+            chkCommitIfNoBranch.Checked = AppSettings.Current.DontConfirmCommitIfNoBranch;
+            chkAutoPopStashAfterPull.CheckState = AppSettings.Current.AutoPopStashAfterPull.ToCheckboxState();
+            chkAutoPopStashAfterCheckout.CheckState = AppSettings.Current.AutoPopStashAfterCheckoutBranch.ToCheckboxState();
+            chkPushNewBranch.Checked = AppSettings.Current.DontConfirmPushNewBranch;
+            chkAddTrackingRef.Checked = AppSettings.Current.DontConfirmAddTrackingRef;
+            chkUpdateModules.CheckState = AppSettings.Current.UpdateSubmodulesOnCheckout.ToCheckboxState();
+            chkResolveConflicts.Checked = AppSettings.Current.DontConfirmResolveConflicts;
+            chkCommitAfterConflictsResolved.Checked = AppSettings.Current.DontConfirmCommitAfterConflictsResolved;
+            chkSecondAbortConfirmation.Checked = AppSettings.Current.DontConfirmSecondAbortConfirmation;
         }
 
         protected override void PageToSettings()
         {
-            AppSettings.Instance.DontConfirmAmend = chkAmend.Checked;
-            AppSettings.Instance.DontConfirmCommitIfNoBranch = chkCommitIfNoBranch.Checked;
-            AppSettings.Instance.AutoPopStashAfterPull = chkAutoPopStashAfterPull.CheckState.ToBoolean();
-            AppSettings.Instance.AutoPopStashAfterCheckoutBranch = chkAutoPopStashAfterCheckout.CheckState.ToBoolean();
-            AppSettings.Instance.DontConfirmPushNewBranch = chkPushNewBranch.Checked;
-            AppSettings.Instance.DontConfirmAddTrackingRef = chkAddTrackingRef.Checked;
-            AppSettings.Instance.UpdateSubmodulesOnCheckout = chkUpdateModules.CheckState.ToBoolean();
-            AppSettings.Instance.DontConfirmResolveConflicts = chkResolveConflicts.Checked;
-            AppSettings.Instance.DontConfirmCommitAfterConflictsResolved = chkCommitAfterConflictsResolved.Checked;
-            AppSettings.Instance.DontConfirmSecondAbortConfirmation = chkSecondAbortConfirmation.Checked;
+            AppSettings.Current.DontConfirmAmend = chkAmend.Checked;
+            AppSettings.Current.DontConfirmCommitIfNoBranch = chkCommitIfNoBranch.Checked;
+            AppSettings.Current.AutoPopStashAfterPull = chkAutoPopStashAfterPull.CheckState.ToBoolean();
+            AppSettings.Current.AutoPopStashAfterCheckoutBranch = chkAutoPopStashAfterCheckout.CheckState.ToBoolean();
+            AppSettings.Current.DontConfirmPushNewBranch = chkPushNewBranch.Checked;
+            AppSettings.Current.DontConfirmAddTrackingRef = chkAddTrackingRef.Checked;
+            AppSettings.Current.UpdateSubmodulesOnCheckout = chkUpdateModules.CheckState.ToBoolean();
+            AppSettings.Current.DontConfirmResolveConflicts = chkResolveConflicts.Checked;
+            AppSettings.Current.DontConfirmCommitAfterConflictsResolved = chkCommitAfterConflictsResolved.Checked;
+            AppSettings.Current.DontConfirmSecondAbortConfirmation = chkSecondAbortConfirmation.Checked;
         }
 
         public static SettingsPageReference GetPageReference()

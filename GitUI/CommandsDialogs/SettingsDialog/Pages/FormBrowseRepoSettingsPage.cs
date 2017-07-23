@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using GitCommands.Settings;
 
 namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 {
@@ -27,11 +28,11 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         private void BindSettingsWithControls()
         {
-            AddSettingBinding(AppSettings.Instance.ShowConEmuTab, chkChowConsoleTab);
-            AddSettingBinding(AppSettings.Instance.ConEmuStyle, _NO_TRANSLATE_cboStyle);
-            AddSettingBinding(AppSettings.Instance.ConEmuTerminal, cboTerminal);
-            AddSettingBinding(AppSettings.Instance.ConEmuFontSize, cboFontSize);
-            AddSettingBinding(AppSettings.Instance.ShowRevisionInfoNextToRevisionGrid, chkShowRevisionInfoNextToRevisionGrid);
+            AddSettingBinding(AppSettings.Current.ShowConEmuTab, chkChowConsoleTab);
+            AddSettingBinding(AppSettings.Current.ConEmuStyle, _NO_TRANSLATE_cboStyle);
+            AddSettingBinding(AppSettings.Current.ConEmuTerminal, cboTerminal);
+            AddSettingBinding(AppSettings.Current.ConEmuFontSize, cboFontSize);
+            AddSettingBinding(AppSettings.Current.ShowRevisionInfoNextToRevisionGrid, chkShowRevisionInfoNextToRevisionGrid);
         }
 
         private void chkChowConsoleTab_CheckedChanged(object sender, System.EventArgs e)

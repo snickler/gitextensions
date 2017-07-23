@@ -8,6 +8,7 @@ using GitCommands;
 using GitCommands.Utils;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using GitCommands.Settings;
 
 namespace GitUI.UserControls
 {
@@ -116,9 +117,9 @@ namespace GitUI.UserControls
 
             var startinfo = new ConEmuStartInfo();
             startinfo.ConsoleProcessCommandLine = cmdl.ToString();
-            if (AppSettings.Instance.ConEmuStyle.ValueOrDefault != "Default")
+            if (AppSettings.Current.ConEmuStyle.ValueOrDefault != "Default")
             {
-                startinfo.ConsoleProcessExtraArgs = " -new_console:P:\"" + AppSettings.Instance.ConEmuStyle.ValueOrDefault + "\"";
+                startinfo.ConsoleProcessExtraArgs = " -new_console:P:\"" + AppSettings.Current.ConEmuStyle.ValueOrDefault + "\"";
             }
             startinfo.StartupDirectory = workdir;
             foreach (var envVariable in envVariables)

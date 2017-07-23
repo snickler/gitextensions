@@ -1,5 +1,6 @@
 using System;
 using GitCommands;
+using GitCommands.Settings;
 using SmartFormat;
 
 namespace ResourceManager
@@ -9,7 +10,7 @@ namespace ResourceManager
         // public only because of FormTranslate
         public Strings()
         {
-            Translator.Translate(this, AppSettings.Instance.CurrentTranslation);
+            Translator.Translate(this, AppSettings.Current.CurrentTranslation);
         }
 
         private static Strings _instance;
@@ -116,37 +117,37 @@ namespace ResourceManager
 
         public static string GetNSecondsAgoText(int value)
         {
-            return Smart.Format(AppSettings.Instance.CurrentCultureInfo, Instance._secondsAgo.Text, value, Math.Abs(value));
+            return Smart.Format(AppSettings.Current.CurrentCultureInfo, Instance._secondsAgo.Text, value, Math.Abs(value));
         }
 
         public static string GetNMinutesAgoText(int value)
         {
-            return Smart.Format(AppSettings.Instance.CurrentCultureInfo, Instance._minutesAgo.Text, value, Math.Abs(value));
+            return Smart.Format(AppSettings.Current.CurrentCultureInfo, Instance._minutesAgo.Text, value, Math.Abs(value));
         }
 
         public static string GetNHoursAgoText(int value)
         {
-            return Smart.Format(AppSettings.Instance.CurrentCultureInfo, Instance._hoursAgo.Text, value, Math.Abs(value));
+            return Smart.Format(AppSettings.Current.CurrentCultureInfo, Instance._hoursAgo.Text, value, Math.Abs(value));
         }
 
         public static string GetNDaysAgoText(int value)
         {
-            return Smart.Format(AppSettings.Instance.CurrentCultureInfo, Instance._daysAgo.Text, value, Math.Abs(value));
+            return Smart.Format(AppSettings.Current.CurrentCultureInfo, Instance._daysAgo.Text, value, Math.Abs(value));
         }
 
         public static string GetNWeeksAgoText(int value)
         {
-            return Smart.Format(AppSettings.Instance.CurrentCultureInfo, Instance._weeksAgo.Text, value, Math.Abs(value));
+            return Smart.Format(AppSettings.Current.CurrentCultureInfo, Instance._weeksAgo.Text, value, Math.Abs(value));
         }
 
         public static string GetNMonthsAgoText(int value)
         {
-            return Smart.Format(AppSettings.Instance.CurrentCultureInfo, Instance._monthsAgo.Text, value, Math.Abs(value));
+            return Smart.Format(AppSettings.Current.CurrentCultureInfo, Instance._monthsAgo.Text, value, Math.Abs(value));
         }
 
         public static string GetNYearsAgoText(int value)
         {
-            return Smart.Format(AppSettings.Instance.CurrentCultureInfo, Instance._yearsAgo.Text, value, Math.Abs(value));
+            return Smart.Format(AppSettings.Current.CurrentCultureInfo, Instance._yearsAgo.Text, value, Math.Abs(value));
         }
 
         private readonly TranslationString _secondsAgo = new TranslationString("{0} {1:second|seconds} ago");

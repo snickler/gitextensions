@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GitCommands;
 using GitCommands.Git;
+using GitCommands.Settings;
 using NUnit.Framework;
 using TestClass = NUnit.Framework.TestFixtureAttribute;
 using TestMethod = NUnit.Framework.TestAttribute;

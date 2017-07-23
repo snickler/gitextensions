@@ -9,6 +9,7 @@ using GitUI.UserControls;
 
 using ResourceManager;
 using System.Collections.Generic;
+using GitCommands.Settings;
 
 namespace GitUI
 {
@@ -40,7 +41,7 @@ namespace GitUI
         {
             ProcessCallback = processStart;
             AbortCallback = processAbort;
-            ProcessString = process ?? AppSettings.Instance.GitCommand;
+            ProcessString = process ?? AppSettings.Current.GitCommand;
             ProcessArguments = arguments;
             Remote = "";
             ProcessInput = input;

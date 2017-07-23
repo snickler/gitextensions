@@ -1,5 +1,6 @@
 ﻿using System;
 using GitCommands;
+using GitCommands.Settings;
 
 namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 {
@@ -14,11 +15,11 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         protected override void SettingsToPage()
         {
-            for (int i = 0; i < AppSettings.Instance.CascadeShellMenuItems.Length; i++)
+            for (int i = 0; i < AppSettings.Current.CascadeShellMenuItems.Length; i++)
             {
-                chlMenuEntries.SetItemChecked(i, AppSettings.Instance.CascadeShellMenuItems[i] == '1');
+                chlMenuEntries.SetItemChecked(i, AppSettings.Current.CascadeShellMenuItems[i] == '1');
             }
-            cbAlwaysShowAllCommands.Checked = AppSettings.Instance.AlwaysShowAllCommands;
+            cbAlwaysShowAllCommands.Checked = AppSettings.Current.AlwaysShowAllCommands;
 
             UpdatePreview();
         }
@@ -39,8 +40,8 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
                 }
             }
 
-            AppSettings.Instance.CascadeShellMenuItems = l_CascadeShellMenuItems;
-            AppSettings.Instance.AlwaysShowAllCommands = cbAlwaysShowAllCommands.Checked;
+            AppSettings.Current.CascadeShellMenuItems = l_CascadeShellMenuItems;
+            AppSettings.Current.AlwaysShowAllCommands = cbAlwaysShowAllCommands.Checked;
         }
 
         private void chlMenuEntries_SelectedValueChanged(object sender, EventArgs e)

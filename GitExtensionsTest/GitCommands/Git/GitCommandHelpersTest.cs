@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GitCommands;
+using GitCommands.Settings;
 using NUnit.Framework;
 using ResourceManager;
 using TestClass = NUnit.Framework.TestFixtureAttribute;
@@ -14,7 +15,7 @@ namespace GitExtensionsTest.Git
         [TestMethod]
         public void CanGetRelativeDateString()
         {
-            AppSettings.Instance.CurrentTranslation = "English";
+            AppSettings.Current.CurrentTranslation = "English";
             Assert.AreEqual("0 seconds ago", LocalizationHelpers.GetRelativeDateString(DateTime.Now, DateTime.Now));
             Assert.AreEqual("1 second ago", LocalizationHelpers.GetRelativeDateString(DateTime.Now, DateTime.Now.AddSeconds(-1)));
             Assert.AreEqual("1 minute ago", LocalizationHelpers.GetRelativeDateString(DateTime.Now, DateTime.Now.AddMinutes(-1)));
@@ -38,7 +39,7 @@ namespace GitExtensionsTest.Git
         [TestMethod]
         public void CanGetRelativeNegativeDateString()
         {
-            AppSettings.Instance.CurrentTranslation = "English";
+            AppSettings.Current.CurrentTranslation = "English";
             Assert.AreEqual("-1 second ago", LocalizationHelpers.GetRelativeDateString(DateTime.Now, DateTime.Now.AddSeconds(1)));
             Assert.AreEqual("-1 minute ago", LocalizationHelpers.GetRelativeDateString(DateTime.Now, DateTime.Now.AddMinutes(1)));
             Assert.AreEqual("-1 hour ago", LocalizationHelpers.GetRelativeDateString(DateTime.Now, DateTime.Now.AddMinutes(45)));

@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 using ResourceManager;
 
 namespace GitUI
@@ -34,7 +35,7 @@ namespace GitUI
         // internal for FormTranslate
         internal MessageBoxes()
         {
-            Translator.Translate(this, AppSettings.Instance.CurrentTranslation);
+            Translator.Translate(this, AppSettings.Current.CurrentTranslation);
         }
 
         private static MessageBoxes instance;
@@ -108,7 +109,7 @@ namespace GitUI
                 FooterIcon: PSTaskDialog.eSysIcons.Information) == DialogResult.Yes;
 
             if (PSTaskDialog.cTaskDialog.VerificationChecked)
-                AppSettings.Instance.UpdateSubmodulesOnCheckout = result;
+                AppSettings.Current.UpdateSubmodulesOnCheckout = result;
 
             return result;
         }

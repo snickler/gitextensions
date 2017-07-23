@@ -7,11 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using GitCommands.Logging;
-using GitCommands.Repository;
-using GitCommands.Settings;
 using Microsoft.Win32;
 
-namespace GitCommands
+namespace GitCommands.Settings
 {
     public interface IAppSettings
     {

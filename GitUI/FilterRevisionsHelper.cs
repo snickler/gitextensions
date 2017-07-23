@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 
 namespace GitUI
 {
@@ -79,7 +80,7 @@ namespace GitUI
                 this.authorToolStripMenuItem,
                 this.diffContainsToolStripMenuItem});
 
-            this._NO_TRANSLATE_showFirstParentButton.Checked = AppSettings.Instance.ShowFirstParent;
+            this._NO_TRANSLATE_showFirstParentButton.Checked = AppSettings.Current.ShowFirstParent;
 
             this._NO_TRANSLATE_label.Click += this.ToolStripLabelClick;
             this._NO_TRANSLATE_textBox.Leave += this.ToolStripTextBoxFilterLeave;
@@ -159,7 +160,7 @@ namespace GitUI
 
         private void RevisionGridShowFirstParentsToggled(object sender, EventArgs e)
         {
-            this._NO_TRANSLATE_showFirstParentButton.Checked = AppSettings.Instance.ShowFirstParent;
+            this._NO_TRANSLATE_showFirstParentButton.Checked = AppSettings.Current.ShowFirstParent;
         }
 
         private void diffContainsToolStripMenuItem_Click(object sender, EventArgs e)

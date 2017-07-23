@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using GitCommands;
+using GitCommands.Settings;
 using GitUIPluginInterfaces;
 
 namespace ResourceManager
@@ -56,7 +57,7 @@ namespace ResourceManager
 
         protected void Translate()
         {
-            Translator.Translate(this, AppSettings.Instance.CurrentTranslation);
+            Translator.Translate(this, AppSettings.Current.CurrentTranslation);
         }
 
         public virtual void AddTranslationItems(ITranslation translation)

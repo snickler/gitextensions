@@ -5,6 +5,7 @@ using GitCommands;
 
 using JetBrains.Annotations;
 using System.Collections.Generic;
+using GitCommands.Settings;
 
 namespace GitUI.UserControls
 {
@@ -29,7 +30,7 @@ namespace GitUI.UserControls
         [NotNull]
         public static ConsoleOutputControl CreateInstance()
         {
-            if((ConsoleEmulatorOutputControl.IsSupportedInThisEnvironment) && (AppSettings.Instance.UseConsoleEmulatorForCommands))
+            if((ConsoleEmulatorOutputControl.IsSupportedInThisEnvironment) && (AppSettings.Current.UseConsoleEmulatorForCommands))
                 return new ConsoleEmulatorOutputControl();
             return new EditboxBasedConsoleOutputControl();
         }

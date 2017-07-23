@@ -10,7 +10,8 @@ using System.Windows.Forms;
 using GitCommands;
 using GitCommands.Utils;
 using GitCommands.GitExtLinks;
-using GitUI.Editor.RichTextBoxExtension;
+  using GitCommands.Settings;
+  using GitUI.Editor.RichTextBoxExtension;
 using ResourceManager;
 using GitUI.Editor;
 
@@ -126,11 +127,11 @@ namespace GitUI.CommitInfo
         {
             _RevisionHeader.BackColor = ColorHelper.MakeColorDarker(this.BackColor);
 
-            showContainedInBranchesToolStripMenuItem.Checked = AppSettings.Instance.CommitInfoShowContainedInBranchesLocal;
-            showContainedInBranchesRemoteToolStripMenuItem.Checked = AppSettings.Instance.CommitInfoShowContainedInBranchesRemote;
-            showContainedInBranchesRemoteIfNoLocalToolStripMenuItem.Checked = AppSettings.Instance.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
-            showContainedInTagsToolStripMenuItem.Checked = AppSettings.Instance.CommitInfoShowContainedInTags;
-            showMessagesOfAnnotatedTagsToolStripMenuItem.Checked = AppSettings.Instance.ShowAnnotatedTagsMessages;
+            showContainedInBranchesToolStripMenuItem.Checked = AppSettings.Current.CommitInfoShowContainedInBranchesLocal;
+            showContainedInBranchesRemoteToolStripMenuItem.Checked = AppSettings.Current.CommitInfoShowContainedInBranchesRemote;
+            showContainedInBranchesRemoteIfNoLocalToolStripMenuItem.Checked = AppSettings.Current.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
+            showContainedInTagsToolStripMenuItem.Checked = AppSettings.Current.CommitInfoShowContainedInTags;
+            showMessagesOfAnnotatedTagsToolStripMenuItem.Checked = AppSettings.Current.ShowAnnotatedTagsMessages;
 
             ResetTextAndImage();
 
@@ -163,13 +164,13 @@ namespace GitUI.CommitInfo
             updateText();
             LoadAuthorImage(data.Author ?? data.Committer);
 
-            if (AppSettings.Instance.CommitInfoShowContainedInBranches)
+            if (AppSettings.Current.CommitInfoShowContainedInBranches)
                 ThreadPool.QueueUserWorkItem(_ => loadBranchInfo(_revision.Guid));
 
-            if (AppSettings.Instance.ShowAnnotatedTagsMessages)
+            if (AppSettings.Current.ShowAnnotatedTagsMessages)
                 ThreadPool.QueueUserWorkItem(_ => loadAnnotatedTagInfo(_revision));
 
-            if (AppSettings.Instance.CommitInfoShowContainedInTags)
+            if (AppSettings.Current.CommitInfoShowContainedInTags)
                 ThreadPool.QueueUserWorkItem(_ => loadTagInfo(_revision.Guid));
         }
 
@@ -278,11 +279,11 @@ namespace GitUI.CommitInfo
         private void loadBranchInfo(string revision)
         {
             // Include local branches if explicitly requested or when needed to decide whether to show remotes
-            bool getLocal = AppSettings.Instance.CommitInfoShowContainedInBranchesLocal ||
-                            AppSettings.Instance.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
+            bool getLocal = AppSettings.Current.CommitInfoShowContainedInBranchesLocal ||
+                            AppSettings.Current.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
             // Include remote branches if requested
-            bool getRemote = AppSettings.Instance.CommitInfoShowContainedInBranchesRemote ||
-                             AppSettings.Instance.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
+            bool getRemote = AppSettings.Current.CommitInfoShowContainedInBranchesRemote ||
+                             AppSettings.Current.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
             _branches = Module.GetAllBranchesWhichContainGivenCommit(revision, getLocal, getRemote).ToList();
             this.InvokeAsync(updateText);
         }
@@ -421,8 +422,8 @@ namespace GitUI.CommitInfo
             _tags = null;
             _linkFactory.Clear();
             updateText();
-            gravatar1.Visible = AppSettings.Instance.ShowAuthorGravatar;
-            if (AppSettings.Instance.ShowAuthorGravatar)
+            gravatar1.Visible = AppSettings.Current.ShowAuthorGravatar;
+            if (AppSettings.Current.ShowAuthorGravatar)
             {
                 gravatar1.LoadImageForEmail("");
             }
@@ -435,7 +436,7 @@ namespace GitUI.CommitInfo
             if (matches.Count == 0)
                 return;
 
-            if (AppSettings.Instance.ShowAuthorGravatar)
+            if (AppSettings.Current.ShowAuthorGravatar)
             {
                 gravatar1.LoadImageForEmail(matches[0].Groups[1].Value);
             }
@@ -445,13 +446,13 @@ namespace GitUI.CommitInfo
         {
             const string remotesPrefix = "remotes/";
             // Include local branches if explicitly requested or when needed to decide whether to show remotes
-            bool getLocal = AppSettings.Instance.CommitInfoShowContainedInBranchesLocal ||
-                            AppSettings.Instance.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
+            bool getLocal = AppSettings.Current.CommitInfoShowContainedInBranchesLocal ||
+                            AppSettings.Current.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
             // Include remote branches if requested
-            bool getRemote = AppSettings.Instance.CommitInfoShowContainedInBranchesRemote ||
-                             AppSettings.Instance.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
+            bool getRemote = AppSettings.Current.CommitInfoShowContainedInBranchesRemote ||
+                             AppSettings.Current.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
             var links = new List<string>();
-            bool allowLocal = AppSettings.Instance.CommitInfoShowContainedInBranchesLocal;
+            bool allowLocal = AppSettings.Current.CommitInfoShowContainedInBranchesLocal;
             bool allowRemote = getRemote;
 
             foreach (var branch in branches)
@@ -483,7 +484,7 @@ namespace GitUI.CommitInfo
                     links.Add(branchText);
                 }
 
-                if (branchIsLocal && AppSettings.Instance.CommitInfoShowContainedInBranchesRemoteIfNoLocal)
+                if (branchIsLocal && AppSettings.Current.CommitInfoShowContainedInBranchesRemoteIfNoLocal)
                     allowRemote = false;
             }
             if (links.Any())
@@ -520,13 +521,13 @@ namespace GitUI.CommitInfo
 
         private void showContainedInBranchesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AppSettings.Instance.CommitInfoShowContainedInBranchesLocal = !AppSettings.Instance.CommitInfoShowContainedInBranchesLocal;
+            AppSettings.Current.CommitInfoShowContainedInBranchesLocal = !AppSettings.Current.CommitInfoShowContainedInBranchesLocal;
             ReloadCommitInfo();
         }
 
         private void showContainedInTagsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AppSettings.Instance.CommitInfoShowContainedInTags = !AppSettings.Instance.CommitInfoShowContainedInTags;
+            AppSettings.Current.CommitInfoShowContainedInTags = !AppSettings.Current.CommitInfoShowContainedInTags;
             ReloadCommitInfo();
         }
 
@@ -546,19 +547,19 @@ namespace GitUI.CommitInfo
 
         private void showContainedInBranchesRemoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AppSettings.Instance.CommitInfoShowContainedInBranchesRemote = !AppSettings.Instance.CommitInfoShowContainedInBranchesRemote;
+            AppSettings.Current.CommitInfoShowContainedInBranchesRemote = !AppSettings.Current.CommitInfoShowContainedInBranchesRemote;
             ReloadCommitInfo();
         }
 
         private void showContainedInBranchesRemoteIfNoLocalToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AppSettings.Instance.CommitInfoShowContainedInBranchesRemoteIfNoLocal = !AppSettings.Instance.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
+            AppSettings.Current.CommitInfoShowContainedInBranchesRemoteIfNoLocal = !AppSettings.Current.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
             ReloadCommitInfo();
         }
 
         private void showMessagesOfAnnotatedTagsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AppSettings.Instance.ShowAnnotatedTagsMessages = !AppSettings.Instance.ShowAnnotatedTagsMessages;
+            AppSettings.Current.ShowAnnotatedTagsMessages = !AppSettings.Current.ShowAnnotatedTagsMessages;
             ReloadCommitInfo();
         }
 

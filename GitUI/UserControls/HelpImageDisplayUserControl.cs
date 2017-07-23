@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 using ResourceManager;
 
 namespace GitUI.Help
@@ -151,12 +152,12 @@ namespace GitUI.Help
 
         private void SaveIsExpandedValueInSettings(bool value)
         {
-            AppSettings.Instance.SetHelpIsExpanded(GetId(), value);
+            AppSettings.Current.SetHelpIsExpanded(GetId(), value);
         }
 
         private bool LoadIsExpandedValueFromSettings(bool defaultValue)
         {
-            return AppSettings.Instance.GetHelpIsExpanded(GetId(), defaultValue);
+            return AppSettings.Current.GetHelpIsExpanded(GetId(), defaultValue);
         }
 
         private void UpdateControlSize()

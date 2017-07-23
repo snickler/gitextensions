@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 using ResourceManager;
 
 namespace GitUI.CommandsDialogs.SettingsDialog.Pages
@@ -29,8 +30,8 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         public override void OnPageShown()
         {
-            GitPath.Text = AppSettings.Instance.GitCommandValue;
-            GitBinPath.Text = AppSettings.Instance.GitBinDir;
+            GitPath.Text = AppSettings.Current.GitCommandValue;
+            GitBinPath.Text = AppSettings.Current.GitBinDir;
         }
 
         protected override void SettingsToPage()
@@ -38,14 +39,14 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             GitCommandHelpers.SetEnvironmentVariable();
             homeIsSetToLabel.Text = string.Concat(_homeIsSetToString.Text, " ", GitCommandHelpers.GetHomeDir());
 
-            GitPath.Text = AppSettings.Instance.GitCommandValue;
-            GitBinPath.Text = AppSettings.Instance.GitBinDir;
+            GitPath.Text = AppSettings.Current.GitCommandValue;
+            GitBinPath.Text = AppSettings.Current.GitBinDir;
         }
 
         protected override void PageToSettings()
         {
-            AppSettings.Instance.GitCommandValue = GitPath.Text;
-            AppSettings.Instance.GitBinDir = GitBinPath.Text;
+            AppSettings.Current.GitCommandValue = GitPath.Text;
+            AppSettings.Current.GitBinDir = GitBinPath.Text;
         }
 
         private void BrowseGitPath_Click(object sender, EventArgs e)
@@ -54,7 +55,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
             using (var browseDialog = new OpenFileDialog
             {
-                FileName = AppSettings.Instance.GitCommandValue,
+                FileName = AppSettings.Current.GitCommandValue,
                 Filter = "Git.cmd (git.cmd)|git.cmd|Git.exe (git.exe)|git.exe|Git (git)|git"
             })
             {
@@ -70,7 +71,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
         {
             CheckSettingsLogic.SolveLinuxToolsDir(GitBinPath.Text.Trim());
 
-            var userSelectedPath = OsShellUtil.PickFolder(this, AppSettings.Instance.GitBinDir);
+            var userSelectedPath = OsShellUtil.PickFolder(this, AppSettings.Current.GitBinDir);
 
             if (userSelectedPath != null)
             {

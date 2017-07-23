@@ -55,7 +55,7 @@ namespace GitCommands.Settings
             if (!File.Exists(configPath))
             {
                 // Git 1.xx
-                configPath = Path.Combine(AppSettings.Instance.GitBinDir, "..", "etc", "gitconfig");
+                configPath = Path.Combine(AppSettings.Current.GitBinDir, "..", "etc", "gitconfig");
                 if (!File.Exists(configPath))
                     return null;
             }
@@ -155,7 +155,7 @@ namespace GitCommands.Settings
 
             if (string.IsNullOrEmpty(encodingName))
                 result = null;
-            else if (!AppSettings.Instance.AvailableEncodings.TryGetValue(encodingName, out result))
+            else if (!AppSettings.Current.AvailableEncodings.TryGetValue(encodingName, out result))
             {
                 try
                 {
