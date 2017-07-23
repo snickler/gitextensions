@@ -10,10 +10,7 @@ namespace GitCommands.Settings
         public static readonly string SettingsFileName = "GitExtensions.settings";
         public static readonly int DefaultRepositoriesCount = 30;
 
-        public static bool IsPortable()
-        {
-            return Properties.Settings.Default.IsPortable;
-        }
+        public static bool IsPortable => Properties.Settings.Default.IsPortable;
 
         public static IAppSettings Current => new AppSettingsImplementations();
     }

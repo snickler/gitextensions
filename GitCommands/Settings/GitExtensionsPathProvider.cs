@@ -50,7 +50,7 @@ namespace GitCommands.Settings
 
         public string GetInstallDir()
         {
-            if (AppSettings.IsPortable())
+            if (AppSettings.IsPortable)
                 return GetDirectory();
 
             // TODO:

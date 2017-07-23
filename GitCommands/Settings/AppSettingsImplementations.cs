@@ -453,14 +453,14 @@ namespace GitCommands.Settings
         {
             get
             {
-                if (AppSettings.IsPortable())
+                if (AppSettings.IsPortable)
                     return SettingsContainer.GetString("gitcommand", "");
                 else
                     return ReadStringRegValue("gitcommand", "");
             }
             set
             {
-                if (AppSettings.IsPortable())
+                if (AppSettings.IsPortable)
                     SettingsContainer.SetString("gitcommand", value);
                 else
                     WriteStringRegValue("gitcommand", value);
