@@ -13,24 +13,24 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         protected override void SettingsToPage()
         {
-            chkRememberIgnoreWhiteSpacePreference.Checked = AppSettings.RememberIgnoreWhiteSpacePreference;
-            chkOmitUninterestingDiff.Checked = AppSettings.OmitUninterestingDiff;
-            chkRememberShowEntireFilePreference.Checked = AppSettings.RememberShowEntireFilePreference;
-            chkRememberShowNonPrintingCharsPreference.Checked = AppSettings.RememberShowNonPrintingCharsPreference;
-            chkRememberNumberOfContextLines.Checked = AppSettings.RememberNumberOfContextLines;
-            chkOpenSubmoduleDiffInSeparateWindow.Checked = AppSettings.OpenSubmoduleDiffInSeparateWindow;
-            chkShowDiffForAllParents.Checked = AppSettings.ShowDiffForAllParents;
+            chkRememberIgnoreWhiteSpacePreference.Checked = AppSettings.Instance.RememberIgnoreWhiteSpacePreference;
+            chkOmitUninterestingDiff.Checked = AppSettings.Instance.OmitUninterestingDiff;
+            chkRememberShowEntireFilePreference.Checked = AppSettings.Instance.RememberShowEntireFilePreference;
+            chkRememberShowNonPrintingCharsPreference.Checked = AppSettings.Instance.RememberShowNonPrintingCharsPreference;
+            chkRememberNumberOfContextLines.Checked = AppSettings.Instance.RememberNumberOfContextLines;
+            chkOpenSubmoduleDiffInSeparateWindow.Checked = AppSettings.Instance.OpenSubmoduleDiffInSeparateWindow;
+            chkShowDiffForAllParents.Checked = AppSettings.Instance.ShowDiffForAllParents;
         }
 
         protected override void PageToSettings()
         {
-            AppSettings.RememberIgnoreWhiteSpacePreference = chkRememberIgnoreWhiteSpacePreference.Checked;
-            AppSettings.OmitUninterestingDiff = chkOmitUninterestingDiff.Checked;
-            AppSettings.RememberShowEntireFilePreference = chkRememberShowEntireFilePreference.Checked;
-            AppSettings.RememberShowNonPrintingCharsPreference = chkRememberShowNonPrintingCharsPreference.Checked;
-            AppSettings.RememberNumberOfContextLines = chkRememberNumberOfContextLines.Checked;
-            AppSettings.OpenSubmoduleDiffInSeparateWindow = chkOpenSubmoduleDiffInSeparateWindow.Checked;
-            AppSettings.ShowDiffForAllParents = chkShowDiffForAllParents.Checked;
+            AppSettings.Instance.RememberIgnoreWhiteSpacePreference = chkRememberIgnoreWhiteSpacePreference.Checked;
+            AppSettings.Instance.OmitUninterestingDiff = chkOmitUninterestingDiff.Checked;
+            AppSettings.Instance.RememberShowEntireFilePreference = chkRememberShowEntireFilePreference.Checked;
+            AppSettings.Instance.RememberShowNonPrintingCharsPreference = chkRememberShowNonPrintingCharsPreference.Checked;
+            AppSettings.Instance.RememberNumberOfContextLines = chkRememberNumberOfContextLines.Checked;
+            AppSettings.Instance.OpenSubmoduleDiffInSeparateWindow = chkOpenSubmoduleDiffInSeparateWindow.Checked;
+            AppSettings.Instance.ShowDiffForAllParents = chkShowDiffForAllParents.Checked;
         }
 
         public static SettingsPageReference GetPageReference()

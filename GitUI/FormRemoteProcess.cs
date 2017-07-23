@@ -147,7 +147,7 @@ namespace GitUI
 
                 module.RunExternalCmdShowConsole(
                     "cmd.exe",
-                    string.Format("/k \"\"{0}\" -T {1}\"", AppSettings.Plink, remoteUrl));
+                    string.Format("/k \"\"{0}\" -T {1}\"", AppSettings.Instance.Plink, remoteUrl));
 
                 return true;
             }
@@ -173,7 +173,7 @@ namespace GitUI
                             remoteUrl = UrlTryingToConnect;
                         remoteUrl = GitCommandHelpers.GetPlinkCompatibleUrl(remoteUrl);
 
-                        Module.RunExternalCmdShowConsole("cmd.exe", string.Format("/k \"\"{0}\" {1}\"", AppSettings.Plink, remoteUrl));
+                        Module.RunExternalCmdShowConsole("cmd.exe", string.Format("/k \"\"{0}\" {1}\"", AppSettings.Instance.Plink, remoteUrl));
 
                         restart = true;
                         Reset();

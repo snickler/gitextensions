@@ -134,7 +134,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
 
         public void FillEncodings(ComboBox combo)
         {
-            combo.Items.AddRange(AppSettings.AvailableEncodings.Values.ToArray());
+            combo.Items.AddRange(AppSettings.Instance.AvailableEncodings.Values.ToArray());
             combo.DisplayMember = "EncodingName";
         }
     }

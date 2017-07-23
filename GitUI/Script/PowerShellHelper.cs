@@ -30,7 +30,7 @@ namespace GitUI.Script
             startProcess.Exited += (sender, args) =>
             {
                 var executionEndTimestamp = DateTime.Now;
-                AppSettings.GitLog.Log(filename + " " + psarguments, executionStartTimestamp, executionEndTimestamp);
+                AppSettings.Instance.GitLog.Log(filename + " " + psarguments, executionStartTimestamp, executionEndTimestamp);
             };
 
         }

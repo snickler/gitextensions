@@ -31,7 +31,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             Bitmap icon = GetRepositoryIcon(repository);
 
 
-            if (AppSettings.DashboardShowCurrentBranch)
+            if (AppSettings.Instance.DashboardShowCurrentBranch)
             {
                 _branchNameLoader = new AsyncLoader();
                 _branchNameLoader.Load(() =>

@@ -21,7 +21,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
 
         private void LoadEncoding()
         {
-            var includedEncoding = AppSettings.AvailableEncodings;
+            var includedEncoding = AppSettings.Instance.AvailableEncodings;
             ListIncludedEncodings.BeginUpdate();
             try
             {
@@ -69,10 +69,10 @@ namespace GitUI.CommandsDialogs.SettingsDialog
 
         private void ButtonOk_Click(object sender, EventArgs e)
         {
-            AppSettings.AvailableEncodings.Clear();
+            AppSettings.Instance.AvailableEncodings.Clear();
             foreach(Encoding encoding in ListIncludedEncodings.Items)
             {
-                AppSettings.AvailableEncodings.Add(encoding.HeaderName, encoding);
+                AppSettings.Instance.AvailableEncodings.Add(encoding.HeaderName, encoding);
             }
 
             DialogResult = DialogResult.OK;

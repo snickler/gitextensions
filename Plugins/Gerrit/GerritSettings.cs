@@ -30,7 +30,7 @@ namespace Gerrit
         // public only because of FormTranslate
         public GerritSettings(IGitModule aModule)
         {
-            Translator.Translate(this, GitCommands.AppSettings.CurrentTranslation);
+            Translator.Translate(this, GitCommands.AppSettings.Instance.CurrentTranslation);
             Module = aModule;
             Port = 29418;
             DefaultBranch = "master";

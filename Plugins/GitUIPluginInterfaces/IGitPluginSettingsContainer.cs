@@ -4,7 +4,7 @@ namespace GitUIPluginInterfaces
 {
     public interface IGitPluginSettingsContainer
     {
-        ISettingsSource GetSettingsSource();
-        void SetSettingsSource(ISettingsSource settingsSource);
+        SettingsSource GetSettingsSource();
+        void SetSettingsSource(SettingsSource settingsSource);
     }
 }

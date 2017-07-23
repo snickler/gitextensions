@@ -34,6 +34,7 @@ namespace GitUI.SpellChecker
         private readonly TranslationString dictionaryText = new TranslationString("Dictionary");
         private readonly TranslationString markIllFormedLinesText = new TranslationString("Mark ill formed lines");
 
+        private static readonly IGitExtensionsPathProvider GitExtPathProvider = new GitExtensionsPathProvider();
         private readonly SpellCheckEditControl _customUnderlines;
         private Spelling _spelling;
         private static WordDictionary _wordDictionary;
@@ -69,7 +70,7 @@ namespace GitUI.SpellChecker
 
             EnabledChanged += EditNetSpellEnabledChanged;
 
-            if(AppSettings.ProvideAutocompletion)
+            if(AppSettings.Instance.ProvideAutocompletion)
               InitializeAutoCompleteWordsTask();
         }
 
@@ -218,13 +219,13 @@ namespace GitUI.SpellChecker
             }
         }
 
-        protected RepoDistSettings Settings
+        protected IRepoDistSettings Settings
         {
             get
             {
                 return IsUICommandsInitialized ?
                     Module.EffectiveSettings:
-                    AppSettings.SettingsContainer;
+                    AppSettings.Instance.SettingsContainer;
             }
         }
 
@@ -248,7 +249,7 @@ namespace GitUI.SpellChecker
                         IgnoreWordsWithDigits = true
                     };
 
-            if(AppSettings.ProvideAutocompletion)
+            if(AppSettings.Instance.ProvideAutocompletion)
                 _autoCompleteListTask.ContinueWith(
                 w =>
                 {
@@ -277,7 +278,7 @@ namespace GitUI.SpellChecker
             // Don`t load a dictionary in Design-time
             if (Site != null && Site.DesignMode) return;
 
-            string dictionaryFile = string.Concat(Path.Combine(AppSettings.GetDictionaryDir(), Settings.Dictionary), ".dic");
+            string dictionaryFile = string.Concat(Path.Combine(GitExtPathProvider.GetDictionaryDir(), Settings.Dictionary), ".dic");
 
             if (_wordDictionary == null || _wordDictionary.DictionaryFile != dictionaryFile)
             {
@@ -327,7 +328,7 @@ namespace GitUI.SpellChecker
 
         private void MarkLines()
         {
-            if (!AppSettings.MarkIllFormedLinesInCommitMsg)
+            if (!AppSettings.Instance.MarkIllFormedLinesInCommitMsg)
                 return;
             var numLines = TextBox.Lines.Length;
             var chars = 0;
@@ -482,7 +483,7 @@ namespace GitUI.SpellChecker
 
                 foreach (
                     var fileName in
-                        Directory.GetFiles(AppSettings.GetDictionaryDir(), "*.dic", SearchOption.TopDirectoryOnly))
+                        Directory.GetFiles(GitExtPathProvider.GetDictionaryDir(), "*.dic", SearchOption.TopDirectoryOnly))
                 {
                     var file = new FileInfo(fileName);
 
@@ -509,7 +510,7 @@ namespace GitUI.SpellChecker
             var mi =
                 new ToolStripMenuItem(markIllFormedLinesText.Text)
                     {
-                        Checked = AppSettings.MarkIllFormedLinesInCommitMsg
+                        Checked = AppSettings.Instance.MarkIllFormedLinesInCommitMsg
                     };
             mi.Click += MarkIllFormedLinesInCommitMsgClick;
             SpellCheckContextMenu.Items.Add(mi);
@@ -547,7 +548,7 @@ namespace GitUI.SpellChecker
 
         private void MarkIllFormedLinesInCommitMsgClick(object sender, EventArgs e)
         {
-            AppSettings.MarkIllFormedLinesInCommitMsg = !AppSettings.MarkIllFormedLinesInCommitMsg;
+            AppSettings.Instance.MarkIllFormedLinesInCommitMsg = !AppSettings.Instance.MarkIllFormedLinesInCommitMsg;
             CheckSpelling();
         }
 
@@ -559,7 +560,7 @@ namespace GitUI.SpellChecker
 
         private void DicToolStripMenuItemClick(object sender, EventArgs e)
         {
-            RepoDistSettings settings;
+            IRepoDistSettings settings;
             //if a Module is available, then always change the "repository local" setting
             //it will set a dictionary only for this Module (repository) localy
             if (IsUICommandsInitialized)
@@ -682,7 +683,7 @@ namespace GitUI.SpellChecker
             {
                 UndoHighlighting();
             }
-            else if (e.Control && !e.Alt && e.KeyCode == Keys.Space && AppSettings.ProvideAutocompletion)
+            else if (e.Control && !e.Alt && e.KeyCode == Keys.Space && AppSettings.Instance.ProvideAutocompletion)
             {
                 UpdateOrShowAutoComplete(true);
                 e.Handled = true;
@@ -814,7 +815,7 @@ namespace GitUI.SpellChecker
 
         public void RefreshAutoCompleteWords()
         {
-            if (AppSettings.ProvideAutocompletion)
+            if (AppSettings.Instance.ProvideAutocompletion)
                 InitializeAutoCompleteWordsTask();
         }
 
@@ -934,7 +935,7 @@ namespace GitUI.SpellChecker
                 return;
             }
 
-            if (_autoCompleteListTask == null || !AppSettings.ProvideAutocompletion)
+            if (_autoCompleteListTask == null || !AppSettings.Instance.ProvideAutocompletion)
                 return;
 
             if (!_autoCompleteListTask.IsCompleted)

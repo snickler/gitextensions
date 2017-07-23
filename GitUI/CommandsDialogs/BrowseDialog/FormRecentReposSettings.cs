@@ -22,20 +22,20 @@ namespace GitUI.CommandsDialogs.BrowseDialog
 
         private void LoadSettings()
         {
-            SetShorteningStrategy(AppSettings.ShorteningRecentRepoPathStrategy);
-            sortMostRecentRepos.Checked = AppSettings.SortMostRecentRepos;
-            sortLessRecentRepos.Checked = AppSettings.SortLessRecentRepos;
-            _NO_TRANSLATE_maxRecentRepositories.Value = AppSettings.MaxMostRecentRepositories;
-            comboMinWidthEdit.Value = AppSettings.RecentReposComboMinWidth;
+            SetShorteningStrategy(AppSettings.Instance.ShorteningRecentRepoPathStrategy);
+            sortMostRecentRepos.Checked = AppSettings.Instance.SortMostRecentRepos;
+            sortLessRecentRepos.Checked = AppSettings.Instance.SortLessRecentRepos;
+            _NO_TRANSLATE_maxRecentRepositories.Value = AppSettings.Instance.MaxMostRecentRepositories;
+            comboMinWidthEdit.Value = AppSettings.Instance.RecentReposComboMinWidth;
         }
 
         private void SaveSettings()
         {
-            AppSettings.ShorteningRecentRepoPathStrategy = GetShorteningStrategy();
-            AppSettings.SortMostRecentRepos = sortMostRecentRepos.Checked;
-            AppSettings.SortLessRecentRepos = sortLessRecentRepos.Checked;
-            AppSettings.MaxMostRecentRepositories = (int)_NO_TRANSLATE_maxRecentRepositories.Value;
-            AppSettings.RecentReposComboMinWidth = (int)comboMinWidthEdit.Value;
+            AppSettings.Instance.ShorteningRecentRepoPathStrategy = GetShorteningStrategy();
+            AppSettings.Instance.SortMostRecentRepos = sortMostRecentRepos.Checked;
+            AppSettings.Instance.SortLessRecentRepos = sortLessRecentRepos.Checked;
+            AppSettings.Instance.MaxMostRecentRepositories = (int)_NO_TRANSLATE_maxRecentRepositories.Value;
+            AppSettings.Instance.RecentReposComboMinWidth = (int)comboMinWidthEdit.Value;
         }
 
         private string GetShorteningStrategy()

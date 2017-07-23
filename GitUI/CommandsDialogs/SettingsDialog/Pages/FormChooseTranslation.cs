@@ -76,14 +76,14 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         void translationImage_Click(object sender, EventArgs e)
         {
-            AppSettings.Translation = ((Control)sender).Tag.ToString();
+            AppSettings.Instance.Translation = ((Control)sender).Tag.ToString();
             Close();
         }
 
         private void FormChooseTranslation_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (string.IsNullOrEmpty(AppSettings.Translation))
-                AppSettings.Translation = "English";
+            if (string.IsNullOrEmpty(AppSettings.Instance.Translation))
+                AppSettings.Instance.Translation = "English";
         }
     }
 }

@@ -111,7 +111,7 @@ namespace GitUI.CommandsDialogs
             if (GitCommandHelpers.VersionInUse.SupportPushWithRecursiveSubmodulesCheck)
             {
                 RecursiveSubmodules.Enabled = true;
-                RecursiveSubmodules.SelectedIndex = AppSettings.RecursiveSubmodules;
+                RecursiveSubmodules.SelectedIndex = AppSettings.Instance.RecursiveSubmodules;
                 if (!GitCommandHelpers.VersionInUse.SupportPushWithRecursiveSubmodulesOnDemand)
                     RecursiveSubmodules.Items.RemoveAt(2);
             }
@@ -132,7 +132,7 @@ namespace GitUI.CommandsDialogs
 
             Push.Focus();
 
-            if (AppSettings.AlwaysShowAdvOpt)
+            if (AppSettings.Instance.AlwaysShowAdvOpt)
             {
                 ShowOptions_LinkClicked(null, null);
             }
@@ -243,7 +243,7 @@ namespace GitUI.CommandsDialogs
                     !IsBranchKnownToRemote(selectedRemoteName, RemoteBranch.Text))
                 {
                     //Ask if this is really what the user wants
-                    if (!AppSettings.DontConfirmPushNewBranch &&
+                    if (!AppSettings.Instance.DontConfirmPushNewBranch &&
                         DialogResult.No == MessageBox.Show(owner, _branchNewForRemote.Text, _pushCaption.Text, MessageBoxButtons.YesNo))
                     {
                         return false;
@@ -255,7 +255,7 @@ namespace GitUI.CommandsDialogs
             {
                 Repositories.AddMostRecentRepository(PushDestination.Text);
             }
-            AppSettings.RecursiveSubmodules = RecursiveSubmodules.SelectedIndex;
+            AppSettings.Instance.RecursiveSubmodules = RecursiveSubmodules.SelectedIndex;
 
             var remote = "";
             string destination;
@@ -285,7 +285,7 @@ namespace GitUI.CommandsDialogs
                     {
                         track = false;
                     }
-                    if (track && !AppSettings.DontConfirmAddTrackingRef)
+                    if (track && !AppSettings.Instance.DontConfirmAddTrackingRef)
                     {
                         var result = MessageBox.Show(this,
                                                      string.Format(_updateTrackingReference.Text, selectedLocalBranch.Name, RemoteBranch.Text),
@@ -403,7 +403,7 @@ namespace GitUI.CommandsDialogs
 
         private bool IsRebasingMergeCommit()
         {
-            if (AppSettings.FormPullAction == AppSettings.PullAction.Rebase && 
+            if (AppSettings.Instance.FormPullAction == PullAction.Rebase && 
                 _candidateForRebasingMergeCommit &&
                 _selectedBranch == _currentBranchName && 
                 _selectedRemote == _currentBranchRemote)
@@ -439,21 +439,21 @@ namespace GitUI.CommandsDialogs
             {
                 bool forcePush = false;
                 IWin32Window owner = form.Owner;
-                if (AppSettings.AutoPullOnPushRejectedAction == null)
+                if (AppSettings.Instance.AutoPullOnPushRejectedAction == null)
                 {
                     bool cancel = false;
                     string destination = PushToRemote.Checked ? _NO_TRANSLATE_Remotes.Text : PushDestination.Text;
                     string buttons = _pullRepositoryButtons.Text;
                     switch (Module.LastPullAction)
                     {
-                        case AppSettings.PullAction.Fetch:
-                        case AppSettings.PullAction.FetchAll:
+                        case PullAction.Fetch:
+                        case PullAction.FetchAll:
                             buttons = string.Format(buttons, _pullActionFetch.Text);
                             break;
-                        case AppSettings.PullAction.Merge:
+                        case PullAction.Merge:
                             buttons = string.Format(buttons, _pullActionMerge.Text);
                             break;
-                        case AppSettings.PullAction.Rebase:
+                        case PullAction.Rebase:
                             buttons = string.Format(buttons, _pullActionRebase.Text);
                             break;
                         default:
@@ -477,21 +477,21 @@ namespace GitUI.CommandsDialogs
                         case 0:
                             if (rememberDecision)
                             {
-                                AppSettings.AutoPullOnPushRejectedAction = AppSettings.PullAction.Default;
+                                AppSettings.Instance.AutoPullOnPushRejectedAction = PullAction.Default;
                             }
                             break;
                         case 1:
-                            AppSettings.FormPullAction = AppSettings.PullAction.Rebase;
+                            AppSettings.Instance.FormPullAction = PullAction.Rebase;
                             if (rememberDecision)
                             {
-                                AppSettings.AutoPullOnPushRejectedAction = AppSettings.FormPullAction;
+                                AppSettings.Instance.AutoPullOnPushRejectedAction = AppSettings.Instance.FormPullAction;
                             }
                             break;
                         case 2:
-                            AppSettings.FormPullAction = AppSettings.PullAction.Merge;
+                            AppSettings.Instance.FormPullAction = PullAction.Merge;
                             if (rememberDecision)
                             {
-                                AppSettings.AutoPullOnPushRejectedAction = AppSettings.FormPullAction;
+                                AppSettings.Instance.AutoPullOnPushRejectedAction = AppSettings.Instance.FormPullAction;
                             }
                             break;
                         case 3:
@@ -501,7 +501,7 @@ namespace GitUI.CommandsDialogs
                             cancel = true;
                             if (rememberDecision)
                             {
-                                AppSettings.AutoPullOnPushRejectedAction = AppSettings.PullAction.None;
+                                AppSettings.Instance.AutoPullOnPushRejectedAction = PullAction.None;
                             }
                             break;
                     }
@@ -522,14 +522,14 @@ namespace GitUI.CommandsDialogs
                     return true;
                 }
 
-                if (AppSettings.AutoPullOnPushRejectedAction == AppSettings.PullAction.None)
+                if (AppSettings.Instance.AutoPullOnPushRejectedAction == PullAction.None)
                 {
                     return false;
                 }
 
-                if (AppSettings.AutoPullOnPushRejectedAction == AppSettings.PullAction.Default)
+                if (AppSettings.Instance.AutoPullOnPushRejectedAction == PullAction.Default)
                 {
-                    if (Module.LastPullAction == AppSettings.PullAction.None)
+                    if (Module.LastPullAction == PullAction.None)
                     {
                         return false;
                     }
@@ -537,7 +537,7 @@ namespace GitUI.CommandsDialogs
                     Module.LastPullActionToFormPullAction();
                 }
 
-                if (AppSettings.FormPullAction == AppSettings.PullAction.Fetch)
+                if (AppSettings.Instance.FormPullAction == PullAction.Fetch)
                 {
                     form.AppendOutput(Environment.NewLine +
                         "Can not perform auto pull, when merge option is set to fetch.");
@@ -593,7 +593,7 @@ namespace GitUI.CommandsDialogs
 
             _NO_TRANSLATE_Branch.Text = curBranch;
 
-            ComboBoxHelper.ResizeComboBoxDropDownWidth(_NO_TRANSLATE_Branch, AppSettings.BranchDropDownMinWidth, AppSettings.BranchDropDownMaxWidth);
+            ComboBoxHelper.ResizeComboBoxDropDownWidth(_NO_TRANSLATE_Branch, AppSettings.Instance.BranchDropDownMinWidth, AppSettings.Instance.BranchDropDownMaxWidth);
         }
 
         public IEnumerable<IGitRef> GetLocalBranches()
@@ -633,7 +633,7 @@ namespace GitUI.CommandsDialogs
                         RemoteBranch.Items.Add(head.LocalName);
             }
 
-            ComboBoxHelper.ResizeComboBoxDropDownWidth(RemoteBranch, AppSettings.BranchDropDownMinWidth, AppSettings.BranchDropDownMaxWidth);
+            ComboBoxHelper.ResizeComboBoxDropDownWidth(RemoteBranch, AppSettings.Instance.BranchDropDownMinWidth, AppSettings.Instance.BranchDropDownMaxWidth);
         }
 
         private void BranchSelectedValueChanged(object sender, EventArgs e)
@@ -763,7 +763,7 @@ namespace GitUI.CommandsDialogs
 
         private void StartPageant(string remote)
         {
-            if (!File.Exists(AppSettings.Pageant))
+            if (!File.Exists(AppSettings.Instance.Pageant))
             {
                 MessageBoxes.PAgentNotFound(this);
             }
@@ -794,7 +794,7 @@ namespace GitUI.CommandsDialogs
             tags.Insert(0, AllRefs);
             TagComboBox.DataSource = tags;
 
-            ComboBoxHelper.ResizeComboBoxDropDownWidth(TagComboBox, AppSettings.BranchDropDownMinWidth, AppSettings.BranchDropDownMaxWidth);
+            ComboBoxHelper.ResizeComboBoxDropDownWidth(TagComboBox, AppSettings.Instance.BranchDropDownMinWidth, AppSettings.Instance.BranchDropDownMaxWidth);
         }
 
         private void ForcePushBranchesCheckedChanged(object sender, EventArgs e)

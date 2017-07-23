@@ -52,8 +52,8 @@ namespace GitUI.CommandsDialogs
             _headRevision = new GitRevision(Module, headCommitSha);
             _mergeBase = new GitRevision(Module, Module.GetMergeBase(_baseRevision.Guid, _headRevision.Guid));
 
-            lblBaseCommit.BackColor = AppSettings.DiffRemovedColor;
-            lblHeadCommit.BackColor = AppSettings.DiffAddedColor;
+            lblBaseCommit.BackColor = AppSettings.Instance.DiffRemovedColor;
+            lblHeadCommit.BackColor = AppSettings.Instance.DiffAddedColor;
 
             DiffFiles.SelectedIndexChanged += DiffFiles_SelectedIndexChanged;
 

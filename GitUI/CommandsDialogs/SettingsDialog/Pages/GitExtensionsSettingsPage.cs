@@ -28,50 +28,50 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         protected override void SettingsToPage()
         {
-            chkCheckForUncommittedChangesInCheckoutBranch.Checked = AppSettings.CheckForUncommittedChangesInCheckoutBranch;
-            chkStartWithRecentWorkingDir.Checked = AppSettings.StartWithRecentWorkingDir;
-            chkPlaySpecialStartupSound.Checked = AppSettings.PlaySpecialStartupSound;
-            chkUsePatienceDiffAlgorithm.Checked = AppSettings.UsePatienceDiffAlgorithm;
-            RevisionGridQuickSearchTimeout.Value = AppSettings.RevisionGridQuickSearchTimeout;
-            chkFollowRenamesInFileHistory.Checked = AppSettings.FollowRenamesInFileHistory;
-            chkStashUntrackedFiles.Checked = AppSettings.IncludeUntrackedFilesInAutoStash;
-            chkShowCurrentChangesInRevisionGraph.Checked = AppSettings.RevisionGraphShowWorkingDirChanges;
-            chkShowStashCountInBrowseWindow.Checked = AppSettings.ShowStashCount;
-            chkShowGitStatusInToolbar.Checked = AppSettings.ShowGitStatusInBrowseToolbar;
-            SmtpServer.Text = AppSettings.SmtpServer;
-            SmtpServerPort.Text = AppSettings.SmtpPort.ToString();
-            chkUseSSL.Checked = AppSettings.SmtpUseSsl;
-            _NO_TRANSLATE_MaxCommits.Value = AppSettings.MaxRevisionGraphCommits;
-            chkCloseProcessDialog.Checked = AppSettings.CloseProcessDialog;
-            chkShowGitCommandLine.Checked = AppSettings.ShowGitCommandLine;
-            chkUseFastChecks.Checked = AppSettings.UseFastChecks;
-            cbDefaultCloneDestination.Text = AppSettings.DefaultCloneDestinationPath;
-            chkFollowRenamesInFileHistoryExact.Checked = AppSettings.FollowRenamesInFileHistoryExactOnly;
+            chkCheckForUncommittedChangesInCheckoutBranch.Checked = AppSettings.Instance.CheckForUncommittedChangesInCheckoutBranch;
+            chkStartWithRecentWorkingDir.Checked = AppSettings.Instance.StartWithRecentWorkingDir;
+            chkPlaySpecialStartupSound.Checked = AppSettings.Instance.PlaySpecialStartupSound;
+            chkUsePatienceDiffAlgorithm.Checked = AppSettings.Instance.UsePatienceDiffAlgorithm;
+            RevisionGridQuickSearchTimeout.Value = AppSettings.Instance.RevisionGridQuickSearchTimeout;
+            chkFollowRenamesInFileHistory.Checked = AppSettings.Instance.FollowRenamesInFileHistory;
+            chkStashUntrackedFiles.Checked = AppSettings.Instance.IncludeUntrackedFilesInAutoStash;
+            chkShowCurrentChangesInRevisionGraph.Checked = AppSettings.Instance.RevisionGraphShowWorkingDirChanges;
+            chkShowStashCountInBrowseWindow.Checked = AppSettings.Instance.ShowStashCount;
+            chkShowGitStatusInToolbar.Checked = AppSettings.Instance.ShowGitStatusInBrowseToolbar;
+            SmtpServer.Text = AppSettings.Instance.SmtpServer;
+            SmtpServerPort.Text = AppSettings.Instance.SmtpPort.ToString();
+            chkUseSSL.Checked = AppSettings.Instance.SmtpUseSsl;
+            _NO_TRANSLATE_MaxCommits.Value = AppSettings.Instance.MaxRevisionGraphCommits;
+            chkCloseProcessDialog.Checked = AppSettings.Instance.CloseProcessDialog;
+            chkShowGitCommandLine.Checked = AppSettings.Instance.ShowGitCommandLine;
+            chkUseFastChecks.Checked = AppSettings.Instance.UseFastChecks;
+            cbDefaultCloneDestination.Text = AppSettings.Instance.DefaultCloneDestinationPath;
+            chkFollowRenamesInFileHistoryExact.Checked = AppSettings.Instance.FollowRenamesInFileHistoryExactOnly;
         }
 
         protected override void PageToSettings()
         {
-            AppSettings.CheckForUncommittedChangesInCheckoutBranch = chkCheckForUncommittedChangesInCheckoutBranch.Checked;
-            AppSettings.StartWithRecentWorkingDir = chkStartWithRecentWorkingDir.Checked;
-            AppSettings.PlaySpecialStartupSound = chkPlaySpecialStartupSound.Checked;
-            AppSettings.UsePatienceDiffAlgorithm = chkUsePatienceDiffAlgorithm.Checked;
-            AppSettings.IncludeUntrackedFilesInAutoStash = chkStashUntrackedFiles.Checked;
-            AppSettings.FollowRenamesInFileHistory = chkFollowRenamesInFileHistory.Checked;
-            AppSettings.ShowGitStatusInBrowseToolbar = chkShowGitStatusInToolbar.Checked;
-            AppSettings.SmtpServer = SmtpServer.Text;
+            AppSettings.Instance.CheckForUncommittedChangesInCheckoutBranch = chkCheckForUncommittedChangesInCheckoutBranch.Checked;
+            AppSettings.Instance.StartWithRecentWorkingDir = chkStartWithRecentWorkingDir.Checked;
+            AppSettings.Instance.PlaySpecialStartupSound = chkPlaySpecialStartupSound.Checked;
+            AppSettings.Instance.UsePatienceDiffAlgorithm = chkUsePatienceDiffAlgorithm.Checked;
+            AppSettings.Instance.IncludeUntrackedFilesInAutoStash = chkStashUntrackedFiles.Checked;
+            AppSettings.Instance.FollowRenamesInFileHistory = chkFollowRenamesInFileHistory.Checked;
+            AppSettings.Instance.ShowGitStatusInBrowseToolbar = chkShowGitStatusInToolbar.Checked;
+            AppSettings.Instance.SmtpServer = SmtpServer.Text;
             int port;
             if (int.TryParse(SmtpServerPort.Text, out port))
-                AppSettings.SmtpPort = port;
-            AppSettings.SmtpUseSsl = chkUseSSL.Checked;
-            AppSettings.CloseProcessDialog = chkCloseProcessDialog.Checked;
-            AppSettings.ShowGitCommandLine = chkShowGitCommandLine.Checked;
-            AppSettings.UseFastChecks = chkUseFastChecks.Checked;
-            AppSettings.MaxRevisionGraphCommits = (int)_NO_TRANSLATE_MaxCommits.Value;
-            AppSettings.RevisionGridQuickSearchTimeout = (int)RevisionGridQuickSearchTimeout.Value;
-            AppSettings.RevisionGraphShowWorkingDirChanges = chkShowCurrentChangesInRevisionGraph.Checked;
-            AppSettings.ShowStashCount = chkShowStashCountInBrowseWindow.Checked;
-            AppSettings.DefaultCloneDestinationPath = cbDefaultCloneDestination.Text;
-            AppSettings.FollowRenamesInFileHistoryExactOnly = chkFollowRenamesInFileHistoryExact.Checked;
+                AppSettings.Instance.SmtpPort = port;
+            AppSettings.Instance.SmtpUseSsl = chkUseSSL.Checked;
+            AppSettings.Instance.CloseProcessDialog = chkCloseProcessDialog.Checked;
+            AppSettings.Instance.ShowGitCommandLine = chkShowGitCommandLine.Checked;
+            AppSettings.Instance.UseFastChecks = chkUseFastChecks.Checked;
+            AppSettings.Instance.MaxRevisionGraphCommits = (int)_NO_TRANSLATE_MaxCommits.Value;
+            AppSettings.Instance.RevisionGridQuickSearchTimeout = (int)RevisionGridQuickSearchTimeout.Value;
+            AppSettings.Instance.RevisionGraphShowWorkingDirChanges = chkShowCurrentChangesInRevisionGraph.Checked;
+            AppSettings.Instance.ShowStashCount = chkShowStashCountInBrowseWindow.Checked;
+            AppSettings.Instance.DefaultCloneDestinationPath = cbDefaultCloneDestination.Text;
+            AppSettings.Instance.FollowRenamesInFileHistoryExactOnly = chkFollowRenamesInFileHistoryExact.Checked;
         }
 
         private void chkUseSSL_CheckedChanged(object sender, System.EventArgs e)

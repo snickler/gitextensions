@@ -18,7 +18,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
             return string.Join(",", _autoGenKeywords);
         }
 
-        protected override ISettingsSource GetCurrentSettings()
+        protected override SettingsSource GetCurrentSettings()
         {
             return CurrentSettings;
         }

@@ -23,7 +23,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
         {
             InitializeComponent();
 
-            Font = AppSettings.Font;
+            Font = AppSettings.Instance.Font;
 
             _origTextBoxFont = textBoxFind.Font;
             SetFindPrompt(true);

@@ -240,7 +240,7 @@ namespace GitUI.CommandsDialogs
 
             private Globalized()
             {
-                Translator.Translate(this, AppSettings.CurrentTranslation);
+                Translator.Translate(this, AppSettings.Instance.CurrentTranslation);
             }
 
             public readonly TranslationString Cancel = new TranslationString("Cancel");

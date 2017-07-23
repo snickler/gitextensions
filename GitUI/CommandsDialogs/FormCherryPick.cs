@@ -42,8 +42,8 @@ namespace GitUI.CommandsDialogs
 
         private void LoadSettings()
         {
-            AutoCommit.Checked = AppSettings.CommitAutomaticallyAfterCherryPick;
-            checkAddReference.Checked = AppSettings.AddCommitReferenceToCherryPick;
+            AutoCommit.Checked = AppSettings.Instance.CommitAutomaticallyAfterCherryPick;
+            checkAddReference.Checked = AppSettings.Instance.AddCommitReferenceToCherryPick;
         } 
 
         private void OnRevisionChanged()
@@ -134,8 +134,8 @@ namespace GitUI.CommandsDialogs
 
         void SaveSettings()
         {
-            AppSettings.CommitAutomaticallyAfterCherryPick = AutoCommit.Checked;
-            AppSettings.AddCommitReferenceToCherryPick = checkAddReference.Checked;
+            AppSettings.Instance.CommitAutomaticallyAfterCherryPick = AutoCommit.Checked;
+            AppSettings.Instance.AddCommitReferenceToCherryPick = checkAddReference.Checked;
         }
     }
 }

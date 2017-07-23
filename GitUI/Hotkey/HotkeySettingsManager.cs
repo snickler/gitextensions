@@ -112,7 +112,7 @@ namespace GitUI.Hotkey
                 using (StringWriter writer = new StringWriter(strBuilder))
                 {
                     Serializer.Serialize(writer, settings);
-                    AppSettings.SerializedHotkeys = strBuilder.ToString();
+                    AppSettings.Instance.SerializedHotkeys = strBuilder.ToString();
                 }
             }
             catch { }
@@ -169,8 +169,8 @@ namespace GitUI.Hotkey
 
             MigrateSettings();
 
-            if (!string.IsNullOrWhiteSpace(AppSettings.SerializedHotkeys))
-                settings = LoadSerializedSettings(AppSettings.SerializedHotkeys);
+            if (!string.IsNullOrWhiteSpace(AppSettings.Instance.SerializedHotkeys))
+                settings = LoadSerializedSettings(AppSettings.Instance.SerializedHotkeys);
 
             return settings;
         }
@@ -193,7 +193,7 @@ namespace GitUI.Hotkey
 
         private static void MigrateSettings()
         {
-            if (AppSettings.SerializedHotkeys == null)
+            if (AppSettings.Instance.SerializedHotkeys == null)
             {
                 Properties.Settings.Default.Upgrade();
                 if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Hotkeys))
@@ -201,7 +201,7 @@ namespace GitUI.Hotkey
                     HotkeySettings[] settings = LoadSerializedSettings(Properties.Settings.Default.Hotkeys);
                     if (settings == null)
                     {
-                        AppSettings.SerializedHotkeys = " ";//mark settings as migrated
+                        AppSettings.Instance.SerializedHotkeys = " ";//mark settings as migrated
                     }
                     else
                     {
@@ -210,7 +210,7 @@ namespace GitUI.Hotkey
                 }
                 else
                 {
-                    AppSettings.SerializedHotkeys = " ";//mark settings as migrated
+                    AppSettings.Instance.SerializedHotkeys = " ";//mark settings as migrated
                 }
             }
         }

@@ -7,11 +7,13 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using GitCommands;
+using GitCommands.Settings;
 
 namespace GitUI.AutoCompletion
 {
     public class CommitAutoCompleteProvider : IAutoCompleteProvider
     {
+        private static readonly IApplicationDataPathResolver ApplicationDataPathResolver = new ApplicationDataPathResolver();
         private static readonly Lazy<Dictionary<string, Regex>> s_regexes = new Lazy<Dictionary<string, Regex>>(ParseRegexes);
         private readonly GitModule _module;
 
@@ -68,7 +70,7 @@ namespace GitUI.AutoCompletion
 
         private static IEnumerable<string> ReadOrInitializeAutoCompleteRegexes()
         {
-            var path = Path.Combine(AppSettings.ApplicationDataPath.Value, "AutoCompleteRegexes.txt");
+            var path = Path.Combine(ApplicationDataPathResolver.Resolve(), "AutoCompleteRegexes.txt");
 
             if (File.Exists(path))
                 return File.ReadLines(path);

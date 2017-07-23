@@ -59,7 +59,7 @@ namespace GitUI.UserControls.RevisionGridClasses
             {
                 try
                 {
-                    enabled = AppSettings.UseFastChecks;
+                    enabled = AppSettings.Instance.UseFastChecks;
 
                     _gitDirPath = Module.GetGitDirectory();
 
@@ -127,7 +127,7 @@ namespace GitUI.UserControls.RevisionGridClasses
         private void RefreshWatcher()
         {
             if (_gitDirPath != Module.GetGitDirectory() ||
-                enabled != AppSettings.UseFastChecks)
+                enabled != AppSettings.Instance.UseFastChecks)
                 SetFileSystemWatcher();
         }
 

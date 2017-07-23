@@ -14,30 +14,30 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         protected override void SettingsToPage()
         {
-            chkAmend.Checked = AppSettings.DontConfirmAmend;
-            chkCommitIfNoBranch.Checked = AppSettings.DontConfirmCommitIfNoBranch;
-            chkAutoPopStashAfterPull.CheckState = AppSettings.AutoPopStashAfterPull.ToCheckboxState();
-            chkAutoPopStashAfterCheckout.CheckState = AppSettings.AutoPopStashAfterCheckoutBranch.ToCheckboxState();
-            chkPushNewBranch.Checked = AppSettings.DontConfirmPushNewBranch;
-            chkAddTrackingRef.Checked = AppSettings.DontConfirmAddTrackingRef;
-            chkUpdateModules.CheckState = AppSettings.UpdateSubmodulesOnCheckout.ToCheckboxState();
-            chkResolveConflicts.Checked = AppSettings.DontConfirmResolveConflicts;
-            chkCommitAfterConflictsResolved.Checked = AppSettings.DontConfirmCommitAfterConflictsResolved;
-            chkSecondAbortConfirmation.Checked = AppSettings.DontConfirmSecondAbortConfirmation;
+            chkAmend.Checked = AppSettings.Instance.DontConfirmAmend;
+            chkCommitIfNoBranch.Checked = AppSettings.Instance.DontConfirmCommitIfNoBranch;
+            chkAutoPopStashAfterPull.CheckState = AppSettings.Instance.AutoPopStashAfterPull.ToCheckboxState();
+            chkAutoPopStashAfterCheckout.CheckState = AppSettings.Instance.AutoPopStashAfterCheckoutBranch.ToCheckboxState();
+            chkPushNewBranch.Checked = AppSettings.Instance.DontConfirmPushNewBranch;
+            chkAddTrackingRef.Checked = AppSettings.Instance.DontConfirmAddTrackingRef;
+            chkUpdateModules.CheckState = AppSettings.Instance.UpdateSubmodulesOnCheckout.ToCheckboxState();
+            chkResolveConflicts.Checked = AppSettings.Instance.DontConfirmResolveConflicts;
+            chkCommitAfterConflictsResolved.Checked = AppSettings.Instance.DontConfirmCommitAfterConflictsResolved;
+            chkSecondAbortConfirmation.Checked = AppSettings.Instance.DontConfirmSecondAbortConfirmation;
         }
 
         protected override void PageToSettings()
         {
-            AppSettings.DontConfirmAmend = chkAmend.Checked;
-            AppSettings.DontConfirmCommitIfNoBranch = chkCommitIfNoBranch.Checked;
-            AppSettings.AutoPopStashAfterPull = chkAutoPopStashAfterPull.CheckState.ToBoolean();
-            AppSettings.AutoPopStashAfterCheckoutBranch = chkAutoPopStashAfterCheckout.CheckState.ToBoolean();
-            AppSettings.DontConfirmPushNewBranch = chkPushNewBranch.Checked;
-            AppSettings.DontConfirmAddTrackingRef = chkAddTrackingRef.Checked;
-            AppSettings.UpdateSubmodulesOnCheckout = chkUpdateModules.CheckState.ToBoolean();
-            AppSettings.DontConfirmResolveConflicts = chkResolveConflicts.Checked;
-            AppSettings.DontConfirmCommitAfterConflictsResolved = chkCommitAfterConflictsResolved.Checked;
-            AppSettings.DontConfirmSecondAbortConfirmation = chkSecondAbortConfirmation.Checked;
+            AppSettings.Instance.DontConfirmAmend = chkAmend.Checked;
+            AppSettings.Instance.DontConfirmCommitIfNoBranch = chkCommitIfNoBranch.Checked;
+            AppSettings.Instance.AutoPopStashAfterPull = chkAutoPopStashAfterPull.CheckState.ToBoolean();
+            AppSettings.Instance.AutoPopStashAfterCheckoutBranch = chkAutoPopStashAfterCheckout.CheckState.ToBoolean();
+            AppSettings.Instance.DontConfirmPushNewBranch = chkPushNewBranch.Checked;
+            AppSettings.Instance.DontConfirmAddTrackingRef = chkAddTrackingRef.Checked;
+            AppSettings.Instance.UpdateSubmodulesOnCheckout = chkUpdateModules.CheckState.ToBoolean();
+            AppSettings.Instance.DontConfirmResolveConflicts = chkResolveConflicts.Checked;
+            AppSettings.Instance.DontConfirmCommitAfterConflictsResolved = chkCommitAfterConflictsResolved.Checked;
+            AppSettings.Instance.DontConfirmSecondAbortConfirmation = chkSecondAbortConfirmation.Checked;
         }
 
         public static SettingsPageReference GetPageReference()

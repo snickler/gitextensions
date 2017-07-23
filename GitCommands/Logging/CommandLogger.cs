@@ -4,7 +4,12 @@ using System.Linq;
 
 namespace GitCommands.Logging
 {
-    public sealed class CommandLogger
+    public interface ICommandLogger
+    {
+        void Log(string command, DateTime executionStartTimestamp, DateTime executionEndTimestamp);
+    }
+
+    public sealed class CommandLogger : ICommandLogger
     {
         private const int LogLimit = 500;
         private readonly Queue<CommandLogEntry> _logQueue = new Queue<CommandLogEntry>(LogLimit);

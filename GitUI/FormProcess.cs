@@ -40,7 +40,7 @@ namespace GitUI
         {
             ProcessCallback = processStart;
             AbortCallback = processAbort;
-            ProcessString = process ?? AppSettings.GitCommand;
+            ProcessString = process ?? AppSettings.Instance.GitCommand;
             ProcessArguments = arguments;
             Remote = "";
             ProcessInput = input;

@@ -94,11 +94,14 @@
     <Compile Include="Remote\GitRemote.cs" />
     <Compile Include="Remote\GitRemoteController.cs" />
     <Compile Include="Remote\GitRemoteSaveResult.cs" />
+    <Compile Include="Settings\ApplicationDataPathResolver.cs" />
+    <Compile Include="Settings\AppSettingsImplementations.cs" />
     <Compile Include="Settings\BasicSettingTypes.cs" />
     <Compile Include="Settings\CommonSettingsTypes.cs" />
     <Compile Include="Settings\ConfigFileSettings.cs" />
     <Compile Include="Settings\ConfigFileSettingsCache.cs" />
     <Compile Include="Settings\FileSettingsCache.cs" />
+    <Compile Include="Settings\GitExtensionsPathProvider.cs" />
     <Compile Include="Settings\GitExtSettingsCache.cs" />
     <Compile Include="Settings\RepoDistSettings.cs" />
     <Compile Include="Settings\Setting.cs" />

@@ -97,7 +97,7 @@ namespace GitUI.UserControls
                 //process used to execute external commands
                 var process = new Process();
                 ProcessStartInfo startInfo = GitCommandHelpers.CreateProcessStartInfo(command, arguments, workdir, GitModule.SystemEncoding);
-                startInfo.CreateNoWindow = (!ssh && !AppSettings.ShowGitCommandLine);
+                startInfo.CreateNoWindow = (!ssh && !AppSettings.Instance.ShowGitCommandLine);
                 foreach (var envVariable in envVariables)
                 {
                     startInfo.EnvironmentVariables.Add(envVariable.Key, envVariable.Value);
@@ -137,7 +137,7 @@ namespace GitUI.UserControls
                 process.Exited += (sender, args) =>
                 {
                     DateTime executionEndTimestamp = DateTime.Now;
-                    AppSettings.GitLog.Log(quotedCmd + " " + arguments, executionStartTimestamp, executionEndTimestamp);
+                    AppSettings.Instance.GitLog.Log(quotedCmd + " " + arguments, executionStartTimestamp, executionEndTimestamp);
                 };
 
                 process.Start();

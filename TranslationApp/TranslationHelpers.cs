@@ -16,7 +16,7 @@ namespace TranslationApp
             try
             {
                 //Set language to neutral to get neutral translations
-                GitCommands.AppSettings.CurrentTranslation = "";
+                GitCommands.AppSettings.Instance.CurrentTranslation = "";
 
                 var translatableTypes = TranslationUtl.GetTranslatableTypes();
                 foreach (var types in translatableTypes)
@@ -44,7 +44,7 @@ namespace TranslationApp
             finally
             {
                 //Restore translation
-                GitCommands.AppSettings.CurrentTranslation = null;
+                GitCommands.AppSettings.Instance.CurrentTranslation = null;
             }
 
             return GetItemsDictionary(neutralTranslation);

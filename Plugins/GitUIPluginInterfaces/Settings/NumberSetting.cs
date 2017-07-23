@@ -41,7 +41,7 @@ namespace GitUIPluginInterfaces
                 return new TextBox();
             }
 
-            public override void LoadSetting(ISettingsSource settings, bool areSettingsEffective, TextBox control)
+            public override void LoadSetting(SettingsSource settings, bool areSettingsEffective, TextBox control)
             {
                 object settingVal;
                 if (areSettingsEffective)
@@ -56,7 +56,7 @@ namespace GitUIPluginInterfaces
                 control.Text = ConvertToString(settingVal);
             }
 
-            public override void SaveSetting(ISettingsSource settings, bool areSettingsEffective, TextBox control)
+            public override void SaveSetting(SettingsSource settings, bool areSettingsEffective, TextBox control)
             {
                 var controlValue = control.Text;
                 if (areSettingsEffective)
@@ -100,7 +100,7 @@ namespace GitUIPluginInterfaces
             return null;
         }
 
-        public object this[ISettingsSource settings]
+        public object this[SettingsSource settings]
         {
             get 
             {
@@ -116,7 +116,7 @@ namespace GitUIPluginInterfaces
             }
         }
 
-        public T ValueOrDefault(ISettingsSource settings)
+        public T ValueOrDefault(SettingsSource settings)
         {
             object settingVal = this[settings];
             if (settingVal == null)

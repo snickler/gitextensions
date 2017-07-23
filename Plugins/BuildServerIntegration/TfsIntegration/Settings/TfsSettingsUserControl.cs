@@ -27,7 +27,7 @@ namespace TfsIntegration.Settings
             _defaultProjectName = defaultProjectName;
         }
 
-        public void LoadSettings(ISettingsSource buildServerConfig)
+        public void LoadSettings(SettingsSource buildServerConfig)
         {
             if (buildServerConfig != null)
             {
@@ -38,7 +38,7 @@ namespace TfsIntegration.Settings
             }
         }
 
-        public void SaveSettings(ISettingsSource buildServerConfig)
+        public void SaveSettings(SettingsSource buildServerConfig)
         {
             if (BuildServerSettingsHelper.IsRegexValid(TfsBuildDefinitionNameFilter.Text))
             {

@@ -40,7 +40,7 @@ namespace GitUI.CommandsDialogs
 
         public void Translate()
         {
-            Translator.Translate(this, AppSettings.CurrentTranslation);
+            Translator.Translate(this, AppSettings.Instance.CurrentTranslation);
         }
 
         public virtual void AddTranslationItems(ITranslation translation)

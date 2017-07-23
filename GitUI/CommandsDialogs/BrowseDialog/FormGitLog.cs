@@ -38,7 +38,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
         private void RefreshLogItems()
         {
             if (TabControl.SelectedTab == tabPageCommandLog)
-                RefreshListBox(LogItems, AppSettings.GitLog.GetCommands().Select(cle => cle.ToString()).ToArray());
+                RefreshListBox(LogItems, AppSettings.Instance.GitLog.GetCommands().Select(cle => cle.ToString()).ToArray());
         }
 
         private void RefreshCommandCacheItems()
@@ -91,13 +91,13 @@ namespace GitUI.CommandsDialogs.BrowseDialog
 
         private void UnsubscribeFromEvents()
         {
-            AppSettings.GitLog.CommandsChanged -= OnCommandsLogChanged;
+            AppSettings.Instance.GitLog.CommandsChanged -= OnCommandsLogChanged;
             GitCommandCache.CachedCommandsChanged -= OnCachedCommandsLogChanged;
         }
 
         private void SubscribeToEvents()
         {
-            AppSettings.GitLog.CommandsChanged += OnCommandsLogChanged;
+            AppSettings.Instance.GitLog.CommandsChanged += OnCommandsLogChanged;
             GitCommandCache.CachedCommandsChanged += OnCachedCommandsLogChanged;
         }
 

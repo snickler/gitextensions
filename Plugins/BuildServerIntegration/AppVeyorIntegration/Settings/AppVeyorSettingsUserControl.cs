@@ -27,7 +27,7 @@ namespace AppVeyorIntegration.Settings
             _defaultProjectName = defaultProjectName;
         }
 
-        public void LoadSettings(ISettingsSource buildServerConfig)
+        public void LoadSettings(SettingsSource buildServerConfig)
         {
             if (buildServerConfig != null)
             {
@@ -41,7 +41,7 @@ namespace AppVeyorIntegration.Settings
             }
         }
 
-        public void SaveSettings(ISettingsSource buildServerConfig)
+        public void SaveSettings(SettingsSource buildServerConfig)
         {
             buildServerConfig.SetString("AppVeyorProjectName", AppVeyorProjectName.Text);
             buildServerConfig.SetString("AppVeyorAccountName", AppVeyorAccountName.Text);

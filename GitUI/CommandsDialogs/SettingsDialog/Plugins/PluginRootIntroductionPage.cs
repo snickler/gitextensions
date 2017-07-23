@@ -21,9 +21,9 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
         }
 
         protected override bool AreEffectiveSettings => true;
-        protected override ISettingsSource GetCurrentSettings()
+        protected override SettingsSource GetCurrentSettings()
         {
-            return AppSettings.SettingsContainer;
+            return AppSettings.Instance.SettingsContainer;
         }
     }
 }

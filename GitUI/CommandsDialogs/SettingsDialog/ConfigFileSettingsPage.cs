@@ -24,7 +24,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
             get { return CurrentSettings == ConfigFileSettingsSet.EffectiveSettings; }
         }
 
-        protected override ISettingsSource GetCurrentSettings()
+        protected override SettingsSource GetCurrentSettings()
         {
             return CurrentSettings;
         }

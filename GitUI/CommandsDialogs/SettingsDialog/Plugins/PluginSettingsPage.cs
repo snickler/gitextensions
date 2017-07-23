@@ -44,7 +44,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Plugins
             return result;
         }
 
-        protected override ISettingsSource GetCurrentSettings()
+        protected override SettingsSource GetCurrentSettings()
         {
             settingsCointainer.SetSettingsSource(base.GetCurrentSettings());
             return settingsCointainer;

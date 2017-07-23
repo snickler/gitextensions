@@ -29,7 +29,7 @@ namespace GitUI.UserControls
         [NotNull]
         public static ConsoleOutputControl CreateInstance()
         {
-            if((ConsoleEmulatorOutputControl.IsSupportedInThisEnvironment) && (AppSettings.UseConsoleEmulatorForCommands))
+            if((ConsoleEmulatorOutputControl.IsSupportedInThisEnvironment) && (AppSettings.Instance.UseConsoleEmulatorForCommands))
                 return new ConsoleEmulatorOutputControl();
             return new EditboxBasedConsoleOutputControl();
         }

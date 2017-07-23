@@ -1,13 +1,48 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 
 namespace GitCommands.Settings
 {
+    public interface IRepoDistSettings : ISettingsContainer
+    {
+        //GitModule Module { get; }
+        //bool NoFastForwardMerge { get; set; }
+        string Dictionary { get; set; }
+        //RepoDistSettings LowerPriority { get; }
+        //GitExtSettingsCache SettingsCache { get; }
+        //void LockedAction(Action action);
+        void Save();
+        //T GetValue<T>(string name, T defaultValue, Func<string, T> decode);
+        //bool TryGetValue<T>(string name, T defaultValue, Func<string, T> decode, out T value);
+        //void SetValue<T>(string name, T value, Func<T, string> encode);
+        //bool? GetBool(string name);
+        //bool GetBool(string name, bool defaultValue);
+        //void SetBool(string name, bool? value);
+        //void SetInt(string name, int? value);
+        //int? GetInt(string name);
+        //DateTime GetDate(string name, DateTime defaultValue);
+        //void SetDate(string name, DateTime? value);
+        //DateTime? GetDate(string name);
+        //int GetInt(string name, int defaultValue);
+        //void SetFont(string name, Font value);
+        //Font GetFont(string name, Font defaultValue);
+        //void SetColor(string name, Color? value);
+        //Color? GetColor(string name);
+        //Color GetColor(string name, Color defaultValue);
+        //void SetEnum<T>(string name, T value);
+        //T GetEnum<T>(string name, T defaultValue) where T : struct;
+        //void SetNullableEnum<T>(string name, T? value) where T : struct;
+        //T? GetNullableEnum<T>(string name) where T : struct;
+        //void SetString(string name, string value);
+        //string GetString(string name, string defaultValue);
+    }
+
     /// <summary>
     /// Settings that can be distributed with repository
     /// they can be overridden for a particular repository
     /// </summary>
-    public class RepoDistSettings : SettingsContainer<RepoDistSettings, GitExtSettingsCache>
+    public class RepoDistSettings : SettingsContainer<RepoDistSettings, GitExtSettingsCache>, IRepoDistSettings
     {
 
         public GitModule Module { get; private set; }
@@ -51,7 +86,7 @@ namespace GitCommands.Settings
 
         public static RepoDistSettings CreateGlobal(bool allowCache = true)
         {
-            return new RepoDistSettings(null, GitExtSettingsCache.Create(AppSettings.SettingsFilePath, allowCache));
+            return new RepoDistSettings(null, GitExtSettingsCache.Create(new ApplicationDataPathResolver().Resolve() + AppSettings.SettingsFileName, allowCache));
         }
 
         #endregion

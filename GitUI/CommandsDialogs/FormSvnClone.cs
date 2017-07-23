@@ -36,7 +36,7 @@ namespace GitUI.CommandsDialogs
 
         protected override void OnRuntimeLoad(EventArgs e)
         {
-            _NO_TRANSLATE_destinationComboBox.Text = AppSettings.DefaultCloneDestinationPath;
+            _NO_TRANSLATE_destinationComboBox.Text = AppSettings.Instance.DefaultCloneDestinationPath;
         }
 
         private void okButton_Click(object sender, EventArgs e)
@@ -65,7 +65,7 @@ namespace GitUI.CommandsDialogs
                 if (!int.TryParse(tbFrom.Text, out from))
                     from = 0;
                 
-                var errorOccurred = !FormProcess.ShowDialog(this, AppSettings.GitCommand, 
+                var errorOccurred = !FormProcess.ShowDialog(this, AppSettings.Instance.GitCommand, 
                     GitSvnCommandHelpers.CloneCmd(_NO_TRANSLATE_SvnFrom.Text, dirTo,
                     tbUsername.Text, authorsfile, from,
                     cbTrunk.Checked ? _NO_TRANSLATE_tbTrunk.Text : null,

@@ -61,7 +61,7 @@ namespace GitExtensions
             AsyncLoader.DefaultContinuationTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
             Application.DoEvents();
 
-            AppSettings.LoadSettings();
+            AppSettings.Instance.LoadSettings();
             if (EnvUtils.RunningOnWindows())
             {
               WebBrowserEmulationMode.SetBrowserFeatureControl();
@@ -76,7 +76,7 @@ namespace GitExtensions
             FormSplash.SetAction("Loading plugins...");
             Application.DoEvents();
 
-            if (string.IsNullOrEmpty(AppSettings.Translation))
+            if (string.IsNullOrEmpty(AppSettings.Instance.Translation))
             {
                 using (var formChoose = new FormChooseTranslation())
                 {
@@ -87,9 +87,9 @@ namespace GitExtensions
             try
             {
                 if (!(args.Length >= 2 && args[1].Equals("uninstall"))
-                    && (AppSettings.CheckSettings 
-                    || string.IsNullOrEmpty(AppSettings.GitCommandValue)
-                    || !File.Exists(AppSettings.GitCommandValue)))
+                    && (AppSettings.Instance.CheckSettings 
+                    || string.IsNullOrEmpty(AppSettings.Instance.GitCommandValue)
+                    || !File.Exists(AppSettings.Instance.GitCommandValue)))
                 {
                     FormSplash.SetAction("Checking settings...");
                     Application.DoEvents();
@@ -131,7 +131,7 @@ namespace GitExtensions
                 uCommands.RunCommand(args);
             }
 
-            AppSettings.SaveSettings();
+            AppSettings.Instance.SaveSettings();
         }
 
         private static string GetWorkingDir(string[] args)
@@ -153,10 +153,10 @@ namespace GitExtensions
                 //    Repositories.RepositoryHistory.AddMostRecentRepository(Module.WorkingDir);
             }
 
-            if (args.Length <= 1 && string.IsNullOrEmpty(workingDir) && AppSettings.StartWithRecentWorkingDir)
+            if (args.Length <= 1 && string.IsNullOrEmpty(workingDir) && AppSettings.Instance.StartWithRecentWorkingDir)
             {
-                if (GitModule.IsValidGitWorkingDir(AppSettings.RecentWorkingDir))
-                    workingDir = AppSettings.RecentWorkingDir;
+                if (GitModule.IsValidGitWorkingDir(AppSettings.Instance.RecentWorkingDir))
+                    workingDir = AppSettings.Instance.RecentWorkingDir;
             }
 
             if (string.IsNullOrEmpty(workingDir))

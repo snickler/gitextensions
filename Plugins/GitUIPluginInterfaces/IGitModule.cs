@@ -116,6 +116,6 @@ namespace GitUIPluginInterfaces
 
         bool IsRunningGitProcess();
 
-        ISettingsSource GetEffectiveSettings();
+        SettingsSource GetEffectiveSettings();
     }
 }

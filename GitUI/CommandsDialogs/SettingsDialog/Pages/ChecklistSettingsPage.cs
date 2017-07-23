@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using GitCommands;
 using GitCommands.Config;
+using GitCommands.Settings;
 using GitCommands.Utils;
 using Microsoft.Win32;
 using ResourceManager;
@@ -155,6 +156,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             new TranslationString("Locate linux tools");
         #endregion
 
+        private readonly IGitExtensionsPathProvider _gitExtensionsPathProvider = new GitExtensionsPathProvider();
         private const string _putty = "PuTTY";
 
         /// <summary>
@@ -248,7 +250,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
                 return;
             }
 
-            MessageBox.Show(this, String.Format(_shCanBeRun.Text, AppSettings.GitBinDir), _shCanBeRunCaption.Text);
+            MessageBox.Show(this, String.Format(_shCanBeRun.Text, AppSettings.Instance.GitBinDir), _shCanBeRunCaption.Text);
             ////GitBinPath.Text = Settings.GitBinDir;
             PageHost.LoadAll(); // apply settings to dialog controls (otherwise the later called SaveAndRescan_Click would overwrite settings again)
             SaveAndRescan_Click(null, null);
@@ -256,7 +258,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         private void ShellExtensionsRegistered_Click(object sender, EventArgs e)
         {
-            string path = Path.Combine(AppSettings.GetInstallDir(), CommonLogic.GitExtensionsShellEx32Name);
+            string path = Path.Combine(_gitExtensionsPathProvider.GetInstallDir(), CommonLogic.GitExtensionsShellEx32Name);
             if (!File.Exists(path))
             {
                 path = Assembly.GetAssembly(GetType()).Location;
@@ -401,7 +403,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
                 return;
             }
 
-            MessageBox.Show(this, String.Format(_gitCanBeRun.Text, AppSettings.GitCommandValue), _gitCanBeRunCaption.Text);
+            MessageBox.Show(this, String.Format(_gitCanBeRun.Text, AppSettings.Instance.GitCommandValue), _gitCanBeRunCaption.Text);
 
             PageHost.GotoPage(GitSettingsPage.GetPageReference());
             SaveAndRescan_Click(null, null);
@@ -418,7 +420,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         private void CheckAtStartup_CheckedChanged(object sender, EventArgs e)
         {
-            AppSettings.CheckSettings = CheckAtStartup.Checked;
+            AppSettings.Instance.CheckSettings = CheckAtStartup.Checked;
         }
 
         public bool CheckSettings()
@@ -455,11 +457,11 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         private static bool IsCheckAtStartupChecked(bool bValid)
         {
-            var retValue = AppSettings.CheckSettings;
+            var retValue = AppSettings.Instance.CheckSettings;
 
             if (bValid && retValue)
             {
-                AppSettings.CheckSettings = false;
+                AppSettings.Instance.CheckSettings = false;
                 retValue = false;
             }
             return retValue;
@@ -467,9 +469,9 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         private bool CheckTranslationConfigSettings()
         {
-            return RenderSettingSetUnset(() => string.IsNullOrEmpty(AppSettings.Translation),
+            return RenderSettingSetUnset(() => string.IsNullOrEmpty(AppSettings.Instance.Translation),
                                     translationConfig, translationConfig_Fix,
-                                    _noLanguageConfigured.Text, string.Format(_languageConfigured.Text, AppSettings.Translation));
+                                    _noLanguageConfigured.Text, string.Format(_languageConfigured.Text, AppSettings.Instance.Translation));
         }
 
         private bool CheckSSHSettings()
@@ -477,7 +479,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             SshConfig.Visible = true;
             if (GitCommandHelpers.Plink())
             {
-                return RenderSettingSetUnset(() => !File.Exists(AppSettings.Plink) || !File.Exists(AppSettings.Puttygen) || !File.Exists(AppSettings.Pageant),
+                return RenderSettingSetUnset(() => !File.Exists(AppSettings.Instance.Plink) || !File.Exists(AppSettings.Instance.Puttygen) || !File.Exists(AppSettings.Instance.Pageant),
                                         SshConfig, SshConfig_Fix,
                                         _plinkputtyGenpageantNotFound.Text,
                                         _puttyConfigured.Text);
@@ -490,7 +492,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         private bool CheckGitExe()
         {
-            return RenderSettingSetUnset(() => !File.Exists(AppSettings.GitBinDir + "sh.exe") && !File.Exists(AppSettings.GitBinDir + "sh") &&
+            return RenderSettingSetUnset(() => !File.Exists(AppSettings.Instance.GitBinDir + "sh.exe") && !File.Exists(AppSettings.Instance.GitBinDir + "sh") &&
                                          !CheckSettingsLogic.CheckIfFileIsInPath("sh.exe") && !CheckSettingsLogic.CheckIfFileIsInPath("sh"),
                                    GitBinFound, GitBinFound_Fix,
                                    _linuxToolsSshNotFound.Text, _linuxToolsSshFound.Text);
@@ -613,8 +615,8 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
                                                       null)))
             {
                 //Check if shell extensions are installed
-                string path32 = Path.Combine(AppSettings.GetInstallDir(), CommonLogic.GitExtensionsShellEx32Name);
-                string path64 = Path.Combine(AppSettings.GetInstallDir(), CommonLogic.GitExtensionsShellEx64Name);
+                string path32 = Path.Combine(_gitExtensionsPathProvider.GetInstallDir(), CommonLogic.GitExtensionsShellEx32Name);
+                string path64 = Path.Combine(_gitExtensionsPathProvider.GetInstallDir(), CommonLogic.GitExtensionsShellEx64Name);
                 if (!File.Exists(path32) || (IntPtr.Size == 8 && !File.Exists(path64)))
                 {
                     RenderSettingSet(ShellExtensionsRegistered, ShellExtensionsRegistered_Fix, _shellExtNoInstalled.Text);
@@ -634,12 +636,12 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
                 return true;
 
             GitExtensionsInstall.Visible = true;
-            if (string.IsNullOrEmpty(AppSettings.GetInstallDir()))
+            if (string.IsNullOrEmpty(_gitExtensionsPathProvider.GetInstallDir()))
             {
                 RenderSettingUnset(GitExtensionsInstall, GitExtensionsInstall_Fix, _registryKeyGitExtensionsMissing.Text);
                 return false;
             }
-            if (AppSettings.GetInstallDir() != null && AppSettings.GetInstallDir().EndsWith(".exe"))
+            if (_gitExtensionsPathProvider.GetInstallDir() != null && _gitExtensionsPathProvider.GetInstallDir().EndsWith(".exe"))
             {
                 RenderSettingUnset(GitExtensionsInstall, GitExtensionsInstall_Fix, _registryKeyGitExtensionsFaulty.Text);
                 return false;

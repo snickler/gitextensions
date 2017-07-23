@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using GitCommands.Git;
+using GitCommands.Settings;
 using GitCommands.Utils;
 using JetBrains.Annotations;
 
@@ -48,21 +49,24 @@ namespace GitCommands
 
     public static class GitCommandHelpers
     {
+        private static IGitExtensionsPathProvider _gitExtensionsPathProvider = new GitExtensionsPathProvider();
+
+
         public static void SetEnvironmentVariable(bool reload = false)
         {
             string path = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process);
-            if (!string.IsNullOrEmpty(AppSettings.GitBinDir) && !path.Contains(AppSettings.GitBinDir))
-                Environment.SetEnvironmentVariable("PATH", string.Concat(path, ";", AppSettings.GitBinDir), EnvironmentVariableTarget.Process);
+            if (!string.IsNullOrEmpty(AppSettings.Instance.GitBinDir) && !path.Contains(AppSettings.Instance.GitBinDir))
+                Environment.SetEnvironmentVariable("PATH", string.Concat(path, ";", AppSettings.Instance.GitBinDir), EnvironmentVariableTarget.Process);
 
-            if (!string.IsNullOrEmpty(AppSettings.CustomHomeDir))
+            if (!string.IsNullOrEmpty(AppSettings.Instance.CustomHomeDir))
             {
                 Environment.SetEnvironmentVariable(
                     "HOME",
-                    AppSettings.CustomHomeDir);
+                    AppSettings.Instance.CustomHomeDir);
                 return;
             }
 
-            if (AppSettings.UserProfileHomeDir)
+            if (AppSettings.Instance.UserProfileHomeDir)
             {
                 Environment.SetEnvironmentVariable(
                     "HOME",
@@ -81,7 +85,7 @@ namespace GitCommands
             Environment.SetEnvironmentVariable("HOME", GetDefaultHomeDir());
             //to prevent from leaking processes see issue #1092 for details
             Environment.SetEnvironmentVariable("TERM", "msys");
-            string sshAskPass = Path.Combine(AppSettings.GetInstallDir(), @"GitExtSshAskPass.exe");
+            string sshAskPass = Path.Combine(_gitExtensionsPathProvider.GetInstallDir(), @"GitExtSshAskPass.exe");
             if (EnvUtils.RunningOnWindows())
             {
                 if (File.Exists(sshAskPass))
@@ -122,7 +126,7 @@ namespace GitCommands
             }
         }
 
-	    public static ProcessStartInfo CreateProcessStartInfo(string fileName, string arguments, string workingDirectory, Encoding outputEncoding)
+        public static ProcessStartInfo CreateProcessStartInfo(string fileName, string arguments, string workingDirectory, Encoding outputEncoding)
         {
             return new ProcessStartInfo
             {
@@ -156,13 +160,13 @@ namespace GitCommands
             startProcess.Exited += (sender, args) =>
             {
                 var executionEndTimestamp = DateTime.Now;
-                AppSettings.GitLog.Log(quotedCmd + " " + arguments, executionStartTimestamp, executionEndTimestamp);
+                AppSettings.Instance.GitLog.Log(quotedCmd + " " + arguments, executionStartTimestamp, executionEndTimestamp);
             };
 
             return startProcess;
         }
 
-	    public static bool UseSsh(string arguments)
+        public static bool UseSsh(string arguments)
         {
             var x = !Plink() && GetArgumentsRequiresSsh(arguments);
             return x || arguments.Contains("plink");
@@ -350,7 +354,7 @@ namespace GitCommands
             {
                 if (_versionInUse == null || _versionInUse.IsUnknown)
                 {
-                    var result = RunCmd(AppSettings.GitCommand, "--version");
+                    var result = RunCmd(AppSettings.Instance.GitCommand, "--version");
                     _versionInUse = new GitVersion(result);
                 }
 
@@ -1201,7 +1205,7 @@ namespace GitCommands
         public static string FindRenamesOpt()
         {
             string result = " --find-renames";
-            if (AppSettings.FollowRenamesInFileHistoryExactOnly)
+            if (AppSettings.Instance.FollowRenamesInFileHistoryExactOnly)
             {
                 result += "=\"100%\"";
             }
@@ -1212,7 +1216,7 @@ namespace GitCommands
         public static string FindRenamesAndCopiesOpts()
         {
             string findCopies = " --find-copies";
-            if (AppSettings.FollowRenamesInFileHistoryExactOnly)
+            if (AppSettings.Instance.FollowRenamesInFileHistoryExactOnly)
             {
                 findCopies += "=\"100%\"";
             }

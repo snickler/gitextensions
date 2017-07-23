@@ -29,8 +29,8 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         public override void OnPageShown()
         {
-            GitPath.Text = AppSettings.GitCommandValue;
-            GitBinPath.Text = AppSettings.GitBinDir;
+            GitPath.Text = AppSettings.Instance.GitCommandValue;
+            GitBinPath.Text = AppSettings.Instance.GitBinDir;
         }
 
         protected override void SettingsToPage()
@@ -38,14 +38,14 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             GitCommandHelpers.SetEnvironmentVariable();
             homeIsSetToLabel.Text = string.Concat(_homeIsSetToString.Text, " ", GitCommandHelpers.GetHomeDir());
 
-            GitPath.Text = AppSettings.GitCommandValue;
-            GitBinPath.Text = AppSettings.GitBinDir;
+            GitPath.Text = AppSettings.Instance.GitCommandValue;
+            GitBinPath.Text = AppSettings.Instance.GitBinDir;
         }
 
         protected override void PageToSettings()
         {
-            AppSettings.GitCommandValue = GitPath.Text;
-            AppSettings.GitBinDir = GitBinPath.Text;
+            AppSettings.Instance.GitCommandValue = GitPath.Text;
+            AppSettings.Instance.GitBinDir = GitBinPath.Text;
         }
 
         private void BrowseGitPath_Click(object sender, EventArgs e)
@@ -54,7 +54,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
             using (var browseDialog = new OpenFileDialog
             {
-                FileName = AppSettings.GitCommandValue,
+                FileName = AppSettings.Instance.GitCommandValue,
                 Filter = "Git.cmd (git.cmd)|git.cmd|Git.exe (git.exe)|git.exe|Git (git)|git"
             })
             {
@@ -70,7 +70,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
         {
             CheckSettingsLogic.SolveLinuxToolsDir(GitBinPath.Text.Trim());
 
-            var userSelectedPath = OsShellUtil.PickFolder(this, AppSettings.GitBinDir);
+            var userSelectedPath = OsShellUtil.PickFolder(this, AppSettings.Instance.GitBinDir);
 
             if (userSelectedPath != null)
             {

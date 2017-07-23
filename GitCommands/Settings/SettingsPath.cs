@@ -6,13 +6,13 @@ using GitUIPluginInterfaces;
 
 namespace GitCommands.Settings
 {
-    public class SettingsPath : ISettingsSource
+    public class SettingsPath : SettingsSource
     {
         private const string PathSep = ".";
-        public readonly ISettingsSource Parent;
+        public readonly SettingsSource Parent;
         public readonly string PathName;
 
-        public SettingsPath(ISettingsSource aParent, string aPathName)
+        public SettingsPath(SettingsSource aParent, string aPathName)
         {
             Parent = aParent;
             PathName = aPathName;

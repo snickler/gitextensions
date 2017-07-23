@@ -384,7 +384,7 @@ Inactive remote is completely invisible to git.");
 
             Module.RunExternalCmdDetachedShowConsole(
                 "cmd.exe",
-                string.Format("/k \"\"{0}\" -T {1}\"", AppSettings.Plink, url));
+                string.Format("/k \"\"{0}\" -T {1}\"", AppSettings.Instance.Plink, url));
         }
 
         private void PruneClick(object sender, EventArgs e)

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
+using System.Reflection;
 using System.Security.Permissions;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -116,23 +117,17 @@ namespace GitCommands
         {
             get
             {
-                return AppSettings.GitCommand;
+                return AppSettings.Instance.GitCommand;
             }
         }
 
-        public Version AppVersion
-        {
-            get
-            {
-                return AppSettings.AppVersion;
-            }
-        }
+        public Version AppVersion => Assembly.GetCallingAssembly().GetName().Version;
 
         public string GravatarCacheDir
         {
             get
             {
-                return AppSettings.GravatarCachePath;
+                return AppSettings.Instance.GravatarCachePath;
             }
         }
 
@@ -209,7 +204,7 @@ namespace GitCommands
             }
         }
 
-        public ISettingsSource GetEffectiveSettings()
+        public SettingsSource GetEffectiveSettings()
         {
             return EffectiveSettings;
         }
@@ -352,18 +347,20 @@ namespace GitCommands
 
         private static readonly string[] DetachedPrefixes = { "(no branch", "(detached from ", "(HEAD detached at " };
 
-        public AppSettings.PullAction LastPullAction
+        public PullAction LastPullAction
         {
-            get { return AppSettings.GetEnum("LastPullAction_" + WorkingDir, AppSettings.PullAction.None); }
-            set { AppSettings.SetEnum("LastPullAction_" + WorkingDir, value); }
+            // TODO:
+            get; set;
+            //get { return AppSettings.Instance.GetEnum("LastPullAction_" + WorkingDir, PullAction.None); }
+            //set { AppSettings.Instance.SetEnum("LastPullAction_" + WorkingDir, value); }
         }
 
         public void LastPullActionToFormPullAction()
         {
-            if (LastPullAction == AppSettings.PullAction.FetchAll)
-                AppSettings.FormPullAction = AppSettings.PullAction.Fetch;
-            else if (LastPullAction != AppSettings.PullAction.None)
-                AppSettings.FormPullAction = LastPullAction;
+            if (LastPullAction == PullAction.FetchAll)
+                AppSettings.Instance.FormPullAction = PullAction.Fetch;
+            else if (LastPullAction != PullAction.None)
+                AppSettings.Instance.FormPullAction = LastPullAction;
         }
 
         /// <summary>Indicates whether the <see cref="WorkingDir"/> contains a git repository.</summary>
@@ -542,11 +539,11 @@ namespace GitCommands
             var executionStartTimestamp = DateTime.Now;
 
             var startInfo = new ProcessStartInfo
-                                {
-                                    FileName = fileName,
-                                    Arguments = arguments,
-                                    WorkingDirectory = workingDir
-                                };
+            {
+                FileName = fileName,
+                Arguments = arguments,
+                WorkingDirectory = workingDir
+            };
             if (!showConsole)
             {
                 startInfo.UseShellExecute = false;
@@ -558,7 +555,7 @@ namespace GitCommands
             startProcess.Exited += (sender, args) =>
             {
                 var executionEndTimestamp = DateTime.Now;
-                AppSettings.GitLog.Log(quotedCmd + " " + arguments, executionStartTimestamp, executionEndTimestamp);
+                AppSettings.Instance.GitLog.Log(quotedCmd + " " + arguments, executionStartTimestamp, executionEndTimestamp);
             };
 
             return startProcess;
@@ -636,7 +633,7 @@ namespace GitCommands
             if (encoding == null)
                 encoding = SystemEncoding;
 
-            return GitCommandHelpers.StartProcess(AppSettings.GitCommand, arguments, _workingDir, encoding);
+            return GitCommandHelpers.StartProcess(AppSettings.Instance.GitCommand, arguments, _workingDir, encoding);
         }
 
         /// <summary>
@@ -691,7 +688,7 @@ namespace GitCommands
         /// </summary>
         public string RunGitCmd(string arguments, Encoding encoding = null, byte[] stdInput = null)
         {
-            return RunCmd(AppSettings.GitCommand, arguments, encoding, stdInput);
+            return RunCmd(AppSettings.Instance.GitCommand, arguments, encoding, stdInput);
         }
 
         /// <summary>
@@ -699,7 +696,7 @@ namespace GitCommands
         /// </summary>
         public CmdResult RunGitCmdResult(string arguments, Encoding encoding = null, byte[] stdInput = null)
         {
-            return RunCmdResult(AppSettings.GitCommand, arguments, encoding, stdInput);
+            return RunCmdResult(AppSettings.Instance.GitCommand, arguments, encoding, stdInput);
         }
 
         /// <summary>
@@ -716,7 +713,7 @@ namespace GitCommands
         /// </summary>
         public IEnumerable<string> ReadGitOutputLines(string arguments)
         {
-            return ReadCmdOutputLines(AppSettings.GitCommand, arguments, null);
+            return ReadCmdOutputLines(AppSettings.Instance.GitCommand, arguments, null);
         }
 
         /// <summary>
@@ -745,7 +742,7 @@ namespace GitCommands
             }
             else
             {
-                RunExternalCmdShowConsole(AppSettings.GitCommand, "notes edit " + revision);
+                RunExternalCmdShowConsole(AppSettings.Instance.GitCommand, "notes edit " + revision);
             }
         }
 
@@ -980,13 +977,13 @@ namespace GitCommands
 
         private string GetSortedRefsCommand()
         {
-            if (AppSettings.ShowSuperprojectRemoteBranches)
+            if (AppSettings.Instance.ShowSuperprojectRemoteBranches)
                 return "for-each-ref --sort=-committerdate --format=\"%(objectname) %(refname)\" refs/";
 
-            if (AppSettings.ShowSuperprojectBranches || AppSettings.ShowSuperprojectTags)
+            if (AppSettings.Instance.ShowSuperprojectBranches || AppSettings.Instance.ShowSuperprojectTags)
                 return "for-each-ref --sort=-committerdate --format=\"%(objectname) %(refname)\""
-                    + (AppSettings.ShowSuperprojectBranches ? " refs/heads/" : null)
-                    + (AppSettings.ShowSuperprojectTags ? " refs/tags/" : null);
+                    + (AppSettings.Instance.ShowSuperprojectBranches ? " refs/heads/" : null)
+                    + (AppSettings.Instance.ShowSuperprojectTags ? " refs/tags/" : null);
 
             return null;
         }
@@ -1040,7 +1037,7 @@ namespace GitCommands
             }
             else
             {
-                RunExternalCmdDetached("cmd.exe", "/c \"\"" + AppSettings.GitCommand.Replace("git.cmd", "gitk.cmd")
+                RunExternalCmdDetached("cmd.exe", "/c \"\"" + AppSettings.Instance.GitCommand.Replace("git.cmd", "gitk.cmd")
                                                               .Replace("bin\\git.exe", "cmd\\gitk.cmd")
                                                               .Replace("bin/git.exe", "cmd/gitk.cmd") + "\" --branches --tags --remotes\"");
             }
@@ -1050,11 +1047,11 @@ namespace GitCommands
         {
             if (EnvUtils.RunningOnUnix())
             {
-                RunExternalCmdDetachedShowConsole(AppSettings.GitCommand, "gui");
+                RunExternalCmdDetachedShowConsole(AppSettings.Instance.GitCommand, "gui");
             }
             else
             {
-                RunExternalCmdDetached("cmd.exe", "/c \"\"" + AppSettings.GitCommand + "\" gui\"");
+                RunExternalCmdDetached("cmd.exe", "/c \"\"" + AppSettings.Instance.GitCommand + "\" gui\"");
             }
         }
 
@@ -1161,7 +1158,7 @@ namespace GitCommands
                 /* Committer Date */ "%ct%n";
             const string messageFormat = "%e%n%B%nNotes:%n%-N";
             string cmd = "log -n1 --format=format:" + formatString + (shortFormat ? "%e%n%s" : messageFormat) + " " + commit;
-            var revInfo = RunCacheableCmd(AppSettings.GitCommand, cmd, LosslessEncoding);
+            var revInfo = RunCacheableCmd(AppSettings.Instance.GitCommand, cmd, LosslessEncoding);
             string[] lines = revInfo.Split('\n');
             var revision = new GitRevision(this, lines[0])
             {
@@ -1208,7 +1205,7 @@ namespace GitCommands
 
         public string ShowSha1(string sha1)
         {
-            return ReEncodeShowString(RunCacheableCmd(AppSettings.GitCommand, "show " + sha1, LosslessEncoding));
+            return ReEncodeShowString(RunCacheableCmd(AppSettings.Instance.GitCommand, "show " + sha1, LosslessEncoding));
         }
 
         public string DeleteTag(string tagName)
@@ -1549,20 +1546,20 @@ namespace GitCommands
         {
             //ensure pageant is loaded, so we can wait for loading a key in the next command
             //otherwise we'll stuck there waiting until pageant exits
-            var pageantProcName = Path.GetFileNameWithoutExtension(AppSettings.Pageant);
+            var pageantProcName = Path.GetFileNameWithoutExtension(AppSettings.Instance.Pageant);
             if (Process.GetProcessesByName(pageantProcName).Length == 0)
             {
-                Process pageantProcess = RunExternalCmdDetached(AppSettings.Pageant, "", "");
+                Process pageantProcess = RunExternalCmdDetached(AppSettings.Instance.Pageant, "", "");
                 pageantProcess.WaitForInputIdle();
             }
-            GitCommandHelpers.RunCmd(AppSettings.Pageant, "\"" + sshKeyFile + "\"");
+            GitCommandHelpers.RunCmd(AppSettings.Instance.Pageant, "\"" + sshKeyFile + "\"");
         }
 
         public string GetPuttyKeyFileForRemote(string remote)
         {
             if (string.IsNullOrEmpty(remote) ||
-                string.IsNullOrEmpty(AppSettings.Pageant) ||
-                !AppSettings.AutoStartPageant ||
+                string.IsNullOrEmpty(AppSettings.Instance.Pageant) ||
+                !AppSettings.Instance.AutoStartPageant ||
                 !GitCommandHelpers.Plink())
                 return "";
 
@@ -1732,7 +1729,7 @@ namespace GitCommands
 
         private ProcessStartInfo CreateGitStartInfo(string arguments)
         {
-            return GitCommandHelpers.CreateProcessStartInfo(AppSettings.GitCommand, arguments, _workingDir, SystemEncoding);
+            return GitCommandHelpers.CreateProcessStartInfo(AppSettings.Instance.GitCommand, arguments, _workingDir, SystemEncoding);
         }
 
         public string ApplyPatch(string dir, string amCommand)
@@ -1980,12 +1977,12 @@ namespace GitCommands
 
                 var patchFile =
                     new PatchFile
-                        {
-                            Name = file,
-                            FullName = fullFileName,
-                            IsNext = n == next,
-                            IsSkipped = n < next
-                        };
+                    {
+                        Name = file,
+                        FullName = fullFileName,
+                        IsNext = n == next,
+                        IsSkipped = n < next
+                    };
 
                 if (File.Exists(GetRebaseDir() + file))
                 {
@@ -2204,7 +2201,7 @@ namespace GitCommands
             if (!from.IsNullOrEmpty())
                 commitRange = string.Join(" ", commitRange, "\"" + from + "\"");
 
-            if (AppSettings.UsePatienceDiffAlgorithm)
+            if (AppSettings.Instance.UsePatienceDiffAlgorithm)
                 extraDiffArguments = string.Concat(extraDiffArguments, " --patience");
 
             var patchManager = new PatchManager();
@@ -2212,9 +2209,9 @@ namespace GitCommands
                 fileName.Quote(), oldFileName.Quote());
             string patch;
             if (cacheResult)
-                patch = RunCacheableCmd(AppSettings.GitCommand, arguments, LosslessEncoding);
+                patch = RunCacheableCmd(AppSettings.Instance.GitCommand, arguments, LosslessEncoding);
             else
-                patch = RunCmd(AppSettings.GitCommand, arguments, LosslessEncoding);
+                patch = RunCmd(AppSettings.Instance.GitCommand, arguments, LosslessEncoding);
             patchManager.LoadPatch(patch, false, encoding);
 
             return GetPatch(patchManager, fileName, oldFileName);
@@ -2246,7 +2243,7 @@ namespace GitCommands
         public string GetDiffFilesText(string from, string to, bool noCache)
         {
             string cmd = DiffCommandWithStandardArgs + "-M -C --name-status \"" + to + "\" \"" + from + "\"";
-            return noCache ? RunGitCmd(cmd) : this.RunCacheableCmd(AppSettings.GitCommand, cmd, SystemEncoding);
+            return noCache ? RunGitCmd(cmd) : this.RunCacheableCmd(AppSettings.Instance.GitCommand, cmd, SystemEncoding);
         }
 
         public List<GitItemStatus> GetDiffFilesWithSubmodulesStatus(string from, string to)
@@ -2259,7 +2256,7 @@ namespace GitCommands
         public List<GitItemStatus> GetDiffFiles(string from, string to, bool noCache = false)
         {
             string cmd = DiffCommandWithStandardArgs + "-M -C -z --name-status \"" + to + "\" \"" + from + "\"";
-            string result = noCache ? RunGitCmd(cmd) : this.RunCacheableCmd(AppSettings.GitCommand, cmd, SystemEncoding);
+            string result = noCache ? RunGitCmd(cmd) : this.RunCacheableCmd(AppSettings.Instance.GitCommand, cmd, SystemEncoding);
             return GitCommandHelpers.GetAllChangedFilesFromString(this, result, true);
         }
 
@@ -2419,7 +2416,7 @@ namespace GitCommands
             if (!string.IsNullOrEmpty(oldFileName))
                 oldFileName = oldFileName.ToPosixPath();
 
-            if (AppSettings.UsePatienceDiffAlgorithm)
+            if (AppSettings.Instance.UsePatienceDiffAlgorithm)
                 extraDiffArguments = string.Concat(extraDiffArguments, " --patience");
 
             var args = string.Concat(DiffCommandWithStandardArgs, extraDiffArguments, " -- ", fileName.Quote());
@@ -2830,7 +2827,7 @@ namespace GitCommands
 
         public string[] GetFullTree(string id)
         {
-            string tree = this.RunCacheableCmd(AppSettings.GitCommand, String.Format("ls-tree -z -r --name-only {0}", id), SystemEncoding);
+            string tree = this.RunCacheableCmd(AppSettings.Instance.GitCommand, String.Format("ls-tree -z -r --name-only {0}", id), SystemEncoding);
             return tree.Split(new char[] { '\0', '\n' });
         }
 
@@ -2844,11 +2841,11 @@ namespace GitCommands
 
             if (GitRevision.IsFullSha1Hash(id))
             {
-                tree = this.RunCacheableCmd(AppSettings.GitCommand, "ls-tree " + args + " \"" + id + "\"", SystemEncoding);
+                tree = this.RunCacheableCmd(AppSettings.Instance.GitCommand, "ls-tree " + args + " \"" + id + "\"", SystemEncoding);
             }
             else
             {
-                tree = this.RunCmd(AppSettings.GitCommand, "ls-tree " + args + " \"" + id + "\"", SystemEncoding);
+                tree = this.RunCmd(AppSettings.Instance.GitCommand, "ls-tree " + args + " \"" + id + "\"", SystemEncoding);
             }
 
             return GitItem.CreateIGitItemsFromString(this, tree);
@@ -2866,7 +2863,7 @@ namespace GitCommands
             string blameCommand = string.Format("blame --porcelain -M -w -l{0} \"{1}\" -- \"{2}\"", lines != null ? " -L " + lines : "", from, filename);
             var itemsStrings =
                 RunCacheableCmd(
-                    AppSettings.GitCommand,
+                    AppSettings.Instance.GitCommand,
                     blameCommand,
                     LosslessEncoding
                     )
@@ -2932,7 +2929,7 @@ namespace GitCommands
                 {
                     //Catch all parser errors, and ignore them all!
                     //We should never get here...
-                    AppSettings.GitLog.Log("Error parsing output from command: " + blameCommand + "\n\nPlease report a bug!", DateTime.Now, DateTime.Now);
+                    AppSettings.Instance.GitLog.Log("Error parsing output from command: " + blameCommand + "\n\nPlease report a bug!", DateTime.Now, DateTime.Now);
                 }
             }
 
@@ -2941,7 +2938,7 @@ namespace GitCommands
 
         public string GetFileText(string id, Encoding encoding)
         {
-            return RunCacheableCmd(AppSettings.GitCommand, "cat-file blob \"" + id + "\"", encoding);
+            return RunCacheableCmd(AppSettings.Instance.GitCommand, "cat-file blob \"" + id + "\"", encoding);
         }
 
         public string GetFileBlobHash(string fileName, string revision)
@@ -3151,7 +3148,7 @@ namespace GitCommands
             }
 
             // Get processes by "ps" command.
-            var cmd = Path.Combine(AppSettings.GitBinDir, "ps");
+            var cmd = Path.Combine(AppSettings.Instance.GitBinDir, "ps");
             var arguments = "x";
             var output = RunCmd(cmd, arguments);
             var lines = output.Split('\n');
@@ -3419,12 +3416,12 @@ namespace GitCommands
             var cmd = string.Format("diff-tree {4} --no-commit-id {0} {1} {2} -- {3}",
                 extraArgs,
                 revisionOfMergeCommit.Guid,
-                AppSettings.UsePatienceDiffAlgorithm ? "--patience" : "",
+                AppSettings.Instance.UsePatienceDiffAlgorithm ? "--patience" : "",
                 filePath,
-                AppSettings.OmitUninterestingDiff ? "--cc" : "-c -p");
+                AppSettings.Instance.OmitUninterestingDiff ? "--cc" : "-c -p");
 
             var patchManager = new PatchManager();
-            var patch = RunCacheableCmd(AppSettings.GitCommand, cmd, LosslessEncoding);
+            var patch = RunCacheableCmd(AppSettings.Instance.GitCommand, cmd, LosslessEncoding);
 
             if (string.IsNullOrWhiteSpace(patch))
             {

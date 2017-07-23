@@ -14,11 +14,11 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         protected override void SettingsToPage()
         {
-            for (int i = 0; i < AppSettings.CascadeShellMenuItems.Length; i++)
+            for (int i = 0; i < AppSettings.Instance.CascadeShellMenuItems.Length; i++)
             {
-                chlMenuEntries.SetItemChecked(i, AppSettings.CascadeShellMenuItems[i] == '1');
+                chlMenuEntries.SetItemChecked(i, AppSettings.Instance.CascadeShellMenuItems[i] == '1');
             }
-            cbAlwaysShowAllCommands.Checked = AppSettings.AlwaysShowAllCommands;
+            cbAlwaysShowAllCommands.Checked = AppSettings.Instance.AlwaysShowAllCommands;
 
             UpdatePreview();
         }
@@ -39,8 +39,8 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
                 }
             }
 
-            AppSettings.CascadeShellMenuItems = l_CascadeShellMenuItems;
-            AppSettings.AlwaysShowAllCommands = cbAlwaysShowAllCommands.Checked;
+            AppSettings.Instance.CascadeShellMenuItems = l_CascadeShellMenuItems;
+            AppSettings.Instance.AlwaysShowAllCommands = cbAlwaysShowAllCommands.Checked;
         }
 
         private void chlMenuEntries_SelectedValueChanged(object sender, EventArgs e)

@@ -15,7 +15,7 @@ namespace GitUI.CommandsDialogs
         private readonly TranslationString _branchNameIsEmpty = new TranslationString("Enter branch name.");
         private readonly TranslationString _branchNameIsNotValud = new TranslationString("“{0}” is not valid branch name.");
         private readonly IGitBranchNameNormaliser _branchNameNormaliser;
-        private readonly GitBranchNameOptions _gitBranchNameOptions = new GitBranchNameOptions(AppSettings.AutoNormaliseSymbol);
+        private readonly GitBranchNameOptions _gitBranchNameOptions = new GitBranchNameOptions(AppSettings.Instance.AutoNormaliseSymbol);
 
 
         public FormCreateBranch(GitUICommands aCommands, GitRevision revision)
@@ -52,7 +52,7 @@ namespace GitUI.CommandsDialogs
 
         private void BranchNameTextBox_Leave(object sender, EventArgs e)
         {
-            if (!AppSettings.AutoNormaliseBranchName || !BranchNameTextBox.Text.Any(GitBranchNameNormaliser.IsValidChar))
+            if (!AppSettings.Instance.AutoNormaliseBranchName || !BranchNameTextBox.Text.Any(GitBranchNameNormaliser.IsValidChar))
             {
                 return;
             }

@@ -13,7 +13,7 @@ namespace Stash
         private const string StashSshRegex =
             @"ssh:\/\/([\w\.]+\@)(?<url>([a-zA-Z0-9\.\-]+)):?(\d+)?\/(?<project>~?([\w\-]+))\/(?<repo>([\w\-]+)).git";
 
-        public static Settings Parse(IGitModule gitModule, ISettingsSource settings, StashPlugin plugin)
+        public static Settings Parse(IGitModule gitModule, SettingsSource settings, StashPlugin plugin)
         {
             var result = new Settings
                              {

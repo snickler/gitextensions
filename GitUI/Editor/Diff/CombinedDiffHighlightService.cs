@@ -19,12 +19,12 @@ namespace GitUI.Editor.Diff
 
         protected override int TryHighlightAddedAndDeletedLines(IDocument document, int line, LineSegment lineSegment)
         {
-            ProcessLineSegment(document, ref line, lineSegment, "++", AppSettings.DiffAddedColor);
-            ProcessLineSegment(document, ref line, lineSegment, "+ ", AppSettings.DiffAddedColor);
-            ProcessLineSegment(document, ref line, lineSegment, " +", AppSettings.DiffAddedColor);
-            ProcessLineSegment(document, ref line, lineSegment, "--", AppSettings.DiffRemovedColor);
-            ProcessLineSegment(document, ref line, lineSegment, "- ", AppSettings.DiffRemovedColor);
-            ProcessLineSegment(document, ref line, lineSegment, " -", AppSettings.DiffRemovedColor);
+            ProcessLineSegment(document, ref line, lineSegment, "++", AppSettings.Instance.DiffAddedColor);
+            ProcessLineSegment(document, ref line, lineSegment, "+ ", AppSettings.Instance.DiffAddedColor);
+            ProcessLineSegment(document, ref line, lineSegment, " +", AppSettings.Instance.DiffAddedColor);
+            ProcessLineSegment(document, ref line, lineSegment, "--", AppSettings.Instance.DiffRemovedColor);
+            ProcessLineSegment(document, ref line, lineSegment, "- ", AppSettings.Instance.DiffRemovedColor);
+            ProcessLineSegment(document, ref line, lineSegment, " -", AppSettings.Instance.DiffRemovedColor);
             return line;
         }
 

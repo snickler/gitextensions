@@ -62,7 +62,7 @@ namespace GitUI.CommandsDialogs
             base.OnRuntimeLoad(e);
             FillFromDropDown();
 
-            _NO_TRANSLATE_To.Text = AppSettings.DefaultCloneDestinationPath;
+            _NO_TRANSLATE_To.Text = AppSettings.Instance.DefaultCloneDestinationPath;
 
             if (CanBeGitURL(url) || GitModule.IsValidGitWorkingDir(url))
             {
@@ -189,7 +189,7 @@ namespace GitUI.CommandsDialogs
                 
                 var cloneCmd = GitCommandHelpers.CloneCmd(_NO_TRANSLATE_From.Text, dirTo,
                             CentralRepository.Checked, cbIntializeAllSubmodules.Checked, branch, depth, isSingleBranch, cbLfs.Checked);
-                using (var fromProcess = new FormRemoteProcess(Module, AppSettings.GitCommand, cloneCmd))
+                using (var fromProcess = new FormRemoteProcess(Module, AppSettings.Instance.GitCommand, cloneCmd))
                 {
                     fromProcess.SetUrlTryingToConnect(_NO_TRANSLATE_From.Text);
                     fromProcess.ShowDialog(this);

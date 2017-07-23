@@ -20,12 +20,12 @@ namespace Stash
         private Settings _settings;
         private readonly StashPlugin _plugin;
         private readonly GitUIBaseEventArgs _gitUiCommands;
-        private readonly ISettingsSource _settingsContainer;
+        private readonly SettingsSource _settingsContainer;
         private readonly BindingList<StashUser> _reviewers = new BindingList<StashUser>();
         private readonly List<string> _stashUsers = new List<string>();
 
 
-        public StashPullRequestForm(StashPlugin plugin, ISettingsSource settings, GitUIBaseEventArgs gitUiCommands)
+        public StashPullRequestForm(StashPlugin plugin, SettingsSource settings, GitUIBaseEventArgs gitUiCommands)
         {
             InitializeComponent();
             Translate();

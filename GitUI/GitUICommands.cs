@@ -22,6 +22,8 @@ namespace GitUI
     /// <summary>Contains methods to invoke GitEx forms, dialogs, etc.</summary>
     public sealed class GitUICommands : IGitUICommands
     {
+        private readonly IGitExtensionsPathProvider _gitExtensionsPathProvider = new GitExtensionsPathProvider();
+
         public GitUICommands(GitModule module)
         {
             Module = module;
@@ -219,13 +221,13 @@ namespace GitUI
             try
             {
                 gravatarFallBack =
-                    (FallBackService)Enum.Parse(typeof(FallBackService), Settings.GravatarFallbackService);
+                    (FallBackService)Enum.Parse(typeof(FallBackService), Settings.Instance.GravatarFallbackService);
             }
             catch
             {
-                Settings.GravatarFallbackService = gravatarFallBack.ToString();
+                Settings.Instance.GravatarFallbackService = gravatarFallBack.ToString();
             }
-            GravatarService.CacheImage(email + ".png", email, Settings.AuthorImageSize,
+            GravatarService.CacheImage(email + ".png", email, Settings.Instance.AuthorImageSize,
                 gravatarFallBack);
         }
 
@@ -713,7 +715,7 @@ namespace GitUI
                 return false;
             Func<bool> action = () =>
             {
-                return FormProcess.ShowDialog(owner, Module, Settings.GitCommand, GitSvnCommandHelpers.DcommitCmd());
+                return FormProcess.ShowDialog(owner, Module, Settings.Instance.GitCommand, GitSvnCommandHelpers.DcommitCmd());
             };
 
             return DoActionOnRepo(owner, true, true, PreSvnDcommit, PostSvnDcommit, action);
@@ -730,7 +732,7 @@ namespace GitUI
                 return false;
             Func<bool> action = () =>
             {
-                FormProcess.ShowDialog(owner, Module, Settings.GitCommand, GitSvnCommandHelpers.RebaseCmd());
+                FormProcess.ShowDialog(owner, Module, Settings.Instance.GitCommand, GitSvnCommandHelpers.RebaseCmd());
                 return true;
             };
 
@@ -748,7 +750,7 @@ namespace GitUI
                 return false;
             Func<bool> action = () =>
             {
-                return FormProcess.ShowDialog(owner, Module, Settings.GitCommand, GitSvnCommandHelpers.FetchCmd());
+                return FormProcess.ShowDialog(owner, Module, Settings.Instance.GitCommand, GitSvnCommandHelpers.FetchCmd());
             };
 
             return DoActionOnRepo(owner, true, true, PreSvnFetch, PostSvnFetch, action);
@@ -1460,7 +1462,7 @@ namespace GitUI
             if (!Module.HasSubmodules())
                 return;
 
-            var updateSubmodules = AppSettings.UpdateSubmodulesOnCheckout ?? MessageBoxes.ConfirmUpdateSubmodules(win);
+            var updateSubmodules = AppSettings.Instance.UpdateSubmodulesOnCheckout ?? MessageBoxes.ConfirmUpdateSubmodules(win);
 
             if (updateSubmodules)
                 StartUpdateSubmodulesDialog(win);
@@ -1987,7 +1989,7 @@ namespace GitUI
             var configFileGlobalSettings = ConfigFileSettings.CreateGlobal(false);
 
             var coreEditor = configFileGlobalSettings.GetValue("core.editor");
-            if (coreEditor.ToLowerInvariant().Contains(AppSettings.GetInstallDir().ToPosixPath().ToLowerInvariant()))
+            if (coreEditor.ToLowerInvariant().Contains(_gitExtensionsPathProvider.GetInstallDir().ToPosixPath().ToLowerInvariant()))
             {
                 configFileGlobalSettings.SetValue("core.editor", "");
             }
@@ -2169,13 +2171,13 @@ namespace GitUI
         private static void UpdateSettingsBasedOnArguments(Dictionary<string, string> arguments)
         {
             if (arguments.ContainsKey("merge"))
-                Settings.FormPullAction = Settings.PullAction.Merge;
+                Settings.Instance.FormPullAction = PullAction.Merge;
             if (arguments.ContainsKey("rebase"))
-                Settings.FormPullAction = Settings.PullAction.Rebase;
+                Settings.Instance.FormPullAction = PullAction.Rebase;
             if (arguments.ContainsKey("fetch"))
-                Settings.FormPullAction = Settings.PullAction.Fetch;
+                Settings.Instance.FormPullAction = PullAction.Fetch;
             if (arguments.ContainsKey("autostash"))
-                Settings.AutoStash = true;
+                Settings.Instance.AutoStash = true;
         }
 
         internal void RaisePreBrowseInitialize(IWin32Window owner)

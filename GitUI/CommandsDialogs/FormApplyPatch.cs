@@ -220,7 +220,7 @@ namespace GitUI.CommandsDialogs
             PatchFile.Select();
             
             Text = _applyPatchMsgBox.Text + " (" + Module.WorkingDir + ")";
-            IgnoreWhitespace.Checked = AppSettings.ApplyPatchIgnoreWhitespace;
+            IgnoreWhitespace.Checked = AppSettings.Instance.ApplyPatchIgnoreWhitespace;
         }
 
         private void BrowseDir_Click(object sender, EventArgs e)
@@ -250,7 +250,7 @@ namespace GitUI.CommandsDialogs
 
         private void IgnoreWhitespace_CheckedChanged(object sender, EventArgs e)
         {
-            AppSettings.ApplyPatchIgnoreWhitespace = IgnoreWhitespace.Checked;
+            AppSettings.Instance.ApplyPatchIgnoreWhitespace = IgnoreWhitespace.Checked;
         }
     }
 }

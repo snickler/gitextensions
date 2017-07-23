@@ -1,17 +1,21 @@
 using System;
 using GitCommands;
+using GitCommands.Settings;
 using JetBrains.Annotations;
 
 namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 {
     public static class EditorHelper
     {
+        private static readonly IGitExtensionsPathProvider GitExtPathProvider = new GitExtensionsPathProvider();
+
+
         [NotNull]
         public static Object[] GetEditors()
         {
             return new Object[]
             {
-                "\"" + AppSettings.GetGitExtensionsFullPath() + "\" fileeditor",
+                "\"" + GitExtPathProvider.GetFullPath() + "\" fileeditor",
                 "vi",
                 "notepad",
                 GetNotepadPP(),

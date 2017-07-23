@@ -13,28 +13,28 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         protected override void SettingsToPage()
         {
-            chkShowErrorsWhenStagingFiles.Checked = AppSettings.ShowErrorsWhenStagingFiles;
-            chkAddNewlineToCommitMessageWhenMissing.Checked = AppSettings.AddNewlineToCommitMessageWhenMissing;
-            chkWriteCommitMessageInCommitWindow.Checked = AppSettings.UseFormCommitMessage;
-            _NO_TRANSLATE_CommitDialogNumberOfPreviousMessages.Value = AppSettings.CommitDialogNumberOfPreviousMessages;
-            chkShowCommitAndPush.Checked = AppSettings.ShowCommitAndPush;
-            chkShowResetUnstagedChanges.Checked = AppSettings.ShowResetUnstagedChanges;
-            chkShowResetAllChanges.Checked = AppSettings.ShowResetAllChanges;
-            chkAutocomplete.Checked = AppSettings.ProvideAutocompletion;
-            cbRememberAmendCommitState.Checked = AppSettings.RememberAmendCommitState;
+            chkShowErrorsWhenStagingFiles.Checked = AppSettings.Instance.ShowErrorsWhenStagingFiles;
+            chkAddNewlineToCommitMessageWhenMissing.Checked = AppSettings.Instance.AddNewlineToCommitMessageWhenMissing;
+            chkWriteCommitMessageInCommitWindow.Checked = AppSettings.Instance.UseFormCommitMessage;
+            _NO_TRANSLATE_CommitDialogNumberOfPreviousMessages.Value = AppSettings.Instance.CommitDialogNumberOfPreviousMessages;
+            chkShowCommitAndPush.Checked = AppSettings.Instance.ShowCommitAndPush;
+            chkShowResetUnstagedChanges.Checked = AppSettings.Instance.ShowResetUnstagedChanges;
+            chkShowResetAllChanges.Checked = AppSettings.Instance.ShowResetAllChanges;
+            chkAutocomplete.Checked = AppSettings.Instance.ProvideAutocompletion;
+            cbRememberAmendCommitState.Checked = AppSettings.Instance.RememberAmendCommitState;
         }
 
         protected override void PageToSettings()
         {
-            AppSettings.ShowErrorsWhenStagingFiles = chkShowErrorsWhenStagingFiles.Checked;
-            AppSettings.AddNewlineToCommitMessageWhenMissing = chkAddNewlineToCommitMessageWhenMissing.Checked;
-            AppSettings.UseFormCommitMessage = chkWriteCommitMessageInCommitWindow.Checked;
-            AppSettings.CommitDialogNumberOfPreviousMessages = (int) _NO_TRANSLATE_CommitDialogNumberOfPreviousMessages.Value;
-            AppSettings.ShowCommitAndPush = chkShowCommitAndPush.Checked;
-            AppSettings.ShowResetUnstagedChanges = chkShowResetUnstagedChanges.Checked;
-            AppSettings.ShowResetAllChanges = chkShowResetAllChanges.Checked;
-            AppSettings.ProvideAutocompletion = chkAutocomplete.Checked;
-            AppSettings.RememberAmendCommitState = cbRememberAmendCommitState.Checked;
+            AppSettings.Instance.ShowErrorsWhenStagingFiles = chkShowErrorsWhenStagingFiles.Checked;
+            AppSettings.Instance.AddNewlineToCommitMessageWhenMissing = chkAddNewlineToCommitMessageWhenMissing.Checked;
+            AppSettings.Instance.UseFormCommitMessage = chkWriteCommitMessageInCommitWindow.Checked;
+            AppSettings.Instance.CommitDialogNumberOfPreviousMessages = (int) _NO_TRANSLATE_CommitDialogNumberOfPreviousMessages.Value;
+            AppSettings.Instance.ShowCommitAndPush = chkShowCommitAndPush.Checked;
+            AppSettings.Instance.ShowResetUnstagedChanges = chkShowResetUnstagedChanges.Checked;
+            AppSettings.Instance.ShowResetAllChanges = chkShowResetAllChanges.Checked;
+            AppSettings.Instance.ProvideAutocompletion = chkAutocomplete.Checked;
+            AppSettings.Instance.RememberAmendCommitState = cbRememberAmendCommitState.Checked;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace ResourceManager
     {
         public GitExtensionsControl()
         {
-            Font = AppSettings.Font;
+            Font = AppSettings.Instance.Font;
 
             Load += GitExtensionsControl_Load;
         }
@@ -80,7 +80,7 @@ namespace ResourceManager
         /// <summary>Translates the <see cref="UserControl"/>'s elements.</summary>
         protected void Translate()
         {
-            Translator.Translate(this, GitCommands.AppSettings.CurrentTranslation);
+            Translator.Translate(this, GitCommands.AppSettings.Instance.CurrentTranslation);
             translated = true;
         }
 

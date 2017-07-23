@@ -34,7 +34,7 @@ namespace GitUI
         // internal for FormTranslate
         internal MessageBoxes()
         {
-            Translator.Translate(this, AppSettings.CurrentTranslation);
+            Translator.Translate(this, AppSettings.Instance.CurrentTranslation);
         }
 
         private static MessageBoxes instance;
@@ -108,7 +108,7 @@ namespace GitUI
                 FooterIcon: PSTaskDialog.eSysIcons.Information) == DialogResult.Yes;
 
             if (PSTaskDialog.cTaskDialog.VerificationChecked)
-                AppSettings.UpdateSubmodulesOnCheckout = result;
+                AppSettings.Instance.UpdateSubmodulesOnCheckout = result;
 
             return result;
         }

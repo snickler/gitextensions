@@ -20,7 +20,7 @@ namespace GitUI
     /// </remarks></summary>
     public class GitExtensionsForm : GitExtensionsFormBase
     {
-        internal static Icon ApplicationIcon = GetApplicationIcon(Settings.IconStyle, Settings.IconColor);
+        internal static Icon ApplicationIcon = GetApplicationIcon(Settings.Instance.IconStyle, Settings.Instance.IconColor);
 
         /// <summary>indicates whether the <see cref="Form"/>'s position will be restored</summary>
         readonly bool _enablePositionRestore;
@@ -74,7 +74,7 @@ namespace GitUI
 
         protected void RotateApplicationIcon()
         {
-            ApplicationIcon = GetApplicationIcon(Settings.IconStyle, Settings.IconColor);
+            ApplicationIcon = GetApplicationIcon(Settings.Instance.IconStyle, Settings.Instance.IconColor);
             Icon = ApplicationIcon;
         }
 

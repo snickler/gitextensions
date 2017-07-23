@@ -68,11 +68,11 @@ namespace GitCommands.Repository
 
         public RecentRepoSplitter()
         {
-            MaxRecentRepositories = AppSettings.MaxMostRecentRepositories;
-            ShorteningStrategy = AppSettings.ShorteningRecentRepoPathStrategy;
-            SortMostRecentRepos = AppSettings.SortMostRecentRepos;
-            SortLessRecentRepos = AppSettings.SortLessRecentRepos;
-            RecentReposComboMinWidth = AppSettings.RecentReposComboMinWidth;
+            MaxRecentRepositories = AppSettings.Instance.MaxMostRecentRepositories;
+            ShorteningStrategy = AppSettings.Instance.ShorteningRecentRepoPathStrategy;
+            SortMostRecentRepos = AppSettings.Instance.SortMostRecentRepos;
+            SortLessRecentRepos = AppSettings.Instance.SortLessRecentRepos;
+            RecentReposComboMinWidth = AppSettings.Instance.RecentReposComboMinWidth;
         }
 
         public void SplitRecentRepos(ICollection<Repository> recentRepositories, List<RecentRepoInfo> mostRecentRepoList, List<RecentRepoInfo> lessRecentRepoList)

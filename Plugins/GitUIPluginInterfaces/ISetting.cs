@@ -35,13 +35,13 @@ namespace GitUIPluginInterfaces
         /// </summary>
         /// <param name="settings"></param>
         /// <param name="areSettingsEffective"></param>
-        void LoadSetting(ISettingsSource settings, bool areSettingsEffective);
+        void LoadSetting(SettingsSource settings, bool areSettingsEffective);
 
         /// <summary>
         /// Saves value from Control to settings
         /// </summary>
         /// <param name="settings"></param>
-        void SaveSetting(ISettingsSource settings, bool areSettingsEffective);
+        void SaveSetting(SettingsSource settings, bool areSettingsEffective);
 
         /// <summary>
         /// returns caption assotiated with this control or null if the control layouts
@@ -79,7 +79,7 @@ namespace GitUIPluginInterfaces
             return Control;
         }
 
-        public void LoadSetting(ISettingsSource settings, bool areSettingsEffective)
+        public void LoadSetting(SettingsSource settings, bool areSettingsEffective)
         {
             LoadSetting(settings, areSettingsEffective, Control);
         }
@@ -88,7 +88,7 @@ namespace GitUIPluginInterfaces
         /// Saves value from Control to settings
         /// </summary>
         /// <param name="settings"></param>
-        public void SaveSetting(ISettingsSource settings, bool areSettingsEffective)
+        public void SaveSetting(SettingsSource settings, bool areSettingsEffective)
         {
             SaveSetting(settings, areSettingsEffective, Control);
         }
@@ -112,12 +112,12 @@ namespace GitUIPluginInterfaces
         /// <summary>
         /// Loads setting value from settings to Control
         /// </summary>
-        public abstract void LoadSetting(ISettingsSource settings, bool areSettingsEffective, T control);
+        public abstract void LoadSetting(SettingsSource settings, bool areSettingsEffective, T control);
 
         /// <summary>
         /// Saves value from Control to settings
         /// </summary>
-        public abstract void SaveSetting(ISettingsSource settings, bool areSettingsEffective, T control);
+        public abstract void SaveSetting(SettingsSource settings, bool areSettingsEffective, T control);
     }
 
 }

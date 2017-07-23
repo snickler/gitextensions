@@ -31,7 +31,7 @@ namespace GitUI.Editor
         {
             TreatAllFilesAsText = false;
             ShowEntireFile = false;
-            NumberOfVisibleLines = AppSettings.NumberOfContextLines;
+            NumberOfVisibleLines = AppSettings.Instance.NumberOfContextLines;
             InitializeComponent();
             Translate();
 
@@ -59,20 +59,20 @@ namespace GitUI.Editor
                     }
                 };
 
-            IgnoreWhitespaceChanges = AppSettings.IgnoreWhitespaceChanges;
+            IgnoreWhitespaceChanges = AppSettings.Instance.IgnoreWhitespaceChanges;
             ignoreWhiteSpaces.Checked = IgnoreWhitespaceChanges;
             ignoreWhitespaceChangesToolStripMenuItem.Checked = IgnoreWhitespaceChanges;
 
-            ShowEntireFile = AppSettings.ShowEntireFile;
+            ShowEntireFile = AppSettings.Instance.ShowEntireFile;
             showEntireFileButton.Checked = ShowEntireFile;
             showEntireFileToolStripMenuItem.Checked = ShowEntireFile;
 
-            showNonPrintChars.Checked = AppSettings.ShowNonPrintingChars;
-            showNonprintableCharactersToolStripMenuItem.Checked = AppSettings.ShowNonPrintingChars;
-            ToggleNonPrintingChars(AppSettings.ShowNonPrintingChars);
+            showNonPrintChars.Checked = AppSettings.Instance.ShowNonPrintingChars;
+            showNonprintableCharactersToolStripMenuItem.Checked = AppSettings.Instance.ShowNonPrintingChars;
+            ToggleNonPrintingChars(AppSettings.Instance.ShowNonPrintingChars);
 
             IsReadOnly = true;
-            var encodingList = AppSettings.AvailableEncodings.Values.Select(e => e.EncodingName).ToList();
+            var encodingList = AppSettings.Instance.AvailableEncodings.Values.Select(e => e.EncodingName).ToList();
             var defaultEncodingName = Encoding.Default.EncodingName;
 
             for (int i = 0; i < encodingList.Count; i++)
@@ -190,7 +190,7 @@ namespace GitUI.Editor
         protected override void OnRuntimeLoad(EventArgs e)
         {
             this.Hotkeys = HotkeySettingsManager.LoadHotkeys(HotkeySettingsName);
-            Font = AppSettings.DiffFont;
+            Font = AppSettings.Instance.DiffFont;
         }
 
         void ContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
@@ -685,14 +685,14 @@ namespace GitUI.Editor
             IgnoreWhitespaceChanges = !IgnoreWhitespaceChanges;
             ignoreWhiteSpaces.Checked = IgnoreWhitespaceChanges;
             ignoreWhitespaceChangesToolStripMenuItem.Checked = IgnoreWhitespaceChanges;
-            AppSettings.IgnoreWhitespaceChanges = IgnoreWhitespaceChanges;
+            AppSettings.Instance.IgnoreWhitespaceChanges = IgnoreWhitespaceChanges;
             OnExtraDiffArgumentsChanged();
         }
 
         private void IncreaseNumberOfLinesToolStripMenuItemClick(object sender, EventArgs e)
         {
             NumberOfVisibleLines++;
-            AppSettings.NumberOfContextLines = NumberOfVisibleLines;
+            AppSettings.Instance.NumberOfContextLines = NumberOfVisibleLines;
             OnExtraDiffArgumentsChanged();
         }
 
@@ -702,7 +702,7 @@ namespace GitUI.Editor
                 NumberOfVisibleLines--;
             else
                 NumberOfVisibleLines = 0;
-            AppSettings.NumberOfContextLines = NumberOfVisibleLines;
+            AppSettings.Instance.NumberOfContextLines = NumberOfVisibleLines;
             OnExtraDiffArgumentsChanged();
         }
 
@@ -711,7 +711,7 @@ namespace GitUI.Editor
             ShowEntireFile = !ShowEntireFile;
             showEntireFileButton.Checked = ShowEntireFile;
             showEntireFileToolStripMenuItem.Checked = ShowEntireFile;
-            AppSettings.ShowEntireFile = ShowEntireFile;
+            AppSettings.Instance.ShowEntireFile = ShowEntireFile;
             OnExtraDiffArgumentsChanged();
         }
 
@@ -923,7 +923,7 @@ namespace GitUI.Editor
             showNonPrintChars.Checked = showNonprintableCharactersToolStripMenuItem.Checked;
 
             ToggleNonPrintingChars(show: showNonprintableCharactersToolStripMenuItem.Checked);
-            AppSettings.ShowNonPrintingChars = showNonPrintChars.Checked;
+            AppSettings.Instance.ShowNonPrintingChars = showNonPrintChars.Checked;
         }
 
         private void ToggleNonPrintingChars(bool show)
@@ -1005,7 +1005,7 @@ namespace GitUI.Editor
             else if (encodingToolStripComboBox.Text.StartsWith("Default", StringComparison.CurrentCultureIgnoreCase))
                 encod = Encoding.Default;
             else
-                encod = AppSettings.AvailableEncodings.Values
+                encod = AppSettings.Instance.AvailableEncodings.Values
                       .Where(en => en.EncodingName == encodingToolStripComboBox.Text)
                       .FirstOrDefault() ?? Module.FilesEncoding;
             if (!encod.Equals(this.Encoding))

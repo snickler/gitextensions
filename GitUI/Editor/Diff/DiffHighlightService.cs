@@ -65,7 +65,7 @@ namespace GitUI.Editor.Diff
 
             if (lineAdded.Length - beginOffset - reverseOffset > 0)
             {
-                color = AppSettings.DiffAddedExtraColor;
+                color = AppSettings.Instance.DiffAddedExtraColor;
                 markerStrategy.AddMarker(new TextMarker(lineAdded.Offset + beginOffset,
                                                         lineAdded.Length - beginOffset - reverseOffset,
                                                         TextMarkerType.SolidBlock, color,
@@ -74,7 +74,7 @@ namespace GitUI.Editor.Diff
 
             if (lineRemoved.Length - beginOffset - reverseOffset > 0)
             {
-                color = AppSettings.DiffRemovedExtraColor;
+                color = AppSettings.Instance.DiffRemovedExtraColor;
                 markerStrategy.AddMarker(new TextMarker(lineRemoved.Offset + beginOffset,
                                                         lineRemoved.Length - beginOffset - reverseOffset,
                                                         TextMarkerType.SolidBlock, color,
@@ -175,15 +175,15 @@ namespace GitUI.Editor.Diff
 
                 line = TryHighlightAddedAndDeletedLines(document, line, lineSegment);
 
-                ProcessLineSegment(document, ref line, lineSegment, "@", AppSettings.DiffSectionColor);
-                ProcessLineSegment(document, ref line, lineSegment, "\\", AppSettings.DiffSectionColor);
+                ProcessLineSegment(document, ref line, lineSegment, "@", AppSettings.Instance.DiffSectionColor);
+                ProcessLineSegment(document, ref line, lineSegment, "\\", AppSettings.Instance.DiffSectionColor);
             }
         }
 
         protected virtual int TryHighlightAddedAndDeletedLines(IDocument document, int line, LineSegment lineSegment)
         {
-            ProcessLineSegment(document, ref line, lineSegment, "+", AppSettings.DiffAddedColor);
-            ProcessLineSegment(document, ref line, lineSegment, "-", AppSettings.DiffRemovedColor);
+            ProcessLineSegment(document, ref line, lineSegment, "+", AppSettings.Instance.DiffAddedColor);
+            ProcessLineSegment(document, ref line, lineSegment, "-", AppSettings.Instance.DiffRemovedColor);
             return line;
         }
 

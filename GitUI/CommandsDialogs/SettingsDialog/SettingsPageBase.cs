@@ -103,7 +103,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
             }
         }
 
-        protected abstract ISettingsSource GetCurrentSettings();
+        protected abstract SettingsSource GetCurrentSettings();
         protected abstract bool AreEffectiveSettings { get; }
 
         public void AddControlBinding(ISettingControlBinding aBinding)

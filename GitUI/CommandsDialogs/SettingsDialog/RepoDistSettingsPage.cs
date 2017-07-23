@@ -20,7 +20,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
             get { return CurrentSettings == RepoDistSettingsSet.EffectiveSettings; }
         }
 
-        protected override ISettingsSource GetCurrentSettings()
+        protected override SettingsSource GetCurrentSettings()
         {
             return CurrentSettings;
         }

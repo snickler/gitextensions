@@ -154,7 +154,7 @@ namespace GitUI.CommandsDialogs
 
             _unstagedLoader = new AsyncLoader(_taskScheduler);
 
-            _useFormCommitMessage = AppSettings.UseFormCommitMessage;
+            _useFormCommitMessage = AppSettings.Instance.UseFormCommitMessage;
 
             InitializeComponent();
             Message.TextChanged += Message_TextChanged;
@@ -173,10 +173,10 @@ namespace GitUI.CommandsDialogs
 
             if (IsUICommandsInitialized)
                 StageInSuperproject.Visible = Module.SuperprojectModule != null;
-            StageInSuperproject.Checked = AppSettings.StageInSuperprojectAfterCommit;
-            closeDialogAfterEachCommitToolStripMenuItem.Checked = AppSettings.CloseCommitDialogAfterCommit;
-            closeDialogAfterAllFilesCommittedToolStripMenuItem.Checked = AppSettings.CloseCommitDialogAfterLastCommit;
-            refreshDialogOnFormFocusToolStripMenuItem.Checked = AppSettings.RefreshCommitDialogOnFormFocus;
+            StageInSuperproject.Checked = AppSettings.Instance.StageInSuperprojectAfterCommit;
+            closeDialogAfterEachCommitToolStripMenuItem.Checked = AppSettings.Instance.CloseCommitDialogAfterCommit;
+            closeDialogAfterAllFilesCommittedToolStripMenuItem.Checked = AppSettings.Instance.CloseCommitDialogAfterLastCommit;
+            refreshDialogOnFormFocusToolStripMenuItem.Checked = AppSettings.Instance.RefreshCommitDialogOnFormFocus;
 
             Unstaged.SetNoFilesText(_noUnstagedChanges.Text);
             Unstaged.FilterVisible = true;
@@ -245,9 +245,9 @@ namespace GitUI.CommandsDialogs
         private void FormCommit_Load(object sender, EventArgs e)
         {
             int deviceDpi = GetCurrentDeviceDpi();
-            int commitDialogDpi = AppSettings.CommitDialogDeviceDpi;
-            int commitDialogSplitter = AppSettings.CommitDialogSplitter;
-            int commitDialogRightSplitter = AppSettings.CommitDialogRightSplitter;
+            int commitDialogDpi = AppSettings.Instance.CommitDialogDeviceDpi;
+            int commitDialogSplitter = AppSettings.Instance.CommitDialogSplitter;
+            int commitDialogRightSplitter = AppSettings.Instance.CommitDialogRightSplitter;
 
             float scaleFactor = 1.0f * deviceDpi / commitDialogDpi;
             if (commitDialogSplitter != -1)
@@ -255,10 +255,10 @@ namespace GitUI.CommandsDialogs
             if (commitDialogRightSplitter != -1)
                 splitRight.SplitterDistance = (int)(scaleFactor * commitDialogRightSplitter);
 
-            SetVisibilityOfSelectionFilter(AppSettings.CommitDialogSelectionFilter);
-            Reset.Visible = AppSettings.ShowResetAllChanges;
-            ResetUnStaged.Visible = AppSettings.ShowResetUnstagedChanges;
-            CommitAndPush.Visible = AppSettings.ShowCommitAndPush;
+            SetVisibilityOfSelectionFilter(AppSettings.Instance.CommitDialogSelectionFilter);
+            Reset.Visible = AppSettings.Instance.ShowResetAllChanges;
+            ResetUnStaged.Visible = AppSettings.Instance.ShowResetUnstagedChanges;
+            CommitAndPush.Visible = AppSettings.Instance.ShowCommitAndPush;
             AdjustCommitButtonPanelHeight();
             showUntrackedFilesToolStripMenuItem.Checked = !Module.EffectiveConfigFile.GetValue("status.showUntrackedFiles").Equals("no");
             MinimizeBox = Owner == null;
@@ -279,10 +279,10 @@ namespace GitUI.CommandsDialogs
             if (CommitKind.Normal == _commitKind)
                 GitCommands.CommitHelper.SetCommitMessage(Module, Message.Text, Amend.Checked);
 
-            AppSettings.CommitDialogDeviceDpi = GetCurrentDeviceDpi();
-            AppSettings.CommitDialogSplitter = splitMain.SplitterDistance;
-            AppSettings.CommitDialogRightSplitter = splitRight.SplitterDistance;
-            AppSettings.CommitDialogSelectionFilter = toolbarSelectionFilter.Visible;
+            AppSettings.Instance.CommitDialogDeviceDpi = GetCurrentDeviceDpi();
+            AppSettings.Instance.CommitDialogSplitter = splitMain.SplitterDistance;
+            AppSettings.Instance.CommitDialogRightSplitter = splitRight.SplitterDistance;
+            AppSettings.Instance.CommitDialogSelectionFilter = toolbarSelectionFilter.Visible;
         }
 
         void SelectedDiff_ContextMenuOpening(object sender, System.ComponentModel.CancelEventArgs e)
@@ -669,7 +669,7 @@ namespace GitUI.CommandsDialogs
 
             UpdateMergeHead();
 
-            Message.TextBoxFont = AppSettings.CommitFont;
+            Message.TextBoxFont = AppSettings.Instance.CommitFont;
 
             Cursor.Current = Cursors.Default;
         }
@@ -886,7 +886,7 @@ namespace GitUI.CommandsDialogs
             {
                 // This is an amend commit.  Confirm the user understands the implications.  We don't want to prompt for an empty
                 // commit, because amend may be used just to change the commit message or timestamp.
-                if (!AppSettings.DontConfirmAmend)
+                if (!AppSettings.Instance.DontConfirmAmend)
                     if (MessageBox.Show(this, _amendCommit.Text, _amendCommitCaption.Text, MessageBoxButtons.YesNo) != DialogResult.Yes)
                         return;
             }
@@ -948,7 +948,7 @@ namespace GitUI.CommandsDialogs
             if (_useFormCommitMessage && !ValidCommitMessage())
                 return;
 
-            if (!AppSettings.DontConfirmCommitIfNoBranch && Module.IsDetachedHead() && !Module.InTheMiddleOfRebase())
+            if (!AppSettings.Instance.DontConfirmCommitIfNoBranch && Module.IsDetachedHead() && !Module.InTheMiddleOfRebase())
             {
                 int idx = PSTaskDialog.cTaskDialog.ShowCommandBox(this,
                                                         _notOnBranchCaption.Text,
@@ -1002,10 +1002,10 @@ namespace GitUI.CommandsDialogs
                     UICommands.StartPushDialog(this, true, out pushCompleted);
                 }
 
-                if (pushCompleted && Module.SuperprojectModule != null && AppSettings.StageInSuperprojectAfterCommit)
+                if (pushCompleted && Module.SuperprojectModule != null && AppSettings.Instance.StageInSuperprojectAfterCommit)
                     Module.SuperprojectModule.StageFile(Module.SubmodulePath);
 
-                if (AppSettings.CloseCommitDialogAfterCommit)
+                if (AppSettings.Instance.CloseCommitDialogAfterCommit)
                 {
                     Close();
                     return;
@@ -1017,7 +1017,7 @@ namespace GitUI.CommandsDialogs
                     return;
                 }
 
-                if (AppSettings.CloseCommitDialogAfterLastCommit)
+                if (AppSettings.Instance.CloseCommitDialogAfterLastCommit)
                     Close();
                 else
                     InitializedStaged();
@@ -1030,22 +1030,22 @@ namespace GitUI.CommandsDialogs
 
         private bool ValidCommitMessage()
         {
-            if (AppSettings.CommitValidationMaxCntCharsFirstLine > 0)
+            if (AppSettings.Instance.CommitValidationMaxCntCharsFirstLine > 0)
             {
                 var firstLine = Message.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries)[0];
-                if (firstLine.Length > AppSettings.CommitValidationMaxCntCharsFirstLine)
+                if (firstLine.Length > AppSettings.Instance.CommitValidationMaxCntCharsFirstLine)
                 {
                     if (DialogResult.No == MessageBox.Show(this, _commitMsgFirstLineInvalid.Text, _commitValidationCaption.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk))
                         return false;
                 }
             }
 
-            if (AppSettings.CommitValidationMaxCntCharsPerLine > 0)
+            if (AppSettings.Instance.CommitValidationMaxCntCharsPerLine > 0)
             {
                 var lines = Message.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var line in lines)
                 {
-                    if (line.Length > AppSettings.CommitValidationMaxCntCharsPerLine)
+                    if (line.Length > AppSettings.Instance.CommitValidationMaxCntCharsPerLine)
                     {
                         if (DialogResult.No == MessageBox.Show(this, String.Format(_commitMsgLineInvalid.Text, line), _commitValidationCaption.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk))
                             return false;
@@ -1053,7 +1053,7 @@ namespace GitUI.CommandsDialogs
                 }
             }
 
-            if (AppSettings.CommitValidationSecondLineMustBeEmpty)
+            if (AppSettings.Instance.CommitValidationSecondLineMustBeEmpty)
             {
                 var lines = Message.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
                 if (lines.Length > 2)
@@ -1066,11 +1066,11 @@ namespace GitUI.CommandsDialogs
                 }
             }
 
-            if (!AppSettings.CommitValidationRegEx.IsNullOrEmpty())
+            if (!AppSettings.Instance.CommitValidationRegEx.IsNullOrEmpty())
             {
                 try
                 {
-                    if (!Regex.IsMatch(Message.Text, AppSettings.CommitValidationRegEx))
+                    if (!Regex.IsMatch(Message.Text, AppSettings.Instance.CommitValidationRegEx))
                     {
                         if (DialogResult.No == MessageBox.Show(this, _commitMsgRegExNotMatched.Text, _commitValidationCaption.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk))
                             return false;
@@ -1281,7 +1281,7 @@ namespace GitUI.CommandsDialogs
             EnableStageButtons(true);
             Cursor.Current = Cursors.Default;
 
-            if (AppSettings.RevisionGraphShowWorkingDirChanges)
+            if (AppSettings.Instance.RevisionGraphShowWorkingDirChanges)
                 UICommands.RepoChangedNotifier.Notify();
         }
 
@@ -1375,7 +1375,7 @@ namespace GitUI.CommandsDialogs
                 }
 
                 bool wereErrors = false;
-                if (AppSettings.ShowErrorsWhenStagingFiles)
+                if (AppSettings.Instance.ShowErrorsWhenStagingFiles)
                 {
                     FormStatus.ProcessStart processStart =
                         form =>
@@ -1450,7 +1450,7 @@ namespace GitUI.CommandsDialogs
             AcceptButton = Commit;
             Cursor.Current = Cursors.Default;
 
-            if (AppSettings.RevisionGraphShowWorkingDirChanges)
+            if (AppSettings.Instance.RevisionGraphShowWorkingDirChanges)
                 UICommands.RepoChangedNotifier.Notify();
         }
 
@@ -1526,7 +1526,7 @@ namespace GitUI.CommandsDialogs
                     }
                 }
 
-                if (AppSettings.RevisionGraphShowWorkingDirChanges)
+                if (AppSettings.Instance.RevisionGraphShowWorkingDirChanges)
                     UICommands.RepoChangedNotifier.Notify();
 
                 if (filesInUse.Count > 0)
@@ -1657,7 +1657,7 @@ namespace GitUI.CommandsDialogs
         private void SetCommitMessageFromTextBox(string commitMessageText)
         {
             //Save last commit message in settings. This way it can be used in multiple repositories.
-            AppSettings.LastCommitMessage = commitMessageText;
+            AppSettings.Instance.LastCommitMessage = commitMessageText;
 
             var path = CommitHelper.GetCommitMessagePath(Module);
 
@@ -1671,7 +1671,7 @@ namespace GitUI.CommandsDialogs
 
             using (var textWriter = new StreamWriter(path, false, encoding))
             {
-                var addNewlineToCommitMessageWhenMissing = AppSettings.AddNewlineToCommitMessageWhenMissing;
+                var addNewlineToCommitMessageWhenMissing = AppSettings.Instance.AddNewlineToCommitMessageWhenMissing;
 
                 var lineNumber = 0;
                 foreach (var line in commitMessageText.Split('\n'))
@@ -1723,13 +1723,13 @@ namespace GitUI.CommandsDialogs
         {
             commitMessageToolStripMenuItem.DropDownItems.Clear();
 
-            var msg = AppSettings.LastCommitMessage;
+            var msg = AppSettings.Instance.LastCommitMessage;
 
-            var prevMsgs = Module.GetPreviousCommitMessages(AppSettings.CommitDialogNumberOfPreviousMessages);
+            var prevMsgs = Module.GetPreviousCommitMessages(AppSettings.Instance.CommitDialogNumberOfPreviousMessages);
 
             if (!prevMsgs.Contains(msg))
             {
-                prevMsgs = new string[] { msg }.Concat(prevMsgs).Take(AppSettings.CommitDialogNumberOfPreviousMessages);
+                prevMsgs = new string[] { msg }.Concat(prevMsgs).Take(AppSettings.Instance.CommitDialogNumberOfPreviousMessages);
             }
 
             foreach (var localLastCommitMessage in prevMsgs)
@@ -1939,7 +1939,7 @@ namespace GitUI.CommandsDialogs
 
             foreach (var gitItemStatus in Unstaged.SelectedItems)
             {
-                Module.RunExternalCmdShowConsole(AppSettings.GitCommand, string.Format("checkout -p \"{0}\"", gitItemStatus.Name));
+                Module.RunExternalCmdShowConsole(AppSettings.Instance.GitCommand, string.Format("checkout -p \"{0}\"", gitItemStatus.Name));
                 Initialize();
             }
         }
@@ -1983,7 +1983,7 @@ namespace GitUI.CommandsDialogs
 
         private void FormCommitActivated(object sender, EventArgs e)
         {
-            if (AppSettings.RefreshCommitDialogOnFormFocus)
+            if (AppSettings.Instance.RefreshCommitDialogOnFormFocus)
                 RescanChanges();
 
             updateAuthorInfo();
@@ -2092,9 +2092,9 @@ namespace GitUI.CommandsDialogs
 
         private bool FormatLine(int line)
         {
-            int limit1 = AppSettings.CommitValidationMaxCntCharsFirstLine;
-            int limitX = AppSettings.CommitValidationMaxCntCharsPerLine;
-            bool empty2 = AppSettings.CommitValidationSecondLineMustBeEmpty;
+            int limit1 = AppSettings.Instance.CommitValidationMaxCntCharsFirstLine;
+            int limitX = AppSettings.Instance.CommitValidationMaxCntCharsPerLine;
+            bool empty2 = AppSettings.Instance.CommitValidationSecondLineMustBeEmpty;
 
             bool textHasChanged = false;
 
@@ -2106,7 +2106,7 @@ namespace GitUI.CommandsDialogs
             if (empty2 && line == 1)
             {
                 // Ensure next line. Optionally add a bullet.
-                Message.EnsureEmptyLine(AppSettings.CommitValidationIndentAfterFirstLine, 1);
+                Message.EnsureEmptyLine(AppSettings.Instance.CommitValidationIndentAfterFirstLine, 1);
                 Message.ChangeTextColor(2, 0, Message.LineLength(2), Color.Black);
                 if (FormatLine(2))
                 {
@@ -2116,7 +2116,7 @@ namespace GitUI.CommandsDialogs
 
             if (limitX > 0 && line >= (empty2 ? 2 : 1))
             {
-                if (AppSettings.CommitValidationAutoWrap)
+                if (AppSettings.Instance.CommitValidationAutoWrap)
                 {
                     if (WrapIfNecessary(line, limitX))
                     {
@@ -2226,19 +2226,19 @@ namespace GitUI.CommandsDialogs
         private void closeDialogAfterEachCommitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             closeDialogAfterEachCommitToolStripMenuItem.Checked = !closeDialogAfterEachCommitToolStripMenuItem.Checked;
-            AppSettings.CloseCommitDialogAfterCommit = closeDialogAfterEachCommitToolStripMenuItem.Checked;
+            AppSettings.Instance.CloseCommitDialogAfterCommit = closeDialogAfterEachCommitToolStripMenuItem.Checked;
         }
 
         private void closeDialogAfterAllFilesCommittedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             closeDialogAfterAllFilesCommittedToolStripMenuItem.Checked = !closeDialogAfterAllFilesCommittedToolStripMenuItem.Checked;
-            AppSettings.CloseCommitDialogAfterLastCommit = closeDialogAfterAllFilesCommittedToolStripMenuItem.Checked;
+            AppSettings.Instance.CloseCommitDialogAfterLastCommit = closeDialogAfterAllFilesCommittedToolStripMenuItem.Checked;
         }
 
         private void refreshDialogOnFormFocusToolStripMenuItem_Click(object sender, EventArgs e)
         {
             refreshDialogOnFormFocusToolStripMenuItem.Checked = !refreshDialogOnFormFocusToolStripMenuItem.Checked;
-            AppSettings.RefreshCommitDialogOnFormFocus = refreshDialogOnFormFocusToolStripMenuItem.Checked;
+            AppSettings.Instance.RefreshCommitDialogOnFormFocus = refreshDialogOnFormFocusToolStripMenuItem.Checked;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -2419,7 +2419,7 @@ namespace GitUI.CommandsDialogs
             foreach (var item in unStagedFiles.Where(it => it.IsSubmodule))
             {
                 GitUICommands uiCmds = new GitUICommands(Module.GetSubmodule(item.Name));
-                uiCmds.StashSave(this, AppSettings.IncludeUntrackedFilesInManualStash);
+                uiCmds.StashSave(this, AppSettings.Instance.IncludeUntrackedFilesInManualStash);
             }
 
             Initialize();
@@ -2554,7 +2554,7 @@ namespace GitUI.CommandsDialogs
             if (Unstaged.SelectedItem == null)
                 return;
 
-            Process gitProcess = Module.RunExternalCmdDetachedShowConsole(AppSettings.GitCommand,
+            Process gitProcess = Module.RunExternalCmdDetachedShowConsole(AppSettings.Instance.GitCommand,
                 "add -p \"" + Unstaged.SelectedItem.Name + "\"");
 
             if (gitProcess != null)
@@ -2588,7 +2588,7 @@ namespace GitUI.CommandsDialogs
         private void StageInSuperproject_CheckedChanged(object sender, EventArgs e)
         {
             if (StageInSuperproject.Visible)
-                AppSettings.StageInSuperprojectAfterCommit = StageInSuperproject.Checked;
+                AppSettings.Instance.StageInSuperprojectAfterCommit = StageInSuperproject.Checked;
         }
 
         private void commitCommitter_Click(object sender, EventArgs e)

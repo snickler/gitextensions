@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using GitCommands;
+using GitCommands.Settings;
 using Gravatar;
 using ResourceManager;
 
@@ -12,6 +13,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 {
     public partial class AppearanceSettingsPage : SettingsPageWithHeader
     {
+        private readonly IGitExtensionsPathProvider _gitExtensionsPathProvider = new GitExtensionsPathProvider();
         private readonly TranslationString _noDictFile =
             new TranslationString("None");
         private readonly TranslationString _noDictFilesFound =
@@ -67,47 +69,47 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         protected override void SettingsToPage()
         {
-            chkEnableAutoScale.Checked = AppSettings.EnableAutoScale;
+            chkEnableAutoScale.Checked = AppSettings.Instance.EnableAutoScale;
 
-            chkShowCurrentBranchInVisualStudio.Checked = AppSettings.ShowCurrentBranchInVisualStudio;
-            _NO_TRANSLATE_DaysToCacheImages.Value = AppSettings.AuthorImageCacheDays;
-            if (AppSettings.AuthorImageSize <= 120)
+            chkShowCurrentBranchInVisualStudio.Checked = AppSettings.Instance.ShowCurrentBranchInVisualStudio;
+            _NO_TRANSLATE_DaysToCacheImages.Value = AppSettings.Instance.AuthorImageCacheDays;
+            if (AppSettings.Instance.AuthorImageSize <= 120)
                 AuthorImageSize.SelectedIndex = 0;
-            else if (AppSettings.AuthorImageSize <= 200)
+            else if (AppSettings.Instance.AuthorImageSize <= 200)
                 AuthorImageSize.SelectedIndex = 1;
-            else if (AppSettings.AuthorImageSize <= 280)
+            else if (AppSettings.Instance.AuthorImageSize <= 280)
                 AuthorImageSize.SelectedIndex = 2;
             else
                 AuthorImageSize.SelectedIndex = 3;
-            ShowAuthorGravatar.Checked = AppSettings.ShowAuthorGravatar;
-            NoImageService.Text = AppSettings.GravatarFallbackService;
+            ShowAuthorGravatar.Checked = AppSettings.Instance.ShowAuthorGravatar;
+            NoImageService.Text = AppSettings.Instance.GravatarFallbackService;
 
             Language.Items.Clear();
             Language.Items.Add("English");
             Language.Items.AddRange(Translator.GetAllTranslations());
-            Language.Text = AppSettings.Translation;
+            Language.Text = AppSettings.Instance.Translation;
 
-            truncatePathMethod.SelectedIndex = GetTruncatePathMethodIndex(AppSettings.TruncatePathMethod);
+            truncatePathMethod.SelectedIndex = GetTruncatePathMethodIndex(AppSettings.Instance.TruncatePathMethod);
 
             Dictionary.Items.Clear();
             Dictionary.Items.Add(_noDictFile.Text);
-            if (AppSettings.Dictionary.Equals("none", StringComparison.InvariantCultureIgnoreCase))
+            if (AppSettings.Instance.Dictionary.Equals("none", StringComparison.InvariantCultureIgnoreCase))
                 Dictionary.SelectedIndex = 0;
             else
-                Dictionary.Text = AppSettings.Dictionary;
+                Dictionary.Text = AppSettings.Instance.Dictionary;
 
-            chkShowRelativeDate.Checked = AppSettings.RelativeDate;
+            chkShowRelativeDate.Checked = AppSettings.Instance.RelativeDate;
 
-            SetCurrentApplicationFont(AppSettings.Font);
-            SetCurrentDiffFont(AppSettings.DiffFont);
-            SetCurrentCommitFont(AppSettings.CommitFont);
+            SetCurrentApplicationFont(AppSettings.Instance.Font);
+            SetCurrentDiffFont(AppSettings.Instance.DiffFont);
+            SetCurrentCommitFont(AppSettings.Instance.CommitFont);
         }
 
         protected override void PageToSettings()
         {
-            AppSettings.EnableAutoScale = chkEnableAutoScale.Checked;
-            AppSettings.TruncatePathMethod = GetTruncatePathMethodString(truncatePathMethod.SelectedIndex);
-            AppSettings.ShowCurrentBranchInVisualStudio = chkShowCurrentBranchInVisualStudio.Checked;
+            AppSettings.Instance.EnableAutoScale = chkEnableAutoScale.Checked;
+            AppSettings.Instance.TruncatePathMethod = GetTruncatePathMethodString(truncatePathMethod.SelectedIndex);
+            AppSettings.Instance.ShowCurrentBranchInVisualStudio = chkShowCurrentBranchInVisualStudio.Checked;
 
             int authorImageSize;
             switch (AuthorImageSize.SelectedIndex)
@@ -125,27 +127,27 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
                     authorImageSize = 80;
                     break;
             }
-            if (authorImageSize != AppSettings.AuthorImageSize)
+            if (authorImageSize != AppSettings.Instance.AuthorImageSize)
             {
-                AppSettings.AuthorImageSize = authorImageSize;
+                AppSettings.Instance.AuthorImageSize = authorImageSize;
                 GravatarService.ClearImageCache();
             }
 
-            AppSettings.Translation = Language.Text;
+            AppSettings.Instance.Translation = Language.Text;
             Strings.Reinit();
 
-            AppSettings.AuthorImageCacheDays = (int)_NO_TRANSLATE_DaysToCacheImages.Value;
+            AppSettings.Instance.AuthorImageCacheDays = (int)_NO_TRANSLATE_DaysToCacheImages.Value;
 
-            AppSettings.ShowAuthorGravatar = ShowAuthorGravatar.Checked;
-            AppSettings.GravatarFallbackService = NoImageService.Text;
+            AppSettings.Instance.ShowAuthorGravatar = ShowAuthorGravatar.Checked;
+            AppSettings.Instance.GravatarFallbackService = NoImageService.Text;
 
-            AppSettings.RelativeDate = chkShowRelativeDate.Checked;
+            AppSettings.Instance.RelativeDate = chkShowRelativeDate.Checked;
 
-            AppSettings.Dictionary = Dictionary.SelectedIndex == 0 ? "none" : Dictionary.Text;
+            AppSettings.Instance.Dictionary = Dictionary.SelectedIndex == 0 ? "none" : Dictionary.Text;
 
-            AppSettings.DiffFont = _diffFont;
-            AppSettings.Font = _applicationFont;
-            AppSettings.CommitFont = commitFont;
+            AppSettings.Instance.DiffFont = _diffFont;
+            AppSettings.Instance.Font = _applicationFont;
+            AppSettings.Instance.CommitFont = commitFont;
         }
 
         private void Dictionary_DropDown(object sender, EventArgs e)
@@ -156,7 +158,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
                 Dictionary.Items.Add(_noDictFile.Text);
                 foreach (
                     string fileName in
-                        Directory.GetFiles(AppSettings.GetDictionaryDir(), "*.dic", SearchOption.TopDirectoryOnly))
+                        Directory.GetFiles(_gitExtensionsPathProvider.GetDictionaryDir(), "*.dic", SearchOption.TopDirectoryOnly))
                 {
                     var file = new FileInfo(fileName);
                     Dictionary.Items.Add(file.Name.Replace(".dic", ""));
@@ -164,7 +166,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
             catch
             {
-                MessageBox.Show(this, String.Format(_noDictFilesFound.Text, AppSettings.GetDictionaryDir()));
+                MessageBox.Show(this, String.Format(_noDictFilesFound.Text, _gitExtensionsPathProvider.GetDictionaryDir()));
             }
         }
 

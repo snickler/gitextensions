@@ -65,7 +65,7 @@ namespace ResourceManager
 
         protected void SetFont()
         {
-            Font = AppSettings.Font;
+            Font = AppSettings.Instance.Font;
         }
 
         /// <summary>Indicates whether this is a valid <see cref="IComponent"/> running in design mode.</summary>
@@ -85,7 +85,7 @@ namespace ResourceManager
         /// </summary>
         protected override void OnLoad(EventArgs e)
         {
-            AutoScaleMode = AppSettings.EnableAutoScale
+            AutoScaleMode = AppSettings.Instance.EnableAutoScale
                 ? AutoScaleMode.Dpi
                 : AutoScaleMode.None;
             base.OnLoad(e);
@@ -104,7 +104,7 @@ namespace ResourceManager
         /// <summary>Translates the <see cref="Form"/>'s fields and properties, including child controls.</summary>
         protected void Translate()
         {
-            Translator.Translate(this, AppSettings.CurrentTranslation);
+            Translator.Translate(this, AppSettings.Instance.CurrentTranslation);
             _translated = true;
         }
 
@@ -120,7 +120,7 @@ namespace ResourceManager
 
         protected void TranslateItem(string itemName, object item)
         {
-            var translation = Translator.GetTranslation(AppSettings.CurrentTranslation);
+            var translation = Translator.GetTranslation(AppSettings.Instance.CurrentTranslation);
             if (translation.Count == 0)
                 return;
             foreach (var pair in translation)

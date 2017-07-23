@@ -37,7 +37,7 @@ namespace GitUIPluginInterfaces
                 return new TextBox {PasswordChar = '\u25CF'};
             }
 
-            public override void LoadSetting(ISettingsSource settings, bool areSettingsEffective, TextBox control)
+            public override void LoadSetting(SettingsSource settings, bool areSettingsEffective, TextBox control)
             {
                 string settingVal;
                 if (areSettingsEffective)
@@ -52,7 +52,7 @@ namespace GitUIPluginInterfaces
                 control.Text = settingVal;
             }
 
-            public override void SaveSetting(ISettingsSource settings, bool areSettingsEffective, TextBox control)
+            public override void SaveSetting(SettingsSource settings, bool areSettingsEffective, TextBox control)
             {
                 var controlValue = control.Text;
                 if (areSettingsEffective)
@@ -67,7 +67,7 @@ namespace GitUIPluginInterfaces
             }
         }
 
-        public string this[ISettingsSource settings]
+        public string this[SettingsSource settings]
         {
             get
             {
@@ -80,7 +80,7 @@ namespace GitUIPluginInterfaces
             }
         }
 
-        public string ValueOrDefault(ISettingsSource settings)
+        public string ValueOrDefault(SettingsSource settings)
         {
             return this[settings] ?? DefaultValue;
         }

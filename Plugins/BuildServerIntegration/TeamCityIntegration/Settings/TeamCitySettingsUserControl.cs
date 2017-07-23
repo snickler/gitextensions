@@ -36,7 +36,7 @@ namespace TeamCityIntegration.Settings
             SetChooseBuildButtonState();
         }
 
-        public void LoadSettings(ISettingsSource buildServerConfig)
+        public void LoadSettings(SettingsSource buildServerConfig)
         {
             if (buildServerConfig != null)
             {
@@ -47,7 +47,7 @@ namespace TeamCityIntegration.Settings
             }
         }
 
-        public void SaveSettings(ISettingsSource buildServerConfig)
+        public void SaveSettings(SettingsSource buildServerConfig)
         {
             if (BuildServerSettingsHelper.IsRegexValid(TeamCityBuildIdFilter.Text))
             {

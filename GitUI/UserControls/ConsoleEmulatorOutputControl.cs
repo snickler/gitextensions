@@ -116,9 +116,9 @@ namespace GitUI.UserControls
 
             var startinfo = new ConEmuStartInfo();
             startinfo.ConsoleProcessCommandLine = cmdl.ToString();
-            if (AppSettings.ConEmuStyle.ValueOrDefault != "Default")
+            if (AppSettings.Instance.ConEmuStyle.ValueOrDefault != "Default")
             {
-                startinfo.ConsoleProcessExtraArgs = " -new_console:P:\"" + AppSettings.ConEmuStyle.ValueOrDefault + "\"";
+                startinfo.ConsoleProcessExtraArgs = " -new_console:P:\"" + AppSettings.Instance.ConEmuStyle.ValueOrDefault + "\"";
             }
             startinfo.StartupDirectory = workdir;
             foreach (var envVariable in envVariables)

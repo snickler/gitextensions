@@ -5,7 +5,7 @@ namespace GitUIPluginInterfaces.BuildServerIntegration
     {
         void Initialize(string defaultProjectName);
 
-        void LoadSettings(ISettingsSource buildServerConfig);
-        void SaveSettings(ISettingsSource buildServerConfig);
+        void LoadSettings(SettingsSource buildServerConfig);
+        void SaveSettings(SettingsSource buildServerConfig);
     }
 }

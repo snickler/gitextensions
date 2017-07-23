@@ -92,7 +92,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
         void CheckForNewerVersion(string releases)
         {
             var versions = ReleaseVersion.Parse(releases);
-            var updates = ReleaseVersion.GetNewerVersions(CurrentVersion, AppSettings.CheckForReleaseCandidates, versions);
+            var updates = ReleaseVersion.GetNewerVersions(CurrentVersion, AppSettings.Instance.CheckForReleaseCandidates, versions);
 
             var update = updates.OrderBy(version => version.Version).LastOrDefault();
             if (update != null)

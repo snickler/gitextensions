@@ -47,7 +47,7 @@ namespace GitUI
         /// </summary>
         public static bool LoadKey(IWin32Window parent, string path)
         {
-            if (!File.Exists(AppSettings.Pageant))
+            if (!File.Exists(AppSettings.Instance.Pageant))
             {
                 MessageBoxes.PAgentNotFound(parent);
                 return false;

@@ -78,13 +78,13 @@ namespace GitUI.Editor.Diff
                     switch (diffLine.Style)
                     {
                         case DiffLineNum.DiffLineStyle.Plus:
-                            brush = new SolidBrush(AppSettings.DiffAddedColor);
+                            brush = new SolidBrush(AppSettings.Instance.DiffAddedColor);
                             break;
                         case DiffLineNum.DiffLineStyle.Minus:
-                            brush = new SolidBrush(AppSettings.DiffRemovedColor);
+                            brush = new SolidBrush(AppSettings.Instance.DiffRemovedColor);
                             break;
                         case DiffLineNum.DiffLineStyle.Header:
-                            brush = new SolidBrush(AppSettings.DiffSectionColor);
+                            brush = new SolidBrush(AppSettings.Instance.DiffSectionColor);
                             break;
                     }
 

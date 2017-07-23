@@ -4,31 +4,31 @@ using GitUIPluginInterfaces;
 
 namespace GitUI
 {
-    public class GitPluginSettingsContainer : ISettingsSource, IGitPluginSettingsContainer
+    public class GitPluginSettingsContainer : SettingsSource, IGitPluginSettingsContainer
     {
         private readonly string pluginName;
-        private ISettingsSource _settingsSource;
+        private SettingsSource _settingsSource;
 
         public GitPluginSettingsContainer(string pluginName)
         {
             this.pluginName = pluginName;
         }
 
-        public ISettingsSource GetSettingsSource()
+        public SettingsSource GetSettingsSource()
         {
             return this;
         }
 
-        public void SetSettingsSource(ISettingsSource settingsSource)
+        public void SetSettingsSource(SettingsSource settingsSource)
         {
             _settingsSource = settingsSource;
         }
 
-        private ISettingsSource ExternalSettings
+        private SettingsSource ExternalSettings
         {
             get
             {
-                return _settingsSource ?? AppSettings.SettingsContainer;
+                return _settingsSource ?? AppSettings.Instance.SettingsContainer;
             }
         }
 

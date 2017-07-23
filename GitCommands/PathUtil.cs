@@ -231,7 +231,7 @@ namespace GitCommands
             if (PathUtil.PathExists(shellPath))
                 return true;
 
-            shellPath = Path.Combine(AppSettings.GitBinDir, shell);
+            shellPath = Path.Combine(AppSettings.Instance.GitBinDir, shell);
             if (PathUtil.PathExists(shellPath))
                 return true;
 

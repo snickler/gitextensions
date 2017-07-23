@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using GitCommands;
+using GitCommands.Settings;
 using GitCommands.Utils;
 using Microsoft.Win32;
 using GitUI.Editor;
@@ -10,6 +11,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 {
     public partial class SshSettingsPage : SettingsPageWithHeader
     {
+        private readonly IGitExtensionsPathProvider _gitExtensionsPathProvider = new GitExtensionsPathProvider();
 
         public SshSettingsPage()
         {
@@ -32,10 +34,10 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         protected override void SettingsToPage()
         {
-            PlinkPath.Text = AppSettings.Plink;
-            PuttygenPath.Text = AppSettings.Puttygen;
-            PageantPath.Text = AppSettings.Pageant;
-            AutostartPageant.Checked = AppSettings.AutoStartPageant;
+            PlinkPath.Text = AppSettings.Instance.Plink;
+            PuttygenPath.Text = AppSettings.Instance.Puttygen;
+            PageantPath.Text = AppSettings.Instance.Pageant;
+            AutostartPageant.Checked = AppSettings.Instance.AutoStartPageant;
 
             if (string.IsNullOrEmpty(GitCommandHelpers.GetSsh()))
                 OpenSSH.Checked = true;
@@ -52,10 +54,10 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         protected override void PageToSettings()
         {
-            AppSettings.Plink = PlinkPath.Text;
-            AppSettings.Puttygen = PuttygenPath.Text;
-            AppSettings.Pageant = PageantPath.Text;
-            AppSettings.AutoStartPageant = AutostartPageant.Checked;
+            AppSettings.Instance.Plink = PlinkPath.Text;
+            AppSettings.Instance.Puttygen = PuttygenPath.Text;
+            AppSettings.Instance.Pageant = PageantPath.Text;
+            AppSettings.Instance.AutoStartPageant = AutostartPageant.Checked;
 
             if (OpenSSH.Checked)
                 GitCommandHelpers.UnsetSsh();
@@ -86,7 +88,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
         {
             string envVariable = Environment.GetEnvironmentVariable("GITEXT_PUTTY");
             if (!String.IsNullOrEmpty(envVariable)) yield return envVariable;
-            yield return Path.Combine(AppSettings.GetInstallDir(), @"PuTTY\");
+            yield return Path.Combine(_gitExtensionsPathProvider.GetInstallDir(), @"PuTTY\");
             string programFiles = Environment.GetEnvironmentVariable("ProgramFiles");
             string programFilesX86 = null;
             if (8 == IntPtr.Size

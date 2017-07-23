@@ -554,7 +554,7 @@ namespace GitUI
         {
             if (DoubleClick == null)
             {
-                if (AppSettings.OpenSubmoduleDiffInSeparateWindow && SelectedItem.IsSubmodule)
+                if (AppSettings.Instance.OpenSubmoduleDiffInSeparateWindow && SelectedItem.IsSubmodule)
                 {
                     OpenSubmodule();
                 }
@@ -595,7 +595,7 @@ namespace GitUI
 
             if (isSubmoduleSelected)
             {
-                _openSubmoduleMenuItem.Font = AppSettings.OpenSubmoduleDiffInSeparateWindow ? 
+                _openSubmoduleMenuItem.Font = AppSettings.Instance.OpenSubmoduleDiffInSeparateWindow ? 
                     new Font(_openSubmoduleMenuItem.Font,  FontStyle.Bold) : 
                     new Font(_openSubmoduleMenuItem.Font, FontStyle.Regular);
             }
@@ -1018,7 +1018,7 @@ namespace GitUI
 
                         //Only add the first parent to the dictionary if the setting to show diffs
                         //for app parents is disabled
-                        if (!AppSettings.ShowDiffForAllParents)
+                        if (!AppSettings.Instance.ShowDiffForAllParents)
                             break;
                     }
                     var isMergeCommit = revision.ParentGuids.Count() == 2;

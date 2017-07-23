@@ -110,7 +110,7 @@ namespace GitUI.CommandsDialogs
             InitializeComponent();
             Translate();
 
-            helpImageDisplayUserControl1.Visible = !AppSettings.DontShowHelpImages;
+            helpImageDisplayUserControl1.Visible = !AppSettings.Instance.DontShowHelpImages;
             helpImageDisplayUserControl1.IsOnHoverShowImage2NoticeText = _hoverShowImageLabelText.Text;
 
             if (aCommands != null)
@@ -119,12 +119,12 @@ namespace GitUI.CommandsDialogs
                 Init(defaultRemote);
             }
 
-            Merge.Checked = AppSettings.FormPullAction == AppSettings.PullAction.Merge;
-            Rebase.Checked = AppSettings.FormPullAction == AppSettings.PullAction.Rebase;
-            Fetch.Checked = AppSettings.FormPullAction == AppSettings.PullAction.Fetch;
+            Merge.Checked = AppSettings.Instance.FormPullAction == PullAction.Merge;
+            Rebase.Checked = AppSettings.Instance.FormPullAction == PullAction.Rebase;
+            Fetch.Checked = AppSettings.Instance.FormPullAction == PullAction.Fetch;
             localBranch.Enabled = Fetch.Checked;
-            AutoStash.Checked = AppSettings.AutoStash;
-            Prune.Enabled = AppSettings.FormPullAction == AppSettings.PullAction.Merge || AppSettings.FormPullAction == AppSettings.PullAction.Fetch;
+            AutoStash.Checked = AppSettings.Instance.AutoStash;
+            Prune.Enabled = AppSettings.Instance.FormPullAction == PullAction.Merge || AppSettings.Instance.FormPullAction == PullAction.Fetch;
 
             ErrorOccurred = false;
 
@@ -160,7 +160,7 @@ namespace GitUI.CommandsDialogs
             _NO_TRANSLATE_Remotes.DataSource = new[] { new GitRemote { Name = AllRemotes } }.Union(_gitRemoteController.Remotes).ToList();
             _NO_TRANSLATE_Remotes.DisplayMember = "Name";
             _NO_TRANSLATE_Remotes.SelectedIndex = -1;
-            ComboBoxHelper.ResizeComboBoxDropDownWidth(_NO_TRANSLATE_Remotes, AppSettings.BranchDropDownMinWidth, AppSettings.BranchDropDownMaxWidth);
+            ComboBoxHelper.ResizeComboBoxDropDownWidth(_NO_TRANSLATE_Remotes, AppSettings.Instance.BranchDropDownMinWidth, AppSettings.Instance.BranchDropDownMaxWidth);
 
             if (selectedRemoteName.IsNullOrEmpty())
             {
@@ -199,7 +199,7 @@ namespace GitUI.CommandsDialogs
 
         private void MergetoolClick(object sender, EventArgs e)
         {
-            Module.RunExternalCmdShowConsole(AppSettings.GitCommand, "mergetool");
+            Module.RunExternalCmdShowConsole(AppSettings.Instance.GitCommand, "mergetool");
 
             if (MessageBox.Show(this, _allMergeConflictSolvedQuestion.Text, _allMergeConflictSolvedQuestionCaption.Text,
                                 MessageBoxButtons.YesNo) != DialogResult.Yes)
@@ -252,7 +252,7 @@ namespace GitUI.CommandsDialogs
             _heads.Insert(0, GitRef.NoHead(Module));
             Branches.DataSource = _heads;
 
-            ComboBoxHelper.ResizeComboBoxDropDownWidth(Branches, AppSettings.BranchDropDownMinWidth, AppSettings.BranchDropDownMaxWidth);
+            ComboBoxHelper.ResizeComboBoxDropDownWidth(Branches, AppSettings.Instance.BranchDropDownMinWidth, AppSettings.Instance.BranchDropDownMaxWidth);
 
             Cursor.Current = Cursors.Default;
         }
@@ -308,7 +308,7 @@ namespace GitUI.CommandsDialogs
             if (ErrorOccurred || Module.InTheMiddleOfAction())
                 return;
 
-            bool? messageBoxResult = AppSettings.AutoPopStashAfterPull;
+            bool? messageBoxResult = AppSettings.Instance.AutoPopStashAfterPull;
             if (messageBoxResult == null)
             {
                 DialogResult res = PSTaskDialog.cTaskDialog.MessageBox(
@@ -324,7 +324,7 @@ namespace GitUI.CommandsDialogs
                     PSTaskDialog.eSysIcons.Question);
                 messageBoxResult = (res == DialogResult.Yes);
                 if (PSTaskDialog.cTaskDialog.VerificationChecked)
-                    AppSettings.AutoPopStashAfterPull = messageBoxResult;
+                    AppSettings.Instance.AutoPopStashAfterPull = messageBoxResult;
             }
             if ((bool)messageBoxResult)
             {
@@ -460,7 +460,7 @@ namespace GitUI.CommandsDialogs
             if (!Fetch.Checked && AutoStash.Checked && !Module.IsBareRepository() &&
                 Module.GitStatus(UntrackedFilesMode.No, IgnoreSubmodulesMode.Default).Count > 0)
             {
-                UICommands.StashSave(owner, AppSettings.IncludeUntrackedFilesInAutoStash);
+                UICommands.StashSave(owner, AppSettings.Instance.IncludeUntrackedFilesInAutoStash);
                 return true;
             }
             return false;
@@ -659,13 +659,13 @@ namespace GitUI.CommandsDialogs
         private void UpdateSettingsDuringPull()
         {
             if (Merge.Checked)
-                AppSettings.FormPullAction = AppSettings.PullAction.Merge;
+                AppSettings.Instance.FormPullAction = PullAction.Merge;
             if (Rebase.Checked)
-                AppSettings.FormPullAction = AppSettings.PullAction.Rebase;
+                AppSettings.Instance.FormPullAction = PullAction.Rebase;
             if (Fetch.Checked)
-                AppSettings.FormPullAction = AppSettings.PullAction.Fetch;
+                AppSettings.Instance.FormPullAction = PullAction.Fetch;
 
-            AppSettings.AutoStash = AutoStash.Checked;
+            AppSettings.Instance.AutoStash = AutoStash.Checked;
         }
 
         private IEnumerable<string> GetSelectedRemotes()
@@ -699,7 +699,7 @@ namespace GitUI.CommandsDialogs
             if (!GitCommandHelpers.Plink())
                 return;
 
-            if (File.Exists(AppSettings.Pageant))
+            if (File.Exists(AppSettings.Instance.Pageant))
             {
                 HashSet<string> files = new HashSet<string>(PathUtil.CreatePathEqualityComparer());
                 foreach (var remote in GetSelectedRemotes())

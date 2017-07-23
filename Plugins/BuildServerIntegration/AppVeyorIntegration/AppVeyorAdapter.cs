@@ -61,7 +61,7 @@ namespace AppVeyorIntegration
         private bool _shouldDisplayGitHubPullRequestBuilds;
         private string _gitHubToken;
 
-        public void Initialize(IBuildServerWatcher buildServerWatcher, ISettingsSource config,
+        public void Initialize(IBuildServerWatcher buildServerWatcher, SettingsSource config,
             Func<string, bool> isCommitInRevisionGrid)
         {
             if (_buildServerWatcher != null)

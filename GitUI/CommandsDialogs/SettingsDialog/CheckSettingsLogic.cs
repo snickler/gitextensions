@@ -11,6 +11,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
 {
     public class CheckSettingsLogic
     {
+        private static IGitExtensionsPathProvider _gitExtensionsPathProvider = new GitExtensionsPathProvider();
         public readonly CommonLogic CommonLogic;
         private GitModule Module { get { return CommonLogic.Module; } }
         private ConfigFileSettings GlobalConfigFileSettings { get { return CommonLogic.ConfigFileSettingsSet.GlobalSettings; } }
@@ -43,7 +44,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
             string editor = CommonLogic.GetGlobalEditor();
             if (string.IsNullOrEmpty(editor))
             {
-                GlobalConfigFileSettings.SetPathValue("core.editor", "\"" + AppSettings.GetGitExtensionsFullPath() + "\" fileeditor");
+                GlobalConfigFileSettings.SetPathValue("core.editor", "\"" + _gitExtensionsPathProvider.GetFullPath() + "\" fileeditor");
             }
 
             return true;
@@ -53,11 +54,11 @@ namespace GitUI.CommandsDialogs.SettingsDialog
         {
             if (!EnvUtils.RunningOnWindows())
             {
-                AppSettings.GitBinDir = "";
+                AppSettings.Instance.GitBinDir = "";
                 return true;
             }
 
-            string gitpath = AppSettings.GitCommandValue;
+            string gitpath = AppSettings.Instance.GitCommandValue;
             if (!String.IsNullOrWhiteSpace(possibleNewPath))
             {
                 gitpath = possibleNewPath.Trim();
@@ -73,14 +74,14 @@ namespace GitUI.CommandsDialogs.SettingsDialog
                 {
                     if (File.Exists(gitpath + "sh.exe") || File.Exists(gitpath + "sh"))
                     {
-                        AppSettings.GitBinDir = gitpath;
+                        AppSettings.Instance.GitBinDir = gitpath;
                         return true;
                     }
                 }
 
                 if (CheckIfFileIsInPath("sh.exe") || CheckIfFileIsInPath("sh"))
                 {
-                    AppSettings.GitBinDir = "";
+                    AppSettings.Instance.GitBinDir = "";
                     return true;
                 }
 
@@ -90,7 +91,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
                     {
                         if (File.Exists(path + toolsPath + "sh.exe") || File.Exists(path + toolsPath + "sh"))
                         {
-                            AppSettings.GitBinDir = path + toolsPath;
+                            AppSettings.Instance.GitBinDir = path + toolsPath;
                             return true;
                         }
                     }
@@ -128,8 +129,8 @@ namespace GitUI.CommandsDialogs.SettingsDialog
         {
             if (!string.IsNullOrEmpty(possibleNewPath) && File.Exists(possibleNewPath))
                 yield return possibleNewPath;
-            if (!string.IsNullOrEmpty(AppSettings.GitCommandValue) && File.Exists(AppSettings.GitCommandValue))
-                yield return AppSettings.GitCommandValue;
+            if (!string.IsNullOrEmpty(AppSettings.Instance.GitCommandValue) && File.Exists(AppSettings.Instance.GitCommandValue))
+                yield return AppSettings.Instance.GitCommandValue;
             foreach (var path in GetGitLocations())
             {
                 if (Directory.Exists(path + @"bin\"))
@@ -149,11 +150,11 @@ namespace GitUI.CommandsDialogs.SettingsDialog
 
         public bool SolveGitExtensionsDir()
         {
-            string fileName = AppSettings.GetGitExtensionsDirectory();
+            string fileName = _gitExtensionsPathProvider.GetDirectory();
 
             if (Directory.Exists(fileName))
             {
-                AppSettings.SetInstallDir(fileName);
+                _gitExtensionsPathProvider.SetInstallDir(fileName);
                 return true;
             }
 
@@ -171,12 +172,12 @@ namespace GitUI.CommandsDialogs.SettingsDialog
 
                 if (command != null)
                 {
-                    AppSettings.GitCommandValue = command;
+                    AppSettings.Instance.GitCommandValue = command;
                     return true;
                 }
                 return false;
             }
-            AppSettings.GitCommandValue = "git";
+            AppSettings.Instance.GitCommandValue = "git";
             return !string.IsNullOrEmpty(Module.RunGitCmd(""));
         }
 

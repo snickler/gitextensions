@@ -27,7 +27,7 @@ namespace ResourceManager
         }
 
         //Store settings to use later
-        public ISettingsSource Settings
+        public SettingsSource Settings
         {
             get
             {
@@ -56,7 +56,7 @@ namespace ResourceManager
 
         protected void Translate()
         {
-            Translator.Translate(this, AppSettings.CurrentTranslation);
+            Translator.Translate(this, AppSettings.Instance.CurrentTranslation);
         }
 
         public virtual void AddTranslationItems(ITranslation translation)

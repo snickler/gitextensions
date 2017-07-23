@@ -105,13 +105,13 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         private void LoadSettings()
         {
-            if (!string.IsNullOrEmpty(AppSettings.CustomHomeDir))
+            if (!string.IsNullOrEmpty(AppSettings.Instance.CustomHomeDir))
             {
                 defaultHome.Checked = userprofileHome.Checked = false;
                 otherHome.Checked = true;
-                otherHomeDir.Text = AppSettings.CustomHomeDir;
+                otherHomeDir.Text = AppSettings.Instance.CustomHomeDir;
             }
-            else if (AppSettings.UserProfileHomeDir)
+            else if (AppSettings.Instance.UserProfileHomeDir)
             {
                 defaultHome.Checked = otherHome.Checked = false;
                 userprofileHome.Checked = true;
@@ -201,12 +201,12 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
                     MessageBox.Show(this, _noHomeDirectorySpecified.Text);
                     return;
                 }
-                AppSettings.CustomHomeDir = otherHomeDir.Text;
+                AppSettings.Instance.CustomHomeDir = otherHomeDir.Text;
             }
             else
-                AppSettings.CustomHomeDir = "";
+                AppSettings.Instance.CustomHomeDir = "";
 
-            AppSettings.UserProfileHomeDir = userprofileHome.Checked;
+            AppSettings.Instance.UserProfileHomeDir = userprofileHome.Checked;
 
             GitCommandHelpers.SetEnvironmentVariable(true);
             string path = Environment.GetEnvironmentVariable("HOME");

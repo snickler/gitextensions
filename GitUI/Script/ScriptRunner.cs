@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using GitCommands;
 using GitCommands.Config;
+using GitCommands.Settings;
 using GitUI.HelperDialogs;
 using GitUIPluginInterfaces;
 
@@ -13,6 +14,9 @@ namespace GitUI.Script
     /// <summary>Runs scripts.</summary>
     public static class ScriptRunner
     {
+        private static readonly IGitExtensionsPathProvider GitExtPathProvider = new GitExtensionsPathProvider();
+     
+        
         /// <summary>Tries to run scripts identified by a <paramref name="command"/> 
         /// and returns true if any executed.</summary>
         public static bool ExecuteScriptCommand(IWin32Window owner, GitModule aModule, int command, RevisionGrid revisionGrid = null)
@@ -467,13 +471,13 @@ namespace GitUI.Script
             //Make sure we are able to run git, even if git is not in the path
             if (originalCommand.Equals("git", StringComparison.CurrentCultureIgnoreCase) ||
                 originalCommand.Equals("{git}", StringComparison.CurrentCultureIgnoreCase))
-                return AppSettings.GitCommand;
+                return AppSettings.Instance.GitCommand;
 
             if (originalCommand.Equals("gitextensions", StringComparison.CurrentCultureIgnoreCase) ||
                 originalCommand.Equals("{gitextensions}", StringComparison.CurrentCultureIgnoreCase) ||
                 originalCommand.Equals("gitex", StringComparison.CurrentCultureIgnoreCase) ||
                 originalCommand.Equals("{gitex}", StringComparison.CurrentCultureIgnoreCase))
-                return AppSettings.GetGitExtensionsFullPath();
+                return GitExtPathProvider.GetFullPath();
 
             if (originalCommand.Equals("{openurl}", StringComparison.CurrentCultureIgnoreCase))
                 return "explorer";

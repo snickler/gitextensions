@@ -147,7 +147,7 @@ namespace GitCommands
             // the filename is the next line after the commit-format defined above.
 
             string logParam;
-            if (AppSettings.OrderRevisionByDate)
+            if (AppSettings.Instance.OrderRevisionByDate)
             {
                 logParam = " --date-order";
             }

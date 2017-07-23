@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO;
 using GitCommands;
+using GitCommands.Settings;
 
 namespace GitUI.UserManual
 {
     public class SingleHtmlUserManual : IProvideUserManual
     {
+        private static IGitExtensionsPathProvider _gitExtensionsPathProvider = new GitExtensionsPathProvider();
         private static string _Location;
         public static string Location 
         {
@@ -13,7 +15,7 @@ namespace GitUI.UserManual
             {
                 if (_Location == null)
                 {
-                    var path = Path.Combine(AppSettings.GetInstallDir(), "help");
+                    var path = Path.Combine(_gitExtensionsPathProvider.GetInstallDir(), "help");
                     var uri = new System.Uri(path);
                     _Location = uri.AbsolutePath;
                 }

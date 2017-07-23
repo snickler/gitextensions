@@ -124,7 +124,7 @@ namespace GitUI.CommandsDialogs
         {
             Cursor.Current = Cursors.WaitCursor;
             Directory.SetCurrentDirectory(Module.WorkingDir);
-            Module.RunExternalCmdShowConsole(AppSettings.GitCommand, "mergetool");
+            Module.RunExternalCmdShowConsole(AppSettings.Instance.GitCommand, "mergetool");
             Initialize();
             Cursor.Current = Cursors.Default;
         }
@@ -194,7 +194,7 @@ namespace GitUI.CommandsDialogs
 
                 if (!Module.InTheMiddleOfPatch() && !Module.InTheMiddleOfRebase() && _offerCommit)
                 {
-                    if (AppSettings.DontConfirmCommitAfterConflictsResolved ||
+                    if (AppSettings.Instance.DontConfirmCommitAfterConflictsResolved ||
                         MessageBox.Show(this, allConflictsResolved.Text, allConflictsResolvedCaption.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         UICommands.StartCommitDialog(this);
@@ -557,7 +557,7 @@ namespace GitUI.CommandsDialogs
             if (MessageBox.Show(_abortCurrentOpperation.Text, _abortCurrentOpperationCaption.Text,
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                if (AppSettings.DontConfirmSecondAbortConfirmation ||
+                if (AppSettings.Instance.DontConfirmSecondAbortConfirmation ||
                     MessageBox.Show(_areYouSureYouWantDeleteFiles.Text, _areYouSureYouWantDeleteFilesCaption.Text,
                     MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
                     return true;

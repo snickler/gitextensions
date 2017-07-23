@@ -70,9 +70,9 @@ namespace GitUI.CommandsDialogs
             FileChanges.DisableContextMenu();
 
             UpdateFollowHistoryMenuItems();
-            fullHistoryToolStripMenuItem.Checked = AppSettings.FullHistoryInFileHistory;
-            loadHistoryOnShowToolStripMenuItem.Checked = AppSettings.LoadFileHistoryOnShow;
-            loadBlameOnShowToolStripMenuItem.Checked = AppSettings.LoadBlameOnShow;
+            fullHistoryToolStripMenuItem.Checked = AppSettings.Instance.FullHistoryInFileHistory;
+            loadHistoryOnShowToolStripMenuItem.Checked = AppSettings.Instance.LoadFileHistoryOnShow;
+            loadBlameOnShowToolStripMenuItem.Checked = AppSettings.Instance.LoadBlameOnShow;
 
             if (filterByRevision && revision != null && revision.Guid != null)
                 _filterBranchHelper.SetBranchFilter(revision.Guid, false);
@@ -87,7 +87,7 @@ namespace GitUI.CommandsDialogs
         {
             base.OnRuntimeLoad(e);
 
-            bool autoLoad = (tabControl1.SelectedTab == BlameTab && AppSettings.LoadBlameOnShow) || AppSettings.LoadFileHistoryOnShow;
+            bool autoLoad = (tabControl1.SelectedTab == BlameTab && AppSettings.Instance.LoadBlameOnShow) || AppSettings.Instance.LoadFileHistoryOnShow;
 
             if (autoLoad)
                 LoadFileHistory();
@@ -161,7 +161,7 @@ namespace GitUI.CommandsDialogs
 
             FixedFilterTuple res = new FixedFilterTuple();
             res.PathFilter = " \"" + fileName + "\"";
-            if (AppSettings.FollowRenamesInFileHistory && !Directory.Exists(fullFilePath))
+            if (AppSettings.Instance.FollowRenamesInFileHistory && !Directory.Exists(fullFilePath))
             {
                 // git log --follow is not working as expected (see  http://kerneltrap.org/mailarchive/git/2009/1/30/4856404/thread)
                 //
@@ -200,7 +200,7 @@ namespace GitUI.CommandsDialogs
                 res.PathFilter = listOfFileNames.ToString();
                 res.RevisionFilter += " --name-only --parents" + GitCommandHelpers.FindRenamesAndCopiesOpts();
             }
-            else if (AppSettings.FollowRenamesInFileHistory)
+            else if (AppSettings.Instance.FollowRenamesInFileHistory)
             {
                 // history of a directory
                 // --parents doesn't work with --follow enabled, but needed to graph a filtered log
@@ -212,7 +212,7 @@ namespace GitUI.CommandsDialogs
                 res.RevisionFilter = " --parents";
             }
 
-            if (AppSettings.FullHistoryInFileHistory)
+            if (AppSettings.Instance.FullHistoryInFileHistory)
             {
                 res.RevisionFilter = string.Concat(" --full-history ", res.RevisionFilter);
             }
@@ -356,7 +356,7 @@ namespace GitUI.CommandsDialogs
 
         private void followFileHistoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AppSettings.FollowRenamesInFileHistory = !AppSettings.FollowRenamesInFileHistory;
+            AppSettings.Instance.FollowRenamesInFileHistory = !AppSettings.Instance.FollowRenamesInFileHistory;
             UpdateFollowHistoryMenuItems();
 
             LoadFileHistory();
@@ -364,15 +364,15 @@ namespace GitUI.CommandsDialogs
 
         private void UpdateFollowHistoryMenuItems()
         {
-            followFileHistoryToolStripMenuItem.Checked = AppSettings.FollowRenamesInFileHistory;
-            followFileHistoryRenamesToolStripMenuItem.Enabled = AppSettings.FollowRenamesInFileHistory;
-            followFileHistoryRenamesToolStripMenuItem.Checked = AppSettings.FollowRenamesInFileHistoryExactOnly;
+            followFileHistoryToolStripMenuItem.Checked = AppSettings.Instance.FollowRenamesInFileHistory;
+            followFileHistoryRenamesToolStripMenuItem.Enabled = AppSettings.Instance.FollowRenamesInFileHistory;
+            followFileHistoryRenamesToolStripMenuItem.Checked = AppSettings.Instance.FollowRenamesInFileHistoryExactOnly;
         }
 
         private void fullHistoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AppSettings.FullHistoryInFileHistory = !AppSettings.FullHistoryInFileHistory;
-            fullHistoryToolStripMenuItem.Checked = AppSettings.FullHistoryInFileHistory;
+            AppSettings.Instance.FullHistoryInFileHistory = !AppSettings.Instance.FullHistoryInFileHistory;
+            fullHistoryToolStripMenuItem.Checked = AppSettings.Instance.FullHistoryInFileHistory;
             LoadFileHistory();
         }
 
@@ -427,14 +427,14 @@ namespace GitUI.CommandsDialogs
 
         private void loadHistoryOnShowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AppSettings.LoadFileHistoryOnShow = !AppSettings.LoadFileHistoryOnShow;
-            loadHistoryOnShowToolStripMenuItem.Checked = AppSettings.LoadFileHistoryOnShow;
+            AppSettings.Instance.LoadFileHistoryOnShow = !AppSettings.Instance.LoadFileHistoryOnShow;
+            loadHistoryOnShowToolStripMenuItem.Checked = AppSettings.Instance.LoadFileHistoryOnShow;
         }
 
         private void loadBlameOnShowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AppSettings.LoadBlameOnShow = !AppSettings.LoadBlameOnShow;
-            loadBlameOnShowToolStripMenuItem.Checked = AppSettings.LoadBlameOnShow;
+            AppSettings.Instance.LoadBlameOnShow = !AppSettings.Instance.LoadBlameOnShow;
+            loadBlameOnShowToolStripMenuItem.Checked = AppSettings.Instance.LoadBlameOnShow;
         }
 
         private void Blame_CommandClick(object sender, CommitInfo.CommandEventArgs e)
@@ -472,7 +472,7 @@ namespace GitUI.CommandsDialogs
 
         private void followFileHistoryRenamesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AppSettings.FollowRenamesInFileHistoryExactOnly = !AppSettings.FollowRenamesInFileHistoryExactOnly;
+            AppSettings.Instance.FollowRenamesInFileHistoryExactOnly = !AppSettings.Instance.FollowRenamesInFileHistoryExactOnly;
             UpdateFollowHistoryMenuItems();
             LoadFileHistory();
         }
