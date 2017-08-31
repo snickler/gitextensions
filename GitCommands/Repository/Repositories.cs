@@ -99,7 +99,9 @@ namespace GitCommands.Repository
                 {
                     Repository catRepo = FindFirstCategoryRepository(repo.Path);
                     if (catRepo != null)
-                        repo.Assign(catRepo);
+                    {
+                        repo.Path = catRepo.Path;
+                    }
                 }
             }
         }
