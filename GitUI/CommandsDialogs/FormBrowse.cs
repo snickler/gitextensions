@@ -147,8 +147,6 @@ namespace GitUI.CommandsDialogs
             _showRevisionInfoNextToRevisionGrid = AppSettings.ShowRevisionInfoNextToRevisionGrid;
             InitializeComponent();
 
-            toolPanel.SplitterDistance = ToolStrip.PreferredSize.Height;
-
             // set tab page images
             {
                 var imageList = new ImageList();
@@ -202,7 +200,6 @@ namespace GitUI.CommandsDialogs
 
             this.HotkeysEnabled = true;
             this.Hotkeys = HotkeySettingsManager.LoadHotkeys(HotkeySettingsName);
-            this.toolPanel.SplitterDistance = this.ToolStrip.Height;
             GitUICommandsChanged += (a, e) =>
             {
                 var oldcommands = e.OldCommands;
@@ -317,7 +314,7 @@ namespace GitUI.CommandsDialogs
             {
                 _dashboard = new Dashboard();
                 _dashboard.GitModuleChanged += SetGitModule;
-                toolPanel.Panel2.Controls.Add(_dashboard);
+                toolPanel.ContentPanel.Controls.Add(_dashboard);
                 _dashboard.Dock = DockStyle.Fill;
                 _dashboard.SetSplitterPositions();
             }
@@ -1356,8 +1353,9 @@ namespace GitUI.CommandsDialogs
 
         private void SaveUserMenuPosition()
         {
-            GitCommands.AppSettings.UserMenuLocationX = UserMenuToolStrip.Location.X;
-            GitCommands.AppSettings.UserMenuLocationY = UserMenuToolStrip.Location.Y;
+            // TODO:
+            //GitCommands.AppSettings.UserMenuLocationX = UserMenuToolStrip.Location.X;
+            //GitCommands.AppSettings.UserMenuLocationY = UserMenuToolStrip.Location.Y;
         }
 
         private void EditGitignoreToolStripMenuItem1Click(object sender, EventArgs e)
