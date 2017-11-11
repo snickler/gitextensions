@@ -12,7 +12,6 @@ using ConEmu.WinForms;
 using GitCommands;
 using GitCommands.Git;
 using GitCommands.Repository;
-using GitCommands.Settings;
 using GitCommands.Utils;
 using GitUI.CommandsDialogs.BrowseDialog;
 using GitUI.CommandsDialogs.BrowseDialog.DashboardControl;
@@ -147,6 +146,14 @@ namespace GitUI.CommandsDialogs
             _showRevisionInfoNextToRevisionGrid = AppSettings.ShowRevisionInfoNextToRevisionGrid;
             InitializeComponent();
 
+            try
+            {
+                ToolStripManager.LoadSettings(this, "toolsettings");
+            }
+            catch
+            {
+                // do nothing 
+            }
             // set tab page images
             {
                 var imageList = new ImageList();
@@ -1090,7 +1097,7 @@ namespace GitUI.CommandsDialogs
 
                 var revisions = RevisionGrid.GetSelectedRevisions();
 
-                this.CommitInfoTabControl.SelectedIndexChanged -= new System.EventHandler(this.TabControl1SelectedIndexChanged);
+                CommitInfoTabControl.SelectedIndexChanged -= CommitInfoTabControl_SelectedIndexChanged;
                 if (revisions.Any() && GitRevision.IsArtificial(revisions[0].Guid))
                 {
                     //Artificial commits cannot show tree (ls-tree) and has no commit info 
@@ -1116,7 +1123,7 @@ namespace GitUI.CommandsDialogs
                         RevisionsSplitContainer.Panel2Collapsed = false;
                     }
                 }
-                this.CommitInfoTabControl.SelectedIndexChanged += new System.EventHandler(this.TabControl1SelectedIndexChanged);
+                CommitInfoTabControl.SelectedIndexChanged += CommitInfoTabControl_SelectedIndexChanged;
 
                 //RevisionGrid.HighlightSelectedBranch();
 
@@ -1342,20 +1349,16 @@ namespace GitUI.CommandsDialogs
 
         private void FormBrowseFormClosing(object sender, FormClosingEventArgs e)
         {
-            SaveMenuPosition();
+            CommitInfoTabControl.SelectedIndexChanged -= CommitInfoTabControl_SelectedIndexChanged;
+            CommitInfoTabControl.TabPages.Clear();
+
+            ToolStripManager.SaveSettings(this, "toolsettings");
             SaveApplicationSettings();
         }
 
         private static void SaveApplicationSettings()
         {
             AppSettings.SaveSettings();
-        }
-
-        private void SaveMenuPosition()
-        {
-            // TODO:
-            //AppSettings.UserMenuLocationX = UserMenuToolStrip.Location.X;
-            //AppSettings.UserMenuLocationY = UserMenuToolStrip.Location.Y;
         }
 
         private void EditGitignoreToolStripMenuItem1Click(object sender, EventArgs e)
@@ -1449,7 +1452,7 @@ namespace GitUI.CommandsDialogs
             Module.RunExternalCmdDetached(AppSettings.Puttygen, "");
         }
 
-        private void TabControl1SelectedIndexChanged(object sender, EventArgs e)
+        private void CommitInfoTabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             FillFileTree();
             FillDiff();
@@ -1701,6 +1704,8 @@ namespace GitUI.CommandsDialogs
 
         private void SetGitModule(object sender, GitModuleEventArgs e)
         {
+           // ToolStripManager.SaveSettings(this, "toolsettings");
+
             var module = e.GitModule;
             HideVariableMainMenuItems();
             UnregisterPlugins();
@@ -1726,6 +1731,8 @@ namespace GitUI.CommandsDialogs
             UICommands.RepoChangedNotifier.Notify();
             RevisionGrid.IndexWatcher.Reset();
             RegisterPlugins();
+
+            //ToolStripManager.LoadSettings(this, "toolsettings");
         }
 
         private void TranslateToolStripMenuItemClick(object sender, EventArgs e)

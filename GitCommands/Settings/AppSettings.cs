@@ -241,18 +241,6 @@ namespace GitCommands
             }
         }
 
-        public static int UserMenuLocationX
-        {
-            get { return GetInt("usermenulocationx", -1); }
-            set { SetInt("usermenulocationx", value); }
-        }
-
-        public static int UserMenuLocationY
-        {
-            get { return GetInt("usermenulocationy", -1); }
-            set { SetInt("usermenulocationy", value); }
-        }
-
         public static bool StashKeepIndex
         {
             get { return GetBool("stashkeepindex", false); }
