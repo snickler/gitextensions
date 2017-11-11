@@ -12,6 +12,7 @@ using ConEmu.WinForms;
 using GitCommands;
 using GitCommands.Git;
 using GitCommands.Repository;
+using GitCommands.Settings;
 using GitCommands.Utils;
 using GitUI.CommandsDialogs.BrowseDialog;
 using GitUI.CommandsDialogs.BrowseDialog.DashboardControl;
@@ -25,7 +26,6 @@ using GitUI.UserControls.RevisionGridClasses;
 using GitUIPluginInterfaces;
 using Microsoft.Win32;
 using ResourceManager;
-using Settings = GitCommands.AppSettings;
 #if !__MonoCS__
 using Microsoft.WindowsAPICodePack.Taskbar;
 #endif
@@ -172,7 +172,7 @@ namespace GitUI.CommandsDialogs
             Translate();
             LayoutRevisionInfo();
 
-            if (Settings.ShowGitStatusInBrowseToolbar)
+            if (AppSettings.ShowGitStatusInBrowseToolbar)
             {
                 _toolStripGitStatus = new ToolStripGitStatus
                 {
@@ -360,7 +360,7 @@ namespace GitUI.CommandsDialogs
 
             try
             {
-                if (Settings.PlaySpecialStartupSound)
+                if (AppSettings.PlaySpecialStartupSound)
                 {
                     using (var cowMoo = Resources.cow_moo)
                         new System.Media.SoundPlayer(cowMoo).Play();
@@ -376,7 +376,7 @@ namespace GitUI.CommandsDialogs
             bool indexChanged = e.IsIndexChanged;
             this.InvokeAsync(() =>
             {
-                RefreshButton.Image = indexChanged && Settings.UseFastChecks && Module.IsValidGitWorkingDir()
+                RefreshButton.Image = indexChanged && AppSettings.UseFastChecks && Module.IsValidGitWorkingDir()
                                           ? Resources.arrow_refresh_dirty
                                           : Resources.arrow_refresh;
             });
@@ -466,9 +466,9 @@ namespace GitUI.CommandsDialogs
             UICommands.RaisePreBrowseInitialize(this);
 
             // check for updates
-            if (Settings.LastUpdateCheck.AddDays(7) < DateTime.Now)
+            if (AppSettings.LastUpdateCheck.AddDays(7) < DateTime.Now)
             {
-                Settings.LastUpdateCheck = DateTime.Now;
+                AppSettings.LastUpdateCheck = DateTime.Now;
                 var updateForm = new FormUpdates(Module.AppVersion);
                 updateForm.SearchForUpdatesAndShow(Owner, false);
             }
@@ -561,8 +561,8 @@ namespace GitUI.CommandsDialogs
             UpdateJumplist(validWorkingDir);
 
             OnActivate();
-            // load custom user menu
-            LoadUserMenu();
+            // load user menu
+            LoadMenuPosition();
 
             if (validWorkingDir)
             {
@@ -631,12 +631,12 @@ namespace GitUI.CommandsDialogs
                 else
                     _NO_TRANSLATE_Workingdir.Text = ri.Caption;
 
-                if (Settings.RecentReposComboMinWidth > 0)
+                if (AppSettings.RecentReposComboMinWidth > 0)
                 {
                     _NO_TRANSLATE_Workingdir.AutoSize = false;
                     var captionWidth = graphics.MeasureString(_NO_TRANSLATE_Workingdir.Text, _NO_TRANSLATE_Workingdir.Font).Width;
                     captionWidth = captionWidth + _NO_TRANSLATE_Workingdir.DropDownButtonWidth + 5;
-                    _NO_TRANSLATE_Workingdir.Width = Math.Max(Settings.RecentReposComboMinWidth, (int)captionWidth);
+                    _NO_TRANSLATE_Workingdir.Width = Math.Max(AppSettings.RecentReposComboMinWidth, (int)captionWidth);
                 }
                 else
                     _NO_TRANSLATE_Workingdir.AutoSize = true;
@@ -667,7 +667,7 @@ namespace GitUI.CommandsDialogs
             return dirInfo.Name;
         }
 
-        private void LoadUserMenu()
+        private void LoadMenuPosition()
         {
             var scripts = ScriptManager.GetScripts().Where(script => script.Enabled
                 && script.OnEvent == ScriptEvent.ShowInUserMenuBar).ToList();
@@ -720,7 +720,7 @@ namespace GitUI.CommandsDialogs
                 if (validWorkingDir)
                 {
                     string repositoryDescription = GetRepositoryShortName(Module.WorkingDir);
-                    string baseFolder = Path.Combine(Settings.ApplicationDataPath.Value, "Recent");
+                    string baseFolder = Path.Combine(AppSettings.ApplicationDataPath.Value, "Recent");
                     if (!Directory.Exists(baseFolder))
                     {
                         Directory.CreateDirectory(baseFolder);
@@ -840,7 +840,7 @@ namespace GitUI.CommandsDialogs
 
         private void UpdateStashCount()
         {
-            if (Settings.ShowStashCount)
+            if (AppSettings.ShowStashCount)
             {
                 AsyncLoader.DoAsync(() => Module.GetStashes().Count,
                     (result) => toolStripSplitStash.Text = string.Format(_stashCount.Text, result,
@@ -1079,7 +1079,7 @@ namespace GitUI.CommandsDialogs
         private UpdateTargets _selectedRevisionUpdatedTargets = UpdateTargets.None;
         private void RevisionGridSelectionChanged(object sender, EventArgs e)
         {
-            if(_showRevisionInfoNextToRevisionGrid != AppSettings.ShowRevisionInfoNextToRevisionGrid)
+            if (_showRevisionInfoNextToRevisionGrid != AppSettings.ShowRevisionInfoNextToRevisionGrid)
             {
                 _showRevisionInfoNextToRevisionGrid = AppSettings.ShowRevisionInfoNextToRevisionGrid;
                 LayoutRevisionInfo();
@@ -1169,11 +1169,11 @@ namespace GitUI.CommandsDialogs
             bool bSilent;
             if (sender == toolStripButtonPull || sender == pullToolStripMenuItem)
             {
-                if (Module.LastPullAction == Settings.PullAction.None)
+                if (Module.LastPullAction == AppSettings.PullAction.None)
                 {
                     bSilent = (ModifierKeys & Keys.Shift) != 0;
                 }
-                else if (Module.LastPullAction == Settings.PullAction.FetchAll)
+                else if (Module.LastPullAction == AppSettings.PullAction.FetchAll)
                 {
                     fetchAllToolStripMenuItem_Click(sender, e);
                     return;
@@ -1303,9 +1303,9 @@ namespace GitUI.CommandsDialogs
 
         private void SettingsClick(object sender, EventArgs e)
         {
-            var translation = Settings.Translation;
+            var translation = AppSettings.Translation;
             UICommands.StartSettingsDialog(this);
-            if (translation != Settings.Translation)
+            if (translation != AppSettings.Translation)
                 Translate();
 
             this.Hotkeys = HotkeySettingsManager.LoadHotkeys(HotkeySettingsName);
@@ -1342,7 +1342,7 @@ namespace GitUI.CommandsDialogs
 
         private void FormBrowseFormClosing(object sender, FormClosingEventArgs e)
         {
-            SaveUserMenuPosition();
+            SaveMenuPosition();
             SaveApplicationSettings();
         }
 
@@ -1351,7 +1351,7 @@ namespace GitUI.CommandsDialogs
             AppSettings.SaveSettings();
         }
 
-        private void SaveUserMenuPosition()
+        private void SaveMenuPosition()
         {
             // TODO:
             //AppSettings.UserMenuLocationX = UserMenuToolStrip.Location.X;
@@ -1441,12 +1441,12 @@ namespace GitUI.CommandsDialogs
 
         private void StartAuthenticationAgentToolStripMenuItemClick(object sender, EventArgs e)
         {
-            Module.RunExternalCmdDetached(Settings.Pageant, "");
+            Module.RunExternalCmdDetached(AppSettings.Pageant, "");
         }
 
         private void GenerateOrImportKeyToolStripMenuItemClick(object sender, EventArgs e)
         {
-            Module.RunExternalCmdDetached(Settings.Puttygen, "");
+            Module.RunExternalCmdDetached(AppSettings.Puttygen, "");
         }
 
         private void TabControl1SelectedIndexChanged(object sender, EventArgs e)
@@ -1669,7 +1669,7 @@ namespace GitUI.CommandsDialogs
 
             if (lessRecentRepos.Count > 0)
             {
-                if (mostRecentRepos.Count > 0 && (Settings.SortMostRecentRepos || Settings.SortLessRecentRepos))
+                if (mostRecentRepos.Count > 0 && (AppSettings.SortMostRecentRepos || AppSettings.SortLessRecentRepos))
                     _NO_TRANSLATE_Workingdir.DropDownItems.Add(new ToolStripSeparator());
 
                 foreach (RecentRepoInfo repo in lessRecentRepos)
@@ -1709,7 +1709,7 @@ namespace GitUI.CommandsDialogs
             if (Module.IsValidGitWorkingDir())
             {
                 Repositories.AddMostRecentRepository(Module.WorkingDir);
-                Settings.RecentWorkingDir = module.WorkingDir;
+                AppSettings.RecentWorkingDir = module.WorkingDir;
                 ChangeTerminalActiveFolder(Module.WorkingDir);
 
 #if DEBUG
@@ -2060,8 +2060,8 @@ namespace GitUI.CommandsDialogs
 
         private void dontSetAsDefaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Settings.SetNextPullActionAsDefault = !setNextPullActionAsDefaultToolStripMenuItem.Checked;
-            setNextPullActionAsDefaultToolStripMenuItem.Checked = Settings.SetNextPullActionAsDefault;
+            AppSettings.SetNextPullActionAsDefault = !setNextPullActionAsDefaultToolStripMenuItem.Checked;
+            setNextPullActionAsDefaultToolStripMenuItem.Checked = AppSettings.SetNextPullActionAsDefault;
         }
 
         private void doPullAction(Action action)
@@ -2073,12 +2073,12 @@ namespace GitUI.CommandsDialogs
             }
             finally
             {
-                if (!Settings.SetNextPullActionAsDefault)
+                if (!AppSettings.SetNextPullActionAsDefault)
                 {
                     Module.LastPullAction = actLactPullAction;
                     Module.LastPullActionToFormPullAction();
                 }
-                Settings.SetNextPullActionAsDefault = false;
+                AppSettings.SetNextPullActionAsDefault = false;
                 RefreshPullIcon();
             }
         }
@@ -2087,7 +2087,7 @@ namespace GitUI.CommandsDialogs
         {
             doPullAction(() =>
                 {
-                    Module.LastPullAction = Settings.PullAction.Merge;
+                    Module.LastPullAction = AppSettings.PullAction.Merge;
                     PullToolStripMenuItemClick(sender, e);
                 }
             );
@@ -2097,7 +2097,7 @@ namespace GitUI.CommandsDialogs
         {
             doPullAction(() =>
             {
-                Module.LastPullAction = Settings.PullAction.Rebase;
+                Module.LastPullAction = AppSettings.PullAction.Rebase;
                 PullToolStripMenuItemClick(sender, e);
             }
             );
@@ -2107,7 +2107,7 @@ namespace GitUI.CommandsDialogs
         {
             doPullAction(() =>
             {
-                Module.LastPullAction = Settings.PullAction.Fetch;
+                Module.LastPullAction = AppSettings.PullAction.Fetch;
                 PullToolStripMenuItemClick(sender, e);
             }
             );
@@ -2115,37 +2115,37 @@ namespace GitUI.CommandsDialogs
 
         private void pullToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (Settings.SetNextPullActionAsDefault)
-                Module.LastPullAction = Settings.PullAction.None;
+            if (AppSettings.SetNextPullActionAsDefault)
+                Module.LastPullAction = AppSettings.PullAction.None;
             PullToolStripMenuItemClick(sender, e);
 
-            //restore Settings.FormPullAction value
-            if (!Settings.SetNextPullActionAsDefault)
+            //restore AppSettings.FormPullAction value
+            if (!AppSettings.SetNextPullActionAsDefault)
                 Module.LastPullActionToFormPullAction();
 
-            Settings.SetNextPullActionAsDefault = false;
+            AppSettings.SetNextPullActionAsDefault = false;
         }
 
         private void RefreshPullIcon()
         {
             switch (Module.LastPullAction)
             {
-                case Settings.PullAction.Fetch:
+                case AppSettings.PullAction.Fetch:
                     toolStripButtonPull.Image = Properties.Resources.PullFetch;
                     toolStripButtonPull.ToolTipText = _pullFetch.Text;
                     break;
 
-                case Settings.PullAction.FetchAll:
+                case AppSettings.PullAction.FetchAll:
                     toolStripButtonPull.Image = Properties.Resources.PullFetchAll;
                     toolStripButtonPull.ToolTipText = _pullFetchAll.Text;
                     break;
 
-                case Settings.PullAction.Merge:
+                case AppSettings.PullAction.Merge:
                     toolStripButtonPull.Image = Properties.Resources.PullMerge;
                     toolStripButtonPull.ToolTipText = _pullMerge.Text;
                     break;
 
-                case Settings.PullAction.Rebase:
+                case AppSettings.PullAction.Rebase:
                     toolStripButtonPull.Image = Properties.Resources.PullRebase;
                     toolStripButtonPull.ToolTipText = _pullRebase.Text;
                     break;
@@ -2159,19 +2159,19 @@ namespace GitUI.CommandsDialogs
 
         private void fetchAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Settings.SetNextPullActionAsDefault)
-                Module.LastPullAction = Settings.PullAction.FetchAll;
+            if (AppSettings.SetNextPullActionAsDefault)
+                Module.LastPullAction = AppSettings.PullAction.FetchAll;
 
             RefreshPullIcon();
             bool pullCompelted;
 
             UICommands.StartPullDialog(this, true, out pullCompelted, true);
 
-            //restore Settings.FormPullAction value
-            if (!Settings.SetNextPullActionAsDefault)
+            //restore AppSettings.FormPullAction value
+            if (!AppSettings.SetNextPullActionAsDefault)
                 Module.LastPullActionToFormPullAction();
 
-            Settings.SetNextPullActionAsDefault = false;
+            AppSettings.SetNextPullActionAsDefault = false;
         }
 
         private void _NO_TRANSLATE_Workingdir_MouseUp(object sender, MouseEventArgs e)
@@ -2403,7 +2403,7 @@ namespace GitUI.CommandsDialogs
                     cancelToken.ThrowIfCancellationRequested();
                     var name = submodule;
                     string path = threadModule.GetSubmoduleFullPath(submodule);
-                    if (Settings.DashboardShowCurrentBranch && !GitModule.IsBareRepository(path))
+                    if (AppSettings.DashboardShowCurrentBranch && !GitModule.IsBareRepository(path))
                         name = name + " " + GetModuleBranch(path);
 
                     var smi = new SubmoduleInfo { Text = name, Path = path };
@@ -2418,7 +2418,7 @@ namespace GitUI.CommandsDialogs
                     {
                         var name = Path.GetFileName(Path.GetDirectoryName(supersuperproject.WorkingDir));
                         string path = supersuperproject.WorkingDir;
-                        if (Settings.DashboardShowCurrentBranch && !GitModule.IsBareRepository(path))
+                        if (AppSettings.DashboardShowCurrentBranch && !GitModule.IsBareRepository(path))
                             name = name + " " + GetModuleBranch(path);
 
                         result.TopProject = new SubmoduleInfo { Text = name, Path = supersuperproject.WorkingDir };
@@ -2439,7 +2439,7 @@ namespace GitUI.CommandsDialogs
                         else
                             name = Path.GetFileName(Path.GetDirectoryName(supersuperproject.WorkingDir));
                         string path = threadModule.SuperprojectModule.WorkingDir;
-                        if (Settings.DashboardShowCurrentBranch && !GitModule.IsBareRepository(path))
+                        if (AppSettings.DashboardShowCurrentBranch && !GitModule.IsBareRepository(path))
                             name = name + " " + GetModuleBranch(path);
 
                         result.Superproject = new SubmoduleInfo { Text = name, Path = threadModule.SuperprojectModule.WorkingDir };
@@ -2457,7 +2457,7 @@ namespace GitUI.CommandsDialogs
                             cancelToken.ThrowIfCancellationRequested();
                             var name = submodule;
                             string path = supersuperproject.GetSubmoduleFullPath(submodule);
-                            if (Settings.DashboardShowCurrentBranch && !GitModule.IsBareRepository(path))
+                            if (AppSettings.DashboardShowCurrentBranch && !GitModule.IsBareRepository(path))
                                 name = name + " " + GetModuleBranch(path);
                             bool bold = false;
                             if (submodule == localpath)
@@ -2543,7 +2543,7 @@ namespace GitUI.CommandsDialogs
 
         private void toolStripButtonPull_DropDownOpened(object sender, EventArgs e)
         {
-            setNextPullActionAsDefaultToolStripMenuItem.Checked = Settings.SetNextPullActionAsDefault;
+            setNextPullActionAsDefaultToolStripMenuItem.Checked = AppSettings.SetNextPullActionAsDefault;
             PreventToolStripSplitButtonClosing(sender as ToolStripSplitButton);
         }
 
