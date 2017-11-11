@@ -183,8 +183,8 @@ namespace GitUI.CommandsDialogs
                 if (aCommands != null)
                     _toolStripGitStatus.UICommandsSource = this;
                 _toolStripGitStatus.Click += StatusClick;
-                ToolStrip.Items.Insert(ToolStrip.Items.IndexOf(toolStripButton1), _toolStripGitStatus);
-                ToolStrip.Items.Remove(toolStripButton1);
+                ToolStripMain.Items.Insert(ToolStripMain.Items.IndexOf(toolStripButton1), _toolStripGitStatus);
+                ToolStripMain.Items.Remove(toolStripButton1);
                 _toolStripGitStatus.CommitTranslatedString = toolStripButton1.Text;
             }
 
@@ -672,17 +672,17 @@ namespace GitUI.CommandsDialogs
             var scripts = ScriptManager.GetScripts().Where(script => script.Enabled
                 && script.OnEvent == ScriptEvent.ShowInUserMenuBar).ToList();
 
-            for (int i = ToolStrip.Items.Count - 1; i >= 0; i--)
-                if (ToolStrip.Items[i].Tag != null &&
-                    ToolStrip.Items[i].Tag as String == "userscript")
-                    ToolStrip.Items.RemoveAt(i);
+            for (int i = ToolStripMain.Items.Count - 1; i >= 0; i--)
+                if (ToolStripMain.Items[i].Tag != null &&
+                    ToolStripMain.Items[i].Tag as String == "userscript")
+                    ToolStripMain.Items.RemoveAt(i);
 
             if (scripts.Count == 0)
                 return;
 
             ToolStripSeparator toolstripseparator = new ToolStripSeparator();
             toolstripseparator.Tag = "userscript";
-            ToolStrip.Items.Add(toolstripseparator);
+            ToolStripMain.Items.Add(toolstripseparator);
 
             foreach (ScriptInfo scriptInfo in scripts)
             {
@@ -699,7 +699,7 @@ namespace GitUI.CommandsDialogs
                 tempButton.Image = scriptInfo.GetIcon();
                 tempButton.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
                 //add to toolstrip
-                ToolStrip.Items.Add(tempButton);
+                ToolStripMain.Items.Add(tempButton);
             }
         }
 
@@ -1354,8 +1354,8 @@ namespace GitUI.CommandsDialogs
         private void SaveUserMenuPosition()
         {
             // TODO:
-            //GitCommands.AppSettings.UserMenuLocationX = UserMenuToolStrip.Location.X;
-            //GitCommands.AppSettings.UserMenuLocationY = UserMenuToolStrip.Location.Y;
+            //AppSettings.UserMenuLocationX = UserMenuToolStrip.Location.X;
+            //AppSettings.UserMenuLocationY = UserMenuToolStrip.Location.Y;
         }
 
         private void EditGitignoreToolStripMenuItem1Click(object sender, EventArgs e)
