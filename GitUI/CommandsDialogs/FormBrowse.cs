@@ -1262,16 +1262,6 @@ namespace GitUI.CommandsDialogs
             UICommands.StartResolveConflictsDialog(this);
         }
 
-        private void WorkingdirClick(object sender, EventArgs e)
-        {
-            _NO_TRANSLATE_Workingdir.ShowDropDown();
-        }
-
-        private void CurrentBranchClick(object sender, EventArgs e)
-        {
-            branchSelect.ShowDropDown();
-        }
-
         private void DeleteBranchToolStripMenuItemClick(object sender, EventArgs e)
         {
             UICommands.StartDeleteBranchDialog(this, null);
@@ -1316,11 +1306,6 @@ namespace GitUI.CommandsDialogs
         private void TagToolStripMenuItemClick(object sender, EventArgs e)
         {
             UICommands.StartCreateTagDialog(this);
-        }
-
-        private void RefreshButtonClick(object sender, EventArgs e)
-        {
-            RefreshToolStripMenuItemClick(sender, e);
         }
 
         private void CommitcountPerUserToolStripMenuItemClick(object sender, EventArgs e)
@@ -1453,11 +1438,6 @@ namespace GitUI.CommandsDialogs
             using (var frm = new FormChangeLog()) frm.ShowDialog(this);
         }
 
-        private void ToolStripButtonPushClick(object sender, EventArgs e)
-        {
-            PushToolStripMenuItemClick(sender, e);
-        }
-
         private void ManageSubmodulesToolStripMenuItemClick(object sender, EventArgs e)
         {
             UICommands.StartSubmodulesDialog(this);
@@ -1482,26 +1462,6 @@ namespace GitUI.CommandsDialogs
         private void SynchronizeAllSubmodulesToolStripMenuItemClick(object sender, EventArgs e)
         {
             UICommands.StartSyncSubmodulesDialog(this);
-        }
-
-        private void ToolStripSplitStashButtonClick(object sender, EventArgs e)
-        {
-            UICommands.StartStashDialog(this);
-        }
-
-        private void StashChangesToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            UICommands.StashSave(this, AppSettings.IncludeUntrackedFilesInManualStash);
-        }
-
-        private void StashPopToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            UICommands.StashPop(this);
-        }
-
-        private void ViewStashToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            UICommands.StartStashDialog(this);
         }
 
         private void ExitToolStripMenuItemClick(object sender, EventArgs e)
@@ -1629,64 +1589,6 @@ namespace GitUI.CommandsDialogs
             UICommands.StartCleanupRepositoryDialog(this);
         }
 
-        private void AddWorkingdirDropDownItem(Repository repo, string caption)
-        {
-            ToolStripMenuItem toolStripItem = new ToolStripMenuItem(caption);
-            _NO_TRANSLATE_Workingdir.DropDownItems.Add(toolStripItem);
-
-            toolStripItem.Click += (hs, he) => ChangeWorkingDir(repo.Path);
-
-            if (repo.Title != null || !repo.Path.Equals(caption))
-                toolStripItem.ToolTipText = repo.Path;
-        }
-
-        private void WorkingdirDropDownOpening(object sender, EventArgs e)
-        {
-            _NO_TRANSLATE_Workingdir.DropDownItems.Clear();
-
-            List<RecentRepoInfo> mostRecentRepos = new List<RecentRepoInfo>();
-            List<RecentRepoInfo> lessRecentRepos = new List<RecentRepoInfo>();
-
-            using (var graphics = CreateGraphics())
-            {
-                var splitter = new RecentRepoSplitter
-                {
-                    MeasureFont = _NO_TRANSLATE_Workingdir.Font,
-                    Graphics = graphics
-                };
-                splitter.SplitRecentRepos(Repositories.RepositoryHistory.Repositories, mostRecentRepos, lessRecentRepos);
-            }
-
-            foreach (RecentRepoInfo repo in mostRecentRepos)
-                AddWorkingdirDropDownItem(repo.Repo, repo.Caption);
-
-            if (lessRecentRepos.Count > 0)
-            {
-                if (mostRecentRepos.Count > 0 && (AppSettings.SortMostRecentRepos || AppSettings.SortLessRecentRepos))
-                    _NO_TRANSLATE_Workingdir.DropDownItems.Add(new ToolStripSeparator());
-
-                foreach (RecentRepoInfo repo in lessRecentRepos)
-                    AddWorkingdirDropDownItem(repo.Repo, repo.Caption);
-            }
-
-            _NO_TRANSLATE_Workingdir.DropDownItems.Add(new ToolStripSeparator());
-
-            ToolStripMenuItem toolStripItem = new ToolStripMenuItem(openToolStripMenuItem.Text);
-            toolStripItem.ShortcutKeys = openToolStripMenuItem.ShortcutKeys;
-            _NO_TRANSLATE_Workingdir.DropDownItems.Add(toolStripItem);
-            toolStripItem.Click += (hs, he) => OpenToolStripMenuItemClick(hs, he);
-
-            toolStripItem = new ToolStripMenuItem(_configureWorkingDirMenu.Text);
-            _NO_TRANSLATE_Workingdir.DropDownItems.Add(toolStripItem);
-            toolStripItem.Click += (hs, he) =>
-            {
-                using (var frm = new FormRecentReposSettings()) frm.ShowDialog(this);
-                RefreshWorkingDirCombo();
-            };
-
-            PreventToolStripSplitButtonClosing(sender as ToolStripSplitButton);
-        }
-
         public void SetWorkingDir(string path)
         {
             SetGitModule(this, new GitModuleEventArgs(new GitModule(path)));
@@ -1749,16 +1651,6 @@ namespace GitUI.CommandsDialogs
             UICommands.StartCreateBranchDialog(this, RevisionGrid.GetSelectedRevisions().FirstOrDefault());
         }
 
-        private void GitBashClick(object sender, EventArgs e)
-        {
-            GitBashToolStripMenuItemClick1(sender, e);
-        }
-
-        private void ToolStripButtonPullClick(object sender, EventArgs e)
-        {
-            PullToolStripMenuItemClick(sender, e);
-        }
-
         private void editgitattributesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UICommands.StartEditGitAttributesDialog(this);
@@ -1808,32 +1700,6 @@ namespace GitUI.CommandsDialogs
         {
             using (var frm = new FormBisect(RevisionGrid)) frm.ShowDialog(this);
             UICommands.RepoChangedNotifier.Notify();
-        }
-
-        private void CurrentBranchDropDownOpening(object sender, EventArgs e)
-        {
-            branchSelect.DropDownItems.Clear();
-
-            ToolStripMenuItem item = new ToolStripMenuItem(checkoutBranchToolStripMenuItem.Text);
-            item.ShortcutKeys = checkoutBranchToolStripMenuItem.ShortcutKeys;
-            item.ShortcutKeyDisplayString = checkoutBranchToolStripMenuItem.ShortcutKeyDisplayString;
-            branchSelect.DropDownItems.Add(item);
-            item.Click += (hs, he) => CheckoutBranchToolStripMenuItemClick(hs, he);
-
-            branchSelect.DropDownItems.Add(new ToolStripSeparator());
-
-            foreach (var branch in Module.GetRefs(false))
-            {
-                var toolStripItem = branchSelect.DropDownItems.Add(branch.Name);
-                toolStripItem.Click += BranchSelectToolStripItem_Click;
-
-                //Make sure there are never more than 100 branches added to the menu
-                //GitExtensions will hang when the drop down is to large...
-                if (branchSelect.DropDownItems.Count > 100)
-                    break;
-            }
-
-            PreventToolStripSplitButtonClosing(sender as ToolStripSplitButton);
         }
 
         void BranchSelectToolStripItem_Click(object sender, EventArgs e)
@@ -1960,11 +1826,6 @@ namespace GitUI.CommandsDialogs
 
         #endregion
 
-        private void toggleSplitViewLayout_Click(object sender, EventArgs e)
-        {
-            EnabledSplitViewLayout(MainSplitContainer.Panel2.Height == 0 && MainSplitContainer.Height > 0);
-        }
-
         private void EnabledSplitViewLayout(bool enabled)
         {
             if (enabled)
@@ -2051,12 +1912,6 @@ namespace GitUI.CommandsDialogs
             TranslationUtils.TranslateItemsFromFields(Name, _filterBranchHelper, translation);
         }
 
-        private void dontSetAsDefaultToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AppSettings.SetNextPullActionAsDefault = !setNextPullActionAsDefaultToolStripMenuItem.Checked;
-            setNextPullActionAsDefaultToolStripMenuItem.Checked = AppSettings.SetNextPullActionAsDefault;
-        }
-
         private void DoPullAction(Action action)
         {
             var actLactPullAction = Module.LastPullAction;
@@ -2076,47 +1931,10 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void mergeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void dontSetAsDefaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DoPullAction(() =>
-                {
-                    Module.LastPullAction = AppSettings.PullAction.Merge;
-                    PullToolStripMenuItemClick(sender, e);
-                }
-            );
-        }
-
-        private void rebaseToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            DoPullAction(() =>
-            {
-                Module.LastPullAction = AppSettings.PullAction.Rebase;
-                PullToolStripMenuItemClick(sender, e);
-            }
-            );
-        }
-
-        private void fetchToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DoPullAction(() =>
-            {
-                Module.LastPullAction = AppSettings.PullAction.Fetch;
-                PullToolStripMenuItemClick(sender, e);
-            }
-            );
-        }
-
-        private void pullToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            if (AppSettings.SetNextPullActionAsDefault)
-                Module.LastPullAction = AppSettings.PullAction.None;
-            PullToolStripMenuItemClick(sender, e);
-
-            //restore AppSettings.FormPullAction value
-            if (!AppSettings.SetNextPullActionAsDefault)
-                Module.LastPullActionToFormPullAction();
-
-            AppSettings.SetNextPullActionAsDefault = false;
+            AppSettings.SetNextPullActionAsDefault = !setNextPullActionAsDefaultToolStripMenuItem.Checked;
+            setNextPullActionAsDefaultToolStripMenuItem.Checked = AppSettings.SetNextPullActionAsDefault;
         }
 
         private void RefreshPullIcon()
@@ -2165,18 +1983,6 @@ namespace GitUI.CommandsDialogs
                 Module.LastPullActionToFormPullAction();
 
             AppSettings.SetNextPullActionAsDefault = false;
-        }
-
-        private void _NO_TRANSLATE_Workingdir_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-                OpenToolStripMenuItemClick(sender, e);
-        }
-
-        private void branchSelect_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-                CheckoutBranchToolStripMenuItemClick(sender, e);
         }
 
         private void RevisionInfo_CommandClick(object sender, CommitInfo.CommandEventArgs e)
@@ -2253,12 +2059,6 @@ namespace GitUI.CommandsDialogs
 
             controlToFocus.Focus();
             control.Tag = null;
-        }
-
-        private void toolStripButtonLevelUp_DropDownOpening(object sender, EventArgs e)
-        {
-            LoadSubmodulesIntoDropDownMenu();
-            PreventToolStripSplitButtonClosing(sender as ToolStripSplitButton);
         }
 
         private void RemoveSubmoduleButtons()
@@ -2510,14 +2310,6 @@ namespace GitUI.CommandsDialogs
                 TaskScheduler.FromCurrentSynchronizationContext());
         }
 
-        private void toolStripButtonLevelUp_ButtonClick(object sender, EventArgs e)
-        {
-            if (Module.SuperprojectModule != null)
-                SetGitModule(this, new GitModuleEventArgs(Module.SuperprojectModule));
-            else
-                toolStripButtonLevelUp.ShowDropDown();
-        }
-
         private void reportAnIssueToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start(@"https://github.com/gitextensions/gitextensions/issues/new");
@@ -2527,12 +2319,6 @@ namespace GitUI.CommandsDialogs
         {
             var updateForm = new FormUpdates(Module.AppVersion);
             updateForm.SearchForUpdatesAndShow(Owner, true);
-        }
-
-        private void toolStripButtonPull_DropDownOpened(object sender, EventArgs e)
-        {
-            setNextPullActionAsDefaultToolStripMenuItem.Checked = AppSettings.SetNextPullActionAsDefault;
-            PreventToolStripSplitButtonClosing(sender as ToolStripSplitButton);
         }
 
         private void FormBrowse_Activated(object sender, EventArgs e)
@@ -2773,16 +2559,6 @@ namespace GitUI.CommandsDialogs
                 var newModule = new GitModule(formCreateWorktree.WorktreeDirectory);
                 SetGitModule(this, new GitModuleEventArgs(newModule));
             }
-        }
-
-        private void toolStripSplitStash_DropDownOpened(object sender, EventArgs e)
-        {
-            PreventToolStripSplitButtonClosing(sender as ToolStripSplitButton);
-        }
-
-        private void toolStripBranchFilterComboBox_Click(object sender, EventArgs e)
-        {
-            toolStripBranchFilterComboBox.DroppedDown = true;
         }
     }
 }
