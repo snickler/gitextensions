@@ -115,8 +115,8 @@ namespace GitUI.CommandsDialogs
                     try
                     {
                         // If the from directory is filled with the pushUrl from current working directory, set the destination directory to the parent
-                        if (pushUrl.IsNotNullOrWhitespace() && _NO_TRANSLATE_To.Text.IsNullOrWhiteSpace() && Module.WorkingDir.IsNotNullOrWhitespace())
-                            _NO_TRANSLATE_To.Text = Path.GetDirectoryName(Module.WorkingDir.TrimEnd(Path.DirectorySeparatorChar));
+                        if (pushUrl.IsNotNullOrWhitespace() && _NO_TRANSLATE_To.Text.IsNullOrWhiteSpace() && ModuleState.WorkingDir.IsNotNullOrWhitespace())
+                            _NO_TRANSLATE_To.Text = Path.GetDirectoryName(ModuleState.WorkingDir.TrimEnd(Path.DirectorySeparatorChar));
 
                     }
                     catch (Exception)
@@ -127,8 +127,8 @@ namespace GitUI.CommandsDialogs
             }
 
             //if there is no destination directory, then use current working directory
-            if (_NO_TRANSLATE_To.Text.IsNullOrWhiteSpace() && Module.WorkingDir.IsNotNullOrWhitespace())
-                _NO_TRANSLATE_To.Text = Module.WorkingDir.TrimEnd(Path.DirectorySeparatorChar);
+            if (_NO_TRANSLATE_To.Text.IsNullOrWhiteSpace() && ModuleState.WorkingDir.IsNotNullOrWhitespace())
+                _NO_TRANSLATE_To.Text = ModuleState.WorkingDir.TrimEnd(Path.DirectorySeparatorChar);
 
             FromTextUpdate(null, null);
 
@@ -189,7 +189,7 @@ namespace GitUI.CommandsDialogs
                 
                 var cloneCmd = GitCommandHelpers.CloneCmd(_NO_TRANSLATE_From.Text, dirTo,
                             CentralRepository.Checked, cbIntializeAllSubmodules.Checked, branch, depth, isSingleBranch, cbLfs.Checked);
-                using (var fromProcess = new FormRemoteProcess(Module, AppSettings.GitCommand, cloneCmd))
+                using (var fromProcess = new FormRemoteProcess(ModuleState, AppSettings.GitCommand, cloneCmd))
                 {
                     fromProcess.SetUrlTryingToConnect(_NO_TRANSLATE_From.Text);
                     fromProcess.ShowDialog(this);
@@ -208,7 +208,7 @@ namespace GitUI.CommandsDialogs
                 }
                 else if (ShowInTaskbar == false && GitModuleChanged != null &&
                     AskIfNewRepositoryShouldBeOpened(dirTo))
-                    GitModuleChanged(this, new GitModuleEventArgs(new GitModule(dirTo)));
+                    GitModuleChanged(this, new GitModuleEventArgs(new GitModuleState(dirTo)));
 
                 Close();
             }

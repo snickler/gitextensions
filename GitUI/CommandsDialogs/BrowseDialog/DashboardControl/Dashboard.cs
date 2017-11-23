@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using GitCommands;
 using GitCommands.Repository;
 using GitUI.Properties;
+using GitUIPluginInterfaces;
 using GitUIPluginInterfaces.RepositoryHosts;
 using ResourceManager;
 
@@ -297,9 +298,10 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
 
         private void OpenPath(string path)
         {
-            GitModule module = new GitModule(path);
+            var module = new GitModuleState(path);
+            var moduleFunctions = new GitModule(module);
 
-            if (!module.IsValidGitWorkingDir())
+            if (!moduleFunctions.IsValidGitWorkingDir())
             {
                 DialogResult dialogResult = MessageBox.Show(this, directoryIsNotAValidRepository.Text,
                     directoryIsNotAValidRepositoryCaption.Text, MessageBoxButtons.YesNoCancel,
@@ -322,7 +324,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
 
         private void openItem_Click(object sender, EventArgs e)
         {
-            GitModule module = FormOpenDirectory.OpenModule(this, currentModule: null);
+            var module = FormOpenDirectory.OpenModule(this, currentModule: null);
             if (module != null)
                 OnModuleChanged(this, new GitModuleEventArgs(module));
         }
@@ -339,7 +341,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
 
         private void createItem_Click(object sender, EventArgs e)
         {
-            UICommands.StartInitializeDialog(this, Module.WorkingDir, OnModuleChanged);
+            UICommands.StartInitializeDialog(this, ModuleState.WorkingDir, OnModuleChanged);
         }
 
         private static void DonateItem_Click(object sender, EventArgs e)
@@ -364,9 +366,10 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
                 string dir = fileNameArray[0];
                 if (!string.IsNullOrEmpty(dir) && Directory.Exists(dir))
                 {
-                    GitModule module = new GitModule(dir);
+                    var module = new GitModuleState(dir);
+                    var moduleFunctions = new GitModule(module);
 
-                    if (!module.IsValidGitWorkingDir())
+                    if (!moduleFunctions.IsValidGitWorkingDir())
                     {
                         DialogResult dialogResult = MessageBox.Show(this, directoryIsNotAValidRepositoryOpenIt.Text,
                             directoryIsNotAValidRepositoryCaption.Text, MessageBoxButtons.YesNo,

@@ -1111,7 +1111,7 @@ namespace GitUI
                     NoCommits.Visible = true;
                     Loading.Visible = false;
                     NoGit.Visible = true;
-                    string dir = Module.WorkingDir;
+                    string dir = ModuleState.WorkingDir;
                     if (String.IsNullOrEmpty(dir) || !Directory.Exists(dir) ||
                         Directory.GetDirectories(dir).Length == 0 &&
                         Directory.GetFiles(dir).Length == 0)
@@ -1166,7 +1166,7 @@ namespace GitUI
                 else
                     revGraphIMF = filterBarIMF;
 
-                _revisionGraphCommand = new RevisionGraph(Module)
+                _revisionGraphCommand = new RevisionGraph(ModuleState)
                 {
                     BranchFilter = BranchFilter,
                     RefsOptions = _refsOptions,
@@ -1201,15 +1201,17 @@ namespace GitUI
 
         private SuperProjectInfo GetSuperprojectCheckout(Func<IGitRef, bool> showRemoteRef, GitModule gitModule)
         {
-            if (gitModule.SuperprojectModule == null)
+            var superProject = gitModule.GetSuperprojectModule();
+            if (superProject == null)
                 return null;
 
+            var moduleFunctions = new GitModule(superProject);
             SuperProjectInfo spi = new SuperProjectInfo();
             var currentCheckout = gitModule.GetSuperprojectCurrentCheckout();
             if (currentCheckout.Key == 'U')
             {
                 // return local and remote hashes
-                var array = gitModule.SuperprojectModule.GetConflict(gitModule.SubmodulePath);
+                var array = moduleFunctions.GetConflict(gitModule.SubmodulePath);
                 spi.Conflict_Base = array.Base.Hash;
                 spi.Conflict_Local = array.Local.Hash;
                 spi.Conflict_Remote = array.Remote.Hash;
@@ -1219,7 +1221,7 @@ namespace GitUI
                 spi.CurrentBranch = currentCheckout.Value;
             }
 
-            var refs = gitModule.SuperprojectModule.GetSubmoduleItemsForEachRef(gitModule.SubmodulePath, showRemoteRef);
+            var refs = moduleFunctions.GetSubmoduleItemsForEachRef(gitModule.SubmodulePath, showRemoteRef);
 
             if (refs != null)
             {
@@ -2704,7 +2706,7 @@ namespace GitUI
             //Add count only if "FileSystemWatcher" option is set, to give a visual clue that the count is out of date
             //Do not activate if count on Commit button is set, the counters may be inconsistient
             string count = enabled ? "(" + unstaged + ") " : "";
-            var workingDir = new GitRevision(Module, GitRevision.UnstagedGuid)
+            var workingDir = new GitRevision(ModuleState, GitRevision.UnstagedGuid)
             {
                 Subject = count + Strings.GetCurrentUnstagedChanges(),
                 ParentGuids = new[] { GitRevision.IndexGuid }
@@ -2713,7 +2715,7 @@ namespace GitUI
 
             //Add index as virtual commit
             count = enabled ? "(" + staged + ") " : "";
-            var index = new GitRevision(Module, GitRevision.IndexGuid)
+            var index = new GitRevision(ModuleState, GitRevision.IndexGuid)
             {
                 Subject = count + Strings.GetCurrentIndex(),
                 ParentGuids = new[] { filtredCurrentCheckout }
@@ -2768,13 +2770,13 @@ namespace GitUI
             if (LatestSelectedRevision == null)
                 return;
 
-            FormProcess.ShowDialog(this, Module, GitCommandHelpers.ContinueBisectCmd(bisectOption, LatestSelectedRevision.Guid), false);
+            FormProcess.ShowDialog(this, ModuleState, GitCommandHelpers.ContinueBisectCmd(bisectOption, LatestSelectedRevision.Guid), false);
             RefreshRevisions();
         }
 
         private void StopBisectToolStripMenuItemClick(object sender, EventArgs e)
         {
-            FormProcess.ShowDialog(this, Module, GitCommandHelpers.StopBisectCmd());
+            FormProcess.ShowDialog(this, ModuleState, GitCommandHelpers.StopBisectCmd());
             RefreshRevisions();
         }
 
@@ -2834,7 +2836,7 @@ namespace GitUI
                 new FormSettings(UICommands).LoadSettings();
                 _settingsLoaded = true;
             }
-            if (ScriptRunner.RunScript(this, Module, sender.ToString(), this))
+            if (ScriptRunner.RunScript(this, ModuleState, sender.ToString(), this))
                 RefreshRevisions();
         }
 
@@ -2932,7 +2934,7 @@ namespace GitUI
 
         private void InitRepository_Click(object sender, EventArgs e)
         {
-            UICommands.StartInitializeDialog(this, Module.WorkingDir, OnModuleChanged);
+            UICommands.StartInitializeDialog(this, ModuleState.WorkingDir, OnModuleChanged);
         }
 
         private void CloneRepository_Click(object sender, EventArgs e)
@@ -3178,7 +3180,7 @@ namespace GitUI
                 case Commands.ShowFilteredBranches: ShowFilteredBranches_ToolStripMenuItemClick(null, null); break;
                 case Commands.ShowRemoteBranches: ShowRemoteBranches_ToolStripMenuItemClick(null, null); break;
                 case Commands.ShowFirstParent: ShowFirstParent_ToolStripMenuItemClick(null, null); break;
-                case Commands.SelectCurrentRevision: SetSelectedRevision(new GitRevision(Module, CurrentCheckout)); break;
+                case Commands.SelectCurrentRevision: SetSelectedRevision(new GitRevision(ModuleState, CurrentCheckout)); break;
                 case Commands.GoToCommit: _revisionGridMenuCommands.GotoCommitExcecute(); break;
                 case Commands.GoToParent: goToParentToolStripMenuItem_Click(null, null); break;
                 case Commands.GoToChild: goToChildToolStripMenuItem_Click(null, null); break;
@@ -3299,7 +3301,7 @@ namespace GitUI
             string revisionGuid = Module.RevParse(refName);
             if (!string.IsNullOrEmpty(revisionGuid))
             {
-                SetSelectedRevision(new GitRevision(Module, revisionGuid));
+                SetSelectedRevision(new GitRevision(ModuleState, revisionGuid));
             }
             else if (showNoRevisionMsg)
             {
@@ -3425,7 +3427,7 @@ namespace GitUI
             String rebaseCmd = GitCommandHelpers.RebaseCmd(LatestSelectedRevision.FirstParentGuid,
                 interactive: true, preserveMerges: false, autosquash: false, autostash: true);
 
-            using (var formProcess = new FormProcess(null, rebaseCmd, Module.WorkingDir, null, true))
+            using (var formProcess = new FormProcess(null, rebaseCmd, ModuleState.WorkingDir, null, true))
             {
                 formProcess.ProcessEnvVariables.Add("GIT_SEQUENCE_EDITOR", String.Format("sed -i -re '0,/pick/s//{0}/'", command));
                 formProcess.ShowDialog(this);

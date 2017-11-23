@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using GitUIPluginInterfaces;
 
 namespace GitCommands
 {
@@ -75,7 +76,7 @@ namespace GitCommands
             return SvnPrefix + " fetch";
         }
 
-        public static bool ValidSvnWorkingDir(GitModule aModule)
+        public static bool ValidSvnWorkingDir(IGitModuleState aModule)
         {
             return ValidSvnWorkingDir(aModule.WorkingDir);
         }

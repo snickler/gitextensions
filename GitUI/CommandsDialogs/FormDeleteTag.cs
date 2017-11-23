@@ -47,7 +47,7 @@ namespace GitUI.CommandsDialogs
 
             ScriptManager.RunEventScripts(this, ScriptEvent.BeforePush);
 
-            using (var form = new FormRemoteProcess(Module, pushCmd)
+            using (var form = new FormRemoteProcess(ModuleState, pushCmd)
                                     {
                                         ////Remote = currentRemote,
                                         ////Text = string.Format(_deleteFromCaption.Text, currentRemote),

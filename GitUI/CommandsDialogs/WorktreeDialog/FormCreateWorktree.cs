@@ -30,7 +30,7 @@ namespace GitUI.CommandsDialogs.WorktreeDialog
 
         private string GetWorktreeDirectory()
         {
-            return UICommands.GitModule.WorkingDir.TrimEnd('\\', '/');
+            return UICommands.ModuleState.WorkingDir.TrimEnd('\\', '/');
         }
 
         private void FormCreateWorktree_Load(object sender, EventArgs e)
@@ -41,7 +41,7 @@ namespace GitUI.CommandsDialogs.WorktreeDialog
 
         private void LoadBranchesAsync()
         {
-            var selectedBranch = UICommands.GitModule.GetSelectedBranch();
+            var selectedBranch = Module.GetSelectedBranch();
             ExistingBranches = Module.GetRefs(false);
             comboBoxBranches.Text = Strings.GetLoadingData();
             _branchesLoader.Load(

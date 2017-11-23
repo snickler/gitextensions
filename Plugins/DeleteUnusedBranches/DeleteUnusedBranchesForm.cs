@@ -241,7 +241,7 @@ namespace DeleteUnusedBranches
             }
 
             IsRefreshing = true;
-            var curBranch = _gitUiCommands.GitModule.GetSelectedBranch();
+            var curBranch = _gitUiCommands.Module.GetSelectedBranch();
             var context = new RefreshContext(_gitCommands, IncludeRemoteBranches.Checked, includeUnmergedBranches.Checked, _referenceBranch, _NO_TRANSLATE_Remote.Text,
                 useRegexFilter.Checked ? regexFilter.Text : null, useRegexCaseInsensitive.Checked ? useRegexCaseInsensitive.Checked : false, regexDoesNotMatch.Checked ? regexDoesNotMatch.Checked : false, TimeSpan.FromDays(_days), _refreshCancellation.Token);
             Task.Factory.StartNew(() => GetObsoleteBranches(context, curBranch).ToList(), CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using GitCommands;
+using GitUIPluginInterfaces;
 
 namespace GitUI.UserControls.RevisionGridClasses
 {
@@ -29,6 +30,7 @@ namespace GitUI.UserControls.RevisionGridClasses
         }
 
         private GitModule Module { get { return UICommands.Module; } }
+        private IGitModuleState ModuleState => UICommands.ModuleState;
 
         public IndexWatcher(IGitUICommandsSource aUICommandsSource)
         {
@@ -61,7 +63,7 @@ namespace GitUI.UserControls.RevisionGridClasses
                 {
                     enabled = AppSettings.UseFastChecks;
 
-                    _gitDirPath = Module.WorkingDirGitDir;
+                    _gitDirPath = ModuleState.WorkingDirGitDir;
 
                     GitIndexWatcher.Path = _gitDirPath;
                     GitIndexWatcher.Filter = "index";
@@ -87,7 +89,7 @@ namespace GitUI.UserControls.RevisionGridClasses
                 if (!enabled)
                     return true;
 
-                if (_gitDirPath != Module.WorkingDirGitDir)
+                if (_gitDirPath != ModuleState.WorkingDirGitDir)
                     return true;
 
                 return indexChanged;
@@ -126,7 +128,7 @@ namespace GitUI.UserControls.RevisionGridClasses
 
         private void RefreshWatcher()
         {
-            if (_gitDirPath != Module.WorkingDirGitDir || enabled != AppSettings.UseFastChecks)
+            if (_gitDirPath != ModuleState.WorkingDirGitDir || enabled != AppSettings.UseFastChecks)
                 SetFileSystemWatcher();
         }
 

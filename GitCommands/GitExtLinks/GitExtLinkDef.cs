@@ -183,7 +183,7 @@ namespace GitCommands.GitExtLinks
 
         public IEnumerable<GitExtLink> Parse(GitRevision revision)
         {
-            GitRemoteController remoteController = new GitRemoteController(revision.Module);
+            GitRemoteController remoteController = new GitRemoteController(new GitModule(revision.Module));
             return Parse(revision, remoteController);
         }
 

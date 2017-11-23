@@ -7,31 +7,31 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using GitCommands;
+using GitUIPluginInterfaces;
 
 namespace GitUI.AutoCompletion
 {
     public class CommitAutoCompleteProvider : IAutoCompleteProvider
     {
         private static readonly Lazy<Dictionary<string, Regex>> s_regexes = new Lazy<Dictionary<string, Regex>>(ParseRegexes);
-        private readonly GitModule _module;
 
-        public CommitAutoCompleteProvider (GitModule module)
-        {
-            _module = module;
-        }
 
-        public Task<IEnumerable<AutoCompleteWord>> GetAutoCompleteWords (CancellationTokenSource cts)
+        public Task<IEnumerable<AutoCompleteWord>> GetAutoCompleteWords (IGitModuleState module, CancellationTokenSource cts)
         {
             var cancellationToken = cts.Token;
 
+            var workingDir = module.WorkingDir;
             return Task.Factory.StartNew(
                     () =>
                     {
+                        var threadModule = new GitModuleState(workingDir);
+                        var moduleFunctions = new GitModule(threadModule);
+
                         cancellationToken.ThrowIfCancellationRequested();
 
                         var autoCompleteWords = new HashSet<string>();
 
-                        foreach (var file in _module.GetAllChangedFiles())
+                        foreach (var file in moduleFunctions.GetAllChangedFiles())
                         {
                             cancellationToken.ThrowIfCancellationRequested();
 
@@ -39,7 +39,7 @@ namespace GitUI.AutoCompletion
 
                             if (regex != null)
                             {
-                                var text = GetChangedFileText(_module, file);
+                                var text = GetChangedFileText(threadModule, file);
                                 var matches = regex.Matches(text);
                                 foreach (Match match in matches)
                                         // Skip first group since it always contains the entire matched string (regardless of capture groups)
@@ -106,14 +106,15 @@ namespace GitUI.AutoCompletion
             return regexes;
         }
 
-        private static string GetChangedFileText (GitModule module, GitItemStatus file)
+        private static string GetChangedFileText (IGitModuleState module, GitItemStatus file)
         {
-            var changes = module.GetCurrentChanges(file.Name, file.OldName, file.IsStaged, "-U1000000", module.FilesEncoding);
+            var moduleFunctions = new GitModule(module);
+            var changes = moduleFunctions.GetCurrentChanges(file.Name, file.OldName, file.IsStaged, "-U1000000", moduleFunctions.FilesEncoding);
 
             if (changes != null)
                 return changes.Text;
 
-            var content = module.GetFileContents(file);
+            var content = moduleFunctions.GetFileContents(file);
 
             if (content != null)
                 return content;

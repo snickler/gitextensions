@@ -64,13 +64,8 @@ namespace GitUI
             }
         }
 
-        public GitModule Module 
-        {
-            get
-            {
-                return UICommands.Module;
-            }
-        }
+        public GitModule Module => UICommands.Module;
+        public IGitModuleState ModuleState => UICommands.ModuleState;
 
         public ToolStripGitStatus()
         {
@@ -172,7 +167,7 @@ namespace GitUI
                 UICommands.PostCheckoutRevision += GitUICommands_PostCheckout;
                 UICommands.PostEditGitIgnore += GitUICommands_PostEditGitIgnore;
                 
-                TryStartWatchingChanges(Module.WorkingDir, Module.WorkingDirGitDir);
+                TryStartWatchingChanges(ModuleState.WorkingDir, ModuleState.WorkingDirGitDir);
             }
         }
 

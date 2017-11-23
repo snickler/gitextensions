@@ -324,7 +324,7 @@ namespace GitUI
 
                     foreach (GitItemStatus item in SelectedItems)
                     {
-                        string fileName = Path.Combine(Module.WorkingDir, item.Name);
+                        string fileName = Path.Combine(ModuleState.WorkingDir, item.Name);
 
                         fileList.Add(fileName.ToNativePath());
                     }
@@ -583,7 +583,7 @@ namespace GitUI
                     Process process = new Process();
                     process.StartInfo.FileName = Application.ExecutablePath;
                     process.StartInfo.Arguments = "browse -commit=" + t.Result.Commit;
-                    process.StartInfo.WorkingDirectory = Path.Combine(Module.WorkingDir, submoduleName.EnsureTrailingPathSeparator());
+                    process.StartInfo.WorkingDirectory = Path.Combine(ModuleState.WorkingDir, submoduleName.EnsureTrailingPathSeparator());
                     process.Start();
                 });
         }

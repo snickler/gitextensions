@@ -75,7 +75,7 @@ namespace Gerrit
 
             _gitReviewMenuItem.Enabled = validWorkingDir;
 
-            bool showGerritItems = validWorkingDir && File.Exists(e.GitModule.WorkingDir + ".gitreview");
+            bool showGerritItems = validWorkingDir && File.Exists(e.GitUICommands.ModuleState.WorkingDir + ".gitreview");
 
             foreach (var item in _gerritMenuItems)
             {
@@ -274,13 +274,13 @@ namespace Gerrit
 
         private void InstallCommitMsgHook()
         {
-            var settings = GerritSettings.Load(_mainForm, _gitUiCommands.GitModule);
+            var settings = GerritSettings.Load(_mainForm, _gitUiCommands.Module);
 
             if (settings == null)
                 return;
 
             string path = Path.Combine(
-                _gitUiCommands.GitModule.ResolveGitInternalPath("hooks"),
+                _gitUiCommands.Module.ResolveGitInternalPath("hooks"),
                 "commit-msg"
             );
 
@@ -311,7 +311,7 @@ namespace Gerrit
 
                 // Update the cache.
 
-                HaveValidCommitMsgHook(_gitUiCommands.GitModule, true);
+                HaveValidCommitMsgHook(_gitUiCommands.Module, true);
             }
         }
 
@@ -323,7 +323,7 @@ namespace Gerrit
 
             string content = GerritUtil.RunGerritCommand(
                 _mainForm,
-                _gitUiCommands.GitModule,
+                _gitUiCommands.Module,
                 "scp -f hooks/commit-msg",
                 settings.DefaultRemote,
                 new byte[] { 0, 0, 0, 0, 0, 0, 0 }

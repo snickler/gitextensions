@@ -125,9 +125,10 @@ namespace GitCommands.Statistics
                 IList<string> submodules = Module.GetSubmodulesLocalPaths();
                 foreach (var submoduleName in submodules)
                 {
-                    IGitModule submodule = Module.GetSubmodule(submoduleName);
-                    if (submodule.IsValidGitWorkingDir())
-                        tasks.Add(Task.Factory.StartNew(() => LoadModuleInfo(command, submodule, token), token));
+                    var submodule = Module.GetSubmodule(submoduleName);
+                    var submoduleFunctions = new GitModule(submodule);
+                    if (submoduleFunctions.IsValidGitWorkingDir())
+                        tasks.Add(Task.Factory.StartNew(() => LoadModuleInfo(command, submoduleFunctions, token), token));
                 }
             }
             return tasks.ToArray();

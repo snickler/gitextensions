@@ -6,6 +6,7 @@ using GitCommands.Repository;
 using ResourceManager;
 using System.Collections.Generic;
 using System.Linq;
+using GitUIPluginInterfaces;
 
 namespace GitUI.CommandsDialogs.BrowseDialog
 {
@@ -17,9 +18,9 @@ namespace GitUI.CommandsDialogs.BrowseDialog
         private readonly TranslationString _warningOpenFailedCaption =
             new TranslationString("Error");
 
-        private GitModule choosenModule = null;
+        private IGitModuleState choosenModule = null;
 
-        public FormOpenDirectory(GitModule currentModule)
+        public FormOpenDirectory(IGitModuleState currentModule)
         {
             InitializeComponent();
             Translate();
@@ -32,7 +33,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             _NO_TRANSLATE_Directory.Select();
         }
 
-        private IList<string> GetDirectories(GitModule currentModule)
+        private IList<string> GetDirectories(IGitModuleState currentModule)
         {
             List<string> directories = new List<string>();
 
@@ -69,7 +70,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             return directories.Distinct().ToList();
         }
 
-        public static GitModule OpenModule(IWin32Window owner, GitModule currentModule)
+        public static IGitModuleState OpenModule(IWin32Window owner, IGitModuleState currentModule)
         {
             using (var open = new FormOpenDirectory(currentModule))
             {
@@ -83,7 +84,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             _NO_TRANSLATE_Directory.Text = _NO_TRANSLATE_Directory.Text.Trim();
             if (Directory.Exists(_NO_TRANSLATE_Directory.Text))
             {
-                choosenModule = new GitModule(_NO_TRANSLATE_Directory.Text);
+                choosenModule = new GitModuleState(_NO_TRANSLATE_Directory.Text);
                 Repositories.AddMostRecentRepository(choosenModule.WorkingDir);
                 Close();
             }

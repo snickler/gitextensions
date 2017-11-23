@@ -18,7 +18,7 @@
 
         public GitModule GetSubmodule(GitModule module)
         {
-            return module.GetSubmodule(Name);
+            return new GitModule(module.GetSubmodule(Name));
         }
 
         public void CheckSubmoduleStatus(GitModule submodule)

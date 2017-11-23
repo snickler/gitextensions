@@ -175,7 +175,7 @@ namespace GitUI
 
             if (IsItemUntracked(file, firstRevision, secondRevision))
             {
-                var fullPath = Path.Combine(diffViewer.Module.WorkingDir, file.Name);
+                var fullPath = Path.Combine(diffViewer.ModuleState.WorkingDir, file.Name);
                 if (Directory.Exists(fullPath) && GitModule.IsValidGitWorkingDir(fullPath))
                     return LocalizationHelpers.GetSubmoduleText(diffViewer.Module, file.Name.TrimEnd('/'), "");
                 return FileReader.ReadFileContent(fullPath, diffViewer.Encoding);

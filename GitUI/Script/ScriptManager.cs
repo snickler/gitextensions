@@ -58,7 +58,7 @@ namespace GitUI.Script
                         if (MessageBox.Show(form, String.Format("Do you want to execute '{0}'?", scriptInfo.Name), "Script", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                             continue;
 
-                    ScriptRunner.RunScript(form, form.Module, scriptInfo.Name, null);
+                    ScriptRunner.RunScript(form, form.ModuleState, scriptInfo.Name, null);
                 }
         }
 

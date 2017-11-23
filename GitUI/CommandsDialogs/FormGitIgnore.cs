@@ -78,7 +78,7 @@ namespace GitUI.CommandsDialogs
             if(localExclude)
                 return new GitLocalExcludeModel(Module);
 
-            return new GitIgnoreModel(Module);
+            return new GitIgnoreModel(ModuleState);
         }
 
         private string ExcludeFile

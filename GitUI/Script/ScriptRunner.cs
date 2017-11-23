@@ -15,7 +15,7 @@ namespace GitUI.Script
     {
         /// <summary>Tries to run scripts identified by a <paramref name="command"/> 
         /// and returns true if any executed.</summary>
-        public static bool ExecuteScriptCommand(IWin32Window owner, GitModule aModule, int command, RevisionGrid revisionGrid = null)
+        public static bool ExecuteScriptCommand(IWin32Window owner, IGitModuleState aModule, int command, RevisionGrid revisionGrid = null)
         {
             var curScripts = ScriptManager.GetScripts();
             bool anyScriptExecuted = false;
@@ -31,7 +31,7 @@ namespace GitUI.Script
             return anyScriptExecuted;
         }
 
-        public static bool RunScript(IWin32Window owner, GitModule aModule, string script, RevisionGrid revisionGrid)
+        public static bool RunScript(IWin32Window owner, IGitModuleState aModule, string script, RevisionGrid revisionGrid)
         {
             if (string.IsNullOrEmpty(script))
                 return false;
@@ -78,8 +78,9 @@ namespace GitUI.Script
             return path;
         }
 
-        internal static bool RunScript(IWin32Window owner, GitModule aModule, ScriptInfo scriptInfo, RevisionGrid revisionGrid)
+        internal static bool RunScript(IWin32Window owner, IGitModuleState aModule, ScriptInfo scriptInfo, RevisionGrid revisionGrid)
         {
+            var moduleFunctions = new GitModule(aModule);
             string originalCommand = scriptInfo.Command;
             string argument = scriptInfo.Arguments;
 
@@ -106,15 +107,15 @@ namespace GitUI.Script
                     continue;
                 if (option.StartsWith("{c") && currentRevision == null)
                 {
-                    currentRevision = GetCurrentRevision(aModule, revisionGrid, currentTags, currentLocalBranches, currentRemoteBranches, currentBranches, currentRevision);
+                    currentRevision = GetCurrentRevision(moduleFunctions, revisionGrid, currentTags, currentLocalBranches, currentRemoteBranches, currentBranches, currentRevision);
 
                     if (currentLocalBranches.Count == 1)
-                        currentRemote = aModule.GetSetting(string.Format(SettingKeyString.BranchRemote, currentLocalBranches[0].Name));
+                        currentRemote = moduleFunctions.GetSetting(string.Format(SettingKeyString.BranchRemote, currentLocalBranches[0].Name));
                     else
                     {
-                        currentRemote = aModule.GetCurrentRemote();
+                        currentRemote = moduleFunctions.GetCurrentRemote();
                         if (string.IsNullOrEmpty(currentRemote))
-                            currentRemote = aModule.GetSetting(string.Format(SettingKeyString.BranchRemote,
+                            currentRemote = moduleFunctions.GetSetting(string.Format(SettingKeyString.BranchRemote,
                                 askToSpecify(currentLocalBranches, "Current Revision Branch")));
                     }
                 }
@@ -192,7 +193,7 @@ namespace GitUI.Script
                             remote = selectedRemotes[0];
                         else
                             remote = askToSpecify(selectedRemotes, "Selected Revision Remote");
-                        url = aModule.GetSetting(string.Format(SettingKeyString.RemoteUrl, remote));
+                        url = moduleFunctions.GetSetting(string.Format(SettingKeyString.RemoteUrl, remote));
                         argument = argument.Replace(option, url);
                         break;
                     case "{sRemotePathFromUrl}":
@@ -205,7 +206,7 @@ namespace GitUI.Script
                             remote = selectedRemotes[0];
                         else
                             remote = askToSpecify(selectedRemotes, "Selected Revision Remote");
-                        url = aModule.GetSetting(string.Format(SettingKeyString.RemoteUrl, remote));
+                        url = moduleFunctions.GetSetting(string.Format(SettingKeyString.RemoteUrl, remote));
                         argument = argument.Replace(option, GetRemotePath(url));
                         break;
                     case "{sHash}":
@@ -295,7 +296,7 @@ namespace GitUI.Script
                             argument = argument.Replace(option, "");
                             break;
                         }
-                        url = aModule.GetSetting(string.Format(SettingKeyString.RemoteUrl, currentRemote));
+                        url = moduleFunctions.GetSetting(string.Format(SettingKeyString.RemoteUrl, currentRemote));
                         argument = argument.Replace(option, url);
                         break;
                     case "{cDefaultRemotePathFromUrl}":
@@ -304,7 +305,7 @@ namespace GitUI.Script
                             argument = argument.Replace(option, "");
                             break;
                         }
-                        url = aModule.GetSetting(string.Format(SettingKeyString.RemoteUrl, currentRemote));
+                        url = moduleFunctions.GetSetting(string.Format(SettingKeyString.RemoteUrl, currentRemote));
                         argument = argument.Replace(option, GetRemotePath(url));
                         break;
                     case "{UserInput}":
@@ -346,13 +347,13 @@ namespace GitUI.Script
                 if (originalCommand.Equals("{openurl}", StringComparison.CurrentCultureIgnoreCase))
                     Process.Start(argument);
                 else
-                    aModule.RunExternalCmdDetached(command, argument);
+                    moduleFunctions.RunExternalCmdDetached(command, argument);
             }
 
             return !scriptInfo.RunInBackground;
         }
 
-        private static string ExpandCommandVariables(string originalCommand, GitModule aModule)
+        private static string ExpandCommandVariables(string originalCommand, IGitModuleState aModule)
         {
             return originalCommand.Replace("{WorkingDir}", aModule.WorkingDir);
            

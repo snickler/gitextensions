@@ -141,11 +141,12 @@ namespace GitUI.CommitInfo
             _RevisionHeader.Text = string.Empty;
             _RevisionHeader.Refresh();
 
+            var moduleFunctions = new GitModule(ModuleState);
             string error = "";
             CommitData data = CommitData.CreateFromRevision(_revision);
             if (_revision.Body == null)
             {
-                CommitData.UpdateCommitMessage(data, Module, _revision.Guid, ref error);
+                CommitData.UpdateCommitMessage(data, moduleFunctions, _revision.Guid, ref error);
                 _revision.Body = data.Body;
             }
 
@@ -155,7 +156,7 @@ namespace GitUI.CommitInfo
                 ThreadPool.QueueUserWorkItem(_ => loadSortedRefs());
 
             data.ChildrenGuids = _children;
-            CommitInformation commitInformation = CommitInformation.GetCommitInfo(data, _linkFactory, CommandClick != null, Module);
+            CommitInformation commitInformation = CommitInformation.GetCommitInfo(data, _linkFactory, CommandClick != null, moduleFunctions);
 
             _RevisionHeader.SetXHTMLText(commitInformation.Header);
             _RevisionHeader.Height = GetRevisionHeaderHeight();
@@ -213,7 +214,7 @@ namespace GitUI.CommitInfo
 
         private void loadSortedRefs()
         {
-            _sortedRefs = Module.GetSortedRefs();
+            _sortedRefs = new GitModule(ModuleState).GetSortedRefs();
             this.InvokeAsync(updateText);
         }
 
@@ -259,7 +260,7 @@ namespace GitUI.CommitInfo
 
                 if (gitRef.IsTag && gitRef.IsDereference)
                 {
-                    string content = WebUtility.HtmlEncode(Module.GetTagMessage(gitRef.LocalName));
+                    string content = WebUtility.HtmlEncode(new GitModule(ModuleState).GetTagMessage(gitRef.LocalName));
 
                     if (content != null)
                         result.Add(gitRef.LocalName, content);
@@ -271,7 +272,7 @@ namespace GitUI.CommitInfo
 
         private void loadTagInfo(string revision)
         {
-            _tags = Module.GetAllTagsWhichContainGivenCommit(revision).ToList();
+            _tags = new GitModule(ModuleState).GetAllTagsWhichContainGivenCommit(revision).ToList();
             this.InvokeAsync(updateText);
         }
 
@@ -283,7 +284,7 @@ namespace GitUI.CommitInfo
             // Include remote branches if requested
             bool getRemote = AppSettings.CommitInfoShowContainedInBranchesRemote ||
                              AppSettings.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
-            _branches = Module.GetAllBranchesWhichContainGivenCommit(revision, getLocal, getRemote).ToList();
+            _branches = new GitModule(ModuleState).GetAllBranchesWhichContainGivenCommit(revision, getLocal, getRemote).ToList();
             this.InvokeAsync(updateText);
         }
 
@@ -528,7 +529,7 @@ namespace GitUI.CommitInfo
 
         private string GetLinksForRevision(GitRevision revision)
         {
-            GitExtLinksParser parser = new GitExtLinksParser(Module.EffectiveSettings);
+            GitExtLinksParser parser = new GitExtLinksParser(new GitModule(ModuleState).EffectiveSettings);
             var links = parser.Parse(revision).Distinct();
             var linksString = string.Empty;
 
@@ -589,7 +590,7 @@ namespace GitUI.CommitInfo
 
         private void addNoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Module.EditNotes(_revision.Guid);
+            new GitModule(ModuleState).EditNotes(_revision.Guid);
             ReloadCommitInfo();
         }
 

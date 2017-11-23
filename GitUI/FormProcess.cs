@@ -9,6 +9,7 @@ using GitUI.UserControls;
 
 using ResourceManager;
 using System.Collections.Generic;
+using GitUIPluginInterfaces;
 
 namespace GitUI
 {
@@ -56,12 +57,12 @@ namespace GitUI
         {
         }
 
-        public static bool ShowDialog(IWin32Window owner, GitModule module, string arguments)
+        public static bool ShowDialog(IWin32Window owner, IGitModuleState module, string arguments)
         {
             return ShowDialog(owner, null, arguments, module.WorkingDir, null, true);
         }
 
-        public static bool ShowDialog(IWin32Window owner, GitModule module, string process, string arguments)
+        public static bool ShowDialog(IWin32Window owner, IGitModuleState module, string process, string arguments)
         {
             return ShowDialog(owner, process, arguments, module.WorkingDir, null, true);
         }
@@ -73,15 +74,15 @@ namespace GitUI
 
         public static bool ShowDialog(GitModuleForm owner, string process, string arguments)
         {
-            return ShowDialog(owner, process, arguments, owner.Module.WorkingDir, null, true);
+            return ShowDialog(owner, process, arguments, owner.ModuleState.WorkingDir, null, true);
         }
 
         public static bool ShowDialog(GitModuleForm owner, string arguments, bool useDialogSettings)
         {
-            return ShowDialog(owner, owner.Module, arguments, useDialogSettings);
+            return ShowDialog(owner, owner.ModuleState, arguments, useDialogSettings);
         }
 
-        public static bool ShowDialog(IWin32Window owner, GitModule module, string arguments, bool useDialogSettings)
+        public static bool ShowDialog(IWin32Window owner, IGitModuleState module, string arguments, bool useDialogSettings)
         {
             return ShowDialog(owner, null, arguments, module.WorkingDir, null, useDialogSettings);
         }
@@ -119,15 +120,15 @@ namespace GitUI
 
         public static FormProcess ShowModeless(GitModuleForm owner, string arguments)
         {
-            return ShowModeless(owner, null, arguments, owner.Module.WorkingDir, null, true);
+            return ShowModeless(owner, null, arguments, owner.ModuleState.WorkingDir, null, true);
         }
 
         public static string ReadDialog(GitModuleForm owner, string arguments)
         {
-            return ReadDialog(owner, null, arguments, owner.Module, null, true);
+            return ReadDialog(owner, null, arguments, owner.ModuleState, null, true);
         }
 
-        public static string ReadDialog(IWin32Window owner, string process, string arguments, GitModule module, string input, bool useDialogSettings)
+        public static string ReadDialog(IWin32Window owner, string process, string arguments, IGitModuleState module, string input, bool useDialogSettings)
         {
             using (var formProcess = new FormProcess(process, arguments, module.WorkingDir, input, useDialogSettings))
             {

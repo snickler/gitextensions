@@ -38,15 +38,16 @@ namespace GitUI.CommandsDialogs.BrowseDialog
                 IList<string> submodules = Module.GetSubmodulesLocalPaths();
                 foreach (var submoduleName in submodules)
                 {
-                    GitModule submodule = Module.GetSubmodule(submoduleName);
-                    if (submodule.IsValidGitWorkingDir())
+                    var submodule = Module.GetSubmodule(submoduleName);
+                    var submoduleFunctions = new GitModule(submodule);
+                    if (submoduleFunctions.IsValidGitWorkingDir())
                     {
-                        var submoduleItems = CommitCounter.GroupAllCommitsByContributor(submodule).Item1;
+                        var submoduleItems = CommitCounter.GroupAllCommitsByContributor(submoduleFunctions).Item1;
                         foreach (var keyValuePair in submoduleItems)
                         {
                             if (!dict.ContainsKey(keyValuePair.Key))
                                 dict.Add(keyValuePair.Key, new HashSet<string>());
-                            dict[keyValuePair.Key].Add(submodule.SubmoduleName);
+                            dict[keyValuePair.Key].Add(submoduleFunctions.SubmoduleName);
                             if (items.ContainsKey(keyValuePair.Key))
                                 items[keyValuePair.Key] += keyValuePair.Value;
                             else

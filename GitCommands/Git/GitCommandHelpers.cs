@@ -955,8 +955,9 @@ namespace GitCommands
             if (status.OldCommit != null && status.Commit != null)
             {
                 var submodule = module.GetSubmodule(fileName);
-                status.AddedCommits = submodule.GetCommitCount(status.Commit, status.OldCommit);
-                status.RemovedCommits = submodule.GetCommitCount(status.OldCommit, status.Commit);
+                var moduleFunctions = new GitModule(submodule);
+                status.AddedCommits = moduleFunctions.GetCommitCount(status.Commit, status.OldCommit);
+                status.RemovedCommits = moduleFunctions.GetCommitCount(status.OldCommit, status.Commit);
             }
 
             return status;

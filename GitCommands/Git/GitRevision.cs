@@ -23,10 +23,10 @@ namespace GitCommands
 
         public string[] ParentGuids;
         private readonly List<IGitRef> _refs = new List<IGitRef>();
-        public readonly GitModule Module;
+        public readonly IGitModuleState Module;
         private BuildInfo _buildStatus;
 
-        public GitRevision(GitModule aModule, string guid)
+        public GitRevision(IGitModuleState aModule, string guid)
         {
             Guid = guid;
             Subject = "";
@@ -137,12 +137,12 @@ namespace GitCommands
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public static GitRevision CreateForShortSha1(GitModule aModule, string sha1)
+        public static GitRevision CreateForShortSha1(IGitModuleState aModule, string sha1)
         {
             if (!sha1.IsNullOrWhiteSpace() && sha1.Length < 40)
             {
                 string fullSha1;
-                if (aModule.IsExistingCommitHash(sha1, out fullSha1))
+                if (new GitModule(aModule).IsExistingCommitHash(sha1, out fullSha1))
                 {
                     sha1 = fullSha1;
                 }

@@ -39,7 +39,7 @@ namespace GitUI.CommandsDialogs
             {
                 if (!_localExclude)
                 {
-                    return Path.Combine(Module.WorkingDir, ".gitignore");
+                    return Path.Combine(ModuleState.WorkingDir, ".gitignore");
                 }
                 else
                 {

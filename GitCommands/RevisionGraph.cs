@@ -81,11 +81,13 @@ namespace GitCommands
 
         private readonly AsyncLoader _backgroundLoader = new AsyncLoader();
 
-        private readonly GitModule _module;
+        private readonly GitModule _moduleFunctions;
+        private readonly IGitModuleState _module;
 
-        public RevisionGraph(GitModule module)
+        public RevisionGraph(IGitModuleState module)
         {
             _module = module;
+            _moduleFunctions = new GitModule(module);
         }
 
         public void Dispose()
@@ -194,7 +196,7 @@ namespace GitCommands
                 RevisionFilter,
                 PathFilter);
 
-            Process p = _module.RunGitCmdDetached(arguments, GitModule.LosslessEncoding);
+            Process p = _moduleFunctions.RunGitCmdDetached(arguments, GitModule.LosslessEncoding);
 
             if (taskState.IsCancellationRequested)
                 return;
@@ -265,16 +267,16 @@ namespace GitCommands
 
         private IList<IGitRef> GetRefs()
         {
-            var result = _module.GetRefs(true);
-            bool validWorkingDir = _module.IsValidGitWorkingDir();
-            _selectedBranchName = validWorkingDir ? _module.GetSelectedBranch() : string.Empty;
+            var result = _moduleFunctions.GetRefs(true);
+            bool validWorkingDir = _moduleFunctions.IsValidGitWorkingDir();
+            _selectedBranchName = validWorkingDir ? _moduleFunctions.GetSelectedBranch() : string.Empty;
             var selectedRef = result.FirstOrDefault(head => head.Name == _selectedBranchName);
 
             if (selectedRef != null)
             {
                 selectedRef.Selected = true;
 
-                var localConfigFile = _module.LocalConfigFile;
+                var localConfigFile = _moduleFunctions.LocalConfigFile;
 
                 var selectedHeadMergeSource =
                     result.FirstOrDefault(head => head.IsRemote
@@ -343,7 +345,7 @@ namespace GitCommands
             switch (_nextStep)
             {
                 case ReadStep.Commit:
-                    data = GitModule.ReEncodeString(data, GitModule.LosslessEncoding, _module.LogOutputEncoding);
+                    data = GitModule.ReEncodeString(data, GitModule.LosslessEncoding, _moduleFunctions.LogOutputEncoding);
 
                     string[] lines = data.Split(new char[] { '\n' });
                     Debug.Assert(lines.Length == 11);
@@ -382,11 +384,11 @@ namespace GitCommands
                     break;
 
                 case ReadStep.CommitSubject:
-                    _revision.Subject = _module.ReEncodeCommitMessage(data, _revision.MessageEncoding);
+                    _revision.Subject = _moduleFunctions.ReEncodeCommitMessage(data, _revision.MessageEncoding);
                     break;
 
                 case ReadStep.CommitBody:
-                    _revision.Body = _module.ReEncodeCommitMessage(data, _revision.MessageEncoding);
+                    _revision.Body = _moduleFunctions.ReEncodeCommitMessage(data, _revision.MessageEncoding);
                     break;
 
                 case ReadStep.FileName:

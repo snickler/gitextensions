@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using GitUIPluginInterfaces;
 
 namespace GitCommands.Settings
 {
@@ -21,30 +22,30 @@ namespace GitCommands.Settings
 
         #region CreateXXX
 
-        public static RepoDistSettings CreateEffective(GitModule aModule)
+        public static RepoDistSettings CreateEffective(IGitModuleState aModule)
         {
             return CreateLocal(aModule, CreateDistributed(aModule, CreateGlobal()));
         }
 
-        private static RepoDistSettings CreateLocal(GitModule aModule, RepoDistSettings aLowerPriority, bool allowCache = true)
+        private static RepoDistSettings CreateLocal(IGitModuleState aModule, RepoDistSettings aLowerPriority, bool allowCache = true)
         {
-            //if (aModule.IsBareRepository()
+            var moduleFunctions = new GitModule(aModule);
             return new RepoDistSettings(aLowerPriority,
-                GitExtSettingsCache.Create(Path.Combine(aModule.GitCommonDirectory, AppSettings.SettingsFileName), allowCache));
+                GitExtSettingsCache.Create(Path.Combine(moduleFunctions.GitCommonDirectory, AppSettings.SettingsFileName), allowCache));
         }
 
-        public static RepoDistSettings CreateLocal(GitModule aModule, bool allowCache = true)
+        public static RepoDistSettings CreateLocal(IGitModuleState aModule, bool allowCache = true)
         {
             return CreateLocal(aModule, null, allowCache);
         }
 
-        private static RepoDistSettings CreateDistributed(GitModule aModule, RepoDistSettings aLowerPriority, bool allowCache = true)
+        private static RepoDistSettings CreateDistributed(IGitModuleState aModule, RepoDistSettings aLowerPriority, bool allowCache = true)
         {
             return new RepoDistSettings(aLowerPriority,
                 GitExtSettingsCache.Create(Path.Combine(aModule.WorkingDir, AppSettings.SettingsFileName), allowCache));
         }
 
-        public static RepoDistSettings CreateDistributed(GitModule aModule, bool allowCache = true)
+        public static RepoDistSettings CreateDistributed(IGitModuleState aModule, bool allowCache = true)
         {
             return CreateDistributed(aModule, null, allowCache);
         }

@@ -97,8 +97,9 @@ namespace GitUIPluginInterfaces
         event GitUIEventHandler PreViewPatch;
         event GitUIEventHandler PreBrowseInitialize;
         event GitUIEventHandler PreSparseWorkingCopy;
-        
-        IGitModule GitModule { get; }
+
+        IGitModule Module { get; }
+        IGitModuleState ModuleState { get; }
         string GitCommand(string arguments);
         string CommandLineCommand(string cmd, string arguments);
         IGitRemoteCommand CreateRemoteCommand();

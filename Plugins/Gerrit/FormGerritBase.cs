@@ -9,7 +9,7 @@ namespace Gerrit
     {
         protected GerritSettings Settings { get; private set; }
         protected readonly IGitUICommands UICommands;
-        protected IGitModule Module { get { return UICommands.GitModule; } }
+        protected IGitModule Module { get { return UICommands.Module; } }
 
         private FormGerritBase()
             : this(null)

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using GitCommands;
 using GitCommands.Settings;
 using GitCommands.Utils;
+using GitUIPluginInterfaces;
 using Microsoft.Win32;
 
 namespace GitUI.CommandsDialogs.SettingsDialog
@@ -12,12 +14,14 @@ namespace GitUI.CommandsDialogs.SettingsDialog
     public class CheckSettingsLogic
     {
         public readonly CommonLogic CommonLogic;
-        private GitModule Module { get { return CommonLogic.Module; } }
+        private GitModule Module { get; }
+        private IGitModuleState ModuleState { get { return CommonLogic.Module; } }
         private ConfigFileSettings GlobalConfigFileSettings { get { return CommonLogic.ConfigFileSettingsSet.GlobalSettings; } }
 
         public CheckSettingsLogic(CommonLogic commonLogic)
         {
             CommonLogic = commonLogic;
+            Module = new GitModule(ModuleState);
         }
 
         public bool AutoSolveAllSettings()

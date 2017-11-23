@@ -260,7 +260,7 @@ namespace GitUI.CommandsDialogs
             {
                 currentTag++;
                 var createTagArgs = new GitCreateTagArgs($"{RestoredObjectsTagPrefix}{currentTag}", lostObject.Hash);
-                _gitTagController.CreateTag(createTagArgs, this);
+                _gitTagController.CreateTag(createTagArgs, ModuleState, this);
             }
 
             return currentTag;
@@ -281,7 +281,7 @@ namespace GitUI.CommandsDialogs
             if (currentItem == null)
                 throw new InvalidOperationException("There are no current selected item.");
 
-            return new GitRevision(Module, currentItem.Hash);
+            return new GitRevision(ModuleState, currentItem.Hash);
         }
 
         /// <summary>

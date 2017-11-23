@@ -26,7 +26,7 @@ namespace GitCommands
         /// Template file can be set by the following command:
         /// <c>$ git config --global commit.template ~/.git_commit_msg.txt</c>
         /// </remarks>
-        string LoadGitCommitTemplate();
+        string LoadGitCommitTemplate(IGitModuleState module);
 
         /// <summary>
         /// Allows a plugin to register a new commit template.
@@ -58,7 +58,7 @@ namespace GitCommands
         }
 
         public CommitTemplateManager(IGitModule module)
-            : this(module, new FullPathResolver(module), new FileSystem())
+            : this(module, new FullPathResolver(), new FileSystem())
         {
         }
 
@@ -79,7 +79,7 @@ namespace GitCommands
         /// Template file can be set by the following command:
         /// <c>$ git config --global commit.template ~/.git_commit_msg.txt</c>
         /// </remarks>
-        public string LoadGitCommitTemplate()
+        public string LoadGitCommitTemplate(IGitModuleState module)
         {
             string fileName = _module.GetEffectiveSetting("commit.template");
             if (string.IsNullOrEmpty(fileName))
@@ -87,7 +87,7 @@ namespace GitCommands
                 return null;
             }
 
-            fileName = _fullPathResolver.Resolve(fileName);
+            fileName = _fullPathResolver.Resolve(module, fileName);
             if (!_fileSystem.File.Exists(fileName))
             {
                 throw new FileNotFoundException("File not found", fileName);

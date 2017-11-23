@@ -169,7 +169,7 @@ namespace GitUI.CommandsDialogs
 
             if (Module != null)
             {
-                Message.AddAutoCompleteProvider(new CommitAutoCompleteProvider(Module));
+                Message.AddAutoCompleteProvider(new CommitAutoCompleteProvider());
                 _commitTemplateManager = new CommitTemplateManager(Module);
             }
 
@@ -182,7 +182,7 @@ namespace GitUI.CommandsDialogs
             SelectedDiff.ExtraDiffArgumentsChanged += SelectedDiffExtraDiffArgumentsChanged;
 
             if (IsUICommandsInitialized)
-                StageInSuperproject.Visible = Module.SuperprojectModule != null;
+                StageInSuperproject.Visible = Module.GetSuperprojectModule() != null;
             StageInSuperproject.Checked = AppSettings.StageInSuperprojectAfterCommit;
             closeDialogAfterEachCommitToolStripMenuItem.Checked = AppSettings.CloseCommitDialogAfterCommit;
             closeDialogAfterAllFilesCommittedToolStripMenuItem.Checked = AppSettings.CloseCommitDialogAfterLastCommit;
@@ -238,7 +238,7 @@ namespace GitUI.CommandsDialogs
 
             try
             {
-                Message.Text = _commitTemplate = _commitTemplateManager.LoadGitCommitTemplate();
+                Message.Text = _commitTemplate = _commitTemplateManager.LoadGitCommitTemplate(ModuleState);
                 return;
             }
             catch (FileNotFoundException ex)
@@ -288,7 +288,7 @@ namespace GitUI.CommandsDialogs
             // Do not remember commit message of fixup or squash commits, since they have
             // a special meaning, and can be dangerous if used inappropriately.
             if (CommitKind.Normal == _commitKind)
-                GitCommands.CommitHelper.SetCommitMessage(Module, Message.Text, Amend.Checked);
+                GitCommands.CommitHelper.SetCommitMessage(ModuleState, Message.Text, Amend.Checked);
 
             _splitterManager.SaveSplitters();
             AppSettings.CommitDialogSelectionFilter = toolbarSelectionFilter.Visible;
@@ -651,7 +651,7 @@ namespace GitUI.CommandsDialogs
 
         private void SetDialogTitle()
         {
-            Task.Run(() => string.Format(_formTitle.Text, Module.GetSelectedBranch(), Module.WorkingDir))
+            Task.Run(() => string.Format(_formTitle.Text, Module.GetSelectedBranch(), ModuleState.WorkingDir))
                 .ContinueWith(task => Text = task.Result, _taskScheduler);
         }
 
@@ -848,7 +848,7 @@ namespace GitUI.CommandsDialogs
             long length = -1;
             string path = fileName;
             if (!File.Exists(fileName))
-                path = Path.Combine(Module.WorkingDir, fileName);
+                path = Path.Combine(ModuleState.WorkingDir, fileName);
             if (File.Exists(path))
             {
                 FileInfo fi = new FileInfo(path);
@@ -1006,7 +1006,7 @@ namespace GitUI.CommandsDialogs
                 ScriptManager.RunEventScripts(this, ScriptEvent.AfterCommit);
 
                 Message.Text = string.Empty;
-                CommitHelper.SetCommitMessage(Module, string.Empty, Amend.Checked);
+                CommitHelper.SetCommitMessage(ModuleState, string.Empty, Amend.Checked);
 
                 bool pushCompleted = true;
                 if (push)
@@ -1014,8 +1014,9 @@ namespace GitUI.CommandsDialogs
                     UICommands.StartPushDialog(this, true, out pushCompleted);
                 }
 
-                if (pushCompleted && Module.SuperprojectModule != null && AppSettings.StageInSuperprojectAfterCommit)
-                    Module.SuperprojectModule.StageFile(Module.SubmodulePath);
+                var superProject = Module.GetSuperprojectModule();
+                if (pushCompleted && superProject != null && AppSettings.StageInSuperprojectAfterCommit)
+                    new GitModule(superProject).StageFile(Module.SubmodulePath);
 
                 if (AppSettings.CloseCommitDialogAfterCommit)
                 {
@@ -1541,7 +1542,7 @@ namespace GitUI.CommandsDialogs
                         {
                             try
                             {
-                                string path = Path.Combine(Module.WorkingDir, item.Name);
+                                string path = Path.Combine(ModuleState.WorkingDir, item.Name);
                                 if (File.Exists(path))
                                     File.Delete(path);
                                 else
@@ -1589,7 +1590,7 @@ namespace GitUI.CommandsDialogs
                     return;
                 Unstaged.StoreNextIndexToSelect();
                 foreach (var item in Unstaged.SelectedItems)
-                    File.Delete(Path.Combine(Module.WorkingDir, item.Name));
+                    File.Delete(Path.Combine(ModuleState.WorkingDir, item.Name));
 
                 Initialize();
             }
@@ -1614,7 +1615,7 @@ namespace GitUI.CommandsDialogs
             try
             {
                 foreach (var gitItemStatus in Unstaged.SelectedItems)
-                    File.Delete(Path.Combine(Module.WorkingDir, gitItemStatus.Name));
+                    File.Delete(Path.Combine(ModuleState.WorkingDir, gitItemStatus.Name));
             }
             catch (Exception ex)
             {
@@ -1680,8 +1681,8 @@ namespace GitUI.CommandsDialogs
 
                     if (string.IsNullOrEmpty(message))
                     {
-                        message = CommitHelper.GetCommitMessage(Module);
-                        Amend.Checked = CommitHelper.GetAmendState(Module);
+                        message = CommitHelper.GetCommitMessage(ModuleState);
+                        Amend.Checked = CommitHelper.GetAmendState(ModuleState);
                     }
                     break;
             }
@@ -1695,7 +1696,7 @@ namespace GitUI.CommandsDialogs
             //Save last commit message in settings. This way it can be used in multiple repositories.
             AppSettings.LastCommitMessage = commitMessageText;
 
-            var path = CommitHelper.GetCommitMessagePath(Module);
+            var path = CommitHelper.GetCommitMessagePath(ModuleState);
 
             //Commit messages are UTF-8 by default unless otherwise in the config file.
             //The git manual states:
@@ -1828,7 +1829,7 @@ namespace GitUI.CommandsDialogs
                 if (!String.IsNullOrEmpty(from) && !String.IsNullOrEmpty(to))
                 {
                     sb.AppendLine("Submodule " + item.Key + ":");
-                    GitModule module = new GitModule(Module.WorkingDir + item.Value.EnsureTrailingPathSeparator());
+                    GitModule module = new GitModule(new GitModuleState(ModuleState.WorkingDir + item.Value.EnsureTrailingPathSeparator()));
                     string log = module.RunGitCmd(
                          string.Format("log --pretty=format:\"    %m %h - %s\" --no-merges {0}...{1}", from, to));
                     if (log.Length != 0)
@@ -1910,7 +1911,7 @@ namespace GitUI.CommandsDialogs
             var item = list.SelectedItem;
             var fileName = item.Name;
 
-            Process.Start((Path.Combine(Module.WorkingDir, fileName)).ToNativePath());
+            Process.Start((Path.Combine(ModuleState.WorkingDir, fileName)).ToNativePath());
         }
 
         private void OpenWithToolStripMenuItemClick(object sender, EventArgs e)
@@ -1925,7 +1926,7 @@ namespace GitUI.CommandsDialogs
             var item = list.SelectedItem;
             var fileName = item.Name;
 
-            OsShellUtil.OpenAs(Module.WorkingDir + fileName.ToNativePath());
+            OsShellUtil.OpenAs(ModuleState.WorkingDir + fileName.ToNativePath());
         }
 
         private void FilenameToClipboardToolStripMenuItemClick(object sender, EventArgs e)
@@ -1945,7 +1946,7 @@ namespace GitUI.CommandsDialogs
                 if (fileNames.Length > 0)
                     fileNames.AppendLine();
 
-                fileNames.Append((Path.Combine(Module.WorkingDir, item.Name)).ToNativePath());
+                fileNames.Append((Path.Combine(ModuleState.WorkingDir, item.Name)).ToNativePath());
             }
             Clipboard.SetText(fileNames.ToString());
         }
@@ -2005,7 +2006,7 @@ namespace GitUI.CommandsDialogs
                 return;
 
             var item = list.SelectedItem;
-            var fileName = Path.Combine(Module.WorkingDir, item.Name);
+            var fileName = Path.Combine(ModuleState.WorkingDir, item.Name);
 
             UICommands.StartFileEditorDialog(fileName);
 
@@ -2416,7 +2417,7 @@ namespace GitUI.CommandsDialogs
 
         private void commitSubmoduleChanges_Click(object sender, EventArgs e)
         {
-            GitUICommands submodulCommands = new GitUICommands(Module.WorkingDir + _currentItem.Name.EnsureTrailingPathSeparator());
+            GitUICommands submodulCommands = new GitUICommands(ModuleState.WorkingDir + _currentItem.Name.EnsureTrailingPathSeparator());
             submodulCommands.StartCommitDialog(this, false);
             Initialize();
         }
@@ -2430,7 +2431,7 @@ namespace GitUI.CommandsDialogs
                         Process process = new Process();
                         process.StartInfo.FileName = Application.ExecutablePath;
                         process.StartInfo.Arguments = "browse -commit=" + t.Result.Commit;
-                        process.StartInfo.WorkingDirectory = Path.Combine(Module.WorkingDir, submoduleName.EnsureTrailingPathSeparator());
+                        process.StartInfo.WorkingDirectory = Path.Combine(ModuleState.WorkingDir, submoduleName.EnsureTrailingPathSeparator());
                         process.Start();
                     });
         }
@@ -2448,7 +2449,8 @@ namespace GitUI.CommandsDialogs
 
             foreach (var item in unStagedFiles.Where(it => it.IsSubmodule))
             {
-                GitModule module = Module.GetSubmodule(item.Name);
+                var submodule = Module.GetSubmodule(item.Name);
+                var module = new GitModule(submodule);
 
                 // Reset all changes.
                 module.ResetHard("");
@@ -2461,7 +2463,7 @@ namespace GitUI.CommandsDialogs
                     {
                         try
                         {
-                            string path = Path.Combine(module.WorkingDir, file.Name);
+                            string path = Path.Combine(ModuleState.WorkingDir, file.Name);
                             if (File.Exists(path))
                                 File.Delete(path);
                             else
@@ -2612,7 +2614,7 @@ namespace GitUI.CommandsDialogs
             foreach (var item in list.SelectedItems)
             {
                 var fileNames = new StringBuilder();
-                fileNames.Append((Path.Combine(Module.WorkingDir, item.Name)).ToNativePath());
+                fileNames.Append((Path.Combine(ModuleState.WorkingDir, item.Name)).ToNativePath());
 
                 string filePath = fileNames.ToString();
                 if (File.Exists(filePath))

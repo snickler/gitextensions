@@ -5,6 +5,17 @@ using System.Text;
 
 namespace GitUIPluginInterfaces
 {
+    public interface IGitModuleState
+    {
+        /// <summary>Gets the directory which contains the git repository.</summary>
+        string WorkingDir { get; }
+
+        /// <summary>
+        /// Gets the location of .git directory for the current working folder.
+        /// </summary>
+        string WorkingDirGitDir { get; }
+    }
+
     /// <summary>Provides manipulation with git module.</summary>
     public interface IGitModule
     {
@@ -61,23 +72,17 @@ namespace GitUIPluginInterfaces
         /// Determines whether the given repository has index.lock file.
         /// </summary>
         /// <returns><see langword="true"/> is index is locked; otherwise <see langword="false"/>.</returns>
-        bool IsIndexLocked();
+        bool IsIndexLocked(IGitModuleState module);
 
         /// <summary>
         /// Delete index.lock in the current working folder.
         /// </summary>
+        /// <param name="module"></param>
         /// <param name="includeSubmodules">
         ///     If <see langword="true"/> all submodules will be scanned for index.lock files and have them delete, if found.
         /// </param>
-        void UnlockIndex(bool includeSubmodules);
+        void UnlockIndex(IGitModuleState module, bool includeSubmodules);
 
-        /// <summary>Gets the directory which contains the git repository.</summary>
-        string WorkingDir { get; }
-
-        /// <summary>
-        /// Gets the location of .git directory for the current working folder.
-        /// </summary>
-        string WorkingDirGitDir { get; }
 
         /// <summary>
         /// Asks git to resolve the given relativePath
@@ -107,7 +112,7 @@ namespace GitUIPluginInterfaces
 
         IList<string> GetSubmodulesLocalPaths(bool recursive = true);
 
-        IGitModule GetSubmodule(string submoduleName);
+        IGitModuleState GetSubmodule(string submoduleName);
 
         /// <summary>
         /// Retrieves registered remotes by running <c>git remote show</c> command.

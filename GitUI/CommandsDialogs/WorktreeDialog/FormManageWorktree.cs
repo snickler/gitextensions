@@ -103,7 +103,7 @@ namespace GitUI.CommandsDialogs.WorktreeDialog
 
         private bool IsCurrentlyOpenedWorktree(WorkTree workTree)
         {
-            return new DirectoryInfo(UICommands.GitModule.WorkingDir).FullName.TrimEnd('\\') == new DirectoryInfo(workTree.Path).FullName.TrimEnd('\\');
+            return new DirectoryInfo(ModuleState.WorkingDir).FullName.TrimEnd('\\') == new DirectoryInfo(workTree.Path).FullName.TrimEnd('\\');
         }
 
 

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 using GitCommands;
+using GitUIPluginInterfaces;
 using ResourceManager;
 
 namespace GitUI
@@ -67,15 +68,13 @@ namespace GitUI
                 }
             }
         }
+
         /// <summary>Gets the <see cref="UICommands"/>' <see cref="GitModule"/> reference.</summary>
         [Browsable(false)]
-        public GitModule Module
-        {
-            get
-            {
-                return UICommands.Module;
-            }
-        }
+        public GitModule Module => new GitModule(ModuleState);
+
+        [Browsable(false)]
+        public IGitModuleState ModuleState => UICommands.ModuleState;
 
         public GitModuleControl()
         {
@@ -137,7 +136,7 @@ namespace GitUI
         /// and returns true if any executed.</summary>
         protected bool ExecuteScriptCommand(int command)
         {
-            return Script.ScriptRunner.ExecuteScriptCommand(this, Module, command, this as RevisionGrid);
+            return Script.ScriptRunner.ExecuteScriptCommand(this, ModuleState, command, this as RevisionGrid);
         }
 
         /// <summary>Raises the <see cref="GitUICommandsSourceSet"/> event.</summary>

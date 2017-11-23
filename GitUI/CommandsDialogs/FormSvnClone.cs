@@ -77,7 +77,7 @@ namespace GitUI.CommandsDialogs
                 if (ShowInTaskbar == false && AskIfNewRepositoryShouldBeOpened(dirTo))
                 {
                     if (GitModuleChanged != null)
-                        GitModuleChanged(this, new GitModuleEventArgs(new GitModule(dirTo)));
+                        GitModuleChanged(this, new GitModuleEventArgs(new GitModuleState(dirTo)));
                 }
                 Close();
             }

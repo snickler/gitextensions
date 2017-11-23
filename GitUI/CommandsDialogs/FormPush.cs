@@ -390,7 +390,7 @@ namespace GitUI.CommandsDialogs
             _candidateForRebasingMergeCommit = PushToRemote.Checked && (_selectedBranch != AllRefs) && TabControlTagBranch.SelectedTab == BranchTab;
             _selectedRemoteBranchName = RemoteBranch.Text;
 
-            using (var form = new FormRemoteProcess(Module, pushCmd)
+            using (var form = new FormRemoteProcess(ModuleState, pushCmd)
             {
                 Remote = remote,
                 Text = string.Format(_pushToCaption.Text, destination),
@@ -705,7 +705,7 @@ namespace GitUI.CommandsDialogs
         {
             _NO_TRANSLATE_Remotes.Select();
 
-            Text = string.Concat(_pushCaption.Text, " (", Module.WorkingDir, ")");
+            Text = string.Concat(_pushCaption.Text, " (", ModuleState.WorkingDir, ")");
 
             var gitHoster = RepoHosts.TryGetGitHosterForModule(Module);
             _createPullRequestCB.Enabled = gitHoster != null;
@@ -857,7 +857,7 @@ namespace GitUI.CommandsDialogs
                 {
                     EnsurePageant(remote);
                     var cmdGetBranchesFromRemote = "ls-remote --heads \"" + remote + "\"";
-                    using (var formProcess = new FormRemoteProcess(Module, cmdGetBranchesFromRemote)
+                    using (var formProcess = new FormRemoteProcess(ModuleState, cmdGetBranchesFromRemote)
                     {
                         Remote = remote
                     })

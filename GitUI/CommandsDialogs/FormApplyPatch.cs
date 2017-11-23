@@ -219,7 +219,7 @@ namespace GitUI.CommandsDialogs
         {
             PatchFile.Select();
             
-            Text = _applyPatchMsgBox.Text + " (" + Module.WorkingDir + ")";
+            Text = _applyPatchMsgBox.Text + " (" + ModuleState.WorkingDir + ")";
             IgnoreWhitespace.Checked = AppSettings.ApplyPatchIgnoreWhitespace;
         }
 

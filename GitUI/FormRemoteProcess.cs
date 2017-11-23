@@ -5,7 +5,7 @@ using GitCommands;
 using GitCommands.Config;
 
 using GitUI.UserControls;
-
+using GitUIPluginInterfaces;
 using ResourceManager;
 
 namespace GitUI
@@ -24,31 +24,31 @@ namespace GitUI
 
         public bool Plink { get; set; }
         private bool restart;
-        protected readonly GitModule Module;
+        protected readonly IGitModuleState Module;
 
         // only for translation
         protected FormRemoteProcess()
             : base()
         { }
 
-        public FormRemoteProcess(GitModule module, string process, string arguments)
+        public FormRemoteProcess(IGitModuleState module, string process, string arguments)
             : base(process, arguments, module.WorkingDir, null, true)
         {
             this.Module = module;
         }
 
-        public FormRemoteProcess(GitModule module, string arguments)
+        public FormRemoteProcess(IGitModuleState module, string arguments)
             : base(null, arguments, module.WorkingDir, null, true)
         {
             this.Module = module;
         }
 
-        public static new bool ShowDialog(GitModuleForm owner, string arguments)
+        public new static bool ShowDialog(GitModuleForm owner, string arguments)
         {
-            return ShowDialog(owner, owner.Module, arguments);
+            return ShowDialog(owner, owner.ModuleState, arguments);
         }
 
-        public static new bool ShowDialog(IWin32Window owner, GitModule module, string arguments)
+        public new static bool ShowDialog(IWin32Window owner, IGitModuleState module, string arguments)
         {
             using (var formRemoteProcess = new FormRemoteProcess(module, arguments))
             {
@@ -99,6 +99,8 @@ namespace GitUI
                 }
                 */
 
+                var moduleFunctions = new GitModule(Module);
+
                 // If the authentication failed because of a missing key, ask the user to supply one. 
                 if (GetOutputString().Contains("FATAL ERROR") && GetOutputString().Contains("authentication"))
                 {
@@ -107,8 +109,8 @@ namespace GitUI
                     {
                         // To prevent future authentication errors, save this key for this remote.
                         if (!String.IsNullOrEmpty(loadedKey) && !String.IsNullOrEmpty(this.Remote) && 
-                            String.IsNullOrEmpty(Module.GetSetting("remote.{0}.puttykeyfile")))
-                            Module.SetPathSetting(string.Format("remote.{0}.puttykeyfile", this.Remote), loadedKey);
+                            String.IsNullOrEmpty(moduleFunctions.GetSetting("remote.{0}.puttykeyfile")))
+                            moduleFunctions.SetPathSetting(string.Format("remote.{0}.puttykeyfile", this.Remote), loadedKey);
 
                         // Retry the command.
                         Retry();
@@ -121,14 +123,14 @@ namespace GitUI
 
                     if (string.IsNullOrEmpty(UrlTryingToConnect))
                     {
-                        remoteUrl = Module.GetSetting(string.Format(SettingKeyString.RemoteUrl, Remote));
+                        remoteUrl = moduleFunctions.GetSetting(string.Format(SettingKeyString.RemoteUrl, Remote));
                         if (string.IsNullOrEmpty(remoteUrl))
                             remoteUrl = Remote;
                     }
                     else
                         remoteUrl = UrlTryingToConnect;
 
-                    if (AskForCacheHostkey(this, Module, remoteUrl))
+                    if (AskForCacheHostkey(this, moduleFunctions, remoteUrl))
                     {
                         Retry();
                         return true;
@@ -163,17 +165,19 @@ namespace GitUI
                 {
                     if (MessageBox.Show(this, _fingerprintNotRegistredText.Text, _fingerprintNotRegistredTextCaption.Text, MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
+                        var moduleFunctions = new GitModule(Module);
+
                         string remoteUrl;
                         if (string.IsNullOrEmpty(UrlTryingToConnect))
                         {
-                            remoteUrl = Module.GetSetting(string.Format(SettingKeyString.RemoteUrl, Remote));
+                            remoteUrl = moduleFunctions.GetSetting(string.Format(SettingKeyString.RemoteUrl, Remote));
                             remoteUrl = string.IsNullOrEmpty(remoteUrl) ? Remote : remoteUrl;
                         }
                         else
                             remoteUrl = UrlTryingToConnect;
                         remoteUrl = GitCommandHelpers.GetPlinkCompatibleUrl(remoteUrl);
 
-                        Module.RunExternalCmdShowConsole("cmd.exe", string.Format("/k \"\"{0}\" {1}\"", AppSettings.Plink, remoteUrl));
+                        moduleFunctions.RunExternalCmdShowConsole("cmd.exe", string.Format("/k \"\"{0}\" {1}\"", AppSettings.Plink, remoteUrl));
 
                         restart = true;
                         Reset();

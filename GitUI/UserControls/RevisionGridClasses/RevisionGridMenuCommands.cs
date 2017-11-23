@@ -494,7 +494,7 @@ namespace GitUI.UserControls.RevisionGridClasses
                 string revisionGuid = formGoToCommit.ValidateAndGetSelectedRevision();
                 if (!string.IsNullOrEmpty(revisionGuid))
                 {
-                    _revisionGrid.SetSelectedRevision(new GitRevision(_revisionGrid.Module, revisionGuid));
+                    _revisionGrid.SetSelectedRevision(new GitRevision(_revisionGrid.ModuleState, revisionGuid));
                 }
                 else
                 {

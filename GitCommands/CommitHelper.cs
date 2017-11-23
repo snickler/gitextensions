@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using GitCommands.Git;
+using GitUIPluginInterfaces;
 
 namespace GitCommands
 {
@@ -34,7 +35,7 @@ namespace GitCommands
                 Dto.Result = module.RunGitCmd("commit -m \"" + Dto.Message + "\"");
         }
 
-        public static void SetCommitMessage(GitModule module, string commitMessageText, bool amendCommit)
+        public static void SetCommitMessage(IGitModuleState module, string commitMessageText, bool amendCommit)
         {
             if (string.IsNullOrEmpty(commitMessageText))
             {
@@ -43,7 +44,8 @@ namespace GitCommands
                 return;
             }
 
-            using (var textWriter = new StreamWriter(GetCommitMessagePath(module), false, module.CommitEncoding))
+            var moduleFunctions = new GitModule(module);
+            using (var textWriter = new StreamWriter(GetCommitMessagePath(module), false, moduleFunctions.CommitEncoding))
             {
                 textWriter.Write(commitMessageText);
             }
@@ -53,32 +55,33 @@ namespace GitCommands
                 File.Delete(GetAmendPath(module));
         }
 
-        public static string GetCommitMessage(GitModule module)
+        public static string GetCommitMessage(IGitModuleState module)
         {
             if (File.Exists(CommitHelper.GetCommitMessagePath(module)))
             {
-                return File.ReadAllText(CommitHelper.GetCommitMessagePath(module), module.CommitEncoding);
+                var moduleFunctions = new GitModule(module);
+                return File.ReadAllText(CommitHelper.GetCommitMessagePath(module), moduleFunctions.CommitEncoding);
             }
 
             return string.Empty;
         }
 
-        public static string GetCommitMessagePath(GitModule module)
+        public static string GetCommitMessagePath(IGitModuleState module)
         {
             return GetFilePath(module, "COMMITMESSAGE");
         }
 
-        private static string GetAmendPath(GitModule module)
+        private static string GetAmendPath(IGitModuleState module)
         {
             return GetFilePath(module, "GitExtensions.amend");
         }
 
-        private static string GetFilePath(GitModule module, string action)
+        private static string GetFilePath(IGitModuleState module, string action)
         {
             return Path.Combine(module.WorkingDirGitDir, action);
         }
 
-        public static bool GetAmendState(GitModule module)
+        public static bool GetAmendState(IGitModuleState module)
         {
             bool amendState = false;
             if (AppSettings.RememberAmendCommitState && File.Exists(CommitHelper.GetAmendPath(module)))

@@ -500,7 +500,7 @@ namespace GitUI.Editor
         {
             FilePreamble = null;
 
-            string fullPath = Path.GetFullPath(Path.Combine(Module.WorkingDir, fileName));
+            string fullPath = Path.GetFullPath(Path.Combine(ModuleState.WorkingDir, fileName));
 
             if (fileName.EndsWith("/") || Directory.Exists(fullPath))
             {
@@ -578,7 +578,7 @@ namespace GitUI.Editor
         {
             try
             {
-                using (Stream stream = File.OpenRead(Path.Combine(Module.WorkingDir, fileName)))
+                using (Stream stream = File.OpenRead(Path.Combine(ModuleState.WorkingDir, fileName)))
                 {
                     return CreateImage(fileName, stream);
                 }
@@ -614,7 +614,7 @@ namespace GitUI.Editor
             if (File.Exists(fileName))
                 path = fileName;
             else
-                path = Path.Combine(Module.WorkingDir, fileName);
+                path = Path.Combine(ModuleState.WorkingDir, fileName);
 
             if (File.Exists(path))
             {

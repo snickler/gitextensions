@@ -48,9 +48,9 @@ namespace GitUI.CommandsDialogs
                 return;
             }
 
-            _baseRevision = new GitRevision(Module, baseCommitSha);
-            _headRevision = new GitRevision(Module, headCommitSha);
-            _mergeBase = new GitRevision(Module, Module.GetMergeBase(_baseRevision.Guid, _headRevision.Guid));
+            _baseRevision = new GitRevision(ModuleState, baseCommitSha);
+            _headRevision = new GitRevision(ModuleState, headCommitSha);
+            _mergeBase = new GitRevision(ModuleState, Module.GetMergeBase(_baseRevision.Guid, _headRevision.Guid));
 
             lblBaseCommit.BackColor = AppSettings.DiffRemovedColor;
             lblHeadCommit.BackColor = AppSettings.DiffAddedColor;
@@ -98,7 +98,7 @@ namespace GitUI.CommandsDialogs
 
             IList<GitRevision> items = new List<GitRevision> { _headRevision, baseCommit };
             if (items.Count() == 1)
-                items.Add(new GitRevision(Module, DiffFiles.SelectedItemParent));
+                items.Add(new GitRevision(ModuleState, DiffFiles.SelectedItemParent));
             DiffText.ViewChanges(items, DiffFiles.SelectedItem, String.Empty);
         }
 
@@ -145,12 +145,12 @@ namespace GitUI.CommandsDialogs
 
         private void copyFilenameToClipboardToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            FormBrowse.CopyFullPathToClipboard(DiffFiles, Module);
+            FormBrowse.CopyFullPathToClipboard(DiffFiles, ModuleState);
         }
 
         private void openContainingFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormBrowse.OpenContainingFolder(DiffFiles, Module);
+            FormBrowse.OpenContainingFolder(DiffFiles, ModuleState);
         }
 
         private void fileHistoryDiffToolstripMenuItem_Click(object sender, EventArgs e)
@@ -255,7 +255,7 @@ namespace GitUI.CommandsDialogs
                 if (form.ShowDialog(this) == DialogResult.OK)
                 {
                     displayStr = form.BranchName;
-                    revision = new GitRevision(Module, Module.RevParse(form.BranchName));
+                    revision = new GitRevision(ModuleState, Module.RevParse(form.BranchName));
                     PopulateDiffFiles();
                 }
             }

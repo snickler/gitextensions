@@ -62,12 +62,13 @@ namespace GitUI.CommandsDialogs
                 return;
             }
 
-            GitModule module = new GitModule(Directory.Text);
+            var module = new GitModuleState(Directory.Text);
+            var moduleFunctions = new GitModule(module);
 
             if (!System.IO.Directory.Exists(module.WorkingDir))
                 System.IO.Directory.CreateDirectory(module.WorkingDir);
 
-            MessageBox.Show(this, module.Init(Central.Checked, Central.Checked), _initMsgBoxCaption.Text);
+            MessageBox.Show(this, moduleFunctions.Init(Central.Checked, Central.Checked), _initMsgBoxCaption.Text);
 
             if (GitModuleChanged != null)
                 GitModuleChanged(this, new GitModuleEventArgs(module));

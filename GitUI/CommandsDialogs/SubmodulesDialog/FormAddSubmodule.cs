@@ -61,14 +61,15 @@ namespace GitUI.CommandsDialogs.SubmodulesDialog
 
         private void BranchDropDown(object sender, EventArgs e)
         {
-            GitModule module = new GitModule(Directory.Text);
+            var module = new GitModuleState(Directory.Text);
+            var moduleFunctions = new GitModule(module);
             Branch.DisplayMember = "Name";
             IList<IGitRef> heads;
-            if (module.IsValidGitWorkingDir())
-                heads = module.GetRefs(false);
+            if (moduleFunctions.IsValidGitWorkingDir())
+                heads = moduleFunctions.GetRefs(false);
             else
                 heads = new List<IGitRef>();
-            heads.Insert(0, GitRef.NoHead(module));
+            heads.Insert(0, GitRef.NoHead(moduleFunctions));
             Branch.DataSource = heads;
         }
 

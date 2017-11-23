@@ -234,7 +234,7 @@ namespace GitUI.CommandsDialogs
             var items = _revisionGrid.GetSelectedRevisions();
             if (items.Count() == 1)
             {
-                items.Add(new GitRevision(Module, DiffFiles.SelectedItemParent));
+                items.Add(new GitRevision(ModuleState, DiffFiles.SelectedItemParent));
 
                 if (!string.IsNullOrWhiteSpace(DiffFiles.SelectedItemParent)
                     && DiffFiles.SelectedItemParent == DiffFiles.CombinedDiff.Text)
@@ -274,7 +274,7 @@ namespace GitUI.CommandsDialogs
                         Process process = new Process();
                         process.StartInfo.FileName = Application.ExecutablePath;
                         process.StartInfo.Arguments = "browse -commit=" + t.Result.Commit;
-                        process.StartInfo.WorkingDirectory = Path.Combine(Module.WorkingDir, submoduleName.EnsureTrailingPathSeparator());
+                        process.StartInfo.WorkingDirectory = Path.Combine(ModuleState.WorkingDir, submoduleName.EnsureTrailingPathSeparator());
                         process.Start();
                     });
             }
@@ -341,7 +341,7 @@ namespace GitUI.CommandsDialogs
 
                 foreach (var item in DiffFiles.SelectedItems)
                 {
-                    string filePath = FormBrowseUtil.GetFullPathFromGitItemStatus(Module, item);
+                    string filePath = FormBrowseUtil.GetFullPathFromGitItemStatus(ModuleState, item);
                     if (FormBrowseUtil.FileOrParentDirectoryExists(filePath))
                     {
                         openContainingFolderToolStripMenuItem.Enabled = true;
@@ -410,7 +410,7 @@ namespace GitUI.CommandsDialogs
 
         private void copyFilenameToClipboardToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            FormBrowse.CopyFullPathToClipboard(DiffFiles, Module);
+            FormBrowse.CopyFullPathToClipboard(DiffFiles, ModuleState);
         }
 
         private void findInDiffToolStripMenuItem_Click(object sender, EventArgs e)
@@ -463,7 +463,7 @@ namespace GitUI.CommandsDialogs
 
         private void openContainingFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormBrowse.OpenContainingFolder(DiffFiles, Module);
+            FormBrowse.OpenContainingFolder(DiffFiles, ModuleState);
         }
 
         private void openWithDifftoolToolStripMenuItem_Click(object sender, EventArgs e)
@@ -530,7 +530,7 @@ namespace GitUI.CommandsDialogs
             foreach (var item in DiffFiles.SelectedItems)
             {
                 bIsNormal = bIsNormal || !(item.IsNew || item.IsDeleted);
-                string filePath = FormBrowseUtil.GetFullPathFromGitItemStatus(Module, item);
+                string filePath = FormBrowseUtil.GetFullPathFromGitItemStatus(ModuleState, item);
                 if (File.Exists(filePath) || Directory.Exists(filePath))
                 {
                     localExists = true;
@@ -671,7 +671,7 @@ namespace GitUI.CommandsDialogs
 
             GitItemStatus item = DiffFiles.SelectedItem;
 
-            var fullName = Path.Combine(Module.WorkingDir, item.Name);
+            var fullName = Path.Combine(ModuleState.WorkingDir, item.Name);
             using (var fileDialog =
                 new SaveFileDialog
                 {
@@ -730,7 +730,7 @@ namespace GitUI.CommandsDialogs
                 var items = DiffFiles.SelectedItems.Where(item => !item.IsSubmodule);
                 foreach (var item in items)
                 {
-                    File.Delete(Path.Combine(Module.WorkingDir, item.Name));
+                    File.Delete(Path.Combine(ModuleState.WorkingDir, item.Name));
                 }
                 RefreshArtificial();
             }
@@ -750,7 +750,7 @@ namespace GitUI.CommandsDialogs
         private void diffEditFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var item = DiffFiles.SelectedItem;
-            var fileName = Path.Combine(Module.WorkingDir, item.Name);
+            var fileName = Path.Combine(ModuleState.WorkingDir, item.Name);
 
             UICommands.StartFileEditorDialog(fileName);
             RefreshArtificial();
@@ -758,7 +758,7 @@ namespace GitUI.CommandsDialogs
 
         private void diffCommitSubmoduleChanges_Click(object sender, EventArgs e)
         {
-            GitUICommands submodulCommands = new GitUICommands(Module.WorkingDir + DiffFiles.SelectedItem.Name.EnsureTrailingPathSeparator());
+            GitUICommands submodulCommands = new GitUICommands(ModuleState.WorkingDir + DiffFiles.SelectedItem.Name.EnsureTrailingPathSeparator());
             submodulCommands.StartCommitDialog(this, false);
             RefreshArtificial();
         }
@@ -776,15 +776,16 @@ namespace GitUI.CommandsDialogs
 
             foreach (var item in unStagedFiles.Where(it => it.IsSubmodule))
             {
-                GitModule module = Module.GetSubmodule(item.Name);
+                var module = Module.GetSubmodule(item.Name);
+                var moduleFunctions = new GitModule(module);
 
                 // Reset all changes.
-                module.ResetHard("");
+                moduleFunctions.ResetHard("");
 
                 // Also delete new files, if requested.
                 if (resetType == FormResetChanges.ActionEnum.ResetAndDelete)
                 {
-                    var unstagedFiles = module.GetUnstagedFiles();
+                    var unstagedFiles = moduleFunctions.GetUnstagedFiles();
                     foreach (var file in unstagedFiles.Where(file => file.IsNew))
                     {
                         try

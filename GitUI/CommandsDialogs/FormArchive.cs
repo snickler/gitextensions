@@ -125,7 +125,7 @@ namespace GitUI.CommandsDialogs
 
             // TODO (feature): if there is a tag on the revision use the tag name as suggestion
             // TODO (feature): let user decide via GUI
-            string filenameSuggestion = string.Format("{0}_{1}", new DirectoryInfo(Module.WorkingDir).Name, revision);
+            string filenameSuggestion = string.Format("{0}_{1}", new DirectoryInfo(ModuleState.WorkingDir).Name, revision);
 
             using (var saveFileDialog = new SaveFileDialog
             {

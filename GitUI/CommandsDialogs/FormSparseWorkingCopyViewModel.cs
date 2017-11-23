@@ -130,7 +130,7 @@ namespace GitUI.CommandsDialogs
         [NotNull]
         public FileInfo GetPathToSparseCheckoutFile()
         {
-            return new FileInfo(Path.Combine(_gitcommands.GitModule.ResolveGitInternalPath("info"), "sparse-checkout"));
+            return new FileInfo(Path.Combine(_gitcommands.Module.ResolveGitInternalPath("info"), "sparse-checkout"));
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace GitUI.CommandsDialogs
         {
             // Re-apply tree to the index
             // TODO: check how it affects the uncommitted working copy changes
-            using(var fromProcess = new FormRemoteProcess(_gitcommands.Module, AppSettings.GitCommand, RefreshWorkingCopyCommandName))
+            using(var fromProcess = new FormRemoteProcess(_gitcommands.ModuleState, AppSettings.GitCommand, RefreshWorkingCopyCommandName))
                 fromProcess.ShowDialog(Form.ActiveForm);
         }
 

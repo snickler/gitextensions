@@ -11,7 +11,7 @@ namespace GitCommands.Git
         /// Create the Tag depending on input parameter.
         /// </summary>
         /// <returns><see langword="true"/> if create tag command succeeded, <see langword="false"/> otherwise</returns>
-        bool CreateTag(GitCreateTagArgs args, IWin32Window parentForm);
+        bool CreateTag(GitCreateTagArgs args, IGitModuleState module, IWin32Window parentForm);
     }
 
 
@@ -36,12 +36,12 @@ namespace GitCommands.Git
         /// Create the Tag depending on input parameter.
         /// </summary>
         /// <returns>Output string from RunGitCmd.</returns>
-        public bool CreateTag(GitCreateTagArgs args, IWin32Window parentForm)
+        public bool CreateTag(GitCreateTagArgs args, IGitModuleState module, IWin32Window parentForm)
         {
             string tagMessageFileName = null;
             if (args.Operation.CanProvideMessage())
             {
-                tagMessageFileName = Path.Combine(_module.WorkingDirGitDir, "TAGMESSAGE");
+                tagMessageFileName = Path.Combine(module.WorkingDirGitDir, "TAGMESSAGE");
                 _fileSystem.File.WriteAllText(tagMessageFileName, args.TagMessage);
             }
 

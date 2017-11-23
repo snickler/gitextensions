@@ -23,9 +23,9 @@ namespace GitUI.CommandsDialogs.GitIgnoreDialog
         private readonly TranslationString _saveFileQuestion =
             new TranslationString("Save changes to .gitignore?");
 
-        private readonly IGitModule _module;
+        private readonly IGitModuleState _module;
 
-        public GitIgnoreModel(IGitModule module)
+        public GitIgnoreModel(IGitModuleState module)
         {
             _module = module;
 

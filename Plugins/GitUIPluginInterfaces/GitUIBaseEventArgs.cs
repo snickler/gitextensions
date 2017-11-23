@@ -27,7 +27,7 @@ namespace GitUIPluginInterfaces
         {
             get
             {
-                return GitUICommands.GitModule;
+                return GitUICommands.Module;
             }
             
         }

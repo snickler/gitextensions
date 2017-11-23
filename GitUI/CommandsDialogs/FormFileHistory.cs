@@ -67,7 +67,7 @@ namespace GitUI.CommandsDialogs
 
             Diff.ExtraDiffArgumentsChanged += DiffExtraDiffArgumentsChanged;
 
-            bool isSubmodule = GitModule.IsValidGitWorkingDir(Path.Combine(Module.WorkingDir, FileName));
+            bool isSubmodule = GitModule.IsValidGitWorkingDir(Path.Combine(ModuleState.WorkingDir, FileName));
             if (revision != null && revision.IsArtificial() || isSubmodule) //no blame for artificial
                 tabControl1.RemoveIfExists(BlameTab);
             FileChanges.SelectionChanged += FileChangesSelectionChanged;
@@ -145,7 +145,7 @@ namespace GitUI.CommandsDialogs
             fileName = fileName.ToPosixPath();
 
             // we will need this later to look up proper casing for the file
-            var fullFilePath = Path.Combine(Module.WorkingDir, fileName);
+            var fullFilePath = Path.Combine(ModuleState.WorkingDir, fileName);
 
             //The section below contains native windows (kernel32) calls
             //and breaks on Linux. Only use it on Windows. Casing is only
@@ -161,11 +161,11 @@ namespace GitUI.CommandsDialogs
                 NativeMethods.GetLongPathName(shortPath.ToString(), longPath, longPath.Capacity);
 
                 // remove the working directory and now we have a properly cased file name.
-                fileName = longPath.ToString().Substring(Module.WorkingDir.Length);
+                fileName = longPath.ToString().Substring(ModuleState.WorkingDir.Length);
             }
 
-            if (fileName.StartsWith(Module.WorkingDir, StringComparison.InvariantCultureIgnoreCase))
-                fileName = fileName.Substring(Module.WorkingDir.Length);
+            if (fileName.StartsWith(ModuleState.WorkingDir, StringComparison.InvariantCultureIgnoreCase))
+                fileName = fileName.Substring(ModuleState.WorkingDir.Length);
 
             FileName = fileName;
 
@@ -244,7 +244,7 @@ namespace GitUI.CommandsDialogs
             var selectedRows = FileChanges.GetSelectedRevisions();
             if (selectedRows.Count > 0)
             {
-                bool isSubmodule = GitModule.IsValidGitWorkingDir(Path.Combine(Module.WorkingDir, FileName));
+                bool isSubmodule = GitModule.IsValidGitWorkingDir(Path.Combine(ModuleState.WorkingDir, FileName));
                 GitRevision revision = selectedRows[0];
                 if (revision.IsArtificial() || isSubmodule)
                     tabControl1.RemoveIfExists(BlameTab);
@@ -260,7 +260,7 @@ namespace GitUI.CommandsDialogs
             if (!fileName.IsNullOrEmpty() && !fileName.Equals(FileName))
                 Text = Text + string.Format(" ({0})", fileName);
 
-            Text += " - " + Module.WorkingDir;
+            Text += " - " + ModuleState.WorkingDir;
         }
 
         private void UpdateSelectedFileViewers()
@@ -294,7 +294,7 @@ namespace GitUI.CommandsDialogs
                 GitItemStatus file = new GitItemStatus();
                 file.IsTracked = true;
                 file.Name = fileName;
-                file.IsSubmodule = GitModule.IsValidGitWorkingDir(Path.Combine(Module.WorkingDir, fileName));
+                file.IsSubmodule = GitModule.IsValidGitWorkingDir(Path.Combine(ModuleState.WorkingDir, fileName));
                 Diff.ViewChanges(FileChanges.GetSelectedRevisions(), file, "You need to select at least one revision to view diff.");
             }
 
@@ -342,7 +342,7 @@ namespace GitUI.CommandsDialogs
                 if (string.IsNullOrEmpty(orgFileName))
                     orgFileName = FileName;
 
-                string fullName = Module.WorkingDir + orgFileName.ToNativePath();
+                string fullName = ModuleState.WorkingDir + orgFileName.ToNativePath();
 
                 using (var fileDialog = new SaveFileDialog
                 {
@@ -466,14 +466,14 @@ namespace GitUI.CommandsDialogs
         {
             if (e.Command == "gotocommit")
             {
-                FileChanges.SetSelectedRevision(GitRevision.CreateForShortSha1(Module, e.Data));
+                FileChanges.SetSelectedRevision(GitRevision.CreateForShortSha1(ModuleState, e.Data));
             }
             else if (e.Command == "gotobranch" || e.Command == "gototag")
             {
                 string error = "";
                 CommitData commit = CommitData.GetCommitData(Module, e.Data, ref error);
                 if (commit != null)
-                    FileChanges.SetSelectedRevision(new GitRevision(Module, commit.Guid));
+                    FileChanges.SetSelectedRevision(new GitRevision(ModuleState, commit.Guid));
             }
             else if (e.Command == "navigatebackward")
             {

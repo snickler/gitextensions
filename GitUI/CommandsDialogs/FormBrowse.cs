@@ -269,7 +269,7 @@ namespace GitUI.CommandsDialogs
         {
             if (!string.IsNullOrEmpty(selectCommit))
             {
-                RevisionGrid.SetInitialRevision(GitRevision.CreateForShortSha1(Module, selectCommit));
+                RevisionGrid.SetInitialRevision(GitRevision.CreateForShortSha1(ModuleState, selectCommit));
             }
         }
 
@@ -475,7 +475,7 @@ namespace GitUI.CommandsDialogs
 
             bool bareRepository = Module.IsBareRepository();
             bool validWorkingDir = Module.IsValidGitWorkingDir();
-            bool hasWorkingDir = !string.IsNullOrEmpty(Module.WorkingDir);
+            bool hasWorkingDir = !string.IsNullOrEmpty(ModuleState.WorkingDir);
             branchSelect.Text = validWorkingDir ? Module.GetSelectedBranch() : "";
             if (hasWorkingDir)
                 HideDashboard();
@@ -557,7 +557,7 @@ namespace GitUI.CommandsDialogs
             if (hard && hasWorkingDir)
                 ShowRevisions();
             RefreshWorkingDirCombo();
-            Text = GenerateWindowTitle(Module.WorkingDir, validWorkingDir, branchSelect.Text);
+            Text = GenerateWindowTitle(ModuleState.WorkingDir, validWorkingDir, branchSelect.Text);
             UpdateJumplist(validWorkingDir);
 
             OnActivate();
@@ -611,8 +611,8 @@ namespace GitUI.CommandsDialogs
 
             List<RecentRepoInfo> mostRecentRepos = new List<RecentRepoInfo>();
 
-            if (r == null || !r.Path.Equals(Module.WorkingDir, StringComparison.InvariantCultureIgnoreCase))
-                Repositories.AddMostRecentRepository(Module.WorkingDir);
+            if (r == null || !r.Path.Equals(ModuleState.WorkingDir, StringComparison.InvariantCultureIgnoreCase))
+                Repositories.AddMostRecentRepository(ModuleState.WorkingDir);
 
             using (var graphics = CreateGraphics())
             {
@@ -623,10 +623,10 @@ namespace GitUI.CommandsDialogs
                 };
                 splitter.SplitRecentRepos(Repositories.RepositoryHistory.Repositories, mostRecentRepos, mostRecentRepos);
 
-                RecentRepoInfo ri = mostRecentRepos.Find((e) => e.Repo.Path.Equals(Module.WorkingDir, StringComparison.InvariantCultureIgnoreCase));
+                RecentRepoInfo ri = mostRecentRepos.Find((e) => e.Repo.Path.Equals(ModuleState.WorkingDir, StringComparison.InvariantCultureIgnoreCase));
 
                 if (ri == null)
-                    _NO_TRANSLATE_Workingdir.Text = Module.WorkingDir;
+                    _NO_TRANSLATE_Workingdir.Text = ModuleState.WorkingDir;
                 else
                     _NO_TRANSLATE_Workingdir.Text = ri.Caption;
 
@@ -704,7 +704,7 @@ namespace GitUI.CommandsDialogs
 
         private void UserMenu_Click(object sender, EventArgs e)
         {
-            if (ScriptRunner.RunScript(this, Module, ((ToolStripButton)sender).Text, RevisionGrid))
+            if (ScriptRunner.RunScript(this, ModuleState, ((ToolStripButton)sender).Text, RevisionGrid))
                 RevisionGrid.RefreshRevisions();
         }
 
@@ -718,7 +718,7 @@ namespace GitUI.CommandsDialogs
             {
                 if (validWorkingDir)
                 {
-                    string repositoryDescription = GetRepositoryShortName(Module.WorkingDir);
+                    string repositoryDescription = GetRepositoryShortName(ModuleState.WorkingDir);
                     string baseFolder = Path.Combine(AppSettings.ApplicationDataPath.Value, "Recent");
                     if (!Directory.Exists(baseFolder))
                     {
@@ -733,7 +733,7 @@ namespace GitUI.CommandsDialogs
                     }
 
                     string path = Path.Combine(baseFolder, string.Format("{0}.{1}", sb, "gitext"));
-                    File.WriteAllText(path, Module.WorkingDir);
+                    File.WriteAllText(path, ModuleState.WorkingDir);
                     JumpList.AddToRecent(path);
 
                     var jumpList = JumpList.CreateJumpListForIndividualWindow(TaskbarManager.Instance.ApplicationId, Handle);
@@ -902,7 +902,7 @@ namespace GitUI.CommandsDialogs
 
             AsyncLoader.DoAsync(
                 () => validWorkingDir && Module.InTheMiddleOfConflictedMerge() &&
-                      !Directory.Exists(Module.WorkingDirGitDir + "rebase-apply\\"),
+                      !Directory.Exists(ModuleState.WorkingDirGitDir + "rebase-apply\\"),
                 (result) =>
                 {
                     if (result)
@@ -1130,7 +1130,7 @@ namespace GitUI.CommandsDialogs
 
         private void OpenToolStripMenuItemClick(object sender, EventArgs e)
         {
-            GitModule module = FormOpenDirectory.OpenModule(this, Module);
+            var module = FormOpenDirectory.OpenModule(this, ModuleState);
             if (module != null)
                 SetGitModule(this, new GitModuleEventArgs(module));
         }
@@ -1469,7 +1469,7 @@ namespace GitUI.CommandsDialogs
             if (toolStripMenuItem != null)
             {
                 var submodule = toolStripMenuItem.Tag as string;
-                FormProcess.ShowDialog(this, Module.SuperprojectModule, GitCommandHelpers.SubmoduleUpdateCmd(submodule));
+                FormProcess.ShowDialog(this, Module.GetSuperprojectModule(), GitCommandHelpers.SubmoduleUpdateCmd(submodule));
             }
             UICommands.RepoChangedNotifier.Notify();
         }
@@ -1539,9 +1539,9 @@ namespace GitUI.CommandsDialogs
 
         private void ChangeWorkingDir(string path)
         {
-            GitModule module = new GitModule(path);
-
-            if (!module.IsValidGitWorkingDir())
+            var module = new GitModuleState(path);
+            var moduleFunctions = new GitModule(module);
+            if (!moduleFunctions.IsValidGitWorkingDir())
             {
                 DialogResult dialogResult = MessageBox.Show(this, directoryIsNotAValidRepository.Text,
                     directoryIsNotAValidRepositoryCaption.Text, MessageBoxButtons.YesNoCancel,
@@ -1689,7 +1689,7 @@ namespace GitUI.CommandsDialogs
 
         public void SetWorkingDir(string path)
         {
-            SetGitModule(this, new GitModuleEventArgs(new GitModule(path)));
+            SetGitModule(this, new GitModuleEventArgs(new GitModuleState(path)));
         }
 
         private void SetGitModule(object sender, GitModuleEventArgs e)
@@ -1699,19 +1699,20 @@ namespace GitUI.CommandsDialogs
             UnregisterPlugins();
             UICommands = new GitUICommands(module);
 
-            if (Module.IsValidGitWorkingDir())
+            var moduleFunctions = new GitModule(module);
+            if (moduleFunctions.IsValidGitWorkingDir())
             {
-                Repositories.AddMostRecentRepository(Module.WorkingDir);
+                Repositories.AddMostRecentRepository(ModuleState.WorkingDir);
                 AppSettings.RecentWorkingDir = module.WorkingDir;
-                ChangeTerminalActiveFolder(Module.WorkingDir);
+                ChangeTerminalActiveFolder(ModuleState.WorkingDir);
 
 #if DEBUG
                 //Current encodings
                 Debug.WriteLine("Encodings for " + module.WorkingDir);
-                Debug.WriteLine("Files content encoding: " + module.FilesEncoding.EncodingName);
-                Debug.WriteLine("Commit encoding: " + module.CommitEncoding.EncodingName);
-                if (module.LogOutputEncoding.CodePage != module.CommitEncoding.CodePage)
-                    Debug.WriteLine("Log output encoding: " + module.LogOutputEncoding.EncodingName);
+                Debug.WriteLine("Files content encoding: " + moduleFunctions.FilesEncoding.EncodingName);
+                Debug.WriteLine("Commit encoding: " + moduleFunctions.CommitEncoding.EncodingName);
+                if (moduleFunctions.LogOutputEncoding.CodePage != moduleFunctions.CommitEncoding.CodePage)
+                    Debug.WriteLine("Log output encoding: " + moduleFunctions.LogOutputEncoding.EncodingName);
 #endif
             }
 
@@ -1730,7 +1731,7 @@ namespace GitUI.CommandsDialogs
         {
             try
             {
-                Process.Start(Module.WorkingDir);
+                Process.Start(ModuleState.WorkingDir);
             }
             catch (Exception ex)
             {
@@ -1764,7 +1765,7 @@ namespace GitUI.CommandsDialogs
             UICommands.StartEditGitAttributesDialog(this);
         }
 
-        public static void CopyFullPathToClipboard(FileStatusList diffFiles, GitModule module)
+        public static void CopyFullPathToClipboard(FileStatusList diffFiles, IGitModuleState module)
         {
             if (!diffFiles.SelectedItems.Any())
                 return;
@@ -1786,7 +1787,7 @@ namespace GitUI.CommandsDialogs
         {
             try
             {
-                Module.UnlockIndex(true);
+                Module.UnlockIndex(ModuleState, true);
             }
             catch (FileDeleteException ex)
             {
@@ -1974,7 +1975,7 @@ namespace GitUI.CommandsDialogs
         }
 
 
-        public static void OpenContainingFolder(FileStatusList diffFiles, GitModule module)
+        public static void OpenContainingFolder(FileStatusList diffFiles, IGitModuleState module)
         {
             if (!diffFiles.SelectedItems.Any())
                 return;
@@ -2183,7 +2184,7 @@ namespace GitUI.CommandsDialogs
         {
             if (e.Command == "gotocommit")
             {
-                var revision = GitRevision.CreateForShortSha1(Module, e.Data);
+                var revision = GitRevision.CreateForShortSha1(ModuleState, e.Data);
                 var found = RevisionGrid.SetSelectedRevision(revision);
 
                 // When 'git log --first-parent' filtration is used, user can click on child commit
@@ -2200,7 +2201,7 @@ namespace GitUI.CommandsDialogs
                 string error = "";
                 CommitData commit = CommitData.GetCommitData(Module, e.Data, ref error);
                 if (commit != null)
-                    RevisionGrid.SetSelectedRevision(new GitRevision(Module, commit.Guid));
+                    RevisionGrid.SetSelectedRevision(new GitRevision(ModuleState, commit.Guid));
             }
             else if (e.Command == "navigatebackward")
             {
@@ -2342,19 +2343,21 @@ namespace GitUI.CommandsDialogs
         {
             Task.Factory.StartNew(() =>
             {
-                var submodule = new GitModule(info.Path);
-                var supermodule = submodule.SuperprojectModule;
-                var submoduleName = submodule.GetCurrentSubmoduleLocalPath();
+                var submodule = new GitModuleState(info.Path);
+                var submoduleFunctions = new GitModule(submodule);
+                var supermodule = submoduleFunctions.GetSuperprojectModule();
+                var supermoduleFunctions = new GitModule(supermodule);
+                var submoduleName = submoduleFunctions.GetCurrentSubmoduleLocalPath();
 
                 info.Status = null;
 
                 if (string.IsNullOrEmpty(submoduleName) || supermodule == null)
                     return;
 
-                var submoduleStatus = GitCommandHelpers.GetCurrentSubmoduleChanges(supermodule, submoduleName);
+                var submoduleStatus = GitCommandHelpers.GetCurrentSubmoduleChanges(supermoduleFunctions, submoduleName);
                 if (submoduleStatus != null && submoduleStatus.Commit != submoduleStatus.OldCommit)
                 {
-                    submoduleStatus.CheckSubmoduleStatus(submoduleStatus.GetSubmodule(supermodule));
+                    submoduleStatus.CheckSubmoduleStatus(submoduleStatus.GetSubmodule(supermoduleFunctions));
                 }
                 if (submoduleStatus != null)
                 {
@@ -2380,20 +2383,22 @@ namespace GitUI.CommandsDialogs
             // Start gathering new submodule information asynchronously.  This makes a significant difference in UI
             // responsiveness if there are numerous submodules (e.g. > 100).
             var cancelToken = _submodulesStatusCts.Token;
-            string thisModuleDir = Module.WorkingDir;
+            string thisModuleDir = ModuleState.WorkingDir;
             // First task: Gather list of submodules on a background thread.
             var updateTask = Task.Factory.StartNew(() =>
             {
                 // Don't access Module directly because it's not thread-safe.  Use a thread-local version:
-                GitModule threadModule = new GitModule(thisModuleDir);
+                var threadModule = new GitModuleState(thisModuleDir);
+                var threadModuleFunctions = new GitModule(threadModule);
+
                 SubmoduleInfoResult result = new SubmoduleInfoResult();
 
                 // Add all submodules inside the current repository:
-                foreach (var submodule in threadModule.GetSubmodulesLocalPaths().OrderBy(submoduleName => submoduleName))
+                foreach (var submodule in threadModuleFunctions.GetSubmodulesLocalPaths().OrderBy(submoduleName => submoduleName))
                 {
                     cancelToken.ThrowIfCancellationRequested();
                     var name = submodule;
-                    string path = threadModule.GetSubmoduleFullPath(submodule);
+                    string path = threadModuleFunctions.GetSubmoduleFullPath(submodule);
                     if (AppSettings.DashboardShowCurrentBranch && !GitModule.IsBareRepository(path))
                         name = name + " " + GetModuleBranch(path);
 
@@ -2402,10 +2407,13 @@ namespace GitUI.CommandsDialogs
                     GetSubmoduleStatusAsync(smi, cancelToken);
                 }
 
-                if (threadModule.SuperprojectModule != null)
+                var superProject = threadModuleFunctions.GetSuperprojectModule();
+                if (superProject != null)
                 {
-                    GitModule supersuperproject = threadModule.FindTopProjectModule();
-                    if (threadModule.SuperprojectModule.WorkingDir != supersuperproject.WorkingDir)
+                    var supersuperproject = threadModuleFunctions.FindTopProjectModule();
+                    var supersuperprojectdModuleFunctions = new GitModule(supersuperproject);
+
+                    if (superProject.WorkingDir != supersuperproject.WorkingDir)
                     {
                         var name = Path.GetFileName(Path.GetDirectoryName(supersuperproject.WorkingDir));
                         string path = supersuperproject.WorkingDir;
@@ -2418,23 +2426,23 @@ namespace GitUI.CommandsDialogs
 
                     {
                         string name;
-                        if (threadModule.SuperprojectModule.WorkingDir != supersuperproject.WorkingDir)
+                        if (superProject.WorkingDir != supersuperproject.WorkingDir)
                         {
-                            var localpath = threadModule.SuperprojectModule.WorkingDir.Substring(supersuperproject.WorkingDir.Length);
+                            var localpath = superProject.WorkingDir.Substring(supersuperproject.WorkingDir.Length);
                             localpath = PathUtil.GetDirectoryName(localpath.ToPosixPath());
                             name = localpath;
                         }
                         else
                             name = Path.GetFileName(Path.GetDirectoryName(supersuperproject.WorkingDir));
-                        string path = threadModule.SuperprojectModule.WorkingDir;
+                        string path = superProject.WorkingDir;
                         if (AppSettings.DashboardShowCurrentBranch && !GitModule.IsBareRepository(path))
                             name = name + " " + GetModuleBranch(path);
 
-                        result.Superproject = new SubmoduleInfo { Text = name, Path = threadModule.SuperprojectModule.WorkingDir };
+                        result.Superproject = new SubmoduleInfo { Text = name, Path = superProject.WorkingDir };
                         GetSubmoduleStatusAsync(result.Superproject, cancelToken);
                     }
 
-                    var submodules = supersuperproject.GetSubmodulesLocalPaths().OrderBy(submoduleName => submoduleName);
+                    var submodules = supersuperprojectdModuleFunctions.GetSubmodulesLocalPaths().OrderBy(submoduleName => submoduleName);
                     if (submodules.Any())
                     {
                         string localpath = threadModule.WorkingDir.Substring(supersuperproject.WorkingDir.Length);
@@ -2444,13 +2452,13 @@ namespace GitUI.CommandsDialogs
                         {
                             cancelToken.ThrowIfCancellationRequested();
                             var name = submodule;
-                            string path = supersuperproject.GetSubmoduleFullPath(submodule);
+                            string path = supersuperprojectdModuleFunctions.GetSubmoduleFullPath(submodule);
                             if (AppSettings.DashboardShowCurrentBranch && !GitModule.IsBareRepository(path))
                                 name = name + " " + GetModuleBranch(path);
                             bool bold = false;
                             if (submodule == localpath)
                             {
-                                result.CurrentSubmoduleName = threadModule.GetCurrentSubmoduleLocalPath();
+                                result.CurrentSubmoduleName = threadModuleFunctions.GetCurrentSubmoduleLocalPath();
                                 bold = true;
                             }
                             var smi = new SubmoduleInfo { Text = name, Path = path, Bold = bold };
@@ -2512,8 +2520,9 @@ namespace GitUI.CommandsDialogs
 
         private void toolStripButtonLevelUp_ButtonClick(object sender, EventArgs e)
         {
-            if (Module.SuperprojectModule != null)
-                SetGitModule(this, new GitModuleEventArgs(Module.SuperprojectModule));
+            var superProject = Module.GetSuperprojectModule();
+            if (superProject != null)
+                SetGitModule(this, new GitModuleEventArgs(superProject));
             else
                 toolStripButtonLevelUp.ShowDropDown();
         }
@@ -2596,7 +2605,7 @@ namespace GitUI.CommandsDialogs
                 // Create the terminal
                 var startinfo = new ConEmuStartInfo
                 {
-                    StartupDirectory = Module.WorkingDir,
+                    StartupDirectory = ModuleState.WorkingDir,
                     WhenConsoleProcessExits = WhenConsoleProcessExits.CloseConsoleEmulator
                 };
 
@@ -2770,7 +2779,7 @@ namespace GitUI.CommandsDialogs
             var dialogResult = formCreateWorktree.ShowDialog(this);
             if (dialogResult == DialogResult.OK && formCreateWorktree.OpenWorktree)
             {
-                var newModule = new GitModule(formCreateWorktree.WorktreeDirectory);
+                var newModule = new GitModuleState(formCreateWorktree.WorktreeDirectory);
                 SetGitModule(this, new GitModuleEventArgs(newModule));
             }
         }

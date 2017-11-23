@@ -181,7 +181,7 @@ namespace GitUI.CommandsDialogs
 
         protected override void OnRuntimeLoad(EventArgs e)
         {
-            _revisionFileTreeController = new RevisionFileTreeController(() => Module.WorkingDir,
+            _revisionFileTreeController = new RevisionFileTreeController(() => ModuleState.WorkingDir,
                                                                          new GitRevisionInfoProvider(() => Module),
                                                                          new FileAssociatedIconProvider());
 
@@ -253,7 +253,7 @@ namespace GitUI.CommandsDialogs
             var process = new Process();
             process.StartInfo.FileName = Application.ExecutablePath;
             process.StartInfo.Arguments = "browse";
-            process.StartInfo.WorkingDirectory = Path.Combine(Module.WorkingDir, item.FileName.EnsureTrailingPathSeparator());
+            process.StartInfo.WorkingDirectory = Path.Combine(ModuleState.WorkingDir, item.FileName.EnsureTrailingPathSeparator());
             process.Start();
         }
 
@@ -316,7 +316,7 @@ namespace GitUI.CommandsDialogs
             }
 
             var fileList = new StringCollection();
-            var fileName = Path.Combine(Module.WorkingDir, item.FileName);
+            var fileName = Path.Combine(ModuleState.WorkingDir, item.FileName);
 
             fileList.Add(fileName.ToNativePath());
 
@@ -361,7 +361,7 @@ namespace GitUI.CommandsDialogs
             if (gitItem == null)
                 return;
 
-            var fileName = Path.Combine(Module.WorkingDir, gitItem.FileName);
+            var fileName = Path.Combine(ModuleState.WorkingDir, gitItem.FileName);
             Clipboard.SetText(fileName.ToNativePath());
         }
 
@@ -420,7 +420,7 @@ namespace GitUI.CommandsDialogs
             if (gitItem == null || gitItem.ObjectType != GitObjectType.Blob)
                 return;
 
-            var fileName = Path.Combine(Module.WorkingDir, gitItem.FileName);
+            var fileName = Path.Combine(ModuleState.WorkingDir, gitItem.FileName);
             UICommands.StartFileEditorDialog(fileName);
         }
 
@@ -463,7 +463,7 @@ namespace GitUI.CommandsDialogs
             openFileToolStripMenuItem.Visible = enableItems;
             openFileWithToolStripMenuItem.Visible = enableItems;
             openWithToolStripMenuItem.Visible = enableItems;
-            copyFilenameToClipboardToolStripMenuItem.Visible = gitItem != null && FormBrowseUtil.IsFileOrDirectory(FormBrowseUtil.GetFullPathFromGitItem(Module, gitItem));
+            copyFilenameToClipboardToolStripMenuItem.Visible = gitItem != null && FormBrowseUtil.IsFileOrDirectory(FormBrowseUtil.GetFullPathFromGitItem(ModuleState, gitItem));
             editCheckedOutFileToolStripMenuItem.Visible = enableItems;
             toolStripSeparator18.Visible = enableItems;
         }
@@ -476,7 +476,7 @@ namespace GitUI.CommandsDialogs
                 return;
             }
 
-            var filePath = FormBrowseUtil.GetFullPathFromGitItem(Module, gitItem);
+            var filePath = FormBrowseUtil.GetFullPathFromGitItem(ModuleState, gitItem);
             FormBrowseUtil.ShowFileOrFolderInFileExplorer(filePath);
         }
 
@@ -518,7 +518,7 @@ namespace GitUI.CommandsDialogs
             if (gitItem == null || gitItem.ObjectType != GitObjectType.Blob)
                 return;
 
-            var fileName = Path.Combine(Module.WorkingDir, gitItem.FileName);
+            var fileName = Path.Combine(ModuleState.WorkingDir, gitItem.FileName);
             OsShellUtil.OpenAs(fileName.ToNativePath());
         }
 
@@ -545,7 +545,7 @@ namespace GitUI.CommandsDialogs
                 return;
             }
 
-            var fullName = Path.Combine(Module.WorkingDir, item.FileName);
+            var fullName = Path.Combine(ModuleState.WorkingDir, item.FileName);
             using (var fileDialog =
                 new SaveFileDialog
                 {

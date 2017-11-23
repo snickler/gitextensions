@@ -277,7 +277,7 @@ namespace GitUI.CommandsDialogs
 
         private bool InitModules()
         {
-            if (!File.Exists(Module.WorkingDir + ".gitmodules"))
+            if (!File.Exists(ModuleState.WorkingDir + ".gitmodules"))
                 return false;
             if (!IsSubmodulesInitialized())
             {
@@ -473,8 +473,9 @@ namespace GitUI.CommandsDialogs
             var submodules = Module.GetSubmodulesLocalPaths();
             foreach (var submoduleName in submodules)
             {
-                GitModule submodule = Module.GetSubmodule(submoduleName);
-                if (!submodule.IsValidGitWorkingDir())
+                var submodule = Module.GetSubmodule(submoduleName);
+                var moduleFunctions = new GitModule(submodule);
+                if (!moduleFunctions.IsValidGitWorkingDir())
                     return false;
             }
             return true;
@@ -484,12 +485,12 @@ namespace GitUI.CommandsDialogs
         {
             if (Fetch.Checked)
             {
-                return new FormRemoteProcess(Module, Module.FetchCmd(source, curRemoteBranch, curLocalBranch, GetTagsArg(), Unshallow.Checked, Prune.Checked));
+                return new FormRemoteProcess(ModuleState, Module.FetchCmd(source, curRemoteBranch, curLocalBranch, GetTagsArg(), Unshallow.Checked, Prune.Checked));
             }
 
             Debug.Assert(Merge.Checked || Rebase.Checked);
 
-            return new FormRemoteProcess(Module, Module.PullCmd(source, curRemoteBranch, Rebase.Checked, GetTagsArg(), Unshallow.Checked, Prune.Checked))
+            return new FormRemoteProcess(ModuleState, Module.PullCmd(source, curRemoteBranch, Rebase.Checked, GetTagsArg(), Unshallow.Checked, Prune.Checked))
                        {
                            HandleOnExitCallback = HandlePullOnExit
                        };
@@ -518,7 +519,7 @@ namespace GitUI.CommandsDialogs
                 {
                     string remote = _NO_TRANSLATE_Remotes.Text;
                     string pruneCmd = "remote prune " + remote;
-                    using (var formPrune = new FormRemoteProcess(Module, pruneCmd)
+                    using (var formPrune = new FormRemoteProcess(ModuleState, pruneCmd)
                     {
                         Remote = remote,
                         Text = string.Format(_pruneFromCaption.Text, remote)
@@ -736,9 +737,9 @@ namespace GitUI.CommandsDialogs
         private void FillFormTitle()
         {
             if (Fetch.Checked)
-                Text = string.Format(_formTitleFetch.Text, Module.WorkingDir);
+                Text = string.Format(_formTitleFetch.Text, ModuleState.WorkingDir);
             else
-                Text = string.Format(_formTitlePull.Text, Module.WorkingDir);
+                Text = string.Format(_formTitlePull.Text, ModuleState.WorkingDir);
         }
 
         private void StashClick(object sender, EventArgs e)

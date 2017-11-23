@@ -46,7 +46,7 @@ namespace GitUI.CommandsDialogs
 
         private void DisplayRefLog()
         {
-            var reflogOutput = UICommands.GitModule.RunGitCmd("reflog " + (string)Branches.SelectedItem);
+            var reflogOutput = Module.RunGitCmd("reflog " + (string)Branches.SelectedItem);
             var reflog = ConvertReflogOutput(reflogOutput);
             gridReflog.DataSource = reflog;
         }
@@ -84,7 +84,7 @@ namespace GitUI.CommandsDialogs
                 return;
             }
 
-            using (var form = new FormCreateBranch(UICommands, new GitCommands.GitRevision((GitCommands.GitModule)UICommands.GitModule, GetShaOfRefLine())))
+            using (var form = new FormCreateBranch(UICommands, new GitCommands.GitRevision(ModuleState, GetShaOfRefLine())))
             {
                 form.CheckoutAfterCreation = false;
                 form.UserAbleToChangeRevision = false;

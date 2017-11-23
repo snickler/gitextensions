@@ -285,18 +285,19 @@ namespace GitUI.CommandsDialogs.RepoHosting
 
             string cmd = GitCommandHelpers.CloneCmd(repoSrc, targetDir);
 
-            FormRemoteProcess formRemoteProcess = new FormRemoteProcess(new GitModule(null), AppSettings.GitCommand, cmd);
+            FormRemoteProcess formRemoteProcess = new FormRemoteProcess(new GitModuleState(null), AppSettings.GitCommand, cmd);
             formRemoteProcess.Remote = repoSrc;
             formRemoteProcess.ShowDialog();
 
             if (formRemoteProcess.ErrorOccurred())
                 return;
 
-            GitModule module = new GitModule(targetDir);
+            var module = new GitModuleState(targetDir);
+            var moduleFunctions = new GitModule(module);
 
             if (_addRemoteAsTB.Text.Trim().Length > 0 && !string.IsNullOrEmpty(repo.ParentReadOnlyUrl))
             {
-                var error = module.AddRemote(_addRemoteAsTB.Text.Trim(), repo.ParentReadOnlyUrl);
+                var error = moduleFunctions.AddRemote(_addRemoteAsTB.Text.Trim(), repo.ParentReadOnlyUrl);
                 if (!string.IsNullOrEmpty(error))
                     MessageBox.Show(this, error, _strCouldNotAddRemote.Text);
             }

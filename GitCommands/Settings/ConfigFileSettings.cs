@@ -17,20 +17,21 @@ namespace GitCommands.Settings
             mergetool = new MergeToolPath(this);
         }
 
-        public static ConfigFileSettings CreateEffective(GitModule aModule)
+        public static ConfigFileSettings CreateEffective(IGitModuleState aModule)
         {
             return CreateLocal(aModule, CreateGlobal(CreateSystemWide()));
         }
 
-        public static ConfigFileSettings CreateLocal(GitModule aModule, bool allowCache = true)
+        public static ConfigFileSettings CreateLocal(IGitModuleState aModule, bool allowCache = true)
         {
             return CreateLocal(aModule, null, allowCache);
         }
 
-        private static ConfigFileSettings CreateLocal(GitModule aModule, ConfigFileSettings aLowerPriority, bool allowCache = true)
+        private static ConfigFileSettings CreateLocal(IGitModuleState aModule, ConfigFileSettings aLowerPriority, bool allowCache = true)
         {
+            var moduleFunctions = new GitModule(aModule);
             return new ConfigFileSettings(aLowerPriority,
-                ConfigFileSettingsCache.Create(Path.Combine(aModule.GitCommonDirectory, "config"), true, allowCache));
+                ConfigFileSettingsCache.Create(Path.Combine(moduleFunctions.GitCommonDirectory, "config"), true, allowCache));
         }
 
         public static ConfigFileSettings CreateGlobal(bool allowCache = true)

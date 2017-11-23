@@ -106,9 +106,9 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
         private IBuildServerSettingsUserControl CreateBuildServerSettingsUserControl()
         {
-            if (BuildServerType.SelectedIndex == 0 || string.IsNullOrEmpty(Module.WorkingDir))
+            if (BuildServerType.SelectedIndex == 0 || string.IsNullOrEmpty(ModuleState.WorkingDir))
                 return null;
-            var defaultProjectName = Module.WorkingDir.Split(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries).Last();
+            var defaultProjectName = ModuleState.WorkingDir.Split(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries).Last();
 
             var exports = ManagedExtensibility.GetExports<IBuildServerSettingsUserControl, IBuildServerTypeMetadata>();
             var selectedExport = exports.SingleOrDefault(export => export.Metadata.BuildServerType == GetSelectedBuildServerType());

@@ -83,7 +83,7 @@ namespace GitUI.CommandsDialogs
                                                      tagMessage.Text,
                                                      textBoxGpgKey.Text,
                                                      ForceTag.Checked);
-            if (!_gitTagController.CreateTag(createTagArgs, this))
+            if (!_gitTagController.CreateTag(createTagArgs, ModuleState, this))
             {
                 return string.Empty;
             }
@@ -98,7 +98,7 @@ namespace GitUI.CommandsDialogs
 
             ScriptManager.RunEventScripts(this, ScriptEvent.BeforePush);
 
-            using (var form = new FormRemoteProcess(Module, pushCmd)
+            using (var form = new FormRemoteProcess(ModuleState, pushCmd)
             {
                 Remote = _currentRemote,
                 Text = string.Format(_pushToCaption.Text, _currentRemote),

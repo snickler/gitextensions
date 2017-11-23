@@ -44,9 +44,9 @@ namespace GitUI.CommandsDialogs
         {
             try
             {
-                if (File.Exists(Module.WorkingDir + ".gitattributes"))
+                if (File.Exists(ModuleState.WorkingDir + ".gitattributes"))
                 {
-                    _NO_TRANSLATE_GitAttributesText.ViewFile(Module.WorkingDir + ".gitattributes");
+                    _NO_TRANSLATE_GitAttributesText.ViewFile(ModuleState.WorkingDir + ".gitattributes");
                 }
             }
             catch (Exception ex)
@@ -67,7 +67,7 @@ namespace GitUI.CommandsDialogs
             {
                 FileInfoExtensions
                     .MakeFileTemporaryWritable(
-                        Module.WorkingDir + ".gitattributes",
+                        ModuleState.WorkingDir + ".gitattributes",
                         x =>
                         {
                             this.GitAttributesFile = _NO_TRANSLATE_GitAttributesText.GetText();

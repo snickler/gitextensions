@@ -95,7 +95,7 @@ namespace GitExtensions
                     Application.DoEvents();
 
                     GitUICommands uiCommands = new GitUICommands(string.Empty);
-                    var commonLogic = new CommonLogic(uiCommands.Module);
+                    var commonLogic = new CommonLogic(uiCommands.ModuleState);
                     var checkSettingsLogic = new CheckSettingsLogic(commonLogic);
                     ISettingsPageHost fakePageHost = new SettingsPageHostMock(checkSettingsLogic);
                     using (var checklistSettingsPage = SettingsPageBase.Create<ChecklistSettingsPage>(fakePageHost))

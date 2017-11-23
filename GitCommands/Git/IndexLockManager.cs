@@ -12,7 +12,7 @@ namespace GitCommands.Git
         /// Determines whether the given repository has index.lock file.
         /// </summary>
         /// <returns><see langword="true"/> is index is locked; otherwise <see langword="false"/>.</returns>
-        bool IsIndexLocked();
+        bool IsIndexLocked(IGitModuleState module);
 
         /// <summary>
         /// Delete index.lock in the current working folder.
@@ -21,7 +21,7 @@ namespace GitCommands.Git
         ///     If <see langword="true"/> all submodules will be scanned for index.lock files and have them delete, if found.
         /// </param>
         /// <exception cref="FileDeleteException">Unable to delete specific index.lock.</exception>
-        void UnlockIndex(bool includeSubmodules = true);
+        void UnlockIndex(IGitModuleState module, bool includeSubmodules = true);
     }
 
     /// <summary>
@@ -30,20 +30,20 @@ namespace GitCommands.Git
     public sealed class IndexLockManager : IIndexLockManager
     {
         private const string IndexLock = "index.lock";
-        private readonly IGitModule _module;
+        private readonly IGitModule _moduleFunctions;
         private readonly IGitDirectoryResolver _gitDirectoryResolver;
         private readonly IFileSystem _fileSystem;
 
 
-        public IndexLockManager(IGitModule module, IGitDirectoryResolver gitDirectoryResolver, IFileSystem fileSystem)
+        public IndexLockManager(IGitModule moduleFunctions, IGitDirectoryResolver gitDirectoryResolver, IFileSystem fileSystem)
         {
-            _module = module;
+            _moduleFunctions = moduleFunctions;
             _gitDirectoryResolver = gitDirectoryResolver;
             _fileSystem = fileSystem;
         }
 
-        public IndexLockManager(IGitModule module)
-            : this(module, new GitDirectoryResolver(), new FileSystem())
+        public IndexLockManager(IGitModule moduleFunctions)
+            : this(moduleFunctions, new GitDirectoryResolver(), new FileSystem())
         {
         }
 
@@ -52,9 +52,9 @@ namespace GitCommands.Git
         /// Determines whether the given repository has index.lock file.
         /// </summary>
         /// <returns><see langword="true"/> is index is locked; otherwise <see langword="false"/>.</returns>
-        public bool IsIndexLocked()
+        public bool IsIndexLocked(IGitModuleState module)
         {
-            var indexLockFile = Path.Combine(_gitDirectoryResolver.Resolve(_module.WorkingDir), IndexLock);
+            var indexLockFile = Path.Combine(_gitDirectoryResolver.Resolve(module.WorkingDir), IndexLock);
             return _fileSystem.File.Exists(indexLockFile);
         }
 
@@ -65,9 +65,9 @@ namespace GitCommands.Git
         ///     If <see langword="true"/> all submodules will be scanned for index.lock files and have them delete, if found.
         /// </param>
         /// <exception cref="FileDeleteException">Unable to delete specific index.lock.</exception>
-        public void UnlockIndex(bool includeSubmodules = true)
+        public void UnlockIndex(IGitModuleState module, bool includeSubmodules = true)
         {
-            var workingFolderIndexLock = Path.Combine(_gitDirectoryResolver.Resolve(_module.WorkingDir), IndexLock);
+            var workingFolderIndexLock = Path.Combine(_gitDirectoryResolver.Resolve(module.WorkingDir), IndexLock);
             if (!includeSubmodules)
             {
                 DeleteIndexLock(workingFolderIndexLock);
@@ -75,10 +75,10 @@ namespace GitCommands.Git
             }
 
             // get the list of files to delete
-            var submodules = _module.GetSubmodulesLocalPaths();
+            var submodules = _moduleFunctions.GetSubmodulesLocalPaths();
             var list = submodules.Select(sm =>
             {
-                var submodulePath = _module.GetSubmoduleFullPath(sm);
+                var submodulePath = _moduleFunctions.GetSubmoduleFullPath(sm);
                 var submoduleIndexLock = Path.Combine(_gitDirectoryResolver.Resolve(submodulePath), IndexLock);
                 return submoduleIndexLock;
             }).Union(new[] { workingFolderIndexLock });

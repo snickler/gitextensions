@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using GitCommands;
 using ResourceManager;
 
 namespace GitUI.CommandsDialogs
@@ -26,12 +27,16 @@ namespace GitUI.CommandsDialogs
             this.tbBase.Text = item.Base.Hash ?? _deleted.Text;
             this.tbLocal.Text = item.Local.Hash ?? _deleted.Text;
             this.tbRemote.Text = item.Remote.Hash ?? _deleted.Text;
-            this.tbCurrent.Text = Module.GetSubmodule(_filename).GetCurrentCheckout();
+            var submodule = Module.GetSubmodule(_filename);
+            var moduleFunctions = new GitModule(submodule);
+            this.tbCurrent.Text = moduleFunctions.GetCurrentCheckout();
         }
 
         private void btRefresh_Click(object sender, EventArgs e)
         {
-            this.tbCurrent.Text = Module.GetSubmodule(_filename).GetCurrentCheckout();
+            var submodule = Module.GetSubmodule(_filename);
+            var moduleFunctions = new GitModule(submodule);
+            this.tbCurrent.Text = moduleFunctions.GetCurrentCheckout();
         }
 
         private void StageSubmodule()

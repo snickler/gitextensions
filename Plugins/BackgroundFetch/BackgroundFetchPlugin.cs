@@ -53,7 +53,7 @@ namespace BackgroundFetch
 
             int fetchInterval = FetchInterval.ValueOrDefault(Settings);
 
-            var gitModule = currentGitUiCommands.GitModule;
+            var gitModule = currentGitUiCommands.Module;
             if (fetchInterval > 0 && gitModule.IsValidGitWorkingDir())
             {
                 cancellationToken =

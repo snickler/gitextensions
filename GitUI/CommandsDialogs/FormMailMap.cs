@@ -45,9 +45,9 @@ namespace GitUI.CommandsDialogs
         {
             try
             {
-                if (File.Exists(Module.WorkingDir + ".mailmap"))
+                if (File.Exists(ModuleState.WorkingDir + ".mailmap"))
                 {
-                    _NO_TRANSLATE_MailMapText.ViewFile(Module.WorkingDir + ".mailmap");
+                    _NO_TRANSLATE_MailMapText.ViewFile(ModuleState.WorkingDir + ".mailmap");
                 }
             }
             catch (Exception ex)
@@ -68,7 +68,7 @@ namespace GitUI.CommandsDialogs
             {
                 FileInfoExtensions
                     .MakeFileTemporaryWritable(
-                        Module.WorkingDir + ".mailmap",
+                        ModuleState.WorkingDir + ".mailmap",
                         x =>
                         {
                             this.MailMapFile = _NO_TRANSLATE_MailMapText.GetText();

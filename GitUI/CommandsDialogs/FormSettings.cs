@@ -55,7 +55,7 @@ namespace GitUI.CommandsDialogs
             settingsTreeView.AddSettingsPage(new GitExtensionsSettingsGroup(), null);
             SettingsPageReference gitExtPageRef = GitExtensionsSettingsGroup.GetPageReference();
 
-            _commonLogic = new CommonLogic(Module);
+            _commonLogic = new CommonLogic(ModuleState);
             _checkSettingsLogic = new CheckSettingsLogic(_commonLogic);
 
             var checklistSettingsPage = SettingsPageBase.Create <ChecklistSettingsPage>(this);

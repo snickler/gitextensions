@@ -70,11 +70,12 @@ namespace ResourceManager
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Submodule " + name);
             sb.AppendLine();
-            GitModule module = superproject.GetSubmodule(name);
-            if (module.IsValidGitWorkingDir())
+            var module = superproject.GetSubmodule(name);
+            var moduleFunctions = new GitModule(module);
+            if (moduleFunctions.IsValidGitWorkingDir())
             {
                 string error = "";
-                CommitData data = CommitData.GetCommitData(module, hash, ref error);
+                CommitData data = CommitData.GetCommitData(moduleFunctions, hash, ref error);
                 if (data == null)
                 {
                     sb.AppendLine("Commit hash:\t" + hash);
@@ -106,18 +107,19 @@ namespace ResourceManager
                 throw new ArgumentNullException("module");
             if (status == null)
                 throw new ArgumentNullException("status");
-            GitModule gitmodule = module.GetSubmodule(status.Name);
+            var gitmodule = module.GetSubmodule(status.Name);
+            var moduleFunctions = new GitModule(gitmodule);
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Submodule " + status.Name + " Change");
 
             sb.AppendLine();
             sb.AppendLine("From:\t" + (status.OldCommit ?? "null"));
             CommitData oldCommitData = null;
-            if (gitmodule.IsValidGitWorkingDir())
+            if (moduleFunctions.IsValidGitWorkingDir())
             {
                 string error = "";
                 if (status.OldCommit != null)
-                    oldCommitData = CommitData.GetCommitData(gitmodule, status.OldCommit, ref error);
+                    oldCommitData = CommitData.GetCommitData(moduleFunctions, status.OldCommit, ref error);
                 if (oldCommitData != null)
                 {
                     sb.AppendLine("\t\t\t\t\t" + GetRelativeDateString(DateTime.UtcNow, oldCommitData.CommitDate.UtcDateTime) + " (" + GetFullDateString(oldCommitData.CommitDate) + ")");
@@ -134,11 +136,11 @@ namespace ResourceManager
             string dirty = !status.IsDirty ? "" : " (dirty)";
             sb.AppendLine("To:\t\t" + (status.Commit ?? "null") + dirty);
             CommitData commitData = null;
-            if (gitmodule.IsValidGitWorkingDir())
+            if (moduleFunctions.IsValidGitWorkingDir())
             {
                 string error = "";
                 if (status.Commit != null)
-                    commitData = CommitData.GetCommitData(gitmodule, status.Commit, ref error);
+                    commitData = CommitData.GetCommitData(moduleFunctions, status.Commit, ref error);
                 if (commitData != null)
                 {
                     sb.AppendLine("\t\t\t\t\t" + GetRelativeDateString(DateTime.UtcNow, commitData.CommitDate.UtcDateTime) + " (" + GetFullDateString(commitData.CommitDate) + ")");
@@ -152,7 +154,7 @@ namespace ResourceManager
                 sb.AppendLine();
 
             sb.AppendLine();
-            var submoduleStatus = gitmodule.CheckSubmoduleStatus(status.Commit, status.OldCommit, commitData, oldCommitData);
+            var submoduleStatus = moduleFunctions.CheckSubmoduleStatus(status.Commit, status.OldCommit, commitData, oldCommitData);
             sb.Append("Type: ");
             switch (submoduleStatus)
             {
@@ -202,7 +204,7 @@ namespace ResourceManager
             {
                 if (status.IsDirty)
                 {
-                    string statusText = gitmodule.GetStatusText(false);
+                    string statusText = moduleFunctions.GetStatusText(false);
                     if (!String.IsNullOrEmpty(statusText))
                     {
                         sb.AppendLine("\nStatus:");
@@ -210,7 +212,7 @@ namespace ResourceManager
                     }
                 }
 
-                string diffs = gitmodule.GetDiffFilesText(status.OldCommit, status.Commit);
+                string diffs = moduleFunctions.GetDiffFilesText(status.OldCommit, status.Commit);
                 if (!String.IsNullOrEmpty(diffs))
                 {
                     sb.AppendLine("\nDifferences:");
