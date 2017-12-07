@@ -3055,18 +3055,9 @@ namespace GitUI
 
             SetAuthoredRevisionsBrush();
 
+            _rowHeigth = new RevisionGridRowHeightProvider().Get(Handle, _layout, NormalFont);
             if (IsCardLayout())
             {
-                if (AppSettings.RevisionGraphLayout == (int)RevisionGridLayout.Card
-                    || AppSettings.RevisionGraphLayout == (int)RevisionGridLayout.CardWithGraph)
-                {
-                    _rowHeigth = 45;
-                }
-                else
-                {
-                    _rowHeigth = 70;
-                }
-
                 if (_filledItemBrush == null)
                 {
                     _filledItemBrush = new LinearGradientBrush(new Rectangle(0, 0, _rowHeigth, _rowHeigth),
@@ -3083,17 +3074,10 @@ namespace GitUI
             {
                 if (IsFilledBranchesLayout())
                 {
-                    using (var graphics = Graphics.FromHwnd(Handle))
-                    {
-                        _rowHeigth = (int)graphics.MeasureString("By", NormalFont).Height + 9;
-                    }
-
                     _selectedItemBrush = SystemBrushes.Highlight;
                 }
                 else
                 {
-                    _rowHeigth = 25;
-
                     if (_filledItemBrush == null)
                     {
                         _filledItemBrush = new LinearGradientBrush(new Rectangle(0, 0, _rowHeigth, _rowHeigth),
@@ -3462,4 +3446,54 @@ namespace GitUI
             }
         }
     }
+
+    public class RevisionGridRowHeightProvider
+    {
+        public int Get(IntPtr handle, RevisionGridLayout layout, Font normalFont)
+        {
+            int rowHeigth;
+            if (IsCardLayout(layout))
+            {
+                if (AppSettings.RevisionGraphLayout == (int)RevisionGridLayout.Card
+                    || AppSettings.RevisionGraphLayout == (int)RevisionGridLayout.CardWithGraph)
+                {
+                    rowHeigth = 45;
+                }
+                else
+                {
+                    rowHeigth = 70;
+                }
+            }
+            else
+            {
+                if (IsFilledBranchesLayout(layout))
+                {
+                    using (var graphics = Graphics.FromHwnd(handle))
+                    {
+                        rowHeigth = (int)graphics.MeasureString("By", normalFont).Height + 9;
+                    }
+                }
+                else
+                {
+                    rowHeigth = 25;
+                }
+            }
+            return rowHeigth;
+        }
+
+        private bool IsFilledBranchesLayout(RevisionGridLayout layout)
+        {
+            return layout == RevisionGridLayout.FilledBranchesSmall || layout == RevisionGridLayout.FilledBranchesSmallWithGraph;
+        }
+
+        private bool IsCardLayout(RevisionGridLayout layout)
+        {
+            return layout == RevisionGridLayout.Card
+                   || layout == RevisionGridLayout.CardWithGraph
+                   || layout == RevisionGridLayout.LargeCard
+                   || layout == RevisionGridLayout.LargeCardWithGraph;
+        }
+
+    }
+
 }
