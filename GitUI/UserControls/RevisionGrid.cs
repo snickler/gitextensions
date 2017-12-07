@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -62,13 +63,11 @@ namespace GitUI
         private const int LaneWidth = 13;
         private const int LaneLineWidth = 2;
         private const int MaxSuperprojectRefs = 4;
-        private Brush _selectedItemBrush;
-        private SolidBrush _authoredRevisionsBrush;
-        private Brush _filledItemBrush; // disposable brush
         private readonly IImageCache _avatarCache;
         private readonly IAvatarService _gravatarService;
         private readonly IImageNameProvider _avatarImageNameProvider;
         private readonly FormRevisionFilter _revisionFilter = new FormRevisionFilter();
+        private readonly UIStyleProvider _uiStyleProvider;
 
         private RefsFiltringOptions _refsOptions = RefsFiltringOptions.All | RefsFiltringOptions.Boundary;
 
@@ -117,6 +116,8 @@ namespace GitUI
         {
             InitLayout();
             InitializeComponent();
+
+            _uiStyleProvider = new UIStyleProvider();
 
             // Parent-child navigation can expect that SetSelectedRevision is always successfull since it always uses first-parents
             _parentChildNavigationHistory = new ParentChildNavigationHistory(revision => SetSelectedRevision(revision));
@@ -1500,30 +1501,8 @@ namespace GitUI
             drawRefArgs.IsRowSelected = ((e.State & DataGridViewElementStates.Selected) == DataGridViewElementStates.Selected);
 
             // Determine background colour for cell
-            Brush cellBackgroundBrush;
-            if (drawRefArgs.IsRowSelected /*&& !showRevisionCards*/)
-            {
-                cellBackgroundBrush = _selectedItemBrush;
-            }
-            else if (ShouldHighlightRevisionByAuthor(revision))
-            {
-                cellBackgroundBrush = _authoredRevisionsBrush;
-            }
-            else
-            {
-                if (e.RowIndex % 2 == 0)
-                {
-                    //e.Graphics.FillRectangle(Brushes.White, e.CellBounds);
-                    cellBackgroundBrush = new SolidBrush(e.CellStyle.BackColor);
-                }
-                else
-                {
-                    //Brush brush = new SolidBrush(Color.FromArgb(255, 240, 240, 240));
-                    //e.Graphics.FillRectangle(brush, e.CellBounds);
-                    cellBackgroundBrush = new SolidBrush(ColorHelper.MakeColorDarker(e.CellStyle.BackColor));
-                    // TODO if default background is nearly black, we should make it lighter instead
-                }
-            }
+            Brush cellBackgroundBrush = new UIStyleProvider().GetCellBackgroundBrush(revision, e.RowIndex, drawRefArgs.IsRowSelected, e.CellStyle.BackColor);
+
             // Draw cell background
             e.Graphics.FillRectangle(cellBackgroundBrush, e.CellBounds);
             Color? backColor = null;
@@ -1771,13 +1750,6 @@ namespace GitUI
                                             new PointF(e.CellBounds.Left, e.CellBounds.Top + 4));
                 }
             }
-        }
-
-        private bool ShouldHighlightRevisionByAuthor(GitRevision revision)
-        {
-            return AppSettings.HighlightAuthoredRevisions &&
-                   AuthorEmailEqualityComparer.Instance.Equals(revision.AuthorEmail,
-                                                               _revisionHighlighting.AuthorEmailToHighlight);
         }
 
         private float DrawRef(DrawRefArgs drawRefArgs, float offset, string name, Color headColor, ArrowType arrowType, bool dashedLine = false, bool fill = false)
@@ -3058,13 +3030,7 @@ namespace GitUI
             _rowHeigth = new RevisionGridRowHeightProvider().Get(Handle, _layout, NormalFont);
             if (IsCardLayout())
             {
-                if (_filledItemBrush == null)
-                {
-                    _filledItemBrush = new LinearGradientBrush(new Rectangle(0, 0, _rowHeigth, _rowHeigth),
-                        Revisions.RowTemplate.DefaultCellStyle.SelectionBackColor,
-                        Color.LightBlue, 90, false);
-                }
-                _selectedItemBrush = _filledItemBrush;
+                _selectedItemBrush = _uiStyleProvider.GetCardLayoutBrush(_rowHeigth, Revisions.RowTemplate.DefaultCellStyle.SelectionBackColor);
 
                 Revisions.ShowAuthor(!IsCardLayout());
                 Revisions.SetDimensions(NodeDimension, LaneWidth, LaneLineWidth, _rowHeigth);
@@ -3078,13 +3044,7 @@ namespace GitUI
                 }
                 else
                 {
-                    if (_filledItemBrush == null)
-                    {
-                        _filledItemBrush = new LinearGradientBrush(new Rectangle(0, 0, _rowHeigth, _rowHeigth),
-                            Revisions.RowTemplate.DefaultCellStyle.SelectionBackColor,
-                            Color.LightBlue, 90, false);
-                    }
-                    _selectedItemBrush = _filledItemBrush;
+                    _selectedItemBrush = _uiStyleProvider.GetCardLayoutBrush(_rowHeigth, Revisions.RowTemplate.DefaultCellStyle.SelectionBackColor);
                 }
 
                 Revisions.ShowAuthor(!IsCardLayout());
@@ -3496,4 +3456,61 @@ namespace GitUI
 
     }
 
+    public class UIStyleProvider // : IDisposable TODO:
+    {
+        private static readonly ConcurrentDictionary<object, Brush> Brushes = new ConcurrentDictionary<object, Brush>();
+        //private Brush _selectedItemBrush;
+        //private SolidBrush _authoredRevisionsBrush;
+
+        public UIStyleProvider()
+        {
+        }
+
+        public Brush GetCardLayoutBrush(int rowHeigth, Color selectionBackColor)
+        {
+            var descriptor = $"{rowHeigth}:{selectionBackColor.ToArgb()}";
+            var brush = Brushes.GetOrAdd(descriptor,  
+                                        new LinearGradientBrush(new Rectangle(0, 0, rowHeigth, rowHeigth),
+                                                                selectionBackColor,
+                                                                Color.LightBlue, 90, false));
+            return brush;
+        }
+
+        public Brush GetCellBackgroundBrush(GitRevision revision, int rowIndex, bool isSelected, Color currentCellBackColor)
+        {
+            Brush cellBackgroundBrush;
+            if (isSelected /*&& !showRevisionCards*/)
+            {
+                cellBackgroundBrush = _selectedItemBrush;
+            }
+            else if (ShouldHighlightRevisionByAuthor(revision))
+            {
+                cellBackgroundBrush = _authoredRevisionsBrush;
+            }
+            else
+            {
+                if (rowIndex % 2 == 0)
+                {
+                    //e.Graphics.FillRectangle(Brushes.White, e.CellBounds);
+                    cellBackgroundBrush = new SolidBrush(currentCellBackColor);
+                }
+                else
+                {
+                    //Brush brush = new SolidBrush(Color.FromArgb(255, 240, 240, 240));
+                    //e.Graphics.FillRectangle(brush, e.CellBounds);
+                    cellBackgroundBrush = new SolidBrush(ColorHelper.MakeColorDarker(currentCellBackColor));
+                    // TODO if default background is nearly black, we should make it lighter instead
+                }
+            }
+            return cellBackgroundBrush;
+        }
+
+        private bool ShouldHighlightRevisionByAuthor(GitRevision revision)
+        {
+            return AppSettings.HighlightAuthoredRevisions &&
+                   AuthorEmailEqualityComparer.Instance.Equals(revision.AuthorEmail,
+                       _revisionHighlighting.AuthorEmailToHighlight);
+        }
+
+    }
 }
