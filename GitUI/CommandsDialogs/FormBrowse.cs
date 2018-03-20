@@ -1710,6 +1710,7 @@ namespace GitUI.CommandsDialogs
         {
             ToolStripMenuItem toolStripItem = new ToolStripMenuItem(caption);
             _NO_TRANSLATE_Workingdir.DropDownItems.Add(toolStripItem);
+            rcboWorkingDir.DropDownItems.Add(new RibbonButton { Text = caption, Style = RibbonButtonStyle.DropDownListItem });
 
             toolStripItem.Click += (hs, he) => ChangeWorkingDir(repo.Path);
 
@@ -1722,6 +1723,7 @@ namespace GitUI.CommandsDialogs
         private void WorkingdirDropDownOpening(object sender, EventArgs e)
         {
             _NO_TRANSLATE_Workingdir.DropDownItems.Clear();
+            rcboWorkingDir.DropDownItems.Clear();
 
             List<RecentRepoInfo> mostRecentRepos = new List<RecentRepoInfo>();
             List<RecentRepoInfo> lessRecentRepos = new List<RecentRepoInfo>();
@@ -1746,6 +1748,7 @@ namespace GitUI.CommandsDialogs
                 if (mostRecentRepos.Count > 0 && (AppSettings.SortMostRecentRepos || AppSettings.SortLessRecentRepos))
                 {
                     _NO_TRANSLATE_Workingdir.DropDownItems.Add(new ToolStripSeparator());
+                    rcboWorkingDir.DropDownItems.Add(new RibbonSeparator());
                 }
 
                 foreach (RecentRepoInfo repo in lessRecentRepos)
@@ -1755,14 +1758,17 @@ namespace GitUI.CommandsDialogs
             }
 
             _NO_TRANSLATE_Workingdir.DropDownItems.Add(new ToolStripSeparator());
+            rcboWorkingDir.DropDownItems.Add(new RibbonSeparator());
 
             ToolStripMenuItem toolStripItem = new ToolStripMenuItem(openToolStripMenuItem.Text);
             toolStripItem.ShortcutKeys = openToolStripMenuItem.ShortcutKeys;
             _NO_TRANSLATE_Workingdir.DropDownItems.Add(toolStripItem);
+            rcboWorkingDir.DropDownItems.Add(new RibbonButton { Text = openToolStripMenuItem.Text });
             toolStripItem.Click += (hs, he) => OpenToolStripMenuItemClick(hs, he);
 
             toolStripItem = new ToolStripMenuItem(_configureWorkingDirMenu.Text);
             _NO_TRANSLATE_Workingdir.DropDownItems.Add(toolStripItem);
+            rcboWorkingDir.DropDownItems.Add(new RibbonButton { Text = _configureWorkingDirMenu.Text });
             toolStripItem.Click += (hs, he) =>
             {
                 using (var frm = new FormRecentReposSettings())
@@ -3038,6 +3044,11 @@ namespace GitUI.CommandsDialogs
                 Module.RunGitCmd("reset --soft HEAD~1");
                 RefreshRevisions();
             }
+        }
+
+        private void rcboWorkingDir_Click(object sender, EventArgs e)
+        {
+            rcboWorkingDir.ShowDropDown();
         }
     }
 }
