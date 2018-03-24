@@ -185,15 +185,20 @@ namespace GitUI.CommandsDialogs
             this.ribbon1 = new System.Windows.Forms.Ribbon();
             this.ribbonOrbMenuItem1 = new System.Windows.Forms.RibbonOrbMenuItem();
             this.rtabMain = new System.Windows.Forms.RibbonTab();
-            this.rpnaleNavigation = new System.Windows.Forms.RibbonPanel();
+            this.rpnlNavigation = new System.Windows.Forms.RibbonPanel();
             this.rbtnRefresh = new System.Windows.Forms.RibbonButton();
             this.rbtnBack = new System.Windows.Forms.RibbonButton();
             this.rbtnForward = new System.Windows.Forms.RibbonButton();
-            this.ribbonPanel2 = new System.Windows.Forms.RibbonPanel();
+            this.rpnlRepository = new System.Windows.Forms.RibbonPanel();
             this.rcboWorkingDir = new System.Windows.Forms.RibbonComboBox();
             this.ribbonLabel1 = new System.Windows.Forms.RibbonLabel();
             this.rcboBranch = new System.Windows.Forms.RibbonComboBox();
             this.ribbonTab2 = new System.Windows.Forms.RibbonTab();
+            this.rpnlCommit = new System.Windows.Forms.RibbonPanel();
+            this.rbtnCommit = new System.Windows.Forms.RibbonButton();
+            this.rbtnPull = new System.Windows.Forms.RibbonButton();
+            this.rbtnPush = new System.Windows.Forms.RibbonButton();
+            this.ribbonSeparator1 = new System.Windows.Forms.RibbonSeparator();
             this.ToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitContainer)).BeginInit();
             this.MainSplitContainer.Panel1.SuspendLayout();
@@ -1624,6 +1629,7 @@ namespace GitUI.CommandsDialogs
             // 
             // ribbon1
             // 
+            this.ribbon1.Cursor = System.Windows.Forms.Cursors.Default;
             this.ribbon1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ribbon1.Location = new System.Drawing.Point(0, 0);
             this.ribbon1.Minimized = false;
@@ -1660,17 +1666,18 @@ namespace GitUI.CommandsDialogs
             // rtabMain
             // 
             this.rtabMain.Name = "rtabMain";
-            this.rtabMain.Panels.Add(this.rpnaleNavigation);
-            this.rtabMain.Panels.Add(this.ribbonPanel2);
+            this.rtabMain.Panels.Add(this.rpnlNavigation);
+            this.rtabMain.Panels.Add(this.rpnlRepository);
+            this.rtabMain.Panels.Add(this.rpnlCommit);
             this.rtabMain.Text = "Main";
             // 
-            // rpnaleNavigation
+            // rpnlNavigation
             // 
-            this.rpnaleNavigation.Items.Add(this.rbtnRefresh);
-            this.rpnaleNavigation.Items.Add(this.rbtnBack);
-            this.rpnaleNavigation.Items.Add(this.rbtnForward);
-            this.rpnaleNavigation.Name = "rpnaleNavigation";
-            this.rpnaleNavigation.Text = "";
+            this.rpnlNavigation.Items.Add(this.rbtnRefresh);
+            this.rpnlNavigation.Items.Add(this.rbtnBack);
+            this.rpnlNavigation.Items.Add(this.rbtnForward);
+            this.rpnlNavigation.Name = "rpnlNavigation";
+            this.rpnlNavigation.Text = "";
             // 
             // rbtnRefresh
             // 
@@ -1698,15 +1705,17 @@ namespace GitUI.CommandsDialogs
             this.rbtnForward.Name = "rbtnForward";
             this.rbtnForward.SmallImage = global::GitUI.Properties.Resources.ArrowUp;
             // 
-            // ribbonPanel2
+            // rpnlRepository
             // 
-            this.ribbonPanel2.Items.Add(this.rcboWorkingDir);
-            this.ribbonPanel2.Items.Add(this.rcboBranch);
-            this.ribbonPanel2.Name = "ribbonPanel2";
-            this.ribbonPanel2.Text = "ribbonPanel2";
+            this.rpnlRepository.Items.Add(this.rcboWorkingDir);
+            this.rpnlRepository.Items.Add(this.rcboBranch);
+            this.rpnlRepository.Name = "rpnlRepository";
+            this.rpnlRepository.Text = "";
             // 
             // rcboWorkingDir
             // 
+            this.rcboWorkingDir.AllowTextEdit = false;
+            this.rcboWorkingDir.DrawIconsBar = false;
             this.rcboWorkingDir.DropDownItems.Add(this.ribbonLabel1);
             this.rcboWorkingDir.Name = "rcboWorkingDir";
             this.rcboWorkingDir.Text = "";
@@ -1723,15 +1732,61 @@ namespace GitUI.CommandsDialogs
             // 
             // rcboBranch
             // 
+            this.rcboBranch.AllowTextEdit = false;
+            this.rcboBranch.DrawIconsBar = false;
             this.rcboBranch.Name = "rcboBranch";
             this.rcboBranch.Text = "";
             this.rcboBranch.TextBoxText = "";
             this.rcboBranch.TextBoxWidth = 300;
+            this.rcboBranch.DropDownShowing += new System.EventHandler(this.CurrentBranchDropDownOpening);
+            this.rcboBranch.Click += new System.EventHandler(this.rcboBranch_Click);
             // 
             // ribbonTab2
             // 
             this.ribbonTab2.Name = "ribbonTab2";
             this.ribbonTab2.Text = "ribbonTab2";
+            // 
+            // rpnlCommit
+            // 
+            this.rpnlCommit.Items.Add(this.rbtnCommit);
+            this.rpnlCommit.Items.Add(this.rbtnPull);
+            this.rpnlCommit.Items.Add(this.rbtnPush);
+            this.rpnlCommit.Name = "rpnlCommit";
+            this.rpnlCommit.Text = "";
+            // 
+            // rbtnCommit
+            // 
+            this.rbtnCommit.DropDownItems.Add(this.ribbonSeparator1);
+            this.rbtnCommit.Image = ((System.Drawing.Image)(resources.GetObject("rbtnCommit.Image")));
+            this.rbtnCommit.LargeImage = ((System.Drawing.Image)(resources.GetObject("rbtnCommit.LargeImage")));
+            this.rbtnCommit.MaxSizeMode = System.Windows.Forms.RibbonElementSizeMode.Large;
+            this.rbtnCommit.MinSizeMode = System.Windows.Forms.RibbonElementSizeMode.Large;
+            this.rbtnCommit.Name = "rbtnCommit";
+            this.rbtnCommit.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbtnCommit.SmallImage")));
+            this.rbtnCommit.Text = "Commit";
+            // 
+            // rbtnPull
+            // 
+            this.rbtnPull.Image = ((System.Drawing.Image)(resources.GetObject("rbtnPull.Image")));
+            this.rbtnPull.LargeImage = ((System.Drawing.Image)(resources.GetObject("rbtnPull.LargeImage")));
+            this.rbtnPull.MaxSizeMode = System.Windows.Forms.RibbonElementSizeMode.Medium;
+            this.rbtnPull.Name = "rbtnPull";
+            this.rbtnPull.SmallImage = global::GitUI.Properties.Resources.ArrowDown;
+            this.rbtnPull.Style = System.Windows.Forms.RibbonButtonStyle.SplitDropDown;
+            this.rbtnPull.Text = "";
+            // 
+            // rbtnPush
+            // 
+            this.rbtnPush.Image = ((System.Drawing.Image)(resources.GetObject("rbtnPush.Image")));
+            this.rbtnPush.LargeImage = ((System.Drawing.Image)(resources.GetObject("rbtnPush.LargeImage")));
+            this.rbtnPush.MaxSizeMode = System.Windows.Forms.RibbonElementSizeMode.Medium;
+            this.rbtnPush.Name = "rbtnPush";
+            this.rbtnPush.SmallImage = global::GitUI.Properties.Resources.ArrowUp;
+            this.rbtnPush.Text = "";
+            // 
+            // ribbonSeparator1
+            // 
+            this.ribbonSeparator1.Name = "ribbonSeparator1";
             // 
             // FormBrowse
             // 
@@ -1943,15 +1998,20 @@ namespace GitUI.CommandsDialogs
         private ToolStripMenuItem undoLastCommitToolStripMenuItem;
         private Ribbon ribbon1;
         private RibbonTab rtabMain;
-        private RibbonPanel rpnaleNavigation;
+        private RibbonPanel rpnlNavigation;
         private RibbonButton rbtnRefresh;
         private RibbonButton rbtnBack;
         private RibbonButton rbtnForward;
-        private RibbonPanel ribbonPanel2;
+        private RibbonPanel rpnlRepository;
         private RibbonTab ribbonTab2;
         private RibbonOrbMenuItem ribbonOrbMenuItem1;
         private RibbonComboBox rcboWorkingDir;
         private RibbonComboBox rcboBranch;
         private RibbonLabel ribbonLabel1;
+        private RibbonPanel rpnlCommit;
+        private RibbonButton rbtnCommit;
+        private RibbonSeparator ribbonSeparator1;
+        private RibbonButton rbtnPull;
+        private RibbonButton rbtnPush;
     }
 }

@@ -559,6 +559,7 @@ namespace GitUI.CommandsDialogs
             bool validWorkingDir = Module.IsValidGitWorkingDir();
             bool hasWorkingDir = !string.IsNullOrEmpty(Module.WorkingDir);
             branchSelect.Text = validWorkingDir ? Module.GetSelectedBranch() : "";
+            rcboBranch.TextBoxText = validWorkingDir ? Module.GetSelectedBranch() : "";
             if (hasWorkingDir)
             {
                 HideDashboard();
@@ -573,6 +574,7 @@ namespace GitUI.CommandsDialogs
             fileExplorerToolStripMenuItem.Enabled = validWorkingDir;
             manageRemoteRepositoriesToolStripMenuItem1.Enabled = validWorkingDir;
             branchSelect.Enabled = validWorkingDir;
+            rcboBranch.Enabled = validWorkingDir;
             toolStripButton1.Enabled = validWorkingDir && !bareRepository;
             if (_toolStripGitStatus != null)
             {
@@ -732,10 +734,12 @@ namespace GitUI.CommandsDialogs
                 if (ri == null)
                 {
                     _NO_TRANSLATE_Workingdir.Text = Module.WorkingDir;
+                    rcboWorkingDir.TextBoxText = Module.WorkingDir;
                 }
                 else
                 {
                     _NO_TRANSLATE_Workingdir.Text = ri.Caption;
+                    rcboWorkingDir.TextBoxText = ri.Caption;
                 }
 
                 if (AppSettings.RecentReposComboMinWidth > 0)
@@ -1710,9 +1714,12 @@ namespace GitUI.CommandsDialogs
         {
             ToolStripMenuItem toolStripItem = new ToolStripMenuItem(caption);
             _NO_TRANSLATE_Workingdir.DropDownItems.Add(toolStripItem);
-            rcboWorkingDir.DropDownItems.Add(new RibbonButton { Text = caption, Style = RibbonButtonStyle.DropDownListItem });
+
+            var button = new RibbonButton { Text = caption, Style = RibbonButtonStyle.DropDownListItem };
+            rcboWorkingDir.DropDownItems.Add(button);
 
             toolStripItem.Click += (hs, he) => ChangeWorkingDir(repo.Path);
+            button.Click += (hs, he) => ChangeWorkingDir(repo.Path);
 
             if (repo.Title != null || repo.Path != caption)
             {
@@ -1763,13 +1770,25 @@ namespace GitUI.CommandsDialogs
             ToolStripMenuItem toolStripItem = new ToolStripMenuItem(openToolStripMenuItem.Text);
             toolStripItem.ShortcutKeys = openToolStripMenuItem.ShortcutKeys;
             _NO_TRANSLATE_Workingdir.DropDownItems.Add(toolStripItem);
-            rcboWorkingDir.DropDownItems.Add(new RibbonButton { Text = openToolStripMenuItem.Text });
             toolStripItem.Click += (hs, he) => OpenToolStripMenuItemClick(hs, he);
+            var button = new RibbonButton { Text = openToolStripMenuItem.Text };
+            rcboWorkingDir.DropDownItems.Add(button);
+            button.Click += (hs, he) => OpenToolStripMenuItemClick(hs, he);
 
             toolStripItem = new ToolStripMenuItem(_configureWorkingDirMenu.Text);
             _NO_TRANSLATE_Workingdir.DropDownItems.Add(toolStripItem);
-            rcboWorkingDir.DropDownItems.Add(new RibbonButton { Text = _configureWorkingDirMenu.Text });
             toolStripItem.Click += (hs, he) =>
+            {
+                using (var frm = new FormRecentReposSettings())
+                {
+                    frm.ShowDialog(this);
+                }
+
+                RefreshWorkingDirCombo();
+            };
+            button = new RibbonButton { Text = _configureWorkingDirMenu.Text };
+            rcboWorkingDir.DropDownItems.Add(button);
+            button.Click += (hs, he) =>
             {
                 using (var frm = new FormRecentReposSettings())
                 {
@@ -1919,9 +1938,11 @@ namespace GitUI.CommandsDialogs
         private void CurrentBranchDropDownOpening(object sender, EventArgs e)
         {
             branchSelect.DropDownItems.Clear();
+            rcboBranch.DropDownItems.Clear();
 
             AddCheckoutBranchMenuItem();
             branchSelect.DropDownItems.Add(new ToolStripSeparator());
+            rcboBranch.DropDownItems.Add(new RibbonSeparator());
             AddBranchesMenuItems();
 
             PreventToolStripSplitButtonClosing(sender as ToolStripSplitButton);
@@ -1936,6 +1957,14 @@ namespace GitUI.CommandsDialogs
             };
             branchSelect.DropDownItems.Add(checkoutBranchItem);
             checkoutBranchItem.Click += CheckoutBranchToolStripMenuItemClick;
+
+            var button = new RibbonButton { Text = checkoutBranchToolStripMenuItem.Text };
+            ////{
+            ////    ShortcutKeys = checkoutBranchToolStripMenuItem.ShortcutKeys,
+            ////    ShortcutKeyDisplayString = checkoutBranchToolStripMenuItem.ShortcutKeyDisplayString
+            ////};
+            rcboBranch.DropDownItems.Add(button);
+            button.Click += CheckoutBranchToolStripMenuItemClick;
         }
 
         private void AddBranchesMenuItems()
@@ -1944,6 +1973,10 @@ namespace GitUI.CommandsDialogs
             {
                 ToolStripItem toolStripItem = branchSelect.DropDownItems.Add(branchName);
                 toolStripItem.Click += BranchSelectToolStripItem_Click;
+
+                var button = new RibbonButton { Text = branchName, Style = RibbonButtonStyle.DropDownListItem };
+                rcboBranch.DropDownItems.Add(button);
+                button.Click += BranchSelectToolStripItem_Click;
             }
         }
 
@@ -1964,8 +1997,13 @@ namespace GitUI.CommandsDialogs
 
         private void BranchSelectToolStripItem_Click(object sender, EventArgs e)
         {
-            var toolStripItem = (ToolStripItem)sender;
-            UICommands.StartCheckoutBranch(this, toolStripItem.Text, false);
+            var branchName = (sender as ToolStripItem)?.Text ?? (sender as RibbonButton)?.Text;
+            if (string.IsNullOrWhiteSpace(branchName))
+            {
+                return;
+            }
+
+            UICommands.StartCheckoutBranch(this, branchName, false);
         }
 
         private void _forkCloneMenuItem_Click(object sender, EventArgs e)
@@ -3049,6 +3087,11 @@ namespace GitUI.CommandsDialogs
         private void rcboWorkingDir_Click(object sender, EventArgs e)
         {
             rcboWorkingDir.ShowDropDown();
+        }
+
+        private void rcboBranch_Click(object sender, EventArgs e)
+        {
+            rcboBranch.ShowDropDown();
         }
     }
 }
