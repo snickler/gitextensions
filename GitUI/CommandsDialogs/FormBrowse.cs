@@ -360,31 +360,39 @@ namespace GitUI.CommandsDialogs
 
         private void ShowDashboard()
         {
+            toolPanel.TopToolStripPanelVisible =
+                toolPanel.BottomToolStripPanelVisible =
+                    toolPanel.LeftToolStripPanelVisible =
+                        toolPanel.RightToolStripPanelVisible = false;
+
+            MainSplitContainer.Visible = false;
+
             if (_dashboard == null)
             {
                 _dashboard = new Dashboard();
                 _dashboard.GitModuleChanged += SetGitModule;
                 toolPanel.ContentPanel.Controls.Add(_dashboard);
                 _dashboard.Dock = DockStyle.Fill;
-                _dashboard.SetSplitterPositions();
-            }
-            else
-            {
-                _dashboard.Refresh();
             }
 
             _dashboard.Visible = true;
             _dashboard.BringToFront();
-            _dashboard.ShowRecentRepositories();
+            _dashboard.RefreshContent();
         }
 
         private void HideDashboard()
         {
-            if (_dashboard != null && _dashboard.Visible)
+            if (_dashboard == null || !_dashboard.Visible)
             {
-                _dashboard.SaveSplitterPositions();
-                _dashboard.Visible = false;
+                return;
             }
+
+            _dashboard.Visible = false;
+            toolPanel.TopToolStripPanelVisible =
+                toolPanel.BottomToolStripPanelVisible =
+                    toolPanel.LeftToolStripPanelVisible =
+                        toolPanel.RightToolStripPanelVisible = true;
+            MainSplitContainer.Visible = true;
         }
 
         private void BrowseLoad(object sender, EventArgs e)
@@ -518,6 +526,7 @@ namespace GitUI.CommandsDialogs
 
         private void InternalInitialize(bool hard)
         {
+            toolPanel.SuspendLayout();
             using (WaitCursorScope.Enter())
             {
                 // check for updates
@@ -636,6 +645,8 @@ namespace GitUI.CommandsDialogs
 
                 UICommands.RaisePostBrowseInitialize(this);
             }
+
+            toolPanel.ResumeLayout();
         }
 
         private void ReloadRepoObjectsTree()
@@ -1245,7 +1256,7 @@ namespace GitUI.CommandsDialogs
 
         private void RefreshDashboardToolStripMenuItemClick(object sender, EventArgs e)
         {
-            _dashboard.Refresh();
+            _dashboard.RefreshContent();
         }
 
         private void AboutToolStripMenuItemClick(object sender, EventArgs e)
@@ -1368,6 +1379,8 @@ namespace GitUI.CommandsDialogs
                 _showRevisionInfoNextToRevisionGrid = AppSettings.ShowRevisionInfoNextToRevisionGrid;
                 LayoutRevisionInfo();
             }
+
+            _dashboard?.RefreshContent();
         }
 
         private void TagToolStripMenuItemClick(object sender, EventArgs e)
@@ -1636,7 +1649,7 @@ namespace GitUI.CommandsDialogs
                 await RepositoryHistoryManager.Locals.SaveRecentHistoryAsync(repositoryHistory);
 
                 await this.SwitchToMainThreadAsync();
-                _dashboard?.ShowRecentRepositories();
+                _dashboard?.RefreshContent();
             });
         }
 
@@ -2199,10 +2212,6 @@ namespace GitUI.CommandsDialogs
         {
             base.OnClosing(e);
             SaveSplitterPositions();
-            if (_dashboard != null && _dashboard.Visible)
-            {
-                _dashboard.SaveSplitterPositions();
-            }
         }
 
         protected override void OnClosed(EventArgs e)
