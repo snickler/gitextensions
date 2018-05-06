@@ -371,18 +371,19 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             var spacing1 = DpiUtil.Scale(1f);
             var spacing2 = DpiUtil.Scale(2f);
 
-            var longestPath = recentRepositories.Select(r =>
-                                                  {
-                                                      var size = TextRenderer.MeasureText(r.Caption, AppSettings.Font);
-                                                      return new
-                                                      {
-                                                          r.Caption,
-                                                          size.Width,
-                                                          size.Height
-                                                      };
-                                                  })
-                                          .OrderByDescending(r => r.Width)
-                                          .First();
+            var longestPath = recentRepositories.Union(favouriteRepositories)
+                                                .Select(r =>
+                                                {
+                                                    var size = TextRenderer.MeasureText(r.Caption, AppSettings.Font);
+                                                    return new
+                                                    {
+                                                        r.Caption,
+                                                        size.Width,
+                                                        size.Height
+                                                    };
+                                                })
+                                               .OrderByDescending(r => r.Width)
+                                               .First();
             var branchTextSize = TextRenderer.MeasureText("A", _secondaryFont);
 
             var width = AppSettings.RecentReposComboMinWidth;
