@@ -246,6 +246,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
                 var menuStrip = FindControl<MenuStrip>(form.Controls, p => p.Name == "menuStrip1");
                 var dashboardMenu = (ToolStripMenuItem)menuStrip.Items.Cast<ToolStripItem>().SingleOrDefault(p => p.Name == "dashboardToolStripMenuItem");
                 dashboardMenu?.DropDownItems.Add(showCurrentBranchMenuItem);
+                ////dashboardMenu.Visible = true;
             }
 
             Visible = true;

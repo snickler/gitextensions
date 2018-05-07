@@ -125,6 +125,8 @@ namespace GitUI.CommandsDialogs
             _showRevisionInfoNextToRevisionGrid = AppSettings.ShowRevisionInfoNextToRevisionGrid;
             InitializeComponent();
 
+            MainSplitContainer.Visible = false;
+
             // set tab page images
             CommitInfoTabControl.ImageList = new ImageList
             {
@@ -360,10 +362,10 @@ namespace GitUI.CommandsDialogs
 
         private void ShowDashboard()
         {
-            toolPanel.TopToolStripPanelVisible =
-                toolPanel.BottomToolStripPanelVisible =
-                    toolPanel.LeftToolStripPanelVisible =
-                        toolPanel.RightToolStripPanelVisible = false;
+            toolPanel.TopToolStripPanelVisible = false;
+            toolPanel.BottomToolStripPanelVisible = false;
+            toolPanel.LeftToolStripPanelVisible = false;
+            toolPanel.RightToolStripPanelVisible = false;
 
             MainSplitContainer.Visible = false;
 
@@ -375,24 +377,27 @@ namespace GitUI.CommandsDialogs
                 _dashboard.Dock = DockStyle.Fill;
             }
 
+            Text = _appTitleGenerator.Generate(string.Empty, false, string.Empty);
+
+            ////this.InvokeAsync(_dashboard.RefreshContent).FileAndForget();
+            _dashboard.RefreshContent();
             _dashboard.Visible = true;
             _dashboard.BringToFront();
-            _dashboard.RefreshContent();
         }
 
         private void HideDashboard()
         {
+            MainSplitContainer.Visible = true;
             if (_dashboard == null || !_dashboard.Visible)
             {
                 return;
             }
 
             _dashboard.Visible = false;
-            toolPanel.TopToolStripPanelVisible =
-                toolPanel.BottomToolStripPanelVisible =
-                    toolPanel.LeftToolStripPanelVisible =
-                        toolPanel.RightToolStripPanelVisible = true;
-            MainSplitContainer.Visible = true;
+            toolPanel.TopToolStripPanelVisible = true;
+            toolPanel.BottomToolStripPanelVisible = true;
+            toolPanel.LeftToolStripPanelVisible = true;
+            toolPanel.RightToolStripPanelVisible = true;
         }
 
         private void BrowseLoad(object sender, EventArgs e)
@@ -1867,8 +1872,8 @@ namespace GitUI.CommandsDialogs
             var module = e.GitModule;
             HideVariableMainMenuItems();
             UnregisterPlugins();
-            UICommands = new GitUICommands(module);
 
+            UICommands = new GitUICommands(module);
             if (Module.IsValidGitWorkingDir())
             {
                 var path = Module.WorkingDir;
@@ -1886,12 +1891,18 @@ namespace GitUI.CommandsDialogs
                     Debug.WriteLine("Log output encoding: " + module.LogOutputEncoding.EncodingName);
                 }
 #endif
-            }
 
-            HideDashboard();
-            UICommands.RepoChangedNotifier.Notify();
-            RevisionGrid.IndexWatcher.Reset();
-            RegisterPlugins();
+                HideDashboard();
+                UICommands.RepoChangedNotifier.Notify();
+                RevisionGrid.IndexWatcher.Reset();
+                RegisterPlugins();
+            }
+            else
+            {
+                RevisionGrid.IndexWatcher.Reset();
+                MainSplitContainer.Visible = false;
+                ShowDashboard();
+            }
         }
 
         private void TranslateToolStripMenuItemClick(object sender, EventArgs e)

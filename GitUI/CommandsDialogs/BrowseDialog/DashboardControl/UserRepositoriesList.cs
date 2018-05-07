@@ -204,10 +204,10 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
 
         public void ShowRecentRepositories()
         {
-            if (!Visible)
-            {
-                return;
-            }
+            ////if (!Visible)
+            ////{
+            ////    return;
+            ////}
 
             IReadOnlyList<RecentRepoInfo> recentRepositories;
             IReadOnlyList<RecentRepoInfo> favouriteRepositories;
