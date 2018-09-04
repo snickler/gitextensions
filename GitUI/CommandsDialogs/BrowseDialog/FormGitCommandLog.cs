@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using GitCommands;
 using GitCommands.Logging;
+using GitUI.UserControls;
 
 namespace GitUI.CommandsDialogs.BrowseDialog
 {
@@ -90,7 +91,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             }
         }
 
-        private static void RefreshListBox(ListBox log, object dataSource)
+        private static void RefreshListBox(NativeListBox log, object dataSource)
         {
             var isLastIndexSelected = log.Items.Count == 0 || log.SelectedIndex == log.Items.Count - 1;
             var lastIndex = -1;
@@ -185,6 +186,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
         private void mnuClear_Click(object sender, EventArgs e)
         {
             CommandLog.Clear();
+            LogOutput.Clear();
         }
 
         #region Single instance static members

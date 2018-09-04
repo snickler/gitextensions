@@ -34,13 +34,13 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             this.TabControl = new GitUI.CommandsDialogs.FullBleedTabControl();
             this.tabPageCommandLog = new System.Windows.Forms.TabPage();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.LogItems = new System.Windows.Forms.ListBox();
+            this.LogItems = new GitUI.UserControls.NativeListBox();
             this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnuSaveToFile = new System.Windows.Forms.ToolStripMenuItem();
             this.LogOutput = new System.Windows.Forms.RichTextBox();
             this.tabPageCommandCache = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.CommandCacheItems = new System.Windows.Forms.ListBox();
+            this.CommandCacheItems = new GitUI.UserControls.NativeListBox();
             this.commandCacheOutput = new System.Windows.Forms.RichTextBox();
             this.chkAlwaysOnTop = new System.Windows.Forms.CheckBox();
             this.chkWordWrap = new System.Windows.Forms.CheckBox();
@@ -252,6 +252,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             this.Controls.Add(this.chkWordWrap);
             this.Controls.Add(this.chkAlwaysOnTop);
             this.Controls.Add(this.TabControl);
+            this.DoubleBuffered = true;
             this.Name = "FormGitCommandLog";
             this.Text = "Git Command Log";
             this.TabControl.ResumeLayout(false);
@@ -278,9 +279,9 @@ namespace GitUI.CommandsDialogs.BrowseDialog
         private System.Windows.Forms.TabPage tabPageCommandCache;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.RichTextBox commandCacheOutput;
-        private System.Windows.Forms.ListBox CommandCacheItems;
+        private GitUI.UserControls.NativeListBox CommandCacheItems;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.ListBox LogItems;
+        private GitUI.UserControls.NativeListBox LogItems;
         private System.Windows.Forms.RichTextBox LogOutput;
         private CheckBox chkAlwaysOnTop;
         private ContextMenuStrip contextMenu;
