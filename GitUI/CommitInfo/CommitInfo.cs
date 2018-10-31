@@ -180,7 +180,7 @@ namespace GitUI.CommitInfo
 
             if (_revision != null && _revision.Body == null)
             {
-                _commitDataManager.UpdateBody(data, out _);
+                _commitDataManager.LoadCommitBody(data, out _);
                 _revision.Body = data.Body;
             }
 

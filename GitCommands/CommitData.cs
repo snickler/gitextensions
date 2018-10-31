@@ -14,8 +14,7 @@ namespace GitCommands
             string author,
             DateTime authorDate,
             string committer,
-            DateTime commitDate,
-            string body)
+            DateTime commitDate)
         {
             ObjectId = objectId;
             TreeGuid = treeGuid;
@@ -24,7 +23,6 @@ namespace GitCommands
             AuthorDate = authorDate.ToDateTimeOffset();
             Committer = committer;
             CommitDate = commitDate.ToDateTimeOffset();
-            Body = body;
         }
 
         public ObjectId ObjectId { get; }

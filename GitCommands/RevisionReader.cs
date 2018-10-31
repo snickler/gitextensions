@@ -416,7 +416,7 @@ namespace GitCommands
                 CommitDate = commitDate,
                 MessageEncoding = encodingName,
                 Subject = subject,
-                Body = body,
+                //// Body = body,
                 HasMultiLineMessage = !ReferenceEquals(subject, body)
             };
 

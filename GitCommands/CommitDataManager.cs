@@ -33,7 +33,7 @@ namespace GitCommands
         /// <summary>
         /// Updates the <see cref="CommitData.Body"/> (commit message) property of <paramref name="commitData"/>.
         /// </summary>
-        void UpdateBody([NotNull] CommitData commitData, [CanBeNull] out string error);
+        void LoadCommitBody([NotNull] CommitData commitData, [CanBeNull] out string error);
     }
 
     public sealed class CommitDataManager : ICommitDataManager
@@ -49,7 +49,7 @@ namespace GitCommands
         }
 
         /// <inheritdoc />
-        public void UpdateBody(CommitData commitData, out string error)
+        public void LoadCommitBody(CommitData commitData, out string error)
         {
             if (!TryGetCommitLog(commitData.ObjectId.ToString(), BodyAndNotesFormat, out error, out var data))
             {
