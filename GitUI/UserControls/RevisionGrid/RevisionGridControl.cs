@@ -1661,7 +1661,6 @@ namespace GitUI
 
             userScriptMenuBuilder.Build(mainContextMenu);
 
-
             UpdateSeparators();
 
             return;
