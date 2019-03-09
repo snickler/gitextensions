@@ -6,6 +6,7 @@ using GitCommands;
 using GitCommands.Config;
 using GitCommands.Git;
 using GitCommands.UserRepositoryHistory;
+using GitUI.Browsing;
 using GitUI.Browsing.Dialogs;
 using GitUI.UserControls.RevisionGrid;
 using GitUIPluginInterfaces;
@@ -85,13 +86,27 @@ namespace GitUI.Script
             "WorkingDir"
         };
         private readonly ISimpleDialog _simpleDialog;
+        private readonly ICanGetCurrentRevision _canGetCurrentRevision;
+        private readonly ICanGetQuickItemSelectorLocation _canGetQuickItemSelectorLocation;
+        private readonly ICanGetSelectedRevisions _canGetSelectedRevisions;
+        private readonly ICanLatestSelectedRevision _canLatestSelectedRevision;
 
-        public ScriptOptionsParser(ISimpleDialog simpleDialog)
+        public ScriptOptionsParser(
+            ISimpleDialog simpleDialog,
+            ICanGetCurrentRevision canGetCurrentRevision = null,
+            ICanGetQuickItemSelectorLocation canGetQuickItemSelectorLocation = null,
+            ICanGetSelectedRevisions canGetSelectedRevisions = null,
+            ICanLatestSelectedRevision canLatestSelectedRevision = null)
         {
-            _simpleDialog = simpleDialog;
+            _simpleDialog = simpleDialog ?? throw new ArgumentNullException(nameof(simpleDialog));
+            _canGetCurrentRevision = canGetCurrentRevision;
+            _canGetCurrentRevision = canGetCurrentRevision;
+            _canGetQuickItemSelectorLocation = canGetQuickItemSelectorLocation;
+            _canGetSelectedRevisions = canGetSelectedRevisions;
+            _canLatestSelectedRevision = canLatestSelectedRevision;
         }
 
-        public (string argument, bool abort) Parse(string argument, IGitModule module, RevisionGridControl revisionGrid)
+        public (string argument, bool abort) Parse(string argument, IGitModule module)
         {
             GitRevision selectedRevision = null;
             GitRevision currentRevision = null;
@@ -125,7 +140,7 @@ namespace GitUI.Script
 
                 if (option.StartsWith("c") && currentRevision == null)
                 {
-                    currentRevision = GetCurrentRevision(module, revisionGrid, currentTags, currentLocalBranches, currentRemoteBranches, currentBranches, currentRevision);
+                    currentRevision = GetCurrentRevision(module, currentTags, currentLocalBranches, currentRemoteBranches, currentBranches, currentRevision);
 
                     if (currentLocalBranches.Count == 1)
                     {
@@ -137,17 +152,17 @@ namespace GitUI.Script
                         if (string.IsNullOrEmpty(currentRemote))
                         {
                             currentRemote = module.GetSetting(string.Format(SettingKeyString.BranchRemote,
-                                AskToSpecify(currentLocalBranches, revisionGrid)));
+                                AskToSpecify(currentLocalBranches, _canGetQuickItemSelectorLocation)));
                         }
                     }
                 }
-                else if (option.StartsWith("s") && selectedRevision == null && revisionGrid != null)
+                else if (option.StartsWith("s") && selectedRevision == null && _canGetSelectedRevisions != null)
                 {
-                    allSelectedRevisions = revisionGrid.GetSelectedRevisions();
-                    selectedRevision = CalculateSelectedRevision(revisionGrid, selectedRemoteBranches, selectedRemotes, selectedLocalBranches, selectedBranches, selectedTags);
+                    allSelectedRevisions = _canGetSelectedRevisions.GetSelectedRevisions();
+                    selectedRevision = CalculateSelectedRevision(selectedRemoteBranches, selectedRemotes, selectedLocalBranches, selectedBranches, selectedTags);
                 }
 
-                argument = ParseScriptArguments(argument, option, _simpleDialog, revisionGrid, module, allSelectedRevisions, selectedTags, selectedBranches, selectedLocalBranches, selectedRemoteBranches, selectedRemotes, selectedRevision, currentTags, currentBranches, currentLocalBranches, currentRemoteBranches, currentRevision, currentRemote);
+                argument = ParseScriptArguments(argument, option, _simpleDialog, module, allSelectedRevisions, selectedTags, selectedBranches, selectedLocalBranches, selectedRemoteBranches, selectedRemotes, selectedRevision, currentTags, currentBranches, currentLocalBranches, currentRemoteBranches, currentRevision, currentRemote, _canGetQuickItemSelectorLocation);
                 if (argument == null)
                 {
                     return (argument: null, abort: true);
@@ -169,33 +184,33 @@ namespace GitUI.Script
             return result;
         }
 
-        private static string AskToSpecify(IEnumerable<IGitRef> options, RevisionGridControl revisionGrid)
+        private static string AskToSpecify(IEnumerable<IGitRef> options, ICanGetQuickItemSelectorLocation getQuickItemSelectorLocation)
         {
             using (var f = new FormQuickGitRefSelector())
             {
-                f.Location = revisionGrid?.GetQuickItemSelectorLocation() ?? new System.Drawing.Point();
+                f.Location = getQuickItemSelectorLocation?.GetQuickItemSelectorLocation() ?? new System.Drawing.Point();
                 f.Init(FormQuickGitRefSelector.Action.Select, options.ToList());
                 f.ShowDialog();
                 return f.SelectedRef.Name;
             }
         }
 
-        private static string AskToSpecify(IEnumerable<string> options, RevisionGridControl revisionGrid)
+        private static string AskToSpecify(IEnumerable<string> options, ICanGetQuickItemSelectorLocation canGetQuickItemSelectorLocation)
         {
             using (var f = new FormQuickStringSelector())
             {
-                f.Location = revisionGrid?.GetQuickItemSelectorLocation() ?? new System.Drawing.Point();
+                f.Location = canGetQuickItemSelectorLocation?.GetQuickItemSelectorLocation() ?? new System.Drawing.Point();
                 f.Init(options.ToList());
                 f.ShowDialog();
                 return f.SelectedString;
             }
         }
 
-        private static GitRevision CalculateSelectedRevision(RevisionGridControl revisionGrid, List<IGitRef> selectedRemoteBranches,
+        private GitRevision CalculateSelectedRevision(List<IGitRef> selectedRemoteBranches,
             List<string> selectedRemotes, List<IGitRef> selectedLocalBranches,
             List<IGitRef> selectedBranches, List<IGitRef> selectedTags)
         {
-            GitRevision selectedRevision = revisionGrid.LatestSelectedRevision;
+            GitRevision selectedRevision = _canLatestSelectedRevision.LatestSelectedRevision;
             foreach (var head in selectedRevision.Refs)
             {
                 if (head.IsTag)
@@ -224,15 +239,15 @@ namespace GitUI.Script
         }
 
         [CanBeNull]
-        private static GitRevision GetCurrentRevision(
-            IGitModule module, [CanBeNull] RevisionGridControl revisionGrid, List<IGitRef> currentTags, List<IGitRef> currentLocalBranches,
+        private GitRevision GetCurrentRevision(
+            IGitModule module, List<IGitRef> currentTags, List<IGitRef> currentLocalBranches,
             List<IGitRef> currentRemoteBranches, List<IGitRef> currentBranches, [CanBeNull] GitRevision currentRevision)
         {
             if (currentRevision == null)
             {
                 IEnumerable<IGitRef> refs;
 
-                if (revisionGrid == null)
+                if (_canGetCurrentRevision == null)
                 {
                     var currentRevisionGuid = module.GetCurrentCheckout();
                     currentRevision = new GitRevision(currentRevisionGuid);
@@ -240,7 +255,7 @@ namespace GitUI.Script
                 }
                 else
                 {
-                    currentRevision = revisionGrid.GetCurrentRevision();
+                    currentRevision = _canGetCurrentRevision.GetCurrentRevision();
                     refs = currentRevision.Refs;
                 }
 
@@ -279,7 +294,7 @@ namespace GitUI.Script
             return string.Empty;
         }
 
-        private static string ParseScriptArguments(string argument, string option, ISimpleDialog simpleDialog, RevisionGridControl revisionGrid, IGitModule module, IReadOnlyList<GitRevision> allSelectedRevisions, in IList<IGitRef> selectedTags, in IList<IGitRef> selectedBranches, in IList<IGitRef> selectedLocalBranches, in IList<IGitRef> selectedRemoteBranches, in IList<string> selectedRemotes, GitRevision selectedRevision, in IList<IGitRef> currentTags, in IList<IGitRef> currentBranches, in IList<IGitRef> currentLocalBranches, in IList<IGitRef> currentRemoteBranches, GitRevision currentRevision, string currentRemote)
+        private static string ParseScriptArguments(string argument, string option, ISimpleDialog simpleDialog, IGitModule module, IReadOnlyList<GitRevision> allSelectedRevisions, in IList<IGitRef> selectedTags, in IList<IGitRef> selectedBranches, in IList<IGitRef> selectedLocalBranches, in IList<IGitRef> selectedRemoteBranches, in IList<string> selectedRemotes, GitRevision selectedRevision, in IList<IGitRef> currentTags, in IList<IGitRef> currentBranches, in IList<IGitRef> currentLocalBranches, in IList<IGitRef> currentRemoteBranches, GitRevision currentRevision, string currentRemote, ICanGetQuickItemSelectorLocation canGetQuickItemSelectorLocation)
         {
             string newString = null;
             string remote;
@@ -297,7 +312,7 @@ namespace GitUI.Script
                     }
                     else if (selectedTags.Count != 0)
                     {
-                        newString = AskToSpecify(selectedTags, revisionGrid);
+                        newString = AskToSpecify(selectedTags, canGetQuickItemSelectorLocation);
                     }
                     else
                     {
@@ -327,7 +342,7 @@ namespace GitUI.Script
                     }
                     else if (selectedBranches.Count != 0)
                     {
-                        newString = AskToSpecify(selectedBranches, revisionGrid);
+                        newString = AskToSpecify(selectedBranches, canGetQuickItemSelectorLocation);
                     }
                     else
                     {
@@ -357,7 +372,7 @@ namespace GitUI.Script
                     }
                     else if (selectedLocalBranches.Count != 0)
                     {
-                        newString = AskToSpecify(selectedLocalBranches, revisionGrid);
+                        newString = AskToSpecify(selectedLocalBranches, canGetQuickItemSelectorLocation);
                     }
                     else
                     {
@@ -387,7 +402,7 @@ namespace GitUI.Script
                     }
                     else if (selectedRemoteBranches.Count != 0)
                     {
-                        newString = AskToSpecify(selectedRemoteBranches, revisionGrid);
+                        newString = AskToSpecify(selectedRemoteBranches, canGetQuickItemSelectorLocation);
                     }
                     else
                     {
@@ -431,7 +446,7 @@ namespace GitUI.Script
                     {
                         newString = selectedRemotes.Count == 1
                             ? selectedRemotes[0]
-                            : AskToSpecify(selectedRemotes, revisionGrid);
+                            : AskToSpecify(selectedRemotes, canGetQuickItemSelectorLocation);
                     }
 
                     break;
@@ -454,7 +469,7 @@ namespace GitUI.Script
                     {
                         remote = selectedRemotes.Count == 1
                             ? selectedRemotes[0]
-                            : AskToSpecify(selectedRemotes, revisionGrid);
+                            : AskToSpecify(selectedRemotes, canGetQuickItemSelectorLocation);
                         newString = module.GetSetting(string.Format(SettingKeyString.RemoteUrl, remote));
                     }
 
@@ -478,7 +493,7 @@ namespace GitUI.Script
                     {
                         remote = selectedRemotes.Count == 1
                             ? selectedRemotes[0]
-                            : AskToSpecify(selectedRemotes, revisionGrid);
+                            : AskToSpecify(selectedRemotes, canGetQuickItemSelectorLocation);
                         newString = module.GetSetting(string.Format(SettingKeyString.RemoteUrl, remote));
                         url = module.GetSetting(string.Format(SettingKeyString.RemoteUrl, remote));
                         newString = GetRemotePath(url);
@@ -517,7 +532,7 @@ namespace GitUI.Script
                     }
                     else if (currentTags.Count != 0)
                     {
-                        newString = AskToSpecify(currentTags, revisionGrid);
+                        newString = AskToSpecify(currentTags, canGetQuickItemSelectorLocation);
                     }
                     else
                     {
@@ -547,7 +562,7 @@ namespace GitUI.Script
                     }
                     else if (currentBranches.Count != 0)
                     {
-                        newString = AskToSpecify(currentBranches, revisionGrid);
+                        newString = AskToSpecify(currentBranches, canGetQuickItemSelectorLocation);
                     }
                     else
                     {
@@ -577,7 +592,7 @@ namespace GitUI.Script
                     }
                     else if (currentLocalBranches.Count != 0)
                     {
-                        newString = AskToSpecify(currentLocalBranches, revisionGrid);
+                        newString = AskToSpecify(currentLocalBranches, canGetQuickItemSelectorLocation);
                     }
                     else
                     {
@@ -607,7 +622,7 @@ namespace GitUI.Script
                     }
                     else if (currentRemoteBranches.Count != 0)
                     {
-                        newString = AskToSpecify(currentRemoteBranches, revisionGrid);
+                        newString = AskToSpecify(currentRemoteBranches, canGetQuickItemSelectorLocation);
                     }
                     else
                     {
@@ -785,8 +800,8 @@ namespace GitUI.Script
 
         public readonly struct TestAccessor
         {
-            public string ParseScriptArguments(string argument, string option, ISimpleDialog simpleDialog, RevisionGridControl revisionGrid, IGitModule module, IReadOnlyList<GitRevision> allSelectedRevisions, List<IGitRef> selectedTags, List<IGitRef> selectedBranches, List<IGitRef> selectedLocalBranches, List<IGitRef> selectedRemoteBranches, List<string> selectedRemotes, GitRevision selectedRevision, List<IGitRef> currentTags, List<IGitRef> currentBranches, List<IGitRef> currentLocalBranches, List<IGitRef> currentRemoteBranches, GitRevision currentRevision, string currentRemote) =>
-                ScriptOptionsParser.ParseScriptArguments(argument, option, simpleDialog, revisionGrid, module, allSelectedRevisions, selectedTags, selectedBranches, selectedLocalBranches, selectedRemoteBranches, selectedRemotes, selectedRevision, currentTags, currentBranches, currentLocalBranches, currentRemoteBranches, currentRevision, currentRemote);
+            public string ParseScriptArguments(string argument, string option, ISimpleDialog simpleDialog, IGitModule module, IReadOnlyList<GitRevision> allSelectedRevisions, List<IGitRef> selectedTags, List<IGitRef> selectedBranches, List<IGitRef> selectedLocalBranches, List<IGitRef> selectedRemoteBranches, List<string> selectedRemotes, GitRevision selectedRevision, List<IGitRef> currentTags, List<IGitRef> currentBranches, List<IGitRef> currentLocalBranches, List<IGitRef> currentRemoteBranches, GitRevision currentRevision, string currentRemote, ICanGetQuickItemSelectorLocation canGetQuickItemSelectorLocation) =>
+                ScriptOptionsParser.ParseScriptArguments(argument, option, simpleDialog, module, allSelectedRevisions, selectedTags, selectedBranches, selectedLocalBranches, selectedRemoteBranches, selectedRemotes, selectedRevision, currentTags, currentBranches, currentLocalBranches, currentRemoteBranches, currentRevision, currentRemote, canGetQuickItemSelectorLocation);
         }
     }
 }
