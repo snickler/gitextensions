@@ -184,8 +184,8 @@ namespace GitUI.CommandsDialogs
             var gitUIEventArgs = new GitUIEventArgs(RevisionGrid, UICommands);
             var simpleDialog = new SimpleDialog(RevisionGrid);
             var scriptManager = new ScriptManager();
-            var scriptOptionsParser = new ScriptOptionsParser(simpleDialog, RevisionGrid);
-            var scriptRunner = new ScriptRunner(Module, gitUIEventArgs, scriptOptionsParser, simpleDialog, scriptManager, RevisionGrid);
+            var scriptOptionsParser = new ScriptOptionsParser(simpleDialog, () => Module, RevisionGrid);
+            var scriptRunner = new ScriptRunner(() => Module, gitUIEventArgs, scriptOptionsParser, simpleDialog, scriptManager, RevisionGrid);
             var userScriptMenuBuilder = new UserScriptMenuBuilder(scriptManager, scriptRunner, RevisionGrid, new FormSettings(UICommands));
 
             repoObjectsTree.Initialize(_aheadBehindDataProvider, _filterBranchHelper, userScriptMenuBuilder);
@@ -855,8 +855,8 @@ namespace GitUI.CommandsDialogs
                 var gitUIEventArgs = new GitUIEventArgs(this, UICommands);
                 var simpleDialog = new SimpleDialog(this);
                 var scriptManager = new ScriptManager();
-                var scriptOptionsParser = new ScriptOptionsParser(simpleDialog, RevisionGrid);
-                var scriptRunner = new ScriptRunner(Module, gitUIEventArgs, scriptOptionsParser, simpleDialog, scriptManager, RevisionGrid);
+                var scriptOptionsParser = new ScriptOptionsParser(simpleDialog, () => Module, RevisionGrid);
+                var scriptRunner = new ScriptRunner(() => Module, gitUIEventArgs, scriptOptionsParser, simpleDialog, scriptManager, RevisionGrid);
                 var userScriptMenuBuilder = new UserScriptMenuBuilder(scriptManager, scriptRunner, RevisionGrid, new FormSettings(UICommands));
 
                 userScriptMenuBuilder.Build(ToolStrip);
