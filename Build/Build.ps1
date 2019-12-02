@@ -11,9 +11,12 @@ Param(
   [switch] $pack,
   [switch][Alias('bl')]$binaryLog,
   [switch] $dontVersion = $false,
+  [string]$platform = $null,
   [switch] $help,
   [Parameter(ValueFromRemainingArguments=$true)][String[]]$properties
 )
+
+. $PSScriptRoot\tools.ps1
 
 # break on errors
 Set-StrictMode -Version Latest
@@ -25,14 +28,8 @@ $TfmConfiguration = "$Configuration\net461";
 
 Push-Location $PSScriptRoot\..\
 
-$Solution = ".\GitExtensions.sln";
+#$Solution = ".\GitExtensions.sln";
 
-try{
-    if ($restore) {
-        Write-Host "[LOG] Restoring packages" -ForegroundColor Green
-        .\.nuget\nuget.exe update -self
-        .\.nuget\nuget.exe restore -Verbosity Quiet $Solution
-    }
 
     if ($build -eq $true -or $rebuild -eq $true) {
         if ($dontVersion -eq $false) {
@@ -58,31 +55,94 @@ try{
             & $python set_version_to.py -v $Version -t $Version
             Pop-Location
         }
+
+        # Write-Host "[LOG] ...building native" -ForegroundColor Green
+        # & .\Setup\BuildGitExtNative.cmd $Configuration $target
+        # if ($LASTEXITCODE -ne 0) {
+        #     Write-Host "[ERROR] Build failed..." -ForegroundColor Red
+        #     return -1
+        # }
+    }
+
+    $bl = if ($binaryLog) { "/bl:" + (Join-Path $LogDir "build.binlog") } else { "" }
+    $platformArg = if ($platform) { "/p:Platform=$platform" } else { "" }
+
+    $toolsetBuildProj = Resolve-Path 'Build\tools\Build.proj'
+    Write-Host $toolsetBuildProj
+    #InitializeCustomToolset
+
+    MSBuild $toolsetBuildProj `
+        $bl `
+        $platformArg `
+        /p:Configuration=$configuration `
+        /p:RepoRoot=$RepoRoot `
+        /p:Restore=$restore `
+        /p:Build=$build `
+        /p:Rebuild=$rebuild `
+        /p:Test=$test `
+        /p:Pack=$pack `
+        @properties
+        # /p:IntegrationTest=$integrationTest `
+        # /p:PerformanceTest=$performanceTest `
+        #/p:Sign=$sign `
+        #/p:Publish=$publish `
+    
+    # if ($restore) {
+    #     Write-Host "[LOG] Restoring packages" -ForegroundColor Green
+    #     .\.nuget\nuget.exe update -self
+    #     .\.nuget\nuget.exe restore -Verbosity Quiet $Solution
+    # }
+try{
+
+    if ($build -eq $true -or $rebuild -eq $true) {
+        # if ($dontVersion -eq $false) {
+        #     if ([string]::IsNullOrWhiteSpace($Version)) {
+        #         throw "Version is required"
+        #     }
+
+        #     $python = "python";
+        #     if ($env:APPVEYOR) {
+        #         $python = "C:\Python35\python";
+        #     }
+        #     else {
+        #         [string[]]$PythonPaths = & where.exe python
+        #         if (!$PythonPaths) {
+        #             throw "[WARN] Python is not installed or not on PATH. Did you mean to run '-dontVersion'?"
+        #         }
+
+        #         $python = $PythonPaths[0]
+        #     }
+
+        #     Push-Location .\Setup
+        #     Write-Host "[LOG] Setting version: $Version" -ForegroundColor Green
+        #     & $python set_version_to.py -v $Version -t $Version
+        #     Pop-Location
+        # }
         
-        Push-Location $PSScriptRoot\..\
-        Write-Host "[LOG] Performing a build" -ForegroundColor Green
+        # Push-Location $PSScriptRoot\..\
+        # Write-Host "[LOG] Performing a build" -ForegroundColor Green
 
-        $binLog = if ($binaryLog) { "/bl:" + (Join-Path ".\" "build.binlog") } else { "" }
-        $target = if ($rebuild -eq $true) { "Rebuild" } else { "Build" }
+        # $binLog = if ($binaryLog) { "/bl:" + (Join-Path ".\" "build.binlog") } else { "" }
+        # $target = if ($rebuild -eq $true) { "Rebuild" } else { "Build" }
 
-        Write-Host "[LOG] ...building native" -ForegroundColor Green
-        & .\Setup\BuildGitExtNative.cmd $Configuration $target
-        if ($LASTEXITCODE -ne 0) {
-            Write-Host "[ERROR] Build failed..." -ForegroundColor Red
-            return -1
-        }
+        # Write-Host "[LOG] ...building native" -ForegroundColor Green
+        # & .\Setup\BuildGitExtNative.cmd $Configuration $target
+        # if ($LASTEXITCODE -ne 0) {
+        #     Write-Host "[ERROR] Build failed..." -ForegroundColor Red
+        #     return -1
+        # }
         
-        Write-Host "[LOG] ...building the solution" -ForegroundColor Green
-        & .\Setup\hMSBuild -notamd64 -no-cache -m $Solution /p:Configuration=$Configuration /t:$target /nologo /v:$verbosity $binLog
-        if ($LASTEXITCODE -ne 0) {
-            Write-Host "[ERROR] Build failed..." -ForegroundColor Red
+        # Write-Host "[LOG] ...building the solution" -ForegroundColor Green
+        # & .\Setup\hMSBuild -notamd64 -no-cache -m $Solution /p:Configuration=$Configuration /t:$target /nologo /v:$verbosity $binLog
+        # if ($LASTEXITCODE -ne 0) {
+        #     Write-Host "[ERROR] Build failed..." -ForegroundColor Red
 
-            if ($env:APPVEYOR) {
-                Get-ChildItem *.binlog -Recurse | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
-            }
+        #     if ($env:APPVEYOR) {
+        #         Get-ChildItem *.binlog -Recurse | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+        #     }
 
-            return -2
-        }
+        #     return -2
+        # }
     }
 
     if ($loc -eq $true) {

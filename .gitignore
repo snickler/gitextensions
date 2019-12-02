@@ -74,3 +74,4 @@ OpenCover.GitExtensions.xml
 tree.txt
 *.binlog
 artifacts/
+.tools/vswhere/
