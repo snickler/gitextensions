@@ -9,7 +9,7 @@
   <!--
       Direct plugins artifacts to be placed under GitExtensions/Plugins folder
     -->
-  <PropertyGroup>
+  <PropertyGroup Condition=" '$(MSBuildProjectName)' != 'GitUIPluginInterfaces'">
     <BaseOutputPath>$([System.IO.Path]::GetFullPath('$(ArtifactsBinDir)GitExtensions\$(Configuration)\net461\Plugins\$(OutDirName)'))</BaseOutputPath>
     <OutputPath>$(BaseOutputPath)</OutputPath>
   </PropertyGroup>
