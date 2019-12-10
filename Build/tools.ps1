@@ -439,12 +439,14 @@ function MSBuild() {
 function MSBuild-Core() {
     if ($ci) {
         if (!$binaryLog) {
-            Write-PipelineTaskError -Message "Binary log must be enabled in CI build."
+            #Write-PipelineTaskError -Message "Binary log must be enabled in CI build."
+            Write-Error -Message "Binary log must be enabled in CI build."
             ExitWithExitCode 1
         }
 
         if ($nodeReuse) {
-            Write-PipelineTaskError -Message "Node reuse must be disabled in CI build."
+            #Write-PipelineTaskError -Message "Node reuse must be disabled in CI build."
+            Write-Error -Message "Node reuse must be disabled in CI build."
             ExitWithExitCode 1
         }
     }
@@ -470,7 +472,8 @@ function MSBuild-Core() {
     $exitCode = Exec-Process $buildTool.Path $cmdArgs
 
     if ($exitCode -ne 0) {
-        Write-PipelineTaskError -Message "Build failed."
+        #Write-PipelineTaskError -Message "Build failed."
+        Write-Error -Message "Build failed."
 
         $buildLog = GetMSBuildBinaryLogCommandLineArgument $args
         if ($buildLog -ne $null) {
