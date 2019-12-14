@@ -57,14 +57,6 @@ Push-Location $PSScriptRoot\..\
     #         Pop-Location
     #     }
 
-    #     # Write-Host "[LOG] ...building native" -ForegroundColor Green
-    #     # & .\Setup\BuildGitExtNative.cmd $Configuration $target
-    #     # if ($LASTEXITCODE -ne 0) {
-    #     #     Write-Host "[ERROR] Build failed..." -ForegroundColor Red
-    #     #     return -1
-    #     # }
-    # }
-
     $bl = if ($binaryLog) { "/bl:" + (Join-Path $LogDir "build.binlog") } else { "" }
     $platformArg = if ($platform) { "/p:Platform=$platform" } else { "" }
 
@@ -73,60 +65,55 @@ Push-Location $PSScriptRoot\..\
     #InitializeCustomToolset
 
     if ($buildNative) {
-        if (!$build -and !$rebuild) {
-            $build = $true;
-        }
-
         MSBuild $toolsetBuildProj `
             $bl `
             /p:Platform=Win32 `
             /p:Configuration=$configuration `
             /p:RepoRoot=$RepoRoot `
             /p:Projects=$RepoRoot\GitExtSshAskPass\GitExtSshAskPass.sln `
-            /p:Restore=$restore `
-            /p:Build=$build `
+            /p:Build=$buildNative `
             /p:Rebuild=$rebuild `
             @properties;
 
+        # build shell extensions x86
         MSBuild $toolsetBuildProj `
             $bl `
             /p:Platform=Win32 `
             /p:Configuration=$configuration `
             /p:RepoRoot=$RepoRoot `
             /p:Projects=$RepoRoot\GitExtensionsShellEx\GitExtensionsShellEx.sln `
-            /p:Restore=$restore `
-            /p:Build=$build `
+            /p:Build=$buildNative `
             /p:Rebuild=$rebuild `
             @properties;
 
+        # build shell extensions x64
         MSBuild $toolsetBuildProj `
             $bl `
             /p:Platform=x64 `
             /p:Configuration=$configuration `
             /p:RepoRoot=$RepoRoot `
             /p:Projects=$RepoRoot\GitExtensionsShellEx\GitExtensionsShellEx.sln `
-            /p:Restore=$restore `
-            /p:Build=$build `
+            /p:Build=$buildNative `
             /p:Rebuild=$rebuild `
             @properties;
     }
 
-    # MSBuild $toolsetBuildProj `
-    #     $bl `
-    #     $platformArg `
-    #     /p:Configuration=$configuration `
-    #     /p:RepoRoot=$RepoRoot `
-    #     /p:Restore=$restore `
-    #     /p:Build=$build `
-    #     /p:Rebuild=$rebuild `
-    #     /p:BuildNative=$buildNative `
-    #     /p:Test=$test `
-    #     /p:Pack=$pack `
-    #     @properties
-    #     # /p:IntegrationTest=$integrationTest `
-    #     # /p:PerformanceTest=$performanceTest `
-    #     #/p:Sign=$sign `
-    #     #/p:Publish=$publish `
+    MSBuild $toolsetBuildProj `
+        $bl `
+        $platformArg `
+        /p:Configuration=$configuration `
+        /p:RepoRoot=$RepoRoot `
+        /p:Restore=$restore `
+        /p:Build=$build `
+        /p:Rebuild=$rebuild `
+        /p:BuildNative=$buildNative `
+        /p:Test=$test `
+        /p:Pack=$pack `
+        @properties
+        # /p:IntegrationTest=$integrationTest `
+        # /p:PerformanceTest=$performanceTest `
+        #/p:Sign=$sign `
+        #/p:Publish=$publish `
     
     # if ($restore) {
     #     Write-Host "[LOG] Restoring packages" -ForegroundColor Green

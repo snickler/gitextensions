@@ -463,7 +463,6 @@ function MSBuild-Core() {
     }
 
     foreach ($arg in $args) {
-        Write-Host "arg: $arg"
         if ($arg -ne $null -and $arg.ToString().Trim() -ne "") {
             $cmdArgs += " `"$arg`""
         }
