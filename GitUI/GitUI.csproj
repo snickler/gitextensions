@@ -72,10 +72,15 @@
     <None Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-
     <None Include="gituikey.snk.pfx" />
-
     <None Include="Resources\ChangeLog.md" />
+
+    <Content Include="Themes\dark.colors">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Themes\win10default.colors">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <Target Name="CopyTranslations" AfterTargets="AfterBuild">
