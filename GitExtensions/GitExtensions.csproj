@@ -5,7 +5,8 @@
     <StartupObject />
 
     <!-- Default debugging command starts GitExtensions browsing this repository -->
-    <StartArguments>browse "$(MSBuildThisFileDirectory).."</StartArguments>    
+    <StartArguments>browse "$(MSBuildThisFileDirectory).."</StartArguments>
+    <Prefer32bit>true</Prefer32bit>
   </PropertyGroup>
 
   <ItemGroup>
