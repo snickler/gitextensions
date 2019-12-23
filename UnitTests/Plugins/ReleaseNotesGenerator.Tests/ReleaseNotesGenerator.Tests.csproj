@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Plugins\ReleaseNotesGenerator\ReleaseNotesGenerator.csproj" />
+  </ItemGroup>
+
+</Project>

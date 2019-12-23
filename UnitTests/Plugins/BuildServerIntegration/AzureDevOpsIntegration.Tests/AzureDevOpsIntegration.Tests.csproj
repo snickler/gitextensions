@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Plugins\BuildServerIntegration\AzureDevOpsIntegration\AzureDevOpsIntegration.csproj" />
+  </ItemGroup>
+
+</Project>
