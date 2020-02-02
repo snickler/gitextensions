@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using GitCommands.Utils;
 using JetBrains.Annotations;
 using static System.Interop;
+using static System.NativeMethods;
 
 namespace GitUI.UserControls
 {
@@ -60,17 +61,17 @@ namespace GitUI.UserControls
         [CanBeNull]
         public ListViewGroupHitInfo GetGroupHitInfo(Point location)
         {
-            var info = new NativeMethods.LVHITTESTINFO
+            var info = new LVHITTESTINFO
             {
                 pt = location
             };
 
-            if (NativeMethods.SendMessageW(Handle, NativeMethods.LVM_SUBITEMHITTEST, (IntPtr)(-1), ref info) == new IntPtr(-1))
+            if (SendMessageW(Handle, LVM_SUBITEMHITTEST, (IntPtr)(-1), ref info) == new IntPtr(-1))
             {
                 return null;
             }
 
-            if ((info.flags & NativeMethods.LVHITTESTFLAGS.LVHT_EX_GROUP_HEADER) == 0)
+            if ((info.flags & LVHITTESTFLAGS.LVHT_EX_GROUP_HEADER) == 0)
             {
                 return null;
             }
@@ -80,7 +81,7 @@ namespace GitUI.UserControls
                 var groupId = GetGroupId(group);
                 if (info.iItem == groupId)
                 {
-                    bool isCollapseButton = (info.flags & NativeMethods.LVHITTESTFLAGS.LVHT_EX_GROUP_COLLAPSE) > 0;
+                    bool isCollapseButton = (info.flags & LVHITTESTFLAGS.LVHT_EX_GROUP_COLLAPSE) > 0;
                     return new ListViewGroupHitInfo(group, isCollapseButton, location);
                 }
             }
@@ -130,24 +131,54 @@ namespace GitUI.UserControls
                 Groups.Cast<ListViewGroup>().Skip(_minGroupInsertionIndex);
         }
 
+        public unsafe void SeGrouptSubtitle(ListViewGroup group, string subTitle)
+        {
+            if (group == null)
+            {
+                return;
+            }
+
+            var lvgroup = new LVGROUPW
+            {
+                cbSize = (uint)sizeof(LVGROUPW),
+                mask = LVGF.SUBTITLE,
+                iGroupId = GetGroupId(group)
+            };
+
+            var result = SendMessageW(Handle, LVM_GETGROUPINFO, (IntPtr)lvgroup.iGroupId, ref lvgroup);
+            if (result == (IntPtr)(-1))
+            {
+                return;
+            }
+
+            fixed (char* psubTitle = subTitle)
+            {
+                lvgroup.mask = LVGF.SUBTITLE;
+                lvgroup.pszSubtitle = psubTitle;
+                lvgroup.cchSubtitle = (uint)subTitle.Length;
+
+                SendMessageW(Handle, LVM_SETGROUPINFO, (IntPtr)lvgroup.iGroupId, ref lvgroup);
+            }
+        }
+
         protected override void WndProc(ref Message m)
         {
             var message = m;
             switch (m.Msg)
             {
-                case NativeMethods.WM_LBUTTONUP when GetGroupHitInfo(message.LParam.ToPoint())?.IsCollapseButton == true:
+                case WM_LBUTTONUP when GetGroupHitInfo(message.LParam.ToPoint())?.IsCollapseButton == true:
                     DefWndProc(ref m); // collapse / expand by clicking button in group header
                     break;
 
-                case NativeMethods.LVM_INSERTGROUP:
+                case LVM_INSERTGROUP:
                     base.WndProc(ref m);
                     HandleAddedGroup(m);
                     break;
 
-                case NativeMethods.WM_RBUTTONUP when IsGroupMouseEventHandled(MouseButtons.Right, isDown: false):
-                case NativeMethods.WM_RBUTTONDOWN when IsGroupMouseEventHandled(MouseButtons.Right, isDown: true):
-                case NativeMethods.WM_LBUTTONUP when IsGroupMouseEventHandled(MouseButtons.Left, isDown: false):
-                case NativeMethods.WM_LBUTTONDOWN when IsGroupMouseEventHandled(MouseButtons.Left, isDown: true):
+                case WM_RBUTTONUP when IsGroupMouseEventHandled(MouseButtons.Right, isDown: false):
+                case WM_RBUTTONDOWN when IsGroupMouseEventHandled(MouseButtons.Right, isDown: true):
+                case WM_LBUTTONUP when IsGroupMouseEventHandled(MouseButtons.Left, isDown: false):
+                case WM_LBUTTONDOWN when IsGroupMouseEventHandled(MouseButtons.Left, isDown: true):
                     break;
 
                 default:
@@ -163,18 +194,18 @@ namespace GitUI.UserControls
 
                 switch (msg.Msg)
                 {
-                    case NativeMethods.WM_VSCROLL:
+                    case WM_VSCROLL:
                         type = (ScrollEventType)LowWord(msg.WParam.ToInt64());
                         newValue = HighWord(msg.WParam.ToInt64());
                         break;
 
-                    case NativeMethods.WM_MOUSEWHEEL:
+                    case WM_MOUSEWHEEL:
                         type = HighWord(msg.WParam.ToInt64()) > 0
                             ? ScrollEventType.SmallDecrement
                             : ScrollEventType.SmallIncrement;
                         break;
 
-                    case NativeMethods.WM_KEYDOWN:
+                    case WM_KEYDOWN:
                         switch ((Keys)msg.WParam.ToInt32())
                         {
                             case Keys.Up:
@@ -205,7 +236,7 @@ namespace GitUI.UserControls
                         return;
                 }
 
-                newValue = newValue ?? NativeMethods.SetScrollPos(Handle, NativeMethods.SB.VERT, 0, BOOL.FALSE);
+                newValue = newValue ?? SetScrollPos(Handle, SB.VERT, 0, BOOL.FALSE);
                 Scroll?.Invoke(this, new ScrollEventArgs(type, newValue.Value));
 
                 short LowWord(long number) =>
@@ -245,7 +276,7 @@ namespace GitUI.UserControls
                     return index - 1 + _minGroupInsertionIndex;
                 }
 
-                unsafe void SetGrpState(ListViewGroup grp, NativeMethods.LVGS state)
+                unsafe void SetGrpState(ListViewGroup grp, LVGS state)
                 {
                     int groupId = GetGroupId(grp);
                     if (groupId < 0)
@@ -253,13 +284,13 @@ namespace GitUI.UserControls
                         groupId = Groups.IndexOf(grp) - _minGroupInsertionIndex;
                     }
 
-                    var lvgroup = new NativeMethods.LVGROUPW();
-                    lvgroup.cbSize = (uint)sizeof(NativeMethods.LVGROUPW);
+                    var lvgroup = new LVGROUPW();
+                    lvgroup.cbSize = (uint)sizeof(LVGROUPW);
                     lvgroup.state = state;
-                    lvgroup.mask = NativeMethods.LVGF.STATE;
+                    lvgroup.mask = LVGF.STATE;
                     lvgroup.iGroupId = groupId;
 
-                    NativeMethods.SendMessageW(Handle, NativeMethods.LVM_SETGROUPINFO, (IntPtr)groupId, ref lvgroup);
+                    SendMessageW(Handle, LVM_SETGROUPINFO, (IntPtr)groupId, ref lvgroup);
                 }
             }
 
@@ -290,7 +321,7 @@ namespace GitUI.UserControls
         /// Call this method once after <see cref="ListView.Groups"/> collection was cleared (or created)
         /// before making any calls to <see cref="ListViewGroupCollection.Insert"/>
         ///
-        /// <see cref="ListViewGroupCollection.Add(System.Windows.Forms.ListViewGroup)"/> calls must
+        /// <see cref="ListViewGroupCollection.Add(ListViewGroup)"/> calls must
         /// not be used after calling this method
         /// </summary>
         private void BeginGroupInsertion()

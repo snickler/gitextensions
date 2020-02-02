@@ -17,9 +17,10 @@
 
         public const int LVM_FIRST = 0x1000;
         public const int LVM_HITTEST = LVM_FIRST + 18;
-        public const int LVM_SETGROUPINFO = LVM_FIRST + 147;
         public const int LVM_SUBITEMHITTEST = LVM_FIRST + 57;
         public const int LVM_INSERTGROUP = LVM_FIRST + 145;
+        public const int LVM_SETGROUPINFO = LVM_FIRST + 147;
+        public const int LVM_GETGROUPINFO = LVM_FIRST + 149;
 
         public const uint MA_ACTIVATE = 1;
         public const uint MA_ACTIVATEANDEAT = 2;

@@ -894,6 +894,7 @@ namespace GitUI
                     };
 
                     FileStatusListView.Groups.Add(group);
+                    FileStatusListView.SeGrouptSubtitle(group, "bla");
                 }
 
                 foreach (var item in statuses)
