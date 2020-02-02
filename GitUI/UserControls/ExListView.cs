@@ -5,14 +5,14 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using GitCommands.Utils;
 using JetBrains.Annotations;
+using static System.Interop;
 
 namespace GitUI.UserControls
 {
-    internal class ExListView : NativeListView
+    internal partial class ExListView : NativeListView
     {
         private static readonly PropertyInfo ListViewGroupIdProperty;
         private static readonly PropertyInfo ListViewGroupListProperty;
@@ -65,8 +65,7 @@ namespace GitUI.UserControls
                 pt = location
             };
 
-            var handleRef = new HandleRef(this, Handle);
-            if (NativeMethods.SendMessage(handleRef, NativeMethods.LVM_SUBITEMHITTEST, (IntPtr)(-1), ref info) == new IntPtr(-1))
+            if (NativeMethods.SendMessageW(Handle, NativeMethods.LVM_SUBITEMHITTEST, (IntPtr)(-1), ref info) == new IntPtr(-1))
             {
                 return null;
             }
@@ -206,7 +205,7 @@ namespace GitUI.UserControls
                         return;
                 }
 
-                newValue = newValue ?? NativeMethods.GetScrollPos(Handle, NativeMethods.SB_VERT);
+                newValue = newValue ?? NativeMethods.SetScrollPos(Handle, NativeMethods.SB.VERT, 0, BOOL.FALSE);
                 Scroll?.Invoke(this, new ScrollEventArgs(type, newValue.Value));
 
                 short LowWord(long number) =>
@@ -230,7 +229,7 @@ namespace GitUI.UserControls
                 }
 
                 var listViewGroup = Groups[groupIndex];
-                SetGrpState(listViewGroup, ListViewGroupState.Collapsible);
+                SetGrpState(listViewGroup, NativeMethods.LVGS.Collapsible);
                 Invalidate();
 
                 int GetGroupIndex()
@@ -246,7 +245,7 @@ namespace GitUI.UserControls
                     return index - 1 + _minGroupInsertionIndex;
                 }
 
-                void SetGrpState(ListViewGroup grp, ListViewGroupState state)
+                unsafe void SetGrpState(ListViewGroup grp, NativeMethods.LVGS state)
                 {
                     int groupId = GetGroupId(grp);
                     if (groupId < 0)
@@ -254,15 +253,13 @@ namespace GitUI.UserControls
                         groupId = Groups.IndexOf(grp) - _minGroupInsertionIndex;
                     }
 
-                    var lvgroup = new NativeMethods.LVGROUP();
-                    lvgroup.CbSize = Marshal.SizeOf(lvgroup);
-                    lvgroup.State = state;
-                    lvgroup.Mask = NativeMethods.ListViewGroupMask.State;
-                    lvgroup.IGroupId = groupId;
+                    var lvgroup = new NativeMethods.LVGROUPW();
+                    lvgroup.cbSize = (uint)sizeof(NativeMethods.LVGROUPW);
+                    lvgroup.state = state;
+                    lvgroup.mask = NativeMethods.LVGF.STATE;
+                    lvgroup.iGroupId = groupId;
 
-                    var handleRef = new HandleRef(this, Handle);
-
-                    NativeMethods.SendMessage(handleRef, NativeMethods.LVM_SETGROUPINFO, (IntPtr)groupId, ref lvgroup);
+                    NativeMethods.SendMessageW(Handle, NativeMethods.LVM_SETGROUPINFO, (IntPtr)groupId, ref lvgroup);
                 }
             }
 
@@ -355,144 +352,6 @@ namespace GitUI.UserControls
             }
 
             return -1;
-        }
-
-        private static class NativeMethods
-        {
-            [DllImport("user32", CharSet = CharSet.Auto)]
-            public static extern IntPtr SendMessage(HandleRef hWnd,
-                                                   int msg,
-                                                   IntPtr wParam,
-                                                   ref LVHITTESTINFO lParam);
-
-            [DllImport("user32", CharSet = CharSet.Auto)]
-            public static extern IntPtr SendMessage(HandleRef hWnd,
-                                                   int msg,
-                                                   IntPtr wParam,
-                                                   ref LVGROUP lParam);
-
-            [DllImport("user32.dll", CharSet = CharSet.Auto)]
-            public static extern int GetScrollPos(IntPtr hWnd, int nBar);
-
-            #region Windows constants
-
-            public const int WM_LBUTTONDOWN = 0x0201;
-            public const int WM_LBUTTONUP = 0x0202;
-            public const int WM_RBUTTONDOWN = 0x0204;
-            public const int WM_RBUTTONUP = 0x0205;
-
-            public const int WM_VSCROLL = 0x115;
-            public const int WM_MOUSEWHEEL = 0x020A;
-            public const int WM_KEYDOWN = 0x0100;
-            public const int SB_VERT = 1;
-
-            public const int LVM_FIRST = 0x1000;
-            public const int LVM_HITTEST = LVM_FIRST + 18;
-            public const int LVM_SETGROUPINFO = LVM_FIRST + 147;
-            public const int LVM_SUBITEMHITTEST = LVM_FIRST + 57;
-            public const int LVM_INSERTGROUP = LVM_FIRST + 145;
-
-            #endregion
-
-            [StructLayout(LayoutKind.Sequential)]
-            public readonly struct POINT
-            {
-                public readonly int X;
-                public readonly int Y;
-
-                public POINT(int x, int y)
-                {
-                    X = x;
-                    Y = y;
-                }
-
-                public static implicit operator System.Drawing.Point(POINT p) => new System.Drawing.Point(p.X, p.Y);
-                public static implicit operator POINT(System.Drawing.Point p) => new POINT(p.X, p.Y);
-            }
-
-            [StructLayout(LayoutKind.Sequential)]
-            public struct NMHDR
-            {
-                public IntPtr hwndFrom;
-                public IntPtr idFrom;
-                public int code;
-            }
-
-            /// <summary>
-            /// see http://msdn.microsoft.com/en-us/library/bb774754%28v=VS.85%29.aspx
-            /// </summary>
-            [StructLayout(LayoutKind.Sequential)]
-            public struct LVHITTESTINFO
-            {
-                public POINT pt;
-                public LVHITTESTFLAGS flags;
-                public int iItem;
-                public int iSubItem;
-
-                // Vista/Win7+
-                public int iGroup;
-            }
-
-            /// <summary>
-            /// see http://msdn.microsoft.com/en-us/library/bb774754%28v=VS.85%29.aspx
-            /// </summary>
-            [Flags]
-            public enum LVHITTESTFLAGS : uint
-            {
-                LVHT_NOWHERE = 0x00000001,
-                LVHT_ONITEMICON = 0x00000002,
-                LVHT_ONITEMLABEL = 0x00000004,
-                LVHT_ONITEMSTATEICON = 0x00000008,
-                LVHT_ONITEM = LVHT_ONITEMICON | LVHT_ONITEMLABEL | LVHT_ONITEMSTATEICON,
-                LVHT_ABOVE = 0x00000008,
-                LVHT_BELOW = 0x00000010,
-                LVHT_TORIGHT = 0x00000020,
-                LVHT_TOLEFT = 0x00000040,
-
-                // Vista/Win7+ only
-                LVHT_EX_GROUP_HEADER = 0x10000000,
-                LVHT_EX_GROUP_FOOTER = 0x20000000,
-                LVHT_EX_GROUP_COLLAPSE = 0x40000000,
-                LVHT_EX_GROUP_BACKGROUND = 0x80000000,
-                LVHT_EX_GROUP_STATEICON = 0x01000000,
-                LVHT_EX_GROUP_SUBSETLINK = 0x02000000,
-            }
-
-            public enum ListViewGroupMask : uint
-            {
-                None = 0x00000,
-                Header = 0x00001,
-                Footer = 0x00002,
-                State = 0x00004,
-                Align = 0x00008,
-                GroupId = 0x00010,
-                SubTitle = 0x00100,
-                Task = 0x00200,
-                DescriptionTop = 0x00400,
-                DescriptionBottom = 0x00800,
-                TitleImage = 0x01000,
-                ExtendedImage = 0x02000,
-                Items = 0x04000,
-                Subset = 0x08000,
-                SubsetItems = 0x10000
-            }
-
-            [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-            public struct LVGROUP
-            {
-                public int CbSize;
-                public ListViewGroupMask Mask;
-                [MarshalAs(UnmanagedType.LPWStr)]
-                public string PszHeader;
-                public int CchHeader;
-                [MarshalAs(UnmanagedType.LPWStr)]
-                public string PszFooter;
-                public int CchFooter;
-                public int IGroupId;
-                public int StateMask;
-                public ListViewGroupState State;
-                public uint UAlign;
-            }
         }
     }
 }
