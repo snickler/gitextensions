@@ -28,4 +28,12 @@
 
   </PropertyGroup>
 
+  <!--
+      List of plugin files to be included into the installer
+    -->
+  <ItemGroup Condition="'$(_IsTfsInterop)' != true">
+    <PluginAssembly Include="$([System.IO.Path]::Combine('$(OutputPath)', '$(TargetFileName)'))" />
+    <PluginAssembly Include="$([System.IO.Path]::Combine('$(OutputPath)', 'Newtonsoft.Json.dll'))" />
+  </ItemGroup>
+
 </Project>

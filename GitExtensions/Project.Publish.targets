@@ -53,6 +53,13 @@
     -->
 
   <Target Name="CreatePortable" AfterTargets="Publish" DependsOnTargets="_RetrieveCurrentBuildVersion;_PublishTranslations;_PublishExtraDependecies">
+    <ItemGroup>
+      <PackablePluginAssembly Include="@(PluginAssembly->Distinct())"/>
+    </ItemGroup>
+
+    <Message Text="MetaData1:    @(PackablePluginAssembly->Distinct())" />
+    <Message Text="MetaData2:    @(PluginAssembly->Distinct())" />
+
     <PropertyGroup>
       <!-- Resolve app.config, so we can set/unset "portable" flag -->
       <_PublishAppConfig>$([System.IO.Path]::GetFileName('$(TargetAppConfig)'))</_PublishAppConfig>

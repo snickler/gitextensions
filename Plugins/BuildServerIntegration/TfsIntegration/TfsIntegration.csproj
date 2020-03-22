@@ -1,4 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PluginAssembly Include="$([System.IO.Path]::Combine('$(OutputPath)', 'Newtonsoft.Json.dll'))" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Reactive.Linq" Version="$(SystemReactiveVersion)" />

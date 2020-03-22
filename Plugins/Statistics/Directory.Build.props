@@ -21,4 +21,11 @@
     <OutDir>$(BaseOutputPath)</OutDir>
   </PropertyGroup>
 
+  <!--
+      List of plugin files to be included into the installer
+    -->
+  <ItemGroup>
+    <PluginAssembly Include="$([System.IO.Path]::Combine('$(OutputPath)', '$(TargetFileName)'))" />
+  </ItemGroup>
+
 </Project>
