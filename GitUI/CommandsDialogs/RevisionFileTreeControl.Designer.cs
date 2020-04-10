@@ -33,6 +33,7 @@
             this.tvGitTree = new GitUI.UserControls.NativeTreeView();
             this.FileTreeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openWithDifftoolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetToThisRevisionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparatorFileSystemActions = new System.Windows.Forms.ToolStripSeparator();
@@ -115,6 +116,7 @@
             this.openWithToolStripMenuItem,
             this.openFileToolStripMenuItem,
             this.openFileWithToolStripMenuItem,
+            this.runScriptToolStripMenuItem,
             this.toolStripSeparatorFileSystemActions,
             this.copyFilenameToClipboardToolStripMenuItem,
             this.fileTreeOpenContainingFolderToolStripMenuItem,
@@ -264,6 +266,13 @@
             this.openFileWithToolStripMenuItem.Text = "Open this revision with... (temp file)";
             this.openFileWithToolStripMenuItem.Click += new System.EventHandler(this.openFileWithToolStripMenuItem_Click);
             // 
+            // runScriptToolStripMenuItem
+            // 
+            this.runScriptToolStripMenuItem.Image = global::GitUI.Properties.Images.Console;
+            this.runScriptToolStripMenuItem.Name = "runScriptToolStripMenuItem";
+            this.runScriptToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.runScriptToolStripMenuItem.Text = "Run script";
+            // 
             // toolStripSeparatorGitActions
             // 
             this.toolStripSeparatorGitActions.Name = "toolStripSeparatorGitActions";
@@ -354,6 +363,7 @@
         private UserControls.NativeTreeView tvGitTree;
         private Editor.FileViewer FileText;
         private System.Windows.Forms.ContextMenuStrip FileTreeContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem runScriptToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openWithDifftoolToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetToThisRevisionToolStripMenuItem;

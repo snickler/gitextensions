@@ -14,12 +14,13 @@ using GitExtUtils.GitUI;
 using GitUI.CommandsDialogs.BrowseDialog;
 using GitUI.Hotkey;
 using GitUI.Properties;
+using GitUI.Script;
 using JetBrains.Annotations;
 using ResourceManager;
 
 namespace GitUI.CommandsDialogs
 {
-    public partial class RevisionFileTreeControl : GitModuleControl
+    public partial class RevisionFileTreeControl : GitModuleControl, IScriptHostControl
     {
         private readonly TranslationString _resetFileCaption = new TranslationString("Reset");
         private readonly TranslationString _resetFileText = new TranslationString("Are you sure you want to reset this file or directory?");
@@ -45,6 +46,8 @@ Are you sure to assume this file won't change ?");
 See the changes in the commit form.");
 
         private readonly TranslationString _success = new TranslationString("Success");
+
+        private bool _settingsLoaded;
 
         // store strings to not keep references to nodes
         private readonly Stack<string> _lastSelectedNodes = new Stack<string>();
@@ -299,16 +302,16 @@ See the changes in the commit form.");
                 switch (gitItem.ObjectType)
                 {
                     case GitObjectType.Blob:
-                    {
-                        UICommands.StartFileHistoryDialog(this, gitItem.FileName, _revision);
-                        break;
-                    }
+                        {
+                            UICommands.StartFileHistoryDialog(this, gitItem.FileName, _revision);
+                            break;
+                        }
 
                     case GitObjectType.Commit:
-                    {
-                        SpawnCommitBrowser(gitItem);
-                        break;
-                    }
+                        {
+                            SpawnCommitBrowser(gitItem);
+                            break;
+                        }
                 }
             }
         }
@@ -366,22 +369,22 @@ See the changes in the commit form.");
                 {
                     case GitObjectType.Blob:
                     case GitObjectType.Commit:
-                    {
-                        var file = new GitItemStatus
                         {
-                            IsTracked = true,
-                            Name = gitItem.Name,
-                            TreeGuid = gitItem.ObjectId,
-                            IsSubmodule = gitItem.ObjectType == GitObjectType.Commit
-                        };
+                            var file = new GitItemStatus
+                            {
+                                IsTracked = true,
+                                Name = gitItem.Name,
+                                TreeGuid = gitItem.ObjectId,
+                                IsSubmodule = gitItem.ObjectType == GitObjectType.Commit
+                            };
 
-                        return FileText.ViewGitItemAsync(file);
-                    }
+                            return FileText.ViewGitItemAsync(file);
+                        }
 
                     default:
-                    {
-                        return FileText.ViewTextAsync("", "");
-                    }
+                        {
+                            return FileText.ViewTextAsync("", "");
+                        }
                 }
             }
         }
@@ -596,6 +599,25 @@ See the changes in the commit form.");
 
             toolStripSeparatorFileTreeActions.Visible = isFile;
             expandSubtreeToolStripMenuItem.Visible = isFolder;
+
+            if (_revision.IsArtificial || _revision.ObjectId == Module.GetCurrentCheckout())
+            {
+                // TODO: bind only scripts that run on file/folders
+                FileTreeContextMenu.AppendUserScripts(runScriptToolStripMenuItem,
+                    (s, _) =>
+                    {
+                        if (_settingsLoaded == false)
+                        {
+                            new FormSettings(UICommands).LoadSettings();
+                            _settingsLoaded = true;
+                        }
+
+                        // TODO: pass the selected file/folder
+                        // ScriptRunner.RunScript(this, Module, sender.ToString(), UICommands, null);
+
+                        // TODO: allow run scripts on more than one item?
+                    });
+            }
         }
 
         private void fileTreeOpenContainingFolderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -790,5 +812,21 @@ See the changes in the commit form.");
 
             return _revisionFileTreeController.SelectFileOrFolder(tvGitTree, filePath.Substring(Module.WorkingDir.Length));
         }
+
+        #region IScriptHostControl
+
+        GitRevision IScriptHostControl.GetCurrentRevision()
+            => _revision;
+
+        GitRevision IScriptHostControl.GetLatestSelectedRevision()
+            => _revision;
+
+        IReadOnlyList<GitRevision> IScriptHostControl.GetSelectedRevisions()
+            => new[] { _revision };
+
+        Point IScriptHostControl.GetQuickItemSelectorLocation()
+            => Point.Empty;
+
+        #endregion
     }
 }
