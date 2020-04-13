@@ -604,7 +604,8 @@ See the changes in the commit form.");
             {
                 // TODO: bind only scripts that run on file/folders
                 FileTreeContextMenu.AppendUserScripts(runScriptToolStripMenuItem,
-                    (s, _) =>
+                    ScriptContexts.FileTree,
+                    (scriptKey) =>
                     {
                         if (_settingsLoaded == false)
                         {

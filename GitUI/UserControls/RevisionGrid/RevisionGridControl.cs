@@ -1711,6 +1711,7 @@ namespace GitUI
             SetEnabled(openPullRequestPageStripMenuItem, !string.IsNullOrWhiteSpace(revision.BuildStatus?.PullRequestUrl));
 
             mainContextMenu.AppendUserScripts(runScriptToolStripMenuItem,
+                ScriptContexts.RevisionGrid,
                 (scriptKey) =>
                 {
                     if (_settingsLoaded == false)
