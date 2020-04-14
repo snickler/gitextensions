@@ -69,7 +69,7 @@ namespace GitUI.CommandsDialogs
                         scriptInvoker(scriptKey);
                     };
 
-                    if (script.AddToRevisionGridContextMenu)
+                    if (contexts.HasFlag(ScriptContexts.RevisionGrid) && script.AddToRevisionGridContextMenu)
                     {
                         contextMenu.Items.Add(item);
                     }
