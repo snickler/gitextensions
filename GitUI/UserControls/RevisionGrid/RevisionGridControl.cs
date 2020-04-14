@@ -1712,6 +1712,7 @@ namespace GitUI
 
             mainContextMenu.AppendUserScripts(runScriptToolStripMenuItem,
                 ScriptContexts.RevisionGrid,
+                true,
                 (scriptKey) =>
                 {
                     if (_settingsLoaded == false)

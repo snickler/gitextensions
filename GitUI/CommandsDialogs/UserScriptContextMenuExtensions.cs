@@ -14,14 +14,20 @@ namespace GitUI.CommandsDialogs
         /// <param name="contextMenu">The context menu to add user scripts too.</param>
         /// <param name="hostMenuItem">The menu item to which to add user scripts marked as <see cref="ScriptInfo.AddToRevisionGridContextMenu"/>.</param>
         /// <param name="scriptInvoker">The handler that handles user script invocation.</param>
-        public static void AppendUserScripts(this ContextMenuStrip contextMenu, ToolStripMenuItem hostMenuItem, ScriptContexts contexts, Action<string> scriptInvoker)
+        public static void AppendUserScripts(this ContextMenuStrip contextMenu, ToolStripMenuItem hostMenuItem, ScriptContexts contexts, bool addScripts, Action<string> scriptInvoker)
         {
             contextMenu = contextMenu ?? throw new ArgumentNullException(nameof(contextMenu));
             hostMenuItem = hostMenuItem ?? throw new ArgumentNullException(nameof(hostMenuItem));
             scriptInvoker = scriptInvoker ?? throw new ArgumentNullException(nameof(scriptInvoker));
 
             RemoveOwnScripts();
-            AddOwnScripts();
+            if (addScripts)
+            {
+                AddOwnScripts();
+            }
+
+            hostMenuItem.Visible = hostMenuItem.DropDown.Items.Count > 0;
+
             return;
 
             void RemoveOwnScripts()
@@ -84,8 +90,6 @@ namespace GitUI.CommandsDialogs
                     contextMenu.Items.Insert(lastIndex, new ToolStripSeparator());
                 }
 
-                bool showScriptsMenu = hostMenuItem.DropDown.Items.Count > 0;
-                hostMenuItem.Visible = showScriptsMenu;
                 return;
 
                 bool IsCorrectContext(ScriptInfo currentScript, ScriptContexts availableContexts)

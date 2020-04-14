@@ -600,25 +600,23 @@ See the changes in the commit form.");
             toolStripSeparatorFileTreeActions.Visible = isFile;
             expandSubtreeToolStripMenuItem.Visible = isFolder;
 
-            if (_revision.IsArtificial || _revision.ObjectId == Module.GetCurrentCheckout())
-            {
-                // TODO: bind only scripts that run on file/folders
-                FileTreeContextMenu.AppendUserScripts(runScriptToolStripMenuItem,
-                    ScriptContexts.FileTree,
-                    (scriptKey) =>
+            // TODO: bind only scripts that run on file/folders
+            FileTreeContextMenu.AppendUserScripts(runScriptToolStripMenuItem,
+                ScriptContexts.FileTree,
+                _revision.IsArtificial || _revision.ObjectId == Module.GetCurrentCheckout(),
+                (scriptKey) =>
+                {
+                    if (_settingsLoaded == false)
                     {
-                        if (_settingsLoaded == false)
-                        {
-                            new FormSettings(UICommands).LoadSettings();
-                            _settingsLoaded = true;
-                        }
+                        new FormSettings(UICommands).LoadSettings();
+                        _settingsLoaded = true;
+                    }
 
-                        // TODO: pass the selected file/folder
-                        // ScriptRunner.RunScript(this, Module, sender.ToString(), UICommands, null);
+                    // TODO: pass the selected file/folder
+                    // ScriptRunner.RunScript(this, Module, sender.ToString(), UICommands, null);
 
-                        // TODO: allow run scripts on more than one item?
-                    });
-            }
+                    // TODO: allow run scripts on more than one item?
+                });
         }
 
         private void fileTreeOpenContainingFolderToolStripMenuItem_Click(object sender, EventArgs e)
