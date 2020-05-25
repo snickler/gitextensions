@@ -1,4 +1,5 @@
-﻿using GitCommands;
+﻿using System.Linq;
+using GitCommands;
 
 namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 {
@@ -16,6 +17,8 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
         protected override void Init(ISettingsPageHost pageHost)
         {
             base.Init(pageHost);
+
+            cboTerminal.Items.AddRange(ShellHelper.SupportedShells.ToArray());
 
             // Bind settings with controls
             AddSettingBinding(AppSettings.ShowConEmuTab, chkChowConsoleTab);

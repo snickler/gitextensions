@@ -2153,6 +2153,10 @@ compare with first:</source>
         <source>(Repository hosts)</source>
         <target />
       </trans-unit>
+      <trans-unit id="_runShellFailed.Text">
+        <source>Fail to run the shell. Reason: </source>
+        <target />
+      </trans-unit>
       <trans-unit id="_superprojectModuleFormat.Text">
         <source>Superproject: {0}</source>
         <target />
@@ -2597,22 +2601,6 @@ Do you want to continue?</source>
       </trans-unit>
       <trans-unit id="ConEmuGB.Text">
         <source>Console emulator</source>
-        <target />
-      </trans-unit>
-      <trans-unit id="cboTerminal.Item0">
-        <source>bash</source>
-        <target />
-      </trans-unit>
-      <trans-unit id="cboTerminal.Item1">
-        <source>cmd</source>
-        <target />
-      </trans-unit>
-      <trans-unit id="cboTerminal.Item2">
-        <source>powershell</source>
-        <target />
-      </trans-unit>
-      <trans-unit id="cboTerminal.Item3">
-        <source>pwsh</source>
         <target />
       </trans-unit>
       <trans-unit id="chkChowConsoleTab.Text">

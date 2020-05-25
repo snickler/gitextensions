@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ConEmu.WinForms;
 using GitCommands;
 
@@ -10,6 +8,7 @@ namespace GitUI
 {
     public static class ShellHelper
     {
+        public static IReadOnlyList<string> SupportedShells => new[] { "bash", "cmd", "powershell", "pwsh" };
         internal static string GetCommandLineForCurrentShell()
         {
             string shell = AppSettings.ConEmuTerminal.ValueOrDefault.ToLower();
@@ -29,7 +28,7 @@ namespace GitUI
             return result;
         }
 
-        private static string GetShellPath(string shell)
+        internal static string GetShellPath(string shell)
         {
             string[] exeList;
             switch (shell?.ToLower())

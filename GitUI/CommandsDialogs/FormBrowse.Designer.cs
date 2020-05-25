@@ -55,7 +55,7 @@ namespace GitUI.CommandsDialogs
             this.toolStripButtonPush = new GitUI.CommandsDialogs.ToolStripPushButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripFileExplorer = new System.Windows.Forms.ToolStripButton();
-            this.GitBash = new System.Windows.Forms.ToolStripButton();
+            this.GitBash = new System.Windows.Forms.ToolStripSplitButton();
             this.EditSettings = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
@@ -1823,7 +1823,7 @@ namespace GitUI.CommandsDialogs
         private ToolStripSplitButton _NO_TRANSLATE_WorkingDir;
         private ToolStripSeparator toolStripSeparator0;
         private ToolStripSeparator toolStripSeparator1;
-        private ToolStripButton GitBash;
+        private ToolStripSplitButton GitBash;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripButton EditSettings;
         private ToolStripButton RefreshButton;

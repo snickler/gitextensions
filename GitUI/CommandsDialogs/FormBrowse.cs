@@ -76,6 +76,8 @@ namespace GitUI.CommandsDialogs
         private readonly TranslationString _undoLastCommitText = new TranslationString("You will still be able to find all the commit's changes in the staging area\n\nDo you want to continue?");
         private readonly TranslationString _undoLastCommitCaption = new TranslationString("Undo last commit");
 
+        private readonly TranslationString _runShellFailed = new TranslationString("Fail to run the shell. Reason: ");
+
         #endregion
 
         private readonly SplitterManager _splitterManager = new SplitterManager(new AppSettingsPath("FormBrowse"));
@@ -289,6 +291,8 @@ namespace GitUI.CommandsDialogs
             // Populate terminal tab after translation within InitializeComplete
             FillTerminalTab();
 
+            FillBashButtonWithShells();
+
             RevisionGrid.ToggledBetweenArtificialAndHeadCommits += (s, e) => FocusRevisionDiffFileStatusList();
 
             return;
@@ -492,6 +496,17 @@ namespace GitUI.CommandsDialogs
                 var clickedMenuItem = (ToolStripMenuItem)sender;
                 AppSettings.DefaultPullAction = (AppSettings.PullAction)clickedMenuItem.Tag;
                 RefreshDefaultPullAction();
+            }
+        }
+
+        private void FillBashButtonWithShells()
+        {
+            foreach (var shell in ShellHelper.SupportedShells)
+            {
+                var toolStripMenuItem = new ToolStripMenuItem(shell);
+                toolStripMenuItem.Image = Images.Console;
+                toolStripMenuItem.Click += RunShell;
+                GitBash.DropDownItems.Add(toolStripMenuItem);
             }
         }
 
@@ -1312,7 +1327,23 @@ namespace GitUI.CommandsDialogs
 
         private void GitBashToolStripMenuItemClick1(object sender, EventArgs e)
         {
-            Module.RunBash();
+            if (!GitBash.DropDownButtonPressed)
+            {
+                Module.RunBash();
+            }
+        }
+
+        private void RunShell(object sender, EventArgs e)
+        {
+            try
+            {
+                string shellPath = ShellHelper.GetShellPath(((ToolStripMenuItem)sender).Text);
+                new Executable(shellPath, Module.WorkingDir).Start(createWindow: true);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(_runShellFailed.Text + "\n" + exception.Message,  Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void GitGuiToolStripMenuItemClick(object sender, EventArgs e)
