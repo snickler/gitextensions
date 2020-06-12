@@ -504,7 +504,7 @@ namespace GitUI.CommandsDialogs
             foreach (var shell in ShellHelper.SupportedShells)
             {
                 var toolStripMenuItem = new ToolStripMenuItem(shell);
-                toolStripMenuItem.Image = Images.Console;
+                toolStripMenuItem.Image = ShellHelper.GetShellIcon(shell);
                 toolStripMenuItem.Click += RunShell;
                 GitBash.DropDownItems.Add(toolStripMenuItem);
             }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using ConEmu.WinForms;
 using GitCommands;
+using GitUI.Properties;
 
 namespace GitUI
 {
@@ -50,6 +52,23 @@ namespace GitUI
 
             return exeList?.Select(exe => PathUtil.TryFindShellPath(exe, out var exePath) ? exePath : null)
                   .FirstOrDefault(exePath => exePath != null);
+        }
+
+        public static Bitmap GetShellIcon(string shell)
+        {
+            switch (shell)
+            {
+                case "pwsh":
+                    return Images.pwsh;
+                case "powershell":
+                    return Images.powershell;
+                case "cmd":
+                    return Images.cmd;
+                case "bash":
+                    return Images.GitForWindows;
+                default:
+                    return Images.Console;
+            }
         }
 
         internal static bool ShellIsOnPath(string shell) => GetShellPath(shell) != null;
