@@ -76,8 +76,6 @@ namespace GitUI.CommandsDialogs
         private readonly TranslationString _undoLastCommitText = new TranslationString("You will still be able to find all the commit's changes in the staging area\n\nDo you want to continue?");
         private readonly TranslationString _undoLastCommitCaption = new TranslationString("Undo last commit");
 
-        private readonly TranslationString _runShellFailed = new TranslationString("Fail to run the shell. Reason: ");
-
         #endregion
 
         private readonly SplitterManager _splitterManager = new SplitterManager(new AppSettingsPath("FormBrowse"));
@@ -1021,9 +1019,7 @@ namespace GitUI.CommandsDialogs
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(this,
-                                $"Failed to execute '{script.Name}' script.{Environment.NewLine}Reason: {ex.Message}",
-                                Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBoxes.FailedToExecuteScript(this, script.Name, ex.Message);
                         }
                     };
 
@@ -1335,14 +1331,15 @@ namespace GitUI.CommandsDialogs
 
         private void RunShell(object sender, EventArgs e)
         {
+            string shell = ((ToolStripMenuItem)sender).Text;
             try
             {
-                string shellPath = ShellHelper.GetShellPath(((ToolStripMenuItem)sender).Text);
+                string shellPath = ShellHelper.GetShellPath(shell);
                 new Executable(shellPath, Module.WorkingDir).Start(createWindow: true);
             }
             catch (Exception exception)
             {
-                MessageBox.Show(_runShellFailed.Text + "\n" + exception.Message,  Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBoxes.FailedToRunShell(this, shell, exception.Message);
             }
         }
 
@@ -1480,7 +1477,7 @@ namespace GitUI.CommandsDialogs
             var revisions = RevisionGrid.GetSelectedRevisions();
             if (revisions.Count < 1 || revisions.Count > 2)
             {
-                MessageBox.Show(this, @"Select only one or two revisions. Abort.", @"Archive revision", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBoxes.SelectOnlyOneOrTwoRevision(this);
                 return;
             }
 
@@ -1873,7 +1870,7 @@ namespace GitUI.CommandsDialogs
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBoxes.ShowErrorMessageBox(this, ex.Message);
             }
         }
 

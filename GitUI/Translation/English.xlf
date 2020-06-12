@@ -2153,10 +2153,6 @@ compare with first:</source>
         <source>(Repository hosts)</source>
         <target />
       </trans-unit>
-      <trans-unit id="_runShellFailed.Text">
-        <source>Fail to run the shell. Reason: </source>
-        <target />
-      </trans-unit>
       <trans-unit id="_superprojectModuleFormat.Text">
         <source>Superproject: {0}</source>
         <target />
@@ -7674,6 +7670,10 @@ help</source>
   </file>
   <file datatype="plaintext" original="MessageBoxes" source-language="en">
     <body>
+      <trans-unit id="_archiveRevisionCaption.Text">
+        <source>Archive revision</source>
+        <target />
+      </trans-unit>
       <trans-unit id="_confirmDeleteRemoteBranch.Text">
         <source>Do you want to delete the branch {0} from {1}?</source>
         <target />
@@ -7704,6 +7704,22 @@ help</source>
       </trans-unit>
       <trans-unit id="_rememberChoice.Text">
         <source>Remember choice</source>
+        <target />
+      </trans-unit>
+      <trans-unit id="_runShellFailed.Text">
+        <source>Failed to run shell '{0}'. Reason:
+
+{1}</source>
+        <target />
+      </trans-unit>
+      <trans-unit id="_scriptExecutionFailed.Text">
+        <source>Failed to execute script '{0}'. Reason:
+
+{1}</source>
+        <target />
+      </trans-unit>
+      <trans-unit id="_selectOnlyOneOrTwoRevision.Text">
+        <source>Select only one or two revisions. Abort.</source>
         <target />
       </trans-unit>
       <trans-unit id="_serverHostkeyNotCachedText.Text">

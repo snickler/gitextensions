@@ -35,6 +35,12 @@ namespace GitUI
         private readonly TranslationString _shellNotFoundCaption = new TranslationString("Shell not found");
         private readonly TranslationString _shellNotFound = new TranslationString("The selected shell is not installed, or is not on your path.");
 
+        private readonly TranslationString _scriptExecutionFailed = new TranslationString("Failed to execute script '{0}'. Reason:\n\n{1}");
+        private readonly TranslationString _runShellFailed = new TranslationString("Failed to run shell '{0}'. Reason:\n\n{1}");
+
+        private readonly TranslationString _archiveRevisionCaption = new TranslationString("Archive revision");
+        private readonly TranslationString _selectOnlyOneOrTwoRevision = new TranslationString("Select only one or two revisions. Abort.");
+
         // internal for FormTranslate
         internal MessageBoxes()
         {
@@ -45,9 +51,14 @@ namespace GitUI
 
         private static MessageBoxes Instance => instance ?? (instance = new MessageBoxes());
 
+        public static void ShowErrorMessageBox([CanBeNull] IWin32Window owner, string text, string caption = null)
+        {
+            MessageBox.Show(owner, text, caption ?? Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
         public static void NotValidGitDirectory([CanBeNull] IWin32Window owner)
         {
-            MessageBox.Show(owner, Instance._notValidGitDirectory.Text, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            ShowErrorMessageBox(owner, Instance._notValidGitDirectory.Text);
         }
 
         public static void ShowGitConfigurationExceptionMessage(IWin32Window owner, GitConfigurationException exception)
@@ -76,6 +87,21 @@ namespace GitUI
         public static void PAgentNotFound(IWin32Window owner)
         {
             MessageBox.Show(owner, Instance._pageantNotFound.Text, _putty, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        public static void FailedToRunShell(IWin32Window owner, string shell, string errorMessage)
+        {
+            ShowErrorMessageBox(owner, string.Format(Instance._runShellFailed.Text, shell, errorMessage));
+        }
+
+        public static void FailedToExecuteScript(IWin32Window owner, string script, string errorMessage)
+        {
+            ShowErrorMessageBox(owner, string.Format(Instance._scriptExecutionFailed.Text, script, errorMessage));
+        }
+
+        public static void SelectOnlyOneOrTwoRevision(IWin32Window owner)
+        {
+            ShowErrorMessageBox(owner, Instance._selectOnlyOneOrTwoRevision.Text, Instance._archiveRevisionCaption.Text);
         }
 
         public static bool CacheHostkey(IWin32Window owner)
