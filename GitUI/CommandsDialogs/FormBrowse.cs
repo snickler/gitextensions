@@ -501,6 +501,11 @@ namespace GitUI.CommandsDialogs
         {
             foreach (var shell in ShellHelper.SupportedShells)
             {
+                if (shell == "bash")
+                {
+                    continue;
+                }
+
                 var toolStripMenuItem = new ToolStripMenuItem(shell);
                 toolStripMenuItem.Image = ShellHelper.GetShellIcon(shell);
                 toolStripMenuItem.Click += RunShell;
