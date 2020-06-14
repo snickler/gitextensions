@@ -1505,9 +1505,6 @@ namespace GitUI
                 case "formatpatch":
                     StartFormatPatchDialog();
                     return;
-                case "gitbash":
-                    Module.RunBash();
-                    return;
                 case "gitignore":
                     StartEditGitIgnoreDialog(null, false);
                     return;
