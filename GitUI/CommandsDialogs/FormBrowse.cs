@@ -29,6 +29,7 @@ using GitUI.Hotkey;
 using GitUI.Infrastructure.Telemetry;
 using GitUI.Properties;
 using GitUI.Script;
+using GitUI.Shells;
 using GitUI.UserControls;
 using GitUIPluginInterfaces;
 using GitUIPluginInterfaces.RepositoryHosts;
@@ -92,6 +93,7 @@ namespace GitUI.CommandsDialogs
         private readonly ISubmoduleStatusProvider _submoduleStatusProvider;
         private readonly FormBrowseDiagnosticsReporter _formBrowseDiagnosticsReporter;
         [CanBeNull] private BuildReportTabPageExtension _buildReportTabPageExtension;
+        private readonly ShellProvider _shellProvider = new ShellProvider();
         private ConEmuControl _terminal;
         private Dashboard _dashboard;
 
@@ -289,7 +291,7 @@ namespace GitUI.CommandsDialogs
             // Populate terminal tab after translation within InitializeComplete
             FillTerminalTab();
 
-            FillBashButtonWithShells();
+            FillUserShells(AppSettings.ConEmuTerminal.ValueOrDefault);
 
             RevisionGrid.ToggledBetweenArtificialAndHeadCommits += (s, e) => FocusRevisionDiffFileStatusList();
 
@@ -497,19 +499,45 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FillBashButtonWithShells()
+        private void FillUserShells(string defaultShell)
         {
-            foreach (var shell in ShellHelper.SupportedShells)
+            userShell.DropDownItems.Clear();
+
+            bool userShellAccessible = false;
+            foreach (var shellType in Enum.GetNames(typeof(ShellType)))
             {
-                if (shell == "bash")
+                IShellDescriptor shell = _shellProvider.GetShell(shellType);
+                if (!shell.IsExecutableFound)
                 {
                     continue;
                 }
 
-                var toolStripMenuItem = new ToolStripMenuItem(shell);
-                toolStripMenuItem.Image = ShellHelper.GetShellIcon(shell);
-                toolStripMenuItem.Click += RunShell;
-                GitBash.DropDownItems.Add(toolStripMenuItem);
+                if (string.Equals(shellType, defaultShell, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    userShellAccessible = true;
+                    userShell.Image = shell.Icon;
+                    userShell.ToolTipText = shell.Name;
+                    userShell.Tag = shell;
+                }
+
+                var toolStripMenuItem = new ToolStripMenuItem(shell.Name);
+                userShell.DropDownItems.Add(toolStripMenuItem);
+                toolStripMenuItem.Tag = shell;
+                toolStripMenuItem.Image = shell.Icon;
+                toolStripMenuItem.ToolTipText = shell.Name;
+                toolStripMenuItem.Click += userShell_Click;
+            }
+
+            userShell.Visible = userShell.DropDownItems.Count > 0;
+
+            // a user may have a specific shell configured in settings, but the shell is no longer available
+            // set the first available shell as default
+            if (userShell.Visible && !userShellAccessible)
+            {
+                var shell = (IShellDescriptor)userShell.DropDownItems[0].Tag;
+                userShell.Image = shell.Icon;
+                userShell.ToolTipText = shell.Name;
+                userShell.Tag = shell;
             }
         }
 
@@ -1326,25 +1354,27 @@ namespace GitUI.CommandsDialogs
             UICommands.StartApplyPatchDialog(this);
         }
 
-        private void GitBashToolStripMenuItemClick1(object sender, EventArgs e)
+        private void userShell_Click(object sender, EventArgs e)
         {
-            if (!GitBash.DropDownButtonPressed)
+            if (userShell.DropDownButtonPressed)
             {
-                Module.RunBash();
+                return;
             }
-        }
 
-        private void RunShell(object sender, EventArgs e)
-        {
-            string shell = ((ToolStripMenuItem)sender).Text;
+            IShellDescriptor shell = (sender as ToolStripItem)?.Tag as IShellDescriptor;
+            if (shell is null)
+            {
+                return;
+            }
+
             try
             {
-                string shellPath = ShellHelper.GetShellPath(shell);
-                new Executable(shellPath, Module.WorkingDir).Start(createWindow: true);
+                var executable = new Executable(shell.Executable.Value.path, Module.WorkingDir);
+                executable.Start(createWindow: true);
             }
             catch (Exception exception)
             {
-                MessageBoxes.FailedToRunShell(this, shell, exception.Message);
+                MessageBoxes.FailedToRunShell(this, shell.Name, exception.Message);
             }
         }
 
@@ -1882,11 +1912,6 @@ namespace GitUI.CommandsDialogs
         private void CreateBranchToolStripMenuItemClick(object sender, EventArgs e)
         {
             UICommands.StartCreateBranchDialog(this, RevisionGrid.LatestSelectedRevision?.ObjectId);
-        }
-
-        private void GitBashClick(object sender, EventArgs e)
-        {
-            GitBashToolStripMenuItemClick1(sender, e);
         }
 
         private void editGitAttributesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2841,7 +2866,9 @@ namespace GitUI.CommandsDialogs
                 }
 
                 startInfo.BaseConfiguration = startInfoBaseConfiguration;
-                startInfo.ConsoleProcessCommandLine = ShellHelper.GetCommandLineForCurrentShell();
+
+                string shellType = AppSettings.ConEmuTerminal.ValueOrDefault;
+                startInfo.ConsoleProcessCommandLine = _shellProvider.GetShellCommandLine(shellType);
 
                 if (AppSettings.ConEmuStyle.ValueOrDefault != "Default")
                 {
@@ -2875,7 +2902,9 @@ namespace GitUI.CommandsDialogs
 
         public void ChangeTerminalActiveFolder(string path)
         {
-            _terminal?.ChangeFolder(path);
+            string shellType = AppSettings.ConEmuTerminal.ValueOrDefault;
+            IShellDescriptor shell = _shellProvider.GetShell(shellType);
+            _terminal?.ChangeFolder(shell, path);
         }
 
         private void menuitemSparseWorkingCopy_Click(object sender, EventArgs e)
