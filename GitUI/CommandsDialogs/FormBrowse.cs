@@ -507,7 +507,7 @@ namespace GitUI.CommandsDialogs
             foreach (var shellType in Enum.GetNames(typeof(ShellType)))
             {
                 IShellDescriptor shell = _shellProvider.GetShell(shellType);
-                if (!shell.IsExecutableFound)
+                if (!shell.HasExecutable)
                 {
                     continue;
                 }
@@ -1369,7 +1369,7 @@ namespace GitUI.CommandsDialogs
 
             try
             {
-                var executable = new Executable(shell.Executable.Value.path, Module.WorkingDir);
+                var executable = new Executable(shell.ExecutablePath, Module.WorkingDir);
                 executable.Start(createWindow: true);
             }
             catch (Exception exception)

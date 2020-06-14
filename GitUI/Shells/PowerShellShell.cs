@@ -14,11 +14,12 @@ namespace GitUI.Shells
             Type = ShellType.PowerShell;
             Icon = Images.powershell;
 
-            const string executableName = "powershell.exe";
-            Executable = new Lazy<(string, string?, string?)>(
-                () => PathUtil.TryFindShellPath(executableName, out var exePath)
-                        ? (name: executableName, path: exePath, commandLine: exePath.Quote())
-                        : (name: executableName, path: null, commandLine: null));
+            ExecutableName = "powershell.exe";
+            if (PathUtil.TryFindShellPath(ExecutableName, out var exePath))
+            {
+                ExecutablePath = exePath;
+                ExecutableCommandLine = exePath.Quote();
+            }
         }
 
         public override string GetTerminalStartCommand(string path) => $"cd {path.QuoteNE()}";

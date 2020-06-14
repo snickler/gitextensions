@@ -1,6 +1,5 @@
 ﻿#nullable enable
 
-using System;
 using System.Drawing;
 
 namespace GitUI.Shells
@@ -8,10 +7,16 @@ namespace GitUI.Shells
     public abstract class ShellDescriptor : IShellDescriptor
     {
         /// <inheritdoc/>
-        public Lazy<(string name, string? path, string? commandLine)> Executable { get; protected set; } = null!;
+        public string? ExecutableCommandLine { get; protected set; } = null!;
 
         /// <inheritdoc/>
-        public bool IsExecutableFound => Executable.Value.path is object;
+        public string ExecutableName { get; protected set; } = null!;
+
+        /// <inheritdoc/>
+        public string? ExecutablePath { get; protected set; } = null!;
+
+        /// <inheritdoc/>
+        public bool HasExecutable => ExecutablePath is object;
 
         /// <inheritdoc/>
         public Image Icon { get; protected set; } = null!;

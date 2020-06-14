@@ -32,13 +32,12 @@ namespace GitUI.Shells
         {
             var shell = GetShell(shellType);
 
-            var executable = shell.Executable.Value;
-            if (executable.path == null)
+            if (!shell.HasExecutable)
             {
                 return ConEmuConstants.DefaultConsoleCommandLine;
             }
 
-            return executable.commandLine;
+            return shell.ExecutableCommandLine;
         }
     }
 }

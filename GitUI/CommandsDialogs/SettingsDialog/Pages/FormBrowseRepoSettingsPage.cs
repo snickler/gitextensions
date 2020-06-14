@@ -67,7 +67,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
                 return;
             }
 
-            if (shell.IsExecutableFound)
+            if (shell.HasExecutable)
             {
                 return;
             }

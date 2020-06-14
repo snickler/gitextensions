@@ -1,18 +1,30 @@
 ﻿#nullable enable
 
-using System;
 using System.Drawing;
 
 namespace GitUI.Shells
 {
     public interface IShellDescriptor
     {
-        public Lazy<(string name, string? path, string? commandLine)> Executable { get; }
+        /// <summary>
+        /// Gets the executable command line.
+        /// </summary>
+        public string? ExecutableCommandLine { get; }
 
         /// <summary>
-        /// Gets whether the executable for the given shell is located.
+        /// Gets the executable name.
         /// </summary>
-        public bool IsExecutableFound { get; }
+        public string ExecutableName { get; }
+
+        /// <summary>
+        /// Gets the executable resolved path.
+        /// </summary>
+        public string? ExecutablePath { get; }
+
+        /// <summary>
+        /// Indicates whether the executable for the given shell is located and the shell can be run.
+        /// </summary>
+        public bool HasExecutable { get; }
 
         /// <summary>
         /// Gets the shell icon.
