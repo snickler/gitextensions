@@ -291,7 +291,7 @@ namespace GitUI.CommandsDialogs
             // Populate terminal tab after translation within InitializeComplete
             FillTerminalTab();
 
-            FillUserShells(AppSettings.ConEmuTerminal.ValueOrDefault);
+            FillUserShells(ShellType.Bash.ToString());
 
             RevisionGrid.ToggledBetweenArtificialAndHeadCommits += (s, e) => FocusRevisionDiffFileStatusList();
 
