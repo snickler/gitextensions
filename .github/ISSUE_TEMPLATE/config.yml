@@ -1,6 +1,6 @@
 blank_issues_enabled: false
 contact_links:
-  - name: If you have a general question
+  - name: :question: If you have a general question
     url:  https://github.com/gitextensions/gitextensions/discussions
     about: If you have a question about the app - ask it here
   - name: Issue with Git Extensions docs
