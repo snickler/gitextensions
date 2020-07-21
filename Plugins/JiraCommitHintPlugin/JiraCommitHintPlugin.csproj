@@ -1,18 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>-->
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Atlassian.SDK" Version="12.1.1" />
+    <PackageReference Include="Atlassian.SDK" Version="12.1.1">
+      <PrivateAssets>runtime;dependencies</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="NString" Version="1.2.0" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\..\GitExtUtils\GitExtUtils.csproj">
       <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
     </ProjectReference>
     <ProjectReference Include="..\..\ResourceManager\ResourceManager.csproj">
       <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
     </ProjectReference>
     <ProjectReference Include="..\GitUIPluginInterfaces\GitUIPluginInterfaces.csproj">
       <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
     </ProjectReference>
   </ItemGroup>
 
@@ -33,5 +43,15 @@
     <!-- Resources -->
     <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
   </ItemGroup>
+
+  <!-- Hack: PackageReference for some reason are not copied into the TargetDir folder... -->
+  <Target Name="FilterCopyLocalItems" AfterTargets="ResolveLockFileCopyLocalFiles">
+    <ItemGroup>
+      <_ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths)" Condition="'%(Filename)' == 'Atlassian.Jira' " />
+      <_ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths)" Condition="'%(Filename)' == 'NString' " />
+      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" />
+      <ReferenceCopyLocalPaths Include="@(_ReferenceCopyLocalPaths)" />
+    </ItemGroup>
+  </Target>
 
 </Project>
