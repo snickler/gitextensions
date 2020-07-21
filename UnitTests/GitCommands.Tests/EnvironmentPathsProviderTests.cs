@@ -51,7 +51,7 @@ namespace GitCommandsTests
         }
 
         [Platform(Include = "Win")]
-        [TestCase("\\\\my-pc\\Work\\GitExtensions\\", true)]
+        [TestCase("\\\\my-pc\\Work\\GitExtensions\\", false)]
         [TestCase("C:\\Work\\GitExtensions\\", true)]
         [TestCase("C:\\Work\\", true)]
         [TestCase("C:\\", true)]
@@ -70,7 +70,6 @@ namespace GitCommandsTests
                 yield return @"c::\word";
                 yield return "\"c:\\word\t\\\"";
                 yield return @".c:\Programs\";
-                yield return "c:\\Programs\\Get\"\\";
             }
             else
             {
