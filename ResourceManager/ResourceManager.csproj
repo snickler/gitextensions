@@ -13,9 +13,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GitCommands\GitCommands.csproj" />
-    <ProjectReference Include="..\GitExtUtils\GitExtUtils.csproj" />
-    <ProjectReference Include="..\Plugins\GitUIPluginInterfaces\GitUIPluginInterfaces.csproj" />
+    <ProjectReference Include="..\GitCommands\GitCommands.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\GitExtUtils\GitExtUtils.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\GitUIPluginInterfaces\GitUIPluginInterfaces.csproj">
+      <Private>false</Private>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>

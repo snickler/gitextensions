@@ -1,9 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\..\Externals\Git.hub\Git.hub\Git.hub.csproj" />
-    <ProjectReference Include="..\..\GitCommands\GitCommands.csproj" />
-    <ProjectReference Include="..\..\ResourceManager\ResourceManager.csproj" />
-    <ProjectReference Include="..\GitUIPluginInterfaces\GitUIPluginInterfaces.csproj" />
+    <ProjectReference Include="..\..\Externals\Git.hub\Git.hub\Git.hub.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GitCommands\GitCommands.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ResourceManager\ResourceManager.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\GitUIPluginInterfaces\GitUIPluginInterfaces.csproj">
+      <Private>false</Private>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>

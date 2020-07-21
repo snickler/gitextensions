@@ -16,14 +16,30 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Externals\conemu-inside\ConEmuWinForms\ConEmuWinForms.csproj" />
-    <ProjectReference Include="..\Externals\Git.hub\Git.hub\Git.hub.csproj" />
-    <ProjectReference Include="..\Externals\ICSharpCode.TextEditor\Project\ICSharpCode.TextEditor.csproj" />
-    <ProjectReference Include="..\Externals\NetSpell.SpellChecker\SpellChecker.csproj" />
-    <ProjectReference Include="..\GitCommands\GitCommands.csproj" />
-    <ProjectReference Include="..\GitExtUtils\GitExtUtils.csproj" />
-    <ProjectReference Include="..\Plugins\GitUIPluginInterfaces\GitUIPluginInterfaces.csproj" />
-    <ProjectReference Include="..\ResourceManager\ResourceManager.csproj" />
+    <ProjectReference Include="..\Externals\conemu-inside\ConEmuWinForms\ConEmuWinForms.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Externals\Git.hub\Git.hub\Git.hub.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Externals\ICSharpCode.TextEditor\Project\ICSharpCode.TextEditor.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Externals\NetSpell.SpellChecker\SpellChecker.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\GitCommands\GitCommands.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\GitExtUtils\GitExtUtils.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\GitUIPluginInterfaces\GitUIPluginInterfaces.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\ResourceManager\ResourceManager.csproj">
+      <Private>false</Private>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>
