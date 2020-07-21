@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -30,6 +31,8 @@ namespace TranslationApp
             // this would lead to InvalidOperationException thrown in GitModuleForm()
             // set the flag that will stop this from happening
             GitModuleForm.IsUnitTestActive = true;
+
+            Debugger.Launch();
 
             var neutralItems = TranslationHelpers.LoadNeutralItems();
             string filename = Path.Combine(Translator.GetTranslationDir(), "English.xlf");

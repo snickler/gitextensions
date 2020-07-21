@@ -24,13 +24,14 @@
       <_GitExtensionsOutputDir Condition="'$(TranslationsPath)' == ''">$([MSBuild]::NormalizeDirectory('$(GitExtensionsOutputPath)', '$(TargetFramework)'))</_GitExtensionsOutputDir>
 
       <_TranslationAppDir>$([System.IO.Path]::GetFullPath('$(ArtifactsBinDir)TranslationApp\$(Configuration)\$(TargetFramework)'))</_TranslationAppDir>
-      <_TranslationAppOutputPath>$([MSBuild]::NormalizePath('$(_TranslationAppDir)', 'TranslationApp.exe'))</_TranslationAppOutputPath>
+      <_TranslationAppOutputExePath>$([MSBuild]::NormalizePath('$(_TranslationAppDir)', 'TranslationApp.exe'))</_TranslationAppOutputExePath>
+      <_TranslationAppOutputDllPath>$([MSBuild]::NormalizePath('$(_TranslationAppDir)', 'TranslationApp.dll'))</_TranslationAppOutputDllPath>
       <_TranslationAppTempPath>$([MSBuild]::NormalizePath('$(_GitExtensionsOutputDir)', 'TranslationApp.exe'))</_TranslationAppTempPath>
     </PropertyGroup>
 
     <!-- 1. Copy TranslationApp.exe from its output folder to GitExtensions folder -->
     <ItemGroup>
-      <TranslationAppPaths Include="$(_TranslationAppOutputPath)"/>
+      <TranslationAppPaths Include="D:\Development\gitextensions\artifacts\bin\TranslationApp\Debug\netcoreapp3.1\TranslationApp.*"/>
     </ItemGroup>
 
     <Copy SourceFiles="@(TranslationAppPaths)"
