@@ -210,7 +210,6 @@ namespace GitUI.CommandsDialogs
             //
             // FormSettings
             //
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(958, 646);
             this.Controls.Add(this.tableLayoutPanel3);

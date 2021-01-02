@@ -205,7 +205,6 @@
             // 
             // AppearanceFontsSettingsPage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.gbFonts);
             this.MinimumSize = new System.Drawing.Size(258, 255);

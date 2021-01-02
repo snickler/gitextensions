@@ -369,7 +369,6 @@
             // 
             // AdvancedSettingsPage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.tableLayoutPanel2);
             this.Name = "AdvancedSettingsPage";

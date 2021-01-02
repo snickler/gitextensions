@@ -80,7 +80,6 @@
             // FormQuickGitRefSelector
             // 
             this.AcceptButton = this.btnAction;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(279, 146);
             this.Controls.Add(this.lbxRefs);

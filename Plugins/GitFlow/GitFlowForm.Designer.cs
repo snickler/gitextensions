@@ -461,7 +461,6 @@
             // 
             // GitFlowForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(653, 556);
             this.Controls.Add(this.panel3);

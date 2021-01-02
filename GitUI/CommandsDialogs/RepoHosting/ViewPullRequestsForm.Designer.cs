@@ -386,7 +386,6 @@ namespace GitUI.CommandsDialogs.RepoHosting
             // 
             // ViewPullRequestsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(754, 511);
             this.Controls.Add(this.splitContainer2);

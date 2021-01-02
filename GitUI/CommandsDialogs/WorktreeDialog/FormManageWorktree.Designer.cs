@@ -166,7 +166,6 @@ namespace GitUI.CommandsDialogs.WorktreeDialog
             // 
             // FormManageWorktree
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(832, 297);
             this.Controls.Add(this.buttonPruneWorktrees);

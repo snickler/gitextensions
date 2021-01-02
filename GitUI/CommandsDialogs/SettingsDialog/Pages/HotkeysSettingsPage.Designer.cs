@@ -42,7 +42,6 @@
             // 
             // HotkeysSettingsPage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.controlHotkeys);
             this.MinimumSize = new System.Drawing.Size(670, 330);

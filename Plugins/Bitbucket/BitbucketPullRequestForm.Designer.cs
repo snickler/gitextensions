@@ -671,7 +671,6 @@
             // BitbucketPullRequestForm
             // 
             this.AcceptButton = this.btnCreate;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(820, 668);
             this.Controls.Add(this.tabControl1);

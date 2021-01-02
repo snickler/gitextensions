@@ -242,7 +242,6 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             // 
             // CommitDialogSettingsPage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.Controls.Add(this.groupBoxBehaviour);

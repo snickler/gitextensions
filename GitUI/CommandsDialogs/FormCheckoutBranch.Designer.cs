@@ -408,7 +408,6 @@ namespace GitUI.CommandsDialogs
             // FormCheckoutBranch
             // 
             this.AcceptButton = this.Ok;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(626, 260);
             this.HelpButton = true;

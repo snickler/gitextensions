@@ -563,7 +563,6 @@ namespace GitUI.CommandsDialogs
             // FormResolveConflicts
             // 
             this.AcceptButton = this.merge;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(619, 392);
             this.Controls.Add(this.tableLayoutPanel4);
