@@ -669,13 +669,13 @@ namespace GitUI.CommandsDialogs
             // 
             // MainSplitContainer.Panel1
             // 
-            this.MainSplitContainer.Panel1.Controls.Add(this.repoObjectsTree);
+            ////this.MainSplitContainer.Panel1.Controls.Add(this.repoObjectsTree);
             this.MainSplitContainer.Panel1.Padding = new System.Windows.Forms.Padding(1);
             this.MainSplitContainer.Panel1MinSize = 192;
             // 
             // MainSplitContainer.Panel2
             // 
-            this.MainSplitContainer.Panel2.Controls.Add(this.RightSplitContainer);
+            ////this.MainSplitContainer.Panel2.Controls.Add(this.RightSplitContainer);
             this.MainSplitContainer.Size = new System.Drawing.Size(923, 502);
             this.MainSplitContainer.SplitterWidth = 6;
             this.MainSplitContainer.TabIndex = 1;
@@ -700,7 +700,7 @@ namespace GitUI.CommandsDialogs
             // 
             // RightSplitContainer.Panel1
             // 
-            this.RightSplitContainer.Panel1.Controls.Add(this.RevisionsSplitContainer);
+            ////this.RightSplitContainer.Panel1.Controls.Add(this.RevisionsSplitContainer);
             // 
             // RightSplitContainer.Panel2
             // 
@@ -732,8 +732,8 @@ namespace GitUI.CommandsDialogs
             // 
             // RevisionGridContainer
             // 
-            this.RevisionGridContainer.Controls.Add(this.RevisionGrid);
-            this.RevisionGridContainer.Controls.Add(this.RevisionHeader);
+            ////this.RevisionGridContainer.Controls.Add(this.RevisionGrid);
+            ////this.RevisionGridContainer.Controls.Add(this.RevisionHeader);
             this.RevisionGridContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RevisionGridContainer.Location = new System.Drawing.Point(0, 0);
             this.RevisionGridContainer.Name = "RevisionGridContainer";

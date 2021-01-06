@@ -127,6 +127,8 @@ namespace GitUI.CommandsDialogs
         {
             InitializeComponent();
 
+            var padding0 = MainSplitContainer.Panel1.Padding; // = new System.Windows.Forms.Padding(1);
+
             new ToolStripItem[]
             {
                 translateToolStripMenuItem,
@@ -299,9 +301,14 @@ namespace GitUI.CommandsDialogs
                 RevisionGrid.InitialObjectId = selectCommit;
             }
 
+            var padding1 = MainSplitContainer.Panel1.Padding; // = new System.Windows.Forms.Padding(1);
+
             InitializeComplete();
             UpdateCommitButtonAndGetBrush(null, AppSettings.ShowGitStatusInBrowseToolbar);
             RestorePosition();
+
+            var padding2 = MainSplitContainer.Panel1.Padding;
+            MainSplitContainer.Panel1.Padding = new System.Windows.Forms.Padding(1);
 
             // Populate terminal tab after translation within InitializeComplete
             FillTerminalTab();

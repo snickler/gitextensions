@@ -99,12 +99,12 @@ namespace ResourceManager
         {
             _initialiser.InitializeComplete();
 
-            AutoScaleMode = AppSettings.EnableAutoScale
-                ? AutoScaleMode.Dpi
-                : AutoScaleMode.None;
+            ////AutoScaleMode = AppSettings.EnableAutoScale
+            ////    ? AutoScaleMode.Dpi
+            ////    : AutoScaleMode.None;
 
-            this.AdjustForDpiScaling();
-            this.EnableRemoveWordHotkey();
+            ////this.AdjustForDpiScaling();
+            ////this.EnableRemoveWordHotkey();
         }
 
         #region Translation
