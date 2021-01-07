@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using ExCSS;
-using GitCommands;
-using GitExtUtils;
+//using ExCSS;
 using GitExtUtils.GitUI.Theming;
-using Color = System.Drawing.Color;
 
 namespace GitUI.Theming
 {
@@ -21,13 +15,13 @@ namespace GitUI.Theming
         private const string ClassSelector = ".";
         private const string ColorProperty = "color";
 
-        private readonly StylesheetParser _parser;
+        ////private readonly StylesheetParser _parser;
         private readonly IThemeCssUrlResolver _urlResolver;
         private readonly IThemeFileReader _themeFileReader;
 
         public ThemeLoader(IThemeCssUrlResolver urlResolver, IThemeFileReader themeFileReader)
         {
-            _parser = new StylesheetParser();
+            ////_parser = new StylesheetParser();
             _urlResolver = urlResolver;
             _themeFileReader = themeFileReader;
         }
@@ -35,10 +29,11 @@ namespace GitUI.Theming
         public Theme LoadTheme(string themeFileName, ThemeId themeId, in IReadOnlyList<string> allowedClasses)
         {
             var themeColors = new ThemeColors();
-            LoadThemeColors(themeFileName, cssImportChain: new[] { themeFileName }, allowedClasses, themeColors);
+            ////LoadThemeColors(themeFileName, cssImportChain: new[] { themeFileName }, allowedClasses, themeColors);
             return new Theme(themeColors.AppColors, themeColors.SysColors, themeId);
         }
 
+        /*
         private void LoadThemeColors(string themeFileName, string[] cssImportChain, in IReadOnlyList<string> allowedClasses, ThemeColors themeColors)
         {
             string content = _themeFileReader.ReadThemeFile(themeFileName);
@@ -157,6 +152,8 @@ namespace GitUI.Theming
 
         private static ThemeException StyleRuleThemeException(StyleRule styleRule, string themePath)
             => new ThemeException($"Invalid CSS rule '{styleRule.Value}'", themePath);
+
+        */
 
         private class ThemeColors
         {

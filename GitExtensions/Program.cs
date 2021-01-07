@@ -43,8 +43,8 @@ namespace GitExtensions
 
             AppSettings.SetDocumentationBaseUrl(ThisAssembly.Git.Branch);
 
-            ////ThemeModule.Load();
-            ////Application.ApplicationExit += (s, e) => ThemeModule.Unload();
+            ThemeModule.Load();
+            Application.ApplicationExit += (s, e) => ThemeModule.Unload();
 
             SystemEvents.UserPreferenceChanged += (s, e) =>
             {

@@ -62,12 +62,9 @@
     <None Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Compile Remove="Theming\**" />
-    <EmbeddedResource Remove="Theming\**" />
 
     <None Remove="Resources\Icons\artwork\**" />
     <None Remove="Resources\Icons\originals\**" />
-    <None Remove="Theming\**" />
     <Content Include="Themes\*.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

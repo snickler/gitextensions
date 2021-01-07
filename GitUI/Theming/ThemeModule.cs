@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Drawing;
 using System.Reflection;
@@ -80,7 +80,7 @@ namespace GitUI.Theming
             {
                 try
                 {
-                    InstallHooks(theme);
+                    ////InstallHooks(theme);
                 }
                 catch (Exception ex)
                 {
