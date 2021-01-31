@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using GitCommands;
 using GitCommands.Config;
+using GitCommands.DiffMergeTools;
 using GitCommands.Git;
 using GitCommands.Git.Commands;
 using GitExtUtils;
@@ -153,6 +154,7 @@ namespace GitUI.CommandsDialogs
         private event Action OnStageAreaLoaded;
 
         private readonly ICommitTemplateManager _commitTemplateManager;
+        private readonly CustomDiffMergeToolProvider _customDiffMergeToolProvider;
         [CanBeNull] private readonly GitRevision _editedCommit;
         private readonly ToolStripMenuItem _addSelectionToCommitMessageToolStripMenuItem;
         private readonly AsyncLoader _unstagedLoader = new AsyncLoader();
@@ -218,6 +220,7 @@ namespace GitUI.CommandsDialogs
             Message.TextAssigned += Message_TextAssigned;
             Message.AddAutoCompleteProvider(new CommitAutoCompleteProvider(() => Module));
             _commitTemplateManager = new CommitTemplateManager(() => Module);
+            _customDiffMergeToolProvider = new CustomDiffMergeToolProvider(() => Module);
 
             SolveMergeconflicts.Font = new Font(SolveMergeconflicts.Font, FontStyle.Bold);
 
@@ -449,7 +452,7 @@ namespace GitUI.CommandsDialogs
         {
             showUntrackedFilesToolStripMenuItem.Checked = Module.EffectiveConfigFile.GetValue("status.showUntrackedFiles") != "no";
             MinimizeBox = Owner is null;
-            LoadCustomDifftools();
+            ThreadHelper.JoinableTaskFactory.RunAsync(ConfigureCustomDifftoolsAsync).FileAndForget();
             base.OnLoad(e);
         }
 
@@ -581,15 +584,15 @@ namespace GitUI.CommandsDialogs
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        public void LoadCustomDifftools()
+        private async Task ConfigureCustomDifftoolsAsync()
         {
-            List<CustomDiffMergeTool> menus = new()
-            {
-                new(openWithDifftoolToolStripMenuItem, openWithDifftoolToolStripMenuItem_Click),
-                new(stagedOpenDifftoolToolStripMenuItem9, stagedOpenDifftoolToolStripMenuItem9_Click),
-            };
+            IEnumerable<string> customDiffTools = await _customDiffMergeToolProvider.LoadAsync(isDiff: true);
 
-            CustomDiffMergeTool.LoadCustomDiffMergeTools(Module, menus, components, isDiff: true);
+            await this.SwitchToMainThreadAsync();
+            foreach (string diffTool in customDiffTools)
+            {
+                // create menus
+            }
         }
 
         private void FileViewer_TopScrollReached(object sender, EventArgs e)
