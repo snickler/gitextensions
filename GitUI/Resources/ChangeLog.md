@@ -1,9 +1,19 @@
 Changelog
 =========
 
-### Version 3.5 (14 Feb 2021)
-
 #### Changes:
+* [#9017] Push from empty FormCommit
+* [#9012] #8684 Avatars are misaligned in blame form
+* [#9006] Avoid invalid line number in DiffHighlightService
+* [#9003] FileSettingsCache: No exception if Git config is inaccessible
+* [#9001] Check BeforeCommit script failure to abort commit
+* [#8992] Include spelling dictionaries
+* [#8991] Inject current branch slug into the documentation link
+* [#8988] Improve display of exceptions 3.5
+* [#8987] #8684 Avatars are misaligned in blame form
+* [#8979] GitStatusMonitor increase minimum time between updates 3.5
+* [#8978] Submodule: Recreate tree only at structure changes 3.5
+* [#8953] RevDiff: Show worktree/index changes similar to FormCommit
 * [#8908] RevDiff: Request GitStatus updates at file manipulations 3.5
 * [#8893] Remove /en/latest from Doc links 3.5
 * [#8892] Submodule status updated too often 3.5
@@ -199,6 +209,18 @@ Changelog
 * [#6339] Add ability to Copy to Clipboard, similar to commit context menu from left panel
 
 
+[9017]:https://github.com/gitextensions/gitextensions/pull/9017
+[9012]:https://github.com/gitextensions/gitextensions/pull/9012
+[9006]:https://github.com/gitextensions/gitextensions/pull/9006
+[9003]:https://github.com/gitextensions/gitextensions/pull/9003
+[9001]:https://github.com/gitextensions/gitextensions/pull/9001
+[8992]:https://github.com/gitextensions/gitextensions/pull/8992
+[8991]:https://github.com/gitextensions/gitextensions/pull/8991
+[8988]:https://github.com/gitextensions/gitextensions/pull/8988
+[8987]:https://github.com/gitextensions/gitextensions/pull/8987
+[8979]:https://github.com/gitextensions/gitextensions/pull/8979
+[8978]:https://github.com/gitextensions/gitextensions/pull/8978
+[8953]:https://github.com/gitextensions/gitextensions/pull/8953
 [8908]:https://github.com/gitextensions/gitextensions/pull/8908
 [8893]:https://github.com/gitextensions/gitextensions/pull/8893
 [8892]:https://github.com/gitextensions/gitextensions/pull/8892
