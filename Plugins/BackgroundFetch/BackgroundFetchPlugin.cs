@@ -57,7 +57,7 @@ namespace GitExtensions.Plugins.BackgroundFetch
             RecreateObservable();
         }
 
-        private void OnPostSettings(object sender, GitUIPostActionEventArgs e)
+        private void OnPostSettings(object? sender, GitUIPostActionEventArgs e)
         {
             RecreateObservable();
         }

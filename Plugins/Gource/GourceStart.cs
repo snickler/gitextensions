@@ -54,7 +54,7 @@ namespace GitExtensions.Plugins.Gource
             }
         }
 
-        private void Button1Click(object sender, EventArgs e)
+        private void Button1Click(object? sender, EventArgs e)
         {
             if (!File.Exists(GourcePath.Text))
             {
@@ -131,7 +131,7 @@ namespace GitExtensions.Plugins.Gource
             }
         }
 
-        private void GourceBrowseClick(object sender, EventArgs e)
+        private void GourceBrowseClick(object? sender, EventArgs e)
         {
             using var fileDialog =
                 new OpenFileDialog
@@ -144,19 +144,19 @@ namespace GitExtensions.Plugins.Gource
             GourcePath.Text = fileDialog.FileName;
         }
 
-        private void WorkingDirBrowseClick(object sender, EventArgs e)
+        private void WorkingDirBrowseClick(object? sender, EventArgs e)
         {
             using var folderDialog = new FolderBrowserDialog { SelectedPath = WorkingDir.Text };
             folderDialog.ShowDialog(this);
             WorkingDir.Text = folderDialog.SelectedPath;
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkLabel1_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start(@"https://github.com/acaudwell/Gource/");
         }
 
-        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkLabel2_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start(@"https://github.com/acaudwell/Gource/blob/master/README");
         }

@@ -87,7 +87,7 @@ namespace GitExtensions.Plugins.GitImpact
             _impactLoader?.Stop();
         }
 
-        private void ImpactControl_MouseWheel(object sender, MouseEventArgs e)
+        private void ImpactControl_MouseWheel(object? sender, MouseEventArgs e)
         {
             _scrollBar.Value = Math.Min(_scrollBar.Maximum, Math.Max(_scrollBar.Minimum, _scrollBar.Value + e.Delta));
 
@@ -197,7 +197,7 @@ namespace GitExtensions.Plugins.GitImpact
             }
         }
 
-        private void OnPaint(object sender, PaintEventArgs e)
+        private void OnPaint(object? sender, PaintEventArgs e)
         {
             // White background
             e.Graphics.Clear(SystemColors.Window);
@@ -279,7 +279,7 @@ namespace GitExtensions.Plugins.GitImpact
             }
         }
 
-        private void OnResize(object sender, EventArgs e)
+        private void OnResize(object? sender, EventArgs e)
         {
             UpdatePathsAndLabels();
             UpdateScrollbar();
@@ -502,7 +502,7 @@ namespace GitExtensions.Plugins.GitImpact
             }
         }
 
-        private void OnScroll(object sender, ScrollEventArgs e)
+        private void OnScroll(object? sender, ScrollEventArgs e)
         {
             // Redraw when we've scrolled
             Invalidate();

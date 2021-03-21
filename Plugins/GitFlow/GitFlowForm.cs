@@ -39,9 +39,9 @@ namespace GitExtensions.Plugins.GitFlow
             support
         }
 
-        private static List<string> BranchTypes
+        private static string[] BranchTypes
         {
-            get { return Enum.GetValues(typeof(Branch)).Cast<object>().Select(e => e.ToString()).ToList(); }
+            get { return (string[])Enum.GetValues(typeof(Branch)); }
         }
 
         private bool IsGitFlowInitialised
@@ -162,7 +162,7 @@ namespace GitExtensions.Plugins.GitFlow
 
         private void DisplayBranchData()
         {
-            var branchType = cbManageType.SelectedValue.ToString();
+            var branchType = cbManageType.SelectedValue.ToString()!;
             var branches = Branches[branchType];
             var isThereABranch = branches.Any();
 
@@ -207,7 +207,7 @@ namespace GitExtensions.Plugins.GitFlow
         #endregion
 
         #region Run GitFlow commands
-        private void btnInit_Click(object sender, EventArgs e)
+        private void btnInit_Click(object? sender, EventArgs e)
         {
             var args = new GitArgumentBuilder("flow")
             {
@@ -220,9 +220,9 @@ namespace GitExtensions.Plugins.GitFlow
             }
         }
 
-        private void btnStartBranch_Click(object sender, EventArgs e)
+        private void btnStartBranch_Click(object? sender, EventArgs e)
         {
-            var branchType = cbType.SelectedValue.ToString();
+            var branchType = cbType.SelectedValue.ToString()!;
             var args = new GitArgumentBuilder("flow")
             {
                 branchType,
@@ -266,7 +266,7 @@ namespace GitExtensions.Plugins.GitFlow
             return " " + cbBaseBranch.SelectedValue;
         }
 
-        private void btnPublish_Click(object sender, EventArgs e)
+        private void btnPublish_Click(object? sender, EventArgs e)
         {
             var args = new GitArgumentBuilder("flow")
             {
@@ -277,7 +277,7 @@ namespace GitExtensions.Plugins.GitFlow
             RunCommand(args);
         }
 
-        private void btnPull_Click(object sender, EventArgs e)
+        private void btnPull_Click(object? sender, EventArgs e)
         {
             var args = new GitArgumentBuilder("flow")
             {
@@ -289,7 +289,7 @@ namespace GitExtensions.Plugins.GitFlow
             RunCommand(args);
         }
 
-        private void btnFinish_Click(object sender, EventArgs e)
+        private void btnFinish_Click(object? sender, EventArgs e)
         {
             var args = new GitArgumentBuilder("flow")
             {
@@ -355,13 +355,13 @@ namespace GitExtensions.Plugins.GitFlow
             ttCommandResult.SetToolTip(c, msg);
         }
 
-        private void cbType_SelectedValueChanged(object sender, EventArgs e)
+        private void cbType_SelectedValueChanged(object? sender, EventArgs e)
         {
             lblPrefixName.Text = cbType.SelectedValue + "/";
             LoadBaseBranches();
         }
 
-        private void cbManageType_SelectedValueChanged(object sender, EventArgs e)
+        private void cbManageType_SelectedValueChanged(object? sender, EventArgs e)
         {
             var branchType = cbManageType.SelectedValue.ToString();
             lblPrefixManage.Text = branchType + "/";
@@ -377,17 +377,17 @@ namespace GitExtensions.Plugins.GitFlow
         }
         #endregion
 
-        private void btnClose_Click(object sender, EventArgs e)
+        private void btnClose_Click(object? sender, EventArgs e)
         {
             Close();
         }
 
-        private void cbBasedOn_CheckedChanged(object sender, EventArgs e)
+        private void cbBasedOn_CheckedChanged(object? sender, EventArgs e)
         {
             cbBaseBranch.Enabled = cbBasedOn.Checked;
         }
 
-        private void lnkGitFlow_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void lnkGitFlow_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("https://github.com/nvie/gitflow");
         }

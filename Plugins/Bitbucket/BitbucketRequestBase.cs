@@ -79,6 +79,7 @@ namespace GitExtensions.Plugins.Bitbucket
         protected abstract string ApiUrl { get; }
         protected abstract T ParseResponse(JObject json);
 
+#nullable disable
         private static BitbucketResponse<T> ParseErrorResponse(string jsonString)
         {
             JObject json;
@@ -125,5 +126,6 @@ namespace GitExtensions.Plugins.Bitbucket
 
             return new BitbucketResponse<T> { Success = false, Messages = new[] { "Unknown error." } };
         }
+#nullable restore
     }
-}
+    }

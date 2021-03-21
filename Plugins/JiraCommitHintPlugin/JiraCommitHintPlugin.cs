@@ -71,7 +71,7 @@ namespace GitExtensions.Plugins.JiraCommitHintPlugin
             ThreadHelper.JoinableTaskFactory.RunAsync(
                 async () =>
                 {
-                    var message = await GetMessageToCommitAsync(_jira, _query, _stringTemplate);
+                    JiraTaskDTO[]? message = await GetMessageToCommitAsync(_jira, _query, _stringTemplate);
                     await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     MessageBox.Show(string.Join(Environment.NewLine, message.Select(jt => jt.Text).ToArray()), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 });
@@ -118,7 +118,7 @@ namespace GitExtensions.Plugins.JiraCommitHintPlugin
             yield return _stringTemplateSetting;
         }
 
-        private void QueryHelperLink_Click(object sender, EventArgs e)
+        private void QueryHelperLink_Click(object? sender, EventArgs e)
         {
             Validates.NotNull(_urlSettings.CustomControl);
             if (string.IsNullOrWhiteSpace(_urlSettings.CustomControl.Text))
@@ -137,7 +137,7 @@ namespace GitExtensions.Plugins.JiraCommitHintPlugin
             }
         }
 
-        private void btnPreviewClick(object sender, EventArgs eventArgs)
+        private void btnPreviewClick(object? sender, EventArgs eventArgs)
         {
             Validates.NotNull(_btnPreview);
 
@@ -212,7 +212,7 @@ namespace GitExtensions.Plugins.JiraCommitHintPlugin
             _btnPreview = null;
         }
 
-        private void gitUiCommands_PostSettings(object sender, GitUIPostActionEventArgs e)
+        private void gitUiCommands_PostSettings(object? sender, GitUIPostActionEventArgs e)
         {
             UpdateJiraSettings();
         }
@@ -226,7 +226,7 @@ namespace GitExtensions.Plugins.JiraCommitHintPlugin
             gitUiCommands.PostRepositoryChanged -= gitUiCommands_PostRepositoryChanged;
         }
 
-        private void gitUiCommands_PreCommit(object sender, GitUIEventArgs e)
+        private void gitUiCommands_PreCommit(object? sender, GitUIEventArgs e)
         {
             if (!_enabledSettings.ValueOrDefault(Settings))
             {
@@ -252,7 +252,7 @@ namespace GitExtensions.Plugins.JiraCommitHintPlugin
             });
         }
 
-        private void gitUiCommands_PostRepositoryChanged(object sender, GitUIEventArgs e)
+        private void gitUiCommands_PostRepositoryChanged(object? sender, GitUIEventArgs e)
         {
             if (!_enabledSettings.ValueOrDefault(Settings))
             {

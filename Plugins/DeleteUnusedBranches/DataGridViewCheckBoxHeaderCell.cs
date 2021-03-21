@@ -20,7 +20,7 @@ namespace GitExtensions.Plugins.DeleteUnusedBranches
                 if (_checked != value)
                 {
                     _checked = value;
-                    DataGridView.InvalidateCell(this);
+                    DataGridView!.InvalidateCell(this);
                 }
             }
         }
@@ -75,7 +75,7 @@ namespace GitExtensions.Plugins.DeleteUnusedBranches
                 if (CheckBoxClicked is not null)
                 {
                     OnCheckBoxClicked(new CheckBoxHeaderCellEventArgs(Checked));
-                    DataGridView.InvalidateCell(this);
+                    DataGridView!.InvalidateCell(this);
                 }
             }
 

@@ -34,7 +34,7 @@ namespace GitUIPluginInterfaces.UserControls
             set => passwordTextBox.Text = value;
         }
 
-        private void CredentialsControl_Load(object sender, EventArgs e)
+        private void CredentialsControl_Load(object? sender, EventArgs e)
         {
             passwordTextBox.UseSystemPasswordChar = true;
         }

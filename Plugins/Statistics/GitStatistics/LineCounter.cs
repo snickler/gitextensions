@@ -28,7 +28,7 @@ namespace GitExtensions.Plugins.GitStatistics
 
             foreach (var file in GetFiles())
             {
-                if (DirectoryIsFiltered(file.Directory, directoryFilter))
+                if (DirectoryIsFiltered(file.Directory!, directoryFilter))
                 {
                     continue;
                 }

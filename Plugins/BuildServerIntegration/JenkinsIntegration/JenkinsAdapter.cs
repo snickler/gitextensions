@@ -110,6 +110,8 @@ namespace JenkinsIntegration
             get
             {
                 Validates.NotNull(_httpClient);
+                Validates.NotNull(_httpClient.BaseAddress);
+
                 return _httpClient.BaseAddress.Host;
             }
         }
@@ -121,9 +123,10 @@ namespace JenkinsIntegration
             public IEnumerable<JToken>? JobDescription { get; set; }
         }
 
+#nullable disable
         private async Task<ResponseInfo> GetBuildInfoTaskAsync(string projectUrl, bool fullInfo, CancellationToken cancellationToken)
         {
-            string? t;
+            string t;
             long timestamp = 0;
             IEnumerable<JToken> s = Enumerable.Empty<JToken>();
 
@@ -184,6 +187,7 @@ namespace JenkinsIntegration
                 JobDescription = s
             };
         }
+#nullable restore
 
         public IObservable<BuildInfo> GetFinishedBuildsSince(IScheduler scheduler, DateTime? sinceDate = null)
         {
@@ -380,7 +384,8 @@ namespace JenkinsIntegration
 
         private const string _jenkinsTreeBuildInfo = "number,result,timestamp,url,actions[lastBuiltRevision[SHA1,branch[name]],totalCount,failCount,skipCount],building,duration";
 
-        private BuildInfo? CreateBuildInfo(JObject buildDescription)
+#nullable disable
+        private BuildInfo CreateBuildInfo(JObject buildDescription)
         {
             var idValue = buildDescription["number"].ToObject<string>();
             var statusValue = buildDescription["result"].ToObject<string>();
@@ -456,6 +461,7 @@ namespace JenkinsIntegration
             buildInfo.Description = $"#{idValue} {durationText} {testResults} {statusText}";
             return buildInfo;
         }
+#nullable restore
 
         private static DateTime TimestampToDateTime(long timestamp)
         {
@@ -500,7 +506,7 @@ namespace JenkinsIntegration
                 {
                     var httpContent = resp.Content;
 
-                    if (httpContent.Headers.ContentType.MediaType == "text/html")
+                    if (httpContent.Headers.ContentType?.MediaType == "text/html")
                     {
                         // Jenkins responds with an HTML login page when guest access is denied.
                         unauthorized = true;
@@ -558,8 +564,13 @@ namespace JenkinsIntegration
 
         private async Task<string> GetResponseAsync(string relativePath, CancellationToken cancellationToken)
         {
-            using var responseStream = await GetStreamAsync(relativePath, cancellationToken).ConfigureAwait(false);
-            using var reader = new StreamReader(responseStream);
+            using Stream? responseStream = await GetStreamAsync(relativePath, cancellationToken).ConfigureAwait(false);
+            if (responseStream is null)
+            {
+                return string.Empty;
+            }
+
+            using StreamReader? reader = new StreamReader(responseStream);
             return await reader.ReadToEndAsync();
         }
 

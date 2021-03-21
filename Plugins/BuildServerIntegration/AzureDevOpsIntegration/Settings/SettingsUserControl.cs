@@ -118,18 +118,21 @@ namespace AzureDevOpsIntegration.Settings
             }
         }
 
-        private void TextBox_TextChanged(object sender, EventArgs e)
+        private void TextBox_TextChanged(object? sender, EventArgs e)
         {
             UpdateModel();
             UpdateView();
         }
 
-        private void RestApiTokenLink_Click(object sender, EventArgs e)
+        private void RestApiTokenLink_Click(object? sender, EventArgs e)
         {
-            Process.Start(TokenManagementUrl);
+            if (TokenManagementUrl is not null)
+            {
+                Process.Start(TokenManagementUrl);
+            }
         }
 
-        private void ExtractLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void ExtractLink_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {

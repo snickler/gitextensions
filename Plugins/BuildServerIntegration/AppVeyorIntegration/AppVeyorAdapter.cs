@@ -118,6 +118,7 @@ namespace AppVeyorIntegration
                             return;
                         }
 
+#nullable disable
                         foreach (var project in JArray.Parse(result))
                         {
                             // "slug" and "name" are normally the same
@@ -125,6 +126,7 @@ namespace AppVeyorIntegration
                             var projectId = accountName.Combine("/", repoName)!;
                             projectNames.Add(projectId);
                         }
+#nullable restore
                     });
             }
 
@@ -185,7 +187,8 @@ namespace AppVeyorIntegration
             }
         }
 
-        internal IEnumerable<AppVeyorBuildInfo> ExtractBuildInfo(string projectId, string? result)
+#nullable disable
+        internal IEnumerable<AppVeyorBuildInfo> ExtractBuildInfo(string projectId, string result)
         {
             if (string.IsNullOrWhiteSpace(result))
             {
@@ -257,7 +260,7 @@ namespace AppVeyorIntegration
 
             return buildDetails;
 
-            static string? BuildPullRequetUrl(string repositoryType, string repositoryName, string pullRequestId)
+            static string BuildPullRequetUrl(string repositoryType, string repositoryName, string pullRequestId)
             {
                 return repositoryType.ToLowerInvariant() switch
                 {
@@ -270,6 +273,7 @@ namespace AppVeyorIntegration
                 };
             }
         }
+#nullable restore
 
         /// <summary>
         /// Gets a unique key which identifies this build server.
@@ -279,6 +283,7 @@ namespace AppVeyorIntegration
             get
             {
                 Validates.NotNull(_httpClientAppVeyor);
+                Validates.NotNull(_httpClientAppVeyor.BaseAddress);
                 return _httpClientAppVeyor.BaseAddress.Host;
             }
         }
@@ -362,6 +367,7 @@ namespace AppVeyorIntegration
             observer.OnNext(build);
         }
 
+#nullable disable
         private void UpdateDescription(AppVeyorBuildInfo buildDetails, CancellationToken cancellationToken)
         {
             var buildDetailsParsed = ThreadHelper.JoinableTaskFactory.Run(() => FetchBuildDetailsManagingVersionUpdateAsync(buildDetails, cancellationToken));
@@ -396,6 +402,7 @@ namespace AppVeyorIntegration
                 buildDetails.TestsResultText = testResults;
             }
         }
+#nullable restore
 
         private long GetBuildDuration(JToken buildData)
         {
@@ -409,6 +416,7 @@ namespace AppVeyorIntegration
             return (long)(updateTime.Value - startTime.Value).TotalMilliseconds;
         }
 
+#nullable disable
         private async Task<JObject> FetchBuildDetailsManagingVersionUpdateAsync(AppVeyorBuildInfo buildDetails, CancellationToken cancellationToken)
         {
             Validates.NotNull(_httpClientAppVeyor);
@@ -431,6 +439,7 @@ namespace AppVeyorIntegration
                 return JObject.Parse(await GetResponseAsync(_httpClientAppVeyor, buildDetails.AppVeyorBuildReportUrl, cancellationToken).ConfigureAwait(false));
             }
         }
+#nullable restore
 
         private static BuildInfo.BuildStatus ParseBuildStatus(string statusValue)
         {
@@ -450,7 +459,9 @@ namespace AppVeyorIntegration
 
             return httpClient.GetAsync(restServicePath, HttpCompletionOption.ResponseHeadersRead, cancellationToken)
                              .ContinueWith(
+#pragma warning disable VSTHRD003 // Avoid awaiting foreign Tasks
                                  task => GetStreamFromHttpResponseAsync(httpClient, task, restServicePath, cancellationToken),
+#pragma warning restore VSTHRD003 // Avoid awaiting foreign Tasks
                                  cancellationToken,
                                  restServicePath.Contains("github") ? TaskContinuationOptions.None : TaskContinuationOptions.AttachedToParent,
                                  TaskScheduler.Current)
@@ -468,7 +479,9 @@ namespace AppVeyorIntegration
 
             if (task.Status == TaskStatus.RanToCompletion && task.CompletedResult().IsSuccessStatusCode)
             {
-                return task.CompletedResult().Content.ReadAsStreamAsync();
+#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
+                return task.CompletedResult().Content.ReadAsStreamAsync(cancellationToken);
+#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
             }
 
             return Task.FromResult<Stream?>(null);

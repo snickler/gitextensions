@@ -36,13 +36,13 @@ namespace GitExtensions.Plugins.ReleaseNotesGenerator
             _gitLogLineParser = new GitLogLineParser();
         }
 
-        private void ReleaseNotesGeneratorForm_Load(object sender, EventArgs e)
+        private void ReleaseNotesGeneratorForm_Load(object? sender, EventArgs e)
         {
             Icon = Owner?.Icon;
             textBoxResult_TextChanged(sender, e);
         }
 
-        private void buttonGenerate_Click(object sender, EventArgs e)
+        private void buttonGenerate_Click(object? sender, EventArgs e)
         {
             textBoxResult.Text = string.Empty;
 
@@ -86,29 +86,29 @@ namespace GitExtensions.Plugins.ReleaseNotesGenerator
             textBoxResult_TextChanged(sender, e);
         }
 
-        private void textBoxResult_TextChanged(object sender, EventArgs e)
+        private void textBoxResult_TextChanged(object? sender, EventArgs e)
         {
             groupBoxCopy.Enabled = _lastGeneratedLogLines is not null && _lastGeneratedLogLines.Any();
         }
 
-        private void buttonCopyOrigOutput_Click(object sender, EventArgs e)
+        private void buttonCopyOrigOutput_Click(object? sender, EventArgs e)
         {
             ClipboardUtil.TrySetText(textBoxResult.Text);
         }
 
-        private void buttonCopyAsPlainText_Click(object sender, EventArgs e)
+        private void buttonCopyAsPlainText_Click(object? sender, EventArgs e)
         {
             string result = CreateTextTable(_lastGeneratedLogLines, true, true);
             ClipboardUtil.TrySetText(result);
         }
 
-        private void buttonCopyAsTextTableSpace_Click(object sender, EventArgs e)
+        private void buttonCopyAsTextTableSpace_Click(object? sender, EventArgs e)
         {
             string result = CreateTextTable(_lastGeneratedLogLines, true, false);
             ClipboardUtil.TrySetText(result);
         }
 
-        private void buttonCopyAsHtml_Click(object sender, EventArgs e)
+        private void buttonCopyAsHtml_Click(object? sender, EventArgs e)
         {
             string headerHtml = string.Format("<p>Commit log from '{0}' to '{1}' ({2}):</p>", textBoxRevFrom.Text, _NO_TRANSLATE_textBoxRevTo.Text, MostRecentHint);
             string tableHtml = CreateHtmlTable(_lastGeneratedLogLines);

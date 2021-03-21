@@ -140,7 +140,7 @@ namespace TeamCityIntegration
                         {
                             var response = await GetProjectFromNameXmlResponseAsync(name, CancellationToken.None).ConfigureAwait(false);
                             return from element in response.XPathSelectElements("/project/buildTypes/buildType")
-                                   select element.Attribute("id").Value;
+                                   select element.Attribute("id")!.Value;
                         }));
                     }
                 }
@@ -174,6 +174,8 @@ namespace TeamCityIntegration
             get
             {
                 Validates.NotNull(_httpClient);
+                Validates.NotNull(_httpClient.BaseAddress);
+
                 return _httpClient.BaseAddress.Host;
             }
         }
@@ -225,7 +227,7 @@ namespace TeamCityIntegration
                                                                  buildIdTask =>
                                                                  buildIdTask.CompletedResult()
                                                                             .XPathSelectElements("/builds/build")
-                                                                            .Select(x => x.Attribute("id").Value))
+                                                                            .Select(x => x.Attribute("id")!.Value))
                                                              .ToArray();
 
                                 NotifyObserverOfBuilds(buildIds, observer, cancellationToken);
@@ -234,7 +236,7 @@ namespace TeamCityIntegration
                         TaskContinuationOptions.AttachedToParent | TaskContinuationOptions.ExecuteSynchronously,
                         TaskScheduler.Current)
                     .ContinueWith(
-                        task => localObserver.OnError(task.Exception),
+                        task => localObserver.OnError(task.Exception!),
                         CancellationToken.None,
                         TaskContinuationOptions.AttachedToParent | TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnFaulted,
                         TaskScheduler.Current);
@@ -319,6 +321,7 @@ namespace TeamCityIntegration
             return false;
         }
 
+ #nullable disable
         private BuildInfo CreateBuildInfo(XDocument buildXmlDocument)
         {
             var buildXElement = buildXmlDocument.Element("build");
@@ -350,6 +353,7 @@ namespace TeamCityIntegration
             };
             return buildInfo;
         }
+#nullable restore
 
         private static BuildInfo.BuildStatus ParseBuildStatus(string statusValue)
         {
@@ -369,7 +373,9 @@ namespace TeamCityIntegration
 
             return _httpClient.GetAsync(FormatRelativePath(restServicePath), HttpCompletionOption.ResponseHeadersRead, cancellationToken)
                              .ContinueWith(
+#pragma warning disable VSTHRD003 // Avoid awaiting foreign Tasks
                                  task => GetStreamFromHttpResponseAsync(task, restServicePath, cancellationToken),
+#pragma warning restore VSTHRD003 // Avoid awaiting foreign Tasks
                                  cancellationToken,
                                  TaskContinuationOptions.AttachedToParent,
                                  TaskScheduler.Current)
@@ -393,7 +399,7 @@ namespace TeamCityIntegration
                 {
                     var httpContent = task.CompletedResult().Content;
 
-                    if (httpContent.Headers.ContentType.MediaType == "text/html")
+                    if (httpContent.Headers.ContentType?.MediaType == "text/html")
                     {
                         // TeamCity responds with an HTML login page when guest access is denied.
                         unauthorized = true;
@@ -438,6 +444,7 @@ namespace TeamCityIntegration
             try
             {
                 Validates.NotNull(_httpClient);
+                Validates.NotNull(_httpClient.BaseAddress);
                 Validates.NotNull(_httpClientHandler);
                 Validates.NotNull(HostName);
 
@@ -568,7 +575,8 @@ namespace TeamCityIntegration
             _httpClient?.Dispose();
         }
 
-        public Project? GetProjectsTree()
+ #nullable disable
+        public Project GetProjectsTree()
         {
             var projectsRootElement = ThreadHelper.JoinableTaskFactory.Run(() => GetProjectsResponseAsync(CancellationToken.None));
             var projects = projectsRootElement.Root.Elements().Where(e => (string)e.Attribute("archived") != "true").Select(e => new Project
@@ -581,7 +589,7 @@ namespace TeamCityIntegration
 
             var projectDictionary = projects.ToDictionary(p => p.Id, p => p);
 
-            Project? rootProject = null;
+            Project rootProject = null;
             foreach (var project in projects)
             {
                 if (project.ParentProject is not null)
@@ -622,6 +630,7 @@ namespace TeamCityIntegration
             };
         }
     }
+#nullable restore
 
     public class Project
     {

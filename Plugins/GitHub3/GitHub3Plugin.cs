@@ -115,12 +115,12 @@ namespace GitExtensions.Plugins.GitHub3
             yield return new PseudoSetting(manageTokenLink);
         }
 
-        private void GenerateTokenLink_Click(object sender, EventArgs e)
+        private void GenerateTokenLink_Click(object? sender, EventArgs e)
         {
             OpenLink($"https://{GitHubHost.ValueOrDefault(Instance.Settings)}/settings/tokens/new?description=Token%20for%20GitExtensions&scopes=repo,public_repo");
         }
 
-        private void ManageTokenLink_Click(object sender, EventArgs e)
+        private void ManageTokenLink_Click(object? sender, EventArgs e)
         {
             OpenLink($"https://{GitHubHost.ValueOrDefault(Instance.Settings)}/settings/tokens");
         }

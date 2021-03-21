@@ -112,7 +112,7 @@ namespace GitExtensions.Plugins.AutoCompileSubmodules
         /// <summary>
         ///   Automatically compile all solution files found in any submodule
         /// </summary>
-        private void GitUiCommandsPostUpdateSubmodules(object sender, GitUIPostActionEventArgs e)
+        private void GitUiCommandsPostUpdateSubmodules(object? sender, GitUIPostActionEventArgs e)
         {
             if (e.ActionDone && _msBuildEnabled.ValueOrDefault(Settings))
             {

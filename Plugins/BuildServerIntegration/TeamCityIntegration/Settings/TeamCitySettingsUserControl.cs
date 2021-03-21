@@ -59,12 +59,12 @@ namespace TeamCityIntegration.Settings
             }
         }
 
-        private void TeamCityBuildIdFilter_TextChanged(object sender, EventArgs e)
+        private void TeamCityBuildIdFilter_TextChanged(object? sender, EventArgs e)
         {
             labelRegexError.Visible = !BuildServerSettingsHelper.IsRegexValid(TeamCityBuildIdFilter.Text);
         }
 
-        private void buttonProjectChooser_Click(object sender, EventArgs e)
+        private void buttonProjectChooser_Click(object? sender, EventArgs e)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace TeamCityIntegration.Settings
             }
         }
 
-        private void TeamCityServerUrl_TextChanged(object sender, EventArgs e)
+        private void TeamCityServerUrl_TextChanged(object? sender, EventArgs e)
         {
             SetChooseBuildButtonState();
         }
@@ -94,7 +94,7 @@ namespace TeamCityIntegration.Settings
         }
 
         private readonly Regex _teamcityBuildUrlParameters = new(@"(\?|\&)([^=]+)\=([^&]+)");
-        private void lnkExtractDataFromBuildUrlCopiedInTheClipboard_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void lnkExtractDataFromBuildUrlCopiedInTheClipboard_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             if (Clipboard.ContainsText() && Clipboard.GetText().Contains("buildTypeId="))
             {

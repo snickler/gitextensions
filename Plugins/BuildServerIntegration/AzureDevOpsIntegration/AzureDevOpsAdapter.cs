@@ -294,7 +294,7 @@ Detail of the error:");
                 StartDate = buildDetail.StartTime ?? DateTime.MinValue,
                 Status = buildDetail.IsInProgress ? BuildInfo.BuildStatus.InProgress : MapResult(buildDetail.Result),
                 Description = duration + " " + buildDetail.BuildNumber,
-                Tooltip = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(buildDetail.IsInProgress ? buildDetail.Status : buildDetail.Result) + Environment.NewLine + duration + Environment.NewLine + buildDetail.BuildNumber,
+                Tooltip = CultureInfo.CurrentCulture.TextInfo.ToTitleCase((buildDetail.IsInProgress ? buildDetail.Status : buildDetail.Result) ?? string.Empty) + Environment.NewLine + duration + Environment.NewLine + buildDetail.BuildNumber,
                 CommitHashList = new[] { ObjectId.Parse(buildDetail.SourceVersion) },
                 Url = buildDetail._links?.Web?.Href,
                 ShowInBuildReportTab = false

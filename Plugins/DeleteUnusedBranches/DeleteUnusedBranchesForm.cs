@@ -150,7 +150,7 @@ namespace GitExtensions.Plugins.DeleteUnusedBranches
                                                             && (regex is null || regex.IsMatch(branchName) == regexMustMatch));
         }
 
-        private void Delete_Click(object sender, EventArgs e)
+        private void Delete_Click(object? sender, EventArgs e)
         {
             var selectedBranches = _branches.Where(branch => branch.Delete).ToList();
             if (selectedBranches.Count == 0)
@@ -223,7 +223,7 @@ namespace GitExtensions.Plugins.DeleteUnusedBranches
             });
         }
 
-        private void buttonSettings_Click(object sender, EventArgs e)
+        private void buttonSettings_Click(object? sender, EventArgs e)
         {
             Hide();
             Close();
@@ -231,7 +231,7 @@ namespace GitExtensions.Plugins.DeleteUnusedBranches
             _gitUiCommands.StartSettingsDialog(_gitPlugin);
         }
 
-        private void includeUnmergedBranches_CheckedChanged(object sender, EventArgs e)
+        private void includeUnmergedBranches_CheckedChanged(object? sender, EventArgs e)
         {
             ClearResults(sender, e);
 
@@ -241,7 +241,7 @@ namespace GitExtensions.Plugins.DeleteUnusedBranches
             }
         }
 
-        private void ClearResults(object sender, EventArgs e)
+        private void ClearResults(object? sender, EventArgs e)
         {
             instructionLabel.Text = string.Format(_chooseBranchesToDelete.Text, mergedIntoBranch.Text);
             lblStatus.Text = string.Format(_pressToSearch.Text, RefreshBtn.Text);
@@ -249,12 +249,12 @@ namespace GitExtensions.Plugins.DeleteUnusedBranches
             _branches.ResetBindings();
         }
 
-        private void Refresh_Click(object sender, EventArgs e)
+        private void Refresh_Click(object? sender, EventArgs e)
         {
             ThreadHelper.JoinableTaskFactory.RunAsync(() => RefreshObsoleteBranchesAsync());
         }
 
-        private void CheckBoxHeader_OnCheckBoxClicked(object sender, CheckBoxHeaderCellEventArgs e)
+        private void CheckBoxHeader_OnCheckBoxClicked(object? sender, CheckBoxHeaderCellEventArgs e)
         {
             BranchesGrid.CommitEdit(DataGridViewDataErrorContexts.Commit);
 
@@ -269,7 +269,7 @@ namespace GitExtensions.Plugins.DeleteUnusedBranches
             BranchesGrid.EndEdit();
         }
 
-        private void BranchesGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void BranchesGrid_CellContentClick(object? sender, DataGridViewCellEventArgs e)
         {
             // track only “Deleted” column, ignoring the checkbox header
             if (e.ColumnIndex != 0 || e.RowIndex == -1)

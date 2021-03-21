@@ -31,7 +31,7 @@ namespace TeamCityIntegration.Settings
             }
         }
 
-        private void TeamCityBuildChooser_Load(object sender, EventArgs e)
+        private void TeamCityBuildChooser_Load(object? sender, EventArgs e)
         {
             ReselectPreviouslySelectedBuild();
         }
@@ -64,6 +64,8 @@ namespace TeamCityIntegration.Settings
                 Tag = project,
             };
 
+            Validates.NotNull(project.SubProjects);
+
             projectNode.Nodes.AddRange(project.SubProjects.Select(ConvertProjectInTreeNode).OrderBy(p => p.Name).ToArray());
             if (projectNode.Nodes.Count == 0)
             {
@@ -78,7 +80,7 @@ namespace TeamCityIntegration.Settings
             return projectNode;
         }
 
-        private void treeViewTeamCityProjects_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+        private void treeViewTeamCityProjects_BeforeExpand(object? sender, TreeViewCancelEventArgs e)
         {
             LoadProjectBuilds(e.Node);
         }
@@ -108,12 +110,12 @@ namespace TeamCityIntegration.Settings
             }
         }
 
-        private void treeViewTeamCityProjects_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void treeViewTeamCityProjects_MouseDoubleClick(object? sender, MouseEventArgs e)
         {
             SelectBuild();
         }
 
-        private void buttonOK_Click(object sender, EventArgs e)
+        private void buttonOK_Click(object? sender, EventArgs e)
         {
             SelectBuild();
         }
@@ -133,7 +135,7 @@ namespace TeamCityIntegration.Settings
             }
         }
 
-        private void buttonCancel_Click(object sender, EventArgs e)
+        private void buttonCancel_Click(object? sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             Close();
@@ -144,7 +146,7 @@ namespace TeamCityIntegration.Settings
             return selectedNode?.Tag is Build;
         }
 
-        private void treeViewTeamCityProjects_AfterSelect(object sender, TreeViewEventArgs e)
+        private void treeViewTeamCityProjects_AfterSelect(object? sender, TreeViewEventArgs e)
         {
             buttonOK.Enabled = IsBuildSelected(e.Node);
         }

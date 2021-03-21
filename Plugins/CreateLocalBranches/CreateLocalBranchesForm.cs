@@ -18,7 +18,7 @@ namespace GitExtensions.Plugins.CreateLocalBranches
             _gitUiCommands = gitUiCommands;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object? sender, EventArgs e)
         {
             var args = new GitArgumentBuilder("branch") { "-a" };
             string[] references = _gitUiCommands.GitModule.GitExecutable.GetOutput(args)

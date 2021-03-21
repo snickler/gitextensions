@@ -30,7 +30,7 @@ namespace GitExtensions.Plugins.GitImpact
             base.OnClosed(e);
         }
 
-        private void Impact_Invalidated(object sender, InvalidateEventArgs e)
+        private void Impact_Invalidated(object? sender, InvalidateEventArgs e)
         {
             ThreadHelper.JoinableTaskFactory.Run(
                 async () =>
@@ -55,7 +55,7 @@ namespace GitExtensions.Plugins.GitImpact
             }
         }
 
-        private void Impact_MouseMove(object sender, MouseEventArgs e)
+        private void Impact_MouseMove(object? sender, MouseEventArgs e)
         {
             // Are we hovering above an author path?
             string author = Impact.GetAuthorByScreenPosition(e.X, e.Y);
@@ -68,7 +68,7 @@ namespace GitExtensions.Plugins.GitImpact
             }
         }
 
-        private void cbShowSubmodules_CheckedChanged(object sender, EventArgs e)
+        private void cbShowSubmodules_CheckedChanged(object? sender, EventArgs e)
         {
             UpdateAuthorInfo("");
             Impact.ShowSubmodules = cbIncludingSubmodules.Checked;

@@ -202,7 +202,7 @@ namespace GitExtensions.Plugins.FindLargeFiles
             }
         }
 
-        private void Delete_Click(object sender, EventArgs e)
+        private void Delete_Click(object? sender, EventArgs e)
         {
             if (MessageBox.Show(this, _areYouSureToDelete.Text, _deleteCaption.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {

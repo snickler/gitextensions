@@ -11,6 +11,7 @@ using GitUI;
 using GitUIPluginInterfaces;
 using Microsoft;
 using Microsoft.VisualStudio.Threading;
+using Newtonsoft.Json.Linq;
 using ResourceManager;
 
 namespace GitExtensions.Plugins.Bitbucket
@@ -128,6 +129,7 @@ namespace GitExtensions.Plugins.Bitbucket
                 var result = await getPullRequests.SendAsync().ConfigureAwait(false);
                 if (result.Success)
                 {
+                    Validates.NotNull(result.Result);
                     list.AddRange(result.Result);
                 }
 
@@ -135,7 +137,7 @@ namespace GitExtensions.Plugins.Bitbucket
             }
         }
 
-        private void BtnCreateClick(object sender, EventArgs e)
+        private void BtnCreateClick(object? sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -170,7 +172,7 @@ namespace GitExtensions.Plugins.Bitbucket
                 }
                 else
                 {
-                    MessageBox.Show(string.Join(Environment.NewLine, response.Messages),
+                    MessageBox.Show(string.Join(Environment.NewLine, response.Messages!),
                         _error.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             });
@@ -195,10 +197,12 @@ namespace GitExtensions.Plugins.Bitbucket
             if (result.Success)
             {
                 Validates.NotNull(result.Result);
-                foreach (var value in result.Result["values"])
+#nullable disable
+                foreach (JToken value in result.Result["values"])
                 {
                     list.Add(value["displayId"].ToString());
                 }
+#nullable restore
             }
 
             lock (_branches)
@@ -209,14 +213,14 @@ namespace GitExtensions.Plugins.Bitbucket
             return list;
         }
 
-        private void DdlRepositorySourceSelectedValueChanged(object sender, EventArgs e)
+        private void DdlRepositorySourceSelectedValueChanged(object? sender, EventArgs e)
         {
-            ThreadHelper.JoinableTaskFactory.Run(() => RefreshDDLBranchAsync(ddlBranchSource, ((ComboBox)sender).SelectedValue));
+            ThreadHelper.JoinableTaskFactory.Run(() => RefreshDDLBranchAsync(ddlBranchSource, ddlRepositorySource.SelectedValue));
         }
 
-        private void DdlRepositoryTargetSelectedValueChanged(object sender, EventArgs e)
+        private void DdlRepositoryTargetSelectedValueChanged(object? sender, EventArgs e)
         {
-            ThreadHelper.JoinableTaskFactory.Run(() => RefreshDDLBranchAsync(ddlBranchTarget, ((ComboBox)sender).SelectedValue));
+            ThreadHelper.JoinableTaskFactory.Run(() => RefreshDDLBranchAsync(ddlBranchTarget, ddlRepositoryTarget.SelectedValue));
         }
 
         private async Task RefreshDDLBranchAsync(ComboBox branchComboBox, object selectedValue)
@@ -228,7 +232,7 @@ namespace GitExtensions.Plugins.Bitbucket
             branchComboBox.DataSource = branchNames;
         }
 
-        private void DdlBranchSourceSelectedValueChanged(object sender, EventArgs e)
+        private void DdlBranchSourceSelectedValueChanged(object? sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(ddlBranchSource.SelectedValue.ToString()))
             {
@@ -238,17 +242,17 @@ namespace GitExtensions.Plugins.Bitbucket
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
                 var commit = await GetCommitInfoAsync((Repository)ddlRepositorySource.SelectedValue,
-                                                    ddlBranchSource.SelectedValue.ToString());
+                                                    ddlBranchSource.SelectedValue.ToString()!);
                 await this.SwitchToMainThreadAsync();
 
                 ddlBranchSource.Tag = commit;
                 UpdateCommitInfo(lblCommitInfoSource, commit);
-                txtTitle.Text = ddlBranchSource.SelectedValue.ToString().Replace("-", " ");
+                txtTitle.Text = ddlBranchSource.SelectedValue.ToString()!.Replace("-", " ");
                 await UpdatePullRequestDescriptionAsync();
             });
         }
 
-        private void DdlBranchTargetSelectedValueChanged(object sender, EventArgs e)
+        private void DdlBranchTargetSelectedValueChanged(object? sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(ddlBranchTarget.SelectedValue.ToString()))
             {
@@ -258,7 +262,7 @@ namespace GitExtensions.Plugins.Bitbucket
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
                 var commit = await GetCommitInfoAsync((Repository)ddlRepositoryTarget.SelectedValue,
-                                                    ddlBranchTarget.SelectedValue.ToString());
+                                                    ddlBranchTarget.SelectedValue.ToString()!);
                 await this.SwitchToMainThreadAsync();
 
                 ddlBranchTarget.Tag = commit;
@@ -334,7 +338,7 @@ namespace GitExtensions.Plugins.Bitbucket
             }
         }
 
-        private void PullRequestChanged(object sender, EventArgs e)
+        private void PullRequestChanged(object? sender, EventArgs e)
         {
             var curItem = (PullRequest)lbxPullRequests.SelectedItem;
 
@@ -354,7 +358,7 @@ namespace GitExtensions.Plugins.Bitbucket
                 _settings.BitbucketUrl, _settings.ProjectKey, _settings.RepoSlug, curItem.Id);
         }
 
-        private void BtnMergeClick(object sender, EventArgs e)
+        private void BtnMergeClick(object? sender, EventArgs e)
         {
             if (lbxPullRequests.SelectedItem is PullRequest curItem)
             {
@@ -379,13 +383,13 @@ namespace GitExtensions.Plugins.Bitbucket
                 else
                 {
                     MessageBox.Show(
-                        string.Join(Environment.NewLine, response.Messages),
+                        string.Join(Environment.NewLine, response.Messages!),
                         _error.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
-        private void BtnApproveClick(object sender, EventArgs e)
+        private void BtnApproveClick(object? sender, EventArgs e)
         {
             if (lbxPullRequests.SelectedItem is PullRequest curItem)
             {
@@ -410,17 +414,17 @@ namespace GitExtensions.Plugins.Bitbucket
                 else
                 {
                     MessageBox.Show(
-                        string.Join(Environment.NewLine, response.Messages),
+                        string.Join(Environment.NewLine, response.Messages!),
                         _error.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
-        private void textLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void textLinkLabel_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             try
             {
-                var link = ((LinkLabel)sender).Text;
+                var link = _NO_TRANSLATE_lblLinkViewPull.Text;
                 if (e.Button == MouseButtons.Right)
                 {
                     // Just copy the text

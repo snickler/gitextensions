@@ -87,17 +87,18 @@ namespace AzureDevOpsIntegration
             buildDefinitions = await HttpGetAsync<ListWrapper<BuildDefinition>>(BuildDefinitionsUrl);
 
             var tfsBuildDefinitionNameFilter = new Regex(buildDefinitionNameFilter, RegexOptions.Compiled);
-            return GetBuildDefinitionsIds(buildDefinitions.Value.Where(b => tfsBuildDefinitionNameFilter.IsMatch(b.Name)));
+            return GetBuildDefinitionsIds(buildDefinitions.Value?.Where(b => !string.IsNullOrWhiteSpace(b.Name) && tfsBuildDefinitionNameFilter.IsMatch(b.Name)));
         }
 
         private static string? GetBuildDefinitionsIds(IEnumerable<BuildDefinition>? buildDefinitions)
         {
-            if (buildDefinitions is not null && buildDefinitions.Any())
+            if (buildDefinitions is null)
             {
-                return string.Join(",", buildDefinitions.Select(b => b.Id));
+                return null;
             }
 
-            return null;
+            string result = string.Join(",", buildDefinitions.Select(b => b.Id));
+            return result.Length > 1 ? result : null;
         }
 
         /// <summary>

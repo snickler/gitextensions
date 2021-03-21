@@ -200,7 +200,7 @@ namespace GitExtensions.Plugins.GitStatistics
             }
         }
 
-        private void OnLineCounterUpdated(object sender, EventArgs e)
+        private void OnLineCounterUpdated(object? sender, EventArgs e)
         {
             Validates.NotNull(_lineCounter);
 
@@ -285,7 +285,7 @@ namespace GitExtensions.Plugins.GitStatistics
             TotalLinesOfCode2.Text = TotalLinesOfCode.Text = string.Format(_linesOfCode.Text, lineCounter.CodeLineCount);
         }
 
-        private void FormGitStatisticsShown(object sender, EventArgs e)
+        private void FormGitStatisticsShown(object? sender, EventArgs e)
         {
             Initialize();
 
@@ -296,12 +296,12 @@ namespace GitExtensions.Plugins.GitStatistics
             SizeChanged += FormGitStatisticsSizeChanged;
         }
 
-        private void TabsSelectedIndexChanged(object sender, EventArgs e)
+        private void TabsSelectedIndexChanged(object? sender, EventArgs e)
         {
             FormGitStatisticsSizeChanged(sender, EventArgs.Empty);
         }
 
-        private void FormGitStatistics_FormClosing(object sender, FormClosingEventArgs e)
+        private void FormGitStatistics_FormClosing(object? sender, FormClosingEventArgs e)
         {
             if (_lineCounter is not null)
             {

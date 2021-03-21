@@ -73,9 +73,11 @@ namespace GitExtensions.Plugins.Bitbucket
             var reviewers = new JArray();
             foreach (var reviewer in _info.Reviewers)
             {
+#nullable disable
                 var r = new JObject();
                 r["user"] = new JObject();
                 r["user"]["name"] = reviewer.Slug;
+#nullable restore
 
                 reviewers.Add(r);
             }
@@ -85,6 +87,7 @@ namespace GitExtensions.Plugins.Bitbucket
             return resource.ToString();
         }
 
+#nullable disable
         private static JObject CreatePullRequestRef(string projectKey, string repoName, string branchName)
         {
             var reference = new JObject();
@@ -94,6 +97,7 @@ namespace GitExtensions.Plugins.Bitbucket
             reference["repository"]["project"] = new JObject();
             reference["repository"]["project"]["key"] = projectKey;
             return reference;
+#nullable restore
         }
     }
 }

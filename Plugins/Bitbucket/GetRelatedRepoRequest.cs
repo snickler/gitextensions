@@ -6,6 +6,7 @@ namespace GitExtensions.Plugins.Bitbucket
 {
     internal class Repository
     {
+#nullable disable
         public static Repository Parse(JObject json)
         {
             return new Repository
@@ -16,6 +17,7 @@ namespace GitExtensions.Plugins.Bitbucket
                 ProjectKey = json["project"]["key"].ToString()
             };
         }
+#nullable restore
 
         public string? Id { get; set; }
         public string? ProjectKey { get; set; }
@@ -41,7 +43,7 @@ namespace GitExtensions.Plugins.Bitbucket
         protected override List<Repository> ParseResponse(JObject json)
         {
             var result = new List<Repository>();
-            foreach (JObject val in json["values"])
+            foreach (JObject val in json["values"]!)
             {
                 result.Add(Repository.Parse(val));
             }

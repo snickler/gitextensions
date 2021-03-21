@@ -5,6 +5,7 @@ namespace GitExtensions.Plugins.Bitbucket
 {
     internal class Commit
     {
+#nullable disable
         public static Commit Parse(JObject json)
         {
             return new Commit
@@ -15,6 +16,7 @@ namespace GitExtensions.Plugins.Bitbucket
                 IsMerge = ((JArray)json["parents"]).Count > 1
             };
         }
+#nullable restore
 
         public string? Hash { get; set; }
         public string? Message { get; set; }

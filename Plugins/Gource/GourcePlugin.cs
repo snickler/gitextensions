@@ -189,7 +189,7 @@ namespace GitExtensions.Plugins.Gource
             try
             {
                 var webClient = new WebClient { Proxy = WebRequest.DefaultWebProxy };
-                webClient.Proxy.Credentials = CredentialCache.DefaultCredentials;
+                webClient.Proxy!.Credentials = CredentialCache.DefaultCredentials;
 
                 // Once the WebResponse object has been retrieved,
                 // get the stream object associated with the response's data
@@ -238,7 +238,7 @@ namespace GitExtensions.Plugins.Gource
             try
             {
                 var webClient = new WebClient { Proxy = WebRequest.DefaultWebProxy };
-                webClient.Proxy.Credentials = CredentialCache.DefaultCredentials;
+                webClient.Proxy!.Credentials = CredentialCache.DefaultCredentials;
                 webClient.Encoding = Encoding.UTF8;
 
                 var response = webClient.DownloadString(@"https://github.com/acaudwell/Gource/releases/latest");

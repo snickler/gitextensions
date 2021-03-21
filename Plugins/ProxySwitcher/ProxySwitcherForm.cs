@@ -45,7 +45,7 @@ namespace GitExtensions.Plugins.ProxySwitcher
             _gitCommands = gitUiCommands.GitModule;
         }
 
-        private void ProxySwitcherForm_Load(object sender, EventArgs e)
+        private void ProxySwitcherForm_Load(object? sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(_plugin.HttpProxy.ValueOrDefault(_settings)))
             {
@@ -111,7 +111,7 @@ namespace GitExtensions.Plugins.ProxySwitcher
             return sb.ToString();
         }
 
-        private void SetProxy_Button_Click(object sender, EventArgs e)
+        private void SetProxy_Button_Click(object? sender, EventArgs e)
         {
             var httpProxy = BuildHttpProxy();
 
@@ -126,7 +126,7 @@ namespace GitExtensions.Plugins.ProxySwitcher
             RefreshProxy();
         }
 
-        private void UnsetProxy_Button_Click(object sender, EventArgs e)
+        private void UnsetProxy_Button_Click(object? sender, EventArgs e)
         {
             var arguments = ApplyGlobally_CheckBox.Checked
                 ? "config --global --unset http.proxy"

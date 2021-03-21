@@ -7,6 +7,7 @@ namespace GitExtensions.Plugins.Bitbucket
 {
     internal sealed class PullRequest
     {
+#nullable disable
         public static PullRequest Parse(JObject json)
         {
             var request = new PullRequest
@@ -59,6 +60,7 @@ namespace GitExtensions.Plugins.Bitbucket
 
             return request;
         }
+#nullable restore
 
         public string? Id { get; set; }
         public string? Version { get; set; }
@@ -110,7 +112,7 @@ namespace GitExtensions.Plugins.Bitbucket
         protected override List<PullRequest> ParseResponse(JObject json)
         {
             var result = new List<PullRequest>();
-            foreach (JObject val in json["values"])
+            foreach (JObject val in json["values"]!)
             {
                 result.Add(PullRequest.Parse(val));
             }
