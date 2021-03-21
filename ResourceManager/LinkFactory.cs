@@ -11,7 +11,7 @@ namespace ResourceManager
     {
         void Clear();
 
-        string CreateLink(string? caption, string uri);
+        string CreateLink(string caption, string uri);
 
         string CreateTagLink(string tag);
 
@@ -40,12 +40,12 @@ namespace ResourceManager
             _linksMap.Clear();
         }
 
-        public string CreateLink(string? caption, string uri)
+        public string CreateLink(string caption, string uri)
         {
             return AddLink(caption, uri);
         }
 
-        private string AddLink(string? caption, string uri)
+        private string AddLink(string caption, string uri)
         {
             string htmlUri = WebUtility.HtmlEncode(uri);
             string rtfLinkText = caption;

@@ -50,12 +50,12 @@ namespace ResourceManager.Xliff
         [XmlElement("target")]
         public string? Value { get; set; }
 
-        public int CompareTo(TranslationItem other)
+        public int CompareTo(TranslationItem? other)
         {
-            int val = string.Compare(Name, other.Name, StringComparison.Ordinal);
+            int val = string.Compare(Name, other?.Name, StringComparison.Ordinal);
             if (val == 0)
             {
-                val = string.Compare(Property, other.Property, StringComparison.Ordinal);
+                val = string.Compare(Property, other?.Property, StringComparison.Ordinal);
             }
 
             return val;

@@ -28,7 +28,7 @@ namespace ResourceManager.Xliff
             return text.Any(char.IsLetter);
         }
 
-        public static IEnumerable<(string name, object item)> GetObjFields(object obj, string? objName)
+        public static IEnumerable<(string name, object? item)> GetObjFields(object obj, string? objName)
         {
             if (objName is not null)
             {
@@ -68,7 +68,7 @@ namespace ResourceManager.Xliff
             AddTranslationItemsFromList(category, translation, GetObjFields(obj, "$this"));
         }
 
-        private static IEnumerable<PropertyInfo> GetItemPropertiesEnumerator(string name, object item)
+        private static IEnumerable<PropertyInfo> GetItemPropertiesEnumerator(string name, object? item)
         {
             if (item is null)
             {
@@ -102,7 +102,7 @@ namespace ResourceManager.Xliff
             }
         }
 
-        public static void AddTranslationItemsFromList(string category, ITranslation translation, IEnumerable<(string name, object item)> items)
+        public static void AddTranslationItemsFromList(string category, ITranslation translation, IEnumerable<(string name, object? item)> items)
         {
             foreach (var (itemName, itemObj) in items)
             {
@@ -141,7 +141,7 @@ namespace ResourceManager.Xliff
             }
         }
 
-        public static void TranslateItemsFromList(string category, ITranslation translation, IEnumerable<(string name, object item)> items)
+        public static void TranslateItemsFromList(string category, ITranslation translation, IEnumerable<(string name, object? item)> items)
         {
             foreach (var (itemName, itemObj) in items)
             {
@@ -151,7 +151,12 @@ namespace ResourceManager.Xliff
 
                     if (property.Name == "Items" && typeof(IList).IsAssignableFrom(property.PropertyType))
                     {
-                        var list = (IList)property.GetValue(itemObj, null);
+                        IList? list = (IList?)property.GetValue(itemObj, null);
+                        if (list is null)
+                        {
+                            continue;
+                        }
+
                         for (int index = 0; index < list.Count; index++)
                         {
                             if (list[index] is string listValue)
@@ -169,7 +174,7 @@ namespace ResourceManager.Xliff
                     }
                     else if (property.PropertyType.IsEquivalentTo(typeof(string)))
                     {
-                        string ProvideDefaultValue() => (string)property.GetValue(itemObj, null);
+                        string ProvideDefaultValue() => (string?)property.GetValue(itemObj, null) ?? string.Empty;
                         string? value = translation.TranslateItem(category, itemName, property.Name, ProvideDefaultValue);
 
                         if (!string.IsNullOrEmpty(value))
@@ -180,7 +185,7 @@ namespace ResourceManager.Xliff
                             }
                         }
                         else if (property.Name == "ToolTipText" &&
-                                 !string.IsNullOrEmpty((string)property.GetValue(itemObj, null)))
+                                 !string.IsNullOrEmpty((string?)property.GetValue(itemObj, null)))
                         {
                             value = translation.TranslateItem(category, itemName, "Text", ProvideDefaultValue);
                             if (!string.IsNullOrEmpty(value))
@@ -276,7 +281,7 @@ namespace ResourceManager.Xliff
         private static bool IsTranslatable(this Assembly assembly)
         {
             bool isInvalid = UnTranslatableDLLs.Any(
-                asm => assembly.FullName.StartsWith(asm, StringComparison.OrdinalIgnoreCase));
+                asm => assembly.FullName!.StartsWith(asm, StringComparison.OrdinalIgnoreCase));
 
             return !isInvalid;
         }

@@ -125,7 +125,7 @@ namespace ResourceManager
                 return;
             }
 
-            var itemsToTranslate = new[] { (itemName, item) };
+            IEnumerable<(string name, object? item)> itemsToTranslate = new (string name, object? item)[] { (itemName, item) };
 
             foreach (var pair in translation)
             {

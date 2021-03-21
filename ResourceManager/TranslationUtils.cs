@@ -5,7 +5,7 @@ namespace ResourceManager
 {
     public static class TranslationUtils
     {
-        public static IEnumerable<(string name, object item)> GetObjFields(object obj, string objName)
+        public static IEnumerable<(string name, object? item)> GetObjFields(object obj, string objName)
         {
             return Xliff.TranslationUtil.GetObjFields(obj, objName);
         }
@@ -23,7 +23,7 @@ namespace ResourceManager
             }
         }
 
-        public static void AddTranslationItemsFromList(string category, ITranslation translation, IEnumerable<(string name, object item)> items)
+        public static void AddTranslationItemsFromList(string category, ITranslation translation, IEnumerable<(string name, object? item)> items)
         {
             Xliff.TranslationUtil.AddTranslationItemsFromList(category, translation, items);
         }
@@ -33,7 +33,7 @@ namespace ResourceManager
             Xliff.TranslationUtil.TranslateProperty(category, obj, property, translation);
         }
 
-        public static void TranslateItemsFromList(string category, ITranslation translation, IEnumerable<(string name, object item)> items)
+        public static void TranslateItemsFromList(string category, ITranslation translation, IEnumerable<(string name, object? item)> items)
         {
             Xliff.TranslationUtil.TranslateItemsFromList(category, translation, items);
         }

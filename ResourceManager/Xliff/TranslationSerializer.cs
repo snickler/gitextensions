@@ -28,7 +28,7 @@ namespace ResourceManager.Xliff
                 stringReader = new StreamReader(path);
                 using var xmlReader = new XmlTextReader(stringReader);
                 stringReader = null;
-                return (TranslationFile)serializer.Deserialize(xmlReader);
+                return (TranslationFile?)serializer.Deserialize(xmlReader);
             }
             finally
             {

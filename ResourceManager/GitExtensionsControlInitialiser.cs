@@ -27,11 +27,11 @@ namespace ResourceManager
             _translate = control;
         }
 
-        private void LoadHandler(object control, EventArgs e)
+        private void LoadHandler(object? sender, EventArgs e)
         {
             if (!_initialiseCompleteCalled && !IsDesignModeActive)
             {
-                throw new Exception($"{control.GetType().Name} must call {nameof(InitializeComplete)} in its constructor, ideally as the final statement.");
+                throw new Exception($"{((Control)sender!).GetType().Name} must call {nameof(InitializeComplete)} in its constructor, ideally as the final statement.");
             }
         }
 
