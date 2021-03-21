@@ -218,13 +218,13 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             txtMergeToolCommand.Text = diffMergeToolConfig.FullMergeCommand;
         }
 
-        private void btnMergeToolCommandSuggest_Click(object sender, EventArgs e)
+        private void btnMergeToolCommandSuggest_Click(object? sender, EventArgs e)
             => SuggestMergeToolCommand();
 
-        private void btnDiffToolCommandSuggest_Click(object sender, EventArgs e)
+        private void btnDiffToolCommandSuggest_Click(object? sender, EventArgs e)
             => SuggestDiffToolCommand();
 
-        private void txtDiffMergeToolPath_LostFocus(object sender, EventArgs e)
+        private void txtDiffMergeToolPath_LostFocus(object? sender, EventArgs e)
         {
             if (IsLoadingSettings)
             {
@@ -244,13 +244,13 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void btnMergeToolBrowse_Click(object sender, EventArgs e)
+        private void btnMergeToolBrowse_Click(object? sender, EventArgs e)
         {
             txtMergeToolPath.Text = BrowseDiffMergeTool(_NO_TRANSLATE_cboMergeTool.Text, txtMergeToolPath.Text, DiffMergeToolType.Merge).ToPosixPath();
             SuggestMergeToolCommand();
         }
 
-        private void cboDiffTool_TextChanged(object sender, EventArgs e)
+        private void cboDiffTool_TextChanged(object? sender, EventArgs e)
         {
             var toolName = _NO_TRANSLATE_cboDiffTool.Text;
 
@@ -278,7 +278,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             txtDiffToolCommand.Text = _diffMergeToolConfigurationManager.GetToolCommand(toolName, DiffMergeToolType.Diff);
         }
 
-        private void cboMergeTool_TextChanged(object sender, EventArgs e)
+        private void cboMergeTool_TextChanged(object? sender, EventArgs e)
         {
             var toolName = _NO_TRANSLATE_cboMergeTool.Text;
 
@@ -306,18 +306,18 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             txtMergeToolCommand.Text = _diffMergeToolConfigurationManager.GetToolCommand(toolName, DiffMergeToolType.Merge);
         }
 
-        private void btnDiffToolBrowse_Click(object sender, EventArgs e)
+        private void btnDiffToolBrowse_Click(object? sender, EventArgs e)
         {
             txtDiffToolPath.Text = BrowseDiffMergeTool(_NO_TRANSLATE_cboDiffTool.Text, txtDiffToolPath.Text, DiffMergeToolType.Diff).ToPosixPath();
             SuggestDiffToolCommand();
         }
 
-        private void btnCommitTemplateBrowse_Click(object sender, EventArgs e)
+        private void btnCommitTemplateBrowse_Click(object? sender, EventArgs e)
         {
             txtCommitTemplatePath.Text = CommonLogic.SelectFile(".", "*.txt (*.txt)|*.txt", txtCommitTemplatePath.Text);
         }
 
-        private void ConfigureEncoding_Click(object sender, EventArgs e)
+        private void ConfigureEncoding_Click(object? sender, EventArgs e)
         {
             using var encodingDlg = new FormAvailableEncodings();
             if (encodingDlg.ShowDialog() == DialogResult.OK)

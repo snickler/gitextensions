@@ -269,7 +269,7 @@ namespace GitUI.HelperDialogs
             ProcessCallback(this);
         }
 
-        private void Abort_Click(object sender, EventArgs e)
+        private void Abort_Click(object? sender, EventArgs e)
         {
             try
             {
@@ -283,7 +283,7 @@ namespace GitUI.HelperDialogs
             }
         }
 
-        private void KeepDialogOpen_CheckedChanged(object sender, EventArgs e)
+        private void KeepDialogOpen_CheckedChanged(object? sender, EventArgs e)
         {
             AppSettings.CloseProcessDialog = !KeepDialogOpen.Checked;
 
@@ -295,7 +295,7 @@ namespace GitUI.HelperDialogs
             }
         }
 
-        private void Ok_Click(object sender, EventArgs e)
+        private void Ok_Click(object? sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
             Close();

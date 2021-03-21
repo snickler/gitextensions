@@ -321,7 +321,7 @@ namespace GitUI.CommandsDialogs
             return FindRenamesOpt() + findCopies;
         }
 
-        private void FileChangesSelectionChanged(object sender, EventArgs e)
+        private void FileChangesSelectionChanged(object? sender, EventArgs e)
         {
             UpdateSelectedFileViewers();
         }
@@ -430,17 +430,17 @@ namespace GitUI.CommandsDialogs
             _buildReportTabPageExtension.FillBuildReport(selectedRevisions.Count == 1 ? revision : null);
         }
 
-        private void TabControl1SelectedIndexChanged(object sender, EventArgs e)
+        private void TabControl1SelectedIndexChanged(object? sender, EventArgs e)
         {
             FileChangesSelectionChanged(sender, e);
         }
 
-        private void FileChangesDoubleClick(object sender, EventArgs e)
+        private void FileChangesDoubleClick(object? sender, EventArgs e)
         {
             FileChanges.ViewSelectedRevisions();
         }
 
-        private void OpenWithDifftoolToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenWithDifftoolToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             OpenFilesWithDiffTool(RevisionDiffKind.DiffAB, sender);
         }
@@ -464,7 +464,7 @@ namespace GitUI.CommandsDialogs
             UICommands.OpenWithDifftool(this, selectedRevisions, FileName, orgFileName, diffKind, true, customTool: toolName);
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void saveAsToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var selectedRows = FileChanges.GetSelectedRevisions();
 
@@ -503,7 +503,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void followFileHistoryToolStripMenuItem_Click(object sender, EventArgs e)
+        private void followFileHistoryToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.FollowRenamesInFileHistory = !AppSettings.FollowRenamesInFileHistory;
             UpdateFollowHistoryMenuItems();
@@ -518,22 +518,22 @@ namespace GitUI.CommandsDialogs
             followFileHistoryRenamesToolStripMenuItem.Checked = AppSettings.FollowRenamesInFileHistoryExactOnly;
         }
 
-        private void showFullHistoryToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showFullHistoryToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             ToggleFullHistoryFlag();
         }
 
-        private void fullHistoryToolStripMenuItem_Click(object sender, EventArgs e)
+        private void fullHistoryToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             ToggleFullHistoryFlag();
         }
 
-        private void simplifyMergesContextMenuItem_Click(object sender, EventArgs e)
+        private void simplifyMergesContextMenuItem_Click(object? sender, EventArgs e)
         {
             ToggleSimplifyMergesFlag();
         }
 
-        private void simplifyMergesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void simplifyMergesToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             ToggleSimplifyMergesFlag();
         }
@@ -562,7 +562,7 @@ namespace GitUI.CommandsDialogs
             LoadFileHistory();
         }
 
-        private void cherryPickThisCommitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void cherryPickThisCommitToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var selectedRevisions = FileChanges.GetSelectedRevisions();
             if (selectedRevisions.Count == 1)
@@ -571,7 +571,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void revertCommitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void revertCommitToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var selectedRevisions = FileChanges.GetSelectedRevisions();
             if (selectedRevisions.Count == 1)
@@ -580,7 +580,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FileHistoryContextMenuOpening(object sender, CancelEventArgs e)
+        private void FileHistoryContextMenuOpening(object? sender, CancelEventArgs e)
         {
             var selectedRevisions = FileChanges.GetSelectedRevisions();
 
@@ -596,29 +596,29 @@ namespace GitUI.CommandsDialogs
                 selectedRevisions.Count >= 1 && !selectedRevisions[0].IsArtificial;
         }
 
-        private void diffToolRemoteLocalStripMenuItem_Click(object sender, EventArgs e)
+        private void diffToolRemoteLocalStripMenuItem_Click(object? sender, EventArgs e)
         {
             OpenFilesWithDiffTool(RevisionDiffKind.DiffBLocal, sender);
         }
 
-        private void toolStripSplitLoad_ButtonClick(object sender, EventArgs e)
+        private void toolStripSplitLoad_ButtonClick(object? sender, EventArgs e)
         {
             LoadFileHistory();
         }
 
-        private void loadHistoryOnShowToolStripMenuItem_Click(object sender, EventArgs e)
+        private void loadHistoryOnShowToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.LoadFileHistoryOnShow = !AppSettings.LoadFileHistoryOnShow;
             loadHistoryOnShowToolStripMenuItem.Checked = AppSettings.LoadFileHistoryOnShow;
         }
 
-        private void loadBlameOnShowToolStripMenuItem_Click(object sender, EventArgs e)
+        private void loadBlameOnShowToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.LoadBlameOnShow = !AppSettings.LoadBlameOnShow;
             loadBlameOnShowToolStripMenuItem.Checked = AppSettings.LoadBlameOnShow;
         }
 
-        private void Blame_CommandClick(object sender, ResourceManager.CommandEventArgs e)
+        private void Blame_CommandClick(object? sender, ResourceManager.CommandEventArgs e)
         {
             if (e.Command == "gotocommit")
             {
@@ -647,33 +647,33 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void followFileHistoryRenamesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void followFileHistoryRenamesToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.FollowRenamesInFileHistoryExactOnly = !AppSettings.FollowRenamesInFileHistoryExactOnly;
             UpdateFollowHistoryMenuItems();
             LoadFileHistory();
         }
 
-        private void toolStripBranchFilterComboBox_Click(object sender, EventArgs e)
+        private void toolStripBranchFilterComboBox_Click(object? sender, EventArgs e)
         {
             toolStripBranchFilterComboBox.DroppedDown = true;
         }
 
-        private void ignoreWhitespaceToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ignoreWhitespaceToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.IgnoreWhitespaceOnBlame = !AppSettings.IgnoreWhitespaceOnBlame;
             ignoreWhitespaceToolStripMenuItem.Checked = AppSettings.IgnoreWhitespaceOnBlame;
             UpdateSelectedFileViewers(true);
         }
 
-        private void detectMoveAndCopyInAllFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void detectMoveAndCopyInAllFilesToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.DetectCopyInAllOnBlame = !AppSettings.DetectCopyInAllOnBlame;
             detectMoveAndCopyInAllFilesToolStripMenuItem.Checked = AppSettings.DetectCopyInAllOnBlame;
             UpdateSelectedFileViewers(true);
         }
 
-        private void detectMoveAndCopyInThisFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void detectMoveAndCopyInThisFileToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.DetectCopyInFileOnBlame = !AppSettings.DetectCopyInFileOnBlame;
             detectMoveAndCopyInThisFileToolStripMenuItem.Checked = AppSettings.DetectCopyInFileOnBlame;
@@ -698,14 +698,14 @@ namespace GitUI.CommandsDialogs
 
         #endregion
 
-        private void displayAuthorFirstToolStripMenuItem_Click(object sender, EventArgs e)
+        private void displayAuthorFirstToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.BlameDisplayAuthorFirst = !AppSettings.BlameDisplayAuthorFirst;
             displayAuthorFirstToolStripMenuItem.Checked = AppSettings.BlameDisplayAuthorFirst;
             UpdateSelectedFileViewers(true);
         }
 
-        private void showAuthorToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showAuthorToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.BlameShowAuthor = !AppSettings.BlameShowAuthor;
             showAuthorToolStripMenuItem.Checked = AppSettings.BlameShowAuthor;
@@ -719,7 +719,7 @@ namespace GitUI.CommandsDialogs
             UpdateSelectedFileViewers(true);
         }
 
-        private void showAuthorDateToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showAuthorDateToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.BlameShowAuthorDate = !AppSettings.BlameShowAuthorDate;
             showAuthorDateToolStripMenuItem.Checked = AppSettings.BlameShowAuthorDate;
@@ -735,14 +735,14 @@ namespace GitUI.CommandsDialogs
             UpdateSelectedFileViewers(true);
         }
 
-        private void showAuthorTimeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showAuthorTimeToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.BlameShowAuthorTime = !AppSettings.BlameShowAuthorTime;
             showAuthorTimeToolStripMenuItem.Checked = AppSettings.BlameShowAuthorTime;
             UpdateSelectedFileViewers(true);
         }
 
-        private void showLineNumbersToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showLineNumbersToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.BlameShowLineNumbers = !AppSettings.BlameShowLineNumbers;
             showLineNumbersToolStripMenuItem.Checked = AppSettings.BlameShowLineNumbers;
@@ -750,21 +750,21 @@ namespace GitUI.CommandsDialogs
             UpdateSelectedFileViewers(true);
         }
 
-        private void showOriginalFilePathToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showOriginalFilePathToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.BlameShowOriginalFilePath = !AppSettings.BlameShowOriginalFilePath;
             showOriginalFilePathToolStripMenuItem.Checked = AppSettings.BlameShowOriginalFilePath;
             UpdateSelectedFileViewers(true);
         }
 
-        private void showAuthorAvatarToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showAuthorAvatarToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.BlameShowAuthorAvatar = !AppSettings.BlameShowAuthorAvatar;
             showAuthorAvatarToolStripMenuItem.Checked = AppSettings.BlameShowAuthorAvatar;
             UpdateSelectedFileViewers(true);
         }
 
-        private void GitcommandLogToolStripMenuItemClick(object sender, EventArgs e)
+        private void GitcommandLogToolStripMenuItemClick(object? sender, EventArgs e)
         {
             FormGitCommandLog.ShowOrActivate(this);
         }

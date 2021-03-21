@@ -25,7 +25,7 @@ namespace GitUI.Help
         /// <summary>
         /// NOTE: will also be called if designer code calls "this.helpImageDisplayUserControl1.ShowImage2OnHover = true;"
         /// </summary>
-        private void HelpImageDisplayUserControl_Load(object sender, EventArgs e)
+        private void HelpImageDisplayUserControl_Load(object? sender, EventArgs e)
         {
             IsExpanded = LoadIsExpandedValueFromSettings(IsExpanded);
             UpdateIsExpandedState();
@@ -239,7 +239,7 @@ namespace GitUI.Help
                 : Image1;
         }
 
-        private void HelpImageDisplayUserControl_MouseEnter(object sender, EventArgs e)
+        private void HelpImageDisplayUserControl_MouseEnter(object? sender, EventArgs e)
         {
             if (IsOnHoverShowImage2)
             {
@@ -248,7 +248,7 @@ namespace GitUI.Help
             }
         }
 
-        private void HelpImageDisplayUserControl_MouseLeave(object sender, EventArgs e)
+        private void HelpImageDisplayUserControl_MouseLeave(object? sender, EventArgs e)
         {
             if (IsOnHoverShowImage2)
             {
@@ -257,17 +257,17 @@ namespace GitUI.Help
             }
         }
 
-        private void linkLabelHide_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkLabelHide_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             IsExpanded = false;
         }
 
-        private void buttonShowHelp_Click(object sender, EventArgs e)
+        private void buttonShowHelp_Click(object? sender, EventArgs e)
         {
             IsExpanded = true;
         }
 
-        private void linkLabelShowHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkLabelShowHelp_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             IsExpanded = true;
         }

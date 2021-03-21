@@ -12,13 +12,13 @@ namespace GitUI.Script
             InitializeComponent();
         }
 
-        private void btn_OK_Click(object sender, EventArgs e)
+        private void btn_OK_Click(object? sender, EventArgs e)
         {
             UserInput = txt_UserInput.Text;
             Close();
         }
 
-        private void SimplePrompt_Shown(object sender, EventArgs e)
+        private void SimplePrompt_Shown(object? sender, EventArgs e)
         {
             txt_UserInput.Focus();
         }

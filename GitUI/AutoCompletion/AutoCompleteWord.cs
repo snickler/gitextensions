@@ -34,7 +34,7 @@ namespace GitUI.AutoCompletion
             return string.Equals(Word, other.Word);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj))
             {

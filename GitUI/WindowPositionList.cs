@@ -71,7 +71,7 @@ namespace GitUI
             try
             {
                 using var stream = File.Open(ConfigFilePath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite);
-                return (WindowPositionList)_serializer.Deserialize(stream);
+                return (WindowPositionList?)_serializer.Deserialize(stream);
             }
             catch
             {

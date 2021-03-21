@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -46,14 +46,14 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Preview_Click(object sender, EventArgs e)
+        private void Preview_Click(object? sender, EventArgs e)
         {
             var cleanUpCmd = GitCommandHelpers.CleanCmd(GetCleanMode(), dryRun: true, directories: RemoveDirectories.Checked, paths: GetPathArgumentFromGui());
             string cmdOutput = FormProcess.ReadDialog(this, process: null, arguments: cleanUpCmd, Module.WorkingDir, input: null, useDialogSettings: true);
             PreviewOutput.Text = EnvUtils.ReplaceLinuxNewLinesDependingOnPlatform(cmdOutput);
         }
 
-        private void Cleanup_Click(object sender, EventArgs e)
+        private void Cleanup_Click(object? sender, EventArgs e)
         {
             if (MessageBox.Show(this, _reallyCleanupQuestion.Text, _reallyCleanupQuestionCaption.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
@@ -96,19 +96,19 @@ namespace GitUI.CommandsDialogs
             return string.Join(" ", textBoxPaths.Lines.Where(a => !string.IsNullOrEmpty(a)).Select(a => string.Format("\"{0}\"", a)));
         }
 
-        private void Close_Click(object sender, EventArgs e)
+        private void Close_Click(object? sender, EventArgs e)
         {
             Close();
         }
 
-        private void checkBoxPathFilter_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxPathFilter_CheckedChanged(object? sender, EventArgs e)
         {
             bool filterByPath = checkBoxPathFilter.Checked;
             textBoxPaths.Enabled = filterByPath;
             labelPathHint.Visible = filterByPath;
         }
 
-        private void AddPath_Click(object sender, EventArgs e)
+        private void AddPath_Click(object? sender, EventArgs e)
         {
             var dialog = new FolderBrowserDialog()
             {

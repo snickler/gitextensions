@@ -40,7 +40,7 @@ namespace GitUI.CommandsDialogs
             InitializeComplete();
         }
 
-        private void FormDeleteBranchLoad(object sender, EventArgs e)
+        private void FormDeleteBranchLoad(object? sender, EventArgs e)
         {
             Branches.BranchesToSelect = Module.GetRefs(tags: true, branches: true).Where(h => h.IsHead && !h.IsRemote).ToList();
             foreach (var branch in Module.GetMergedBranches())
@@ -61,7 +61,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void OkClick(object sender, EventArgs e)
+        private void OkClick(object? sender, EventArgs e)
         {
             try
             {

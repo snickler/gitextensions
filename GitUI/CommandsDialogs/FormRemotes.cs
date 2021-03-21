@@ -302,7 +302,7 @@ Inactive remote is completely invisible to git.");
             }
         }
 
-        private void application_Idle(object sender, EventArgs e)
+        private void application_Idle(object? sender, EventArgs e)
         {
             // we need this event only once, so unwire
             Application.Idle -= application_Idle;
@@ -333,7 +333,7 @@ Inactive remote is completely invisible to git.");
             Initialize(PreselectRemoteOnLoad, PreselectLocalOnLoad);
         }
 
-        private void btnToggleState_Click(object sender, EventArgs e)
+        private void btnToggleState_Click(object? sender, EventArgs e)
         {
             if (_selectedRemote is null)
             {
@@ -373,7 +373,7 @@ Inactive remote is completely invisible to git.");
             return true;
         }
 
-        private void SaveClick(object sender, EventArgs e)
+        private void SaveClick(object? sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(RemoteName.Text))
             {
@@ -457,13 +457,13 @@ Inactive remote is completely invisible to git.");
             }
         }
 
-        private void NewClick(object sender, EventArgs e)
+        private void NewClick(object? sender, EventArgs e)
         {
             Remotes.SelectedIndices.Clear();
             RemoteName.Focus();
         }
 
-        private void DeleteClick(object sender, EventArgs e)
+        private void DeleteClick(object? sender, EventArgs e)
         {
             if (_selectedRemote is null)
             {
@@ -493,7 +493,7 @@ Inactive remote is completely invisible to git.");
             }
         }
 
-        private void SshBrowseClick(object sender, EventArgs e)
+        private void SshBrowseClick(object? sender, EventArgs e)
         {
             using var dialog = new OpenFileDialog
             {
@@ -507,7 +507,7 @@ Inactive remote is completely invisible to git.");
             }
         }
 
-        private void LoadSshKeyClick(object sender, EventArgs e)
+        private void LoadSshKeyClick(object? sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(PuttySshKey.Text))
             {
@@ -519,7 +519,7 @@ Inactive remote is completely invisible to git.");
             }
         }
 
-        private void TestConnectionClick(object sender, EventArgs e)
+        private void TestConnectionClick(object? sender, EventArgs e)
         {
             var url = Url.Text;
 
@@ -528,7 +528,7 @@ Inactive remote is completely invisible to git.");
                 .FileAndForget();
         }
 
-        private void RemoteBranchesDataError(object sender, DataGridViewDataErrorEventArgs e)
+        private void RemoteBranchesDataError(object? sender, DataGridViewDataErrorEventArgs e)
         {
             MessageBox.Show(this,
                             string.Format(_remoteBranchDataError.Text, RemoteBranches.Rows[e.RowIndex].Cells[0].Value, RemoteBranches.Columns[e.ColumnIndex].HeaderText),
@@ -536,7 +536,7 @@ Inactive remote is completely invisible to git.");
             RemoteBranches.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "";
         }
 
-        private void RemoteBranchesSelectionChanged(object sender, EventArgs e)
+        private void RemoteBranchesSelectionChanged(object? sender, EventArgs e)
         {
             var head = GetHeadForSelectedRemoteBranch();
             if (head is null)
@@ -555,7 +555,7 @@ Inactive remote is completely invisible to git.");
             DefaultMergeWithCombo.Text = head.MergeWith;
         }
 
-        private void DefaultMergeWithComboDropDown(object sender, EventArgs e)
+        private void DefaultMergeWithComboDropDown(object? sender, EventArgs e)
         {
             var head = GetHeadForSelectedRemoteBranch();
             if (head is null)
@@ -588,7 +588,7 @@ Inactive remote is completely invisible to git.");
             }
         }
 
-        private void RemoteRepositoryComboValidated(object sender, EventArgs e)
+        private void RemoteRepositoryComboValidated(object? sender, EventArgs e)
         {
             var head = GetHeadForSelectedRemoteBranch();
             if (head is null)
@@ -599,7 +599,7 @@ Inactive remote is completely invisible to git.");
             head.TrackingRemote = RemoteRepositoryCombo.Text;
         }
 
-        private void DefaultMergeWithComboValidated(object sender, EventArgs e)
+        private void DefaultMergeWithComboValidated(object? sender, EventArgs e)
         {
             var head = GetHeadForSelectedRemoteBranch();
             if (head is null)
@@ -610,17 +610,17 @@ Inactive remote is completely invisible to git.");
             head.MergeWith = DefaultMergeWithCombo.Text;
         }
 
-        private void SaveDefaultPushPullClick(object sender, EventArgs e)
+        private void SaveDefaultPushPullClick(object? sender, EventArgs e)
         {
             Initialize();
         }
 
-        private void RemoteName_TextChanged(object sender, EventArgs e)
+        private void RemoteName_TextChanged(object? sender, EventArgs e)
         {
             Save.Enabled = RemoteName.Text.Trim().Length > 0;
         }
 
-        private void Remotes_SelectedIndexChanged(object sender, EventArgs e)
+        private void Remotes_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (Remotes.SelectedIndices.Count > 0 && _selectedRemote == Remotes.SelectedItems[0].Tag)
             {
@@ -663,12 +663,12 @@ Inactive remote is completely invisible to git.");
             flpnlRemoteManagement.Enabled = !_selectedRemote.Disabled;
         }
 
-        private void checkBoxSepPushUrl_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxSepPushUrl_CheckedChanged(object? sender, EventArgs e)
         {
             ShowSeparatePushUrl(checkBoxSepPushUrl.Checked);
         }
 
-        private void Remotes_MouseUp(object sender, MouseEventArgs e)
+        private void Remotes_MouseUp(object? sender, MouseEventArgs e)
         {
             flpnlRemoteManagement.Enabled = !_selectedRemote?.Disabled ?? true;
         }

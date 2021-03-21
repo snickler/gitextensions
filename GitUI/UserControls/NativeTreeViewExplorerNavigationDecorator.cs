@@ -35,7 +35,7 @@ namespace GitUI.UserControls
         {
         }
 
-        private void OnKeyDown(object sender, KeyEventArgs e)
+        private void OnKeyDown(object? sender, KeyEventArgs e)
         {
             // Supress the "ding" when Enter is pressed
             if (e.KeyCode == Keys.Enter)
@@ -44,7 +44,7 @@ namespace GitUI.UserControls
             }
         }
 
-        private void OnPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        private void OnPreviewKeyDown(object? sender, PreviewKeyDownEventArgs e)
         {
             if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
             {
@@ -60,7 +60,7 @@ namespace GitUI.UserControls
             }
         }
 
-        private void OnAfterSelect(object sender, TreeViewEventArgs e)
+        private void OnAfterSelect(object? sender, TreeViewEventArgs e)
         {
             // If arrow key was used to navigate to this node, don't send OnSelected
             int delta = (int)_getCurrentTime().Subtract(_lastKeyNavigateTime).TotalMilliseconds;
@@ -72,7 +72,7 @@ namespace GitUI.UserControls
             AfterSelect?.Invoke(sender, e);
         }
 
-        private void OnNodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void OnNodeMouseClick(object? sender, TreeNodeMouseClickEventArgs e)
         {
             // If selected node is clicked, make sure to force re-selection. This way, if user
             // navigates to a node by keyboard, then clicks on the same node with the mouse, it

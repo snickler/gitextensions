@@ -46,7 +46,7 @@ namespace GitUI
                 DwmApi.UseImmersiveDarkMode(Handle, true);
             }
 
-            void GitExtensionsForm_FormClosing(object sender, FormClosingEventArgs e)
+            void GitExtensionsForm_FormClosing(object? sender, FormClosingEventArgs e)
             {
                 if (!needsPositionSave)
                 {
@@ -59,7 +59,7 @@ namespace GitUI
             }
         }
 
-        public virtual void CancelButtonClick(object sender, EventArgs e)
+        public virtual void CancelButtonClick(object? sender, EventArgs e)
         {
             Close();
         }

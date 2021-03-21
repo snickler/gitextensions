@@ -254,7 +254,7 @@ Current Branch:
             }
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+        private void btnAdd_Click(object? sender, EventArgs e)
         {
             ScriptInfoProxy script = _scripts.AddNew();
             script.HotkeyCommandIdentifier = Math.Max(ScriptManager.MinimumUserScriptID, _scripts.Max(s => s.HotkeyCommandIdentifier)) + 1;
@@ -263,7 +263,7 @@ Current Branch:
             BindScripts(_scripts, script);
         }
 
-        private void btnArgumentsHelp_Click(object sender, EventArgs e)
+        private void btnArgumentsHelp_Click(object? sender, EventArgs e)
         {
             if (_argumentsCheatSheet?.Visible ?? false)
             {
@@ -280,7 +280,7 @@ Current Branch:
             _argumentsCheatSheet.Show(this);
         }
 
-        private void btnDelete_Click(object sender, EventArgs e)
+        private void btnDelete_Click(object? sender, EventArgs e)
         {
             if (SelectedScript is null)
             {
@@ -291,7 +291,7 @@ Current Branch:
             BindScripts(_scripts, null);
         }
 
-        private void btnMoveDown_Click(object sender, EventArgs e)
+        private void btnMoveDown_Click(object? sender, EventArgs e)
         {
             if (SelectedScript is null)
             {
@@ -307,7 +307,7 @@ Current Branch:
             BindScripts(_scripts, script);
         }
 
-        private void btnMoveUp_Click(object sender, EventArgs e)
+        private void btnMoveUp_Click(object? sender, EventArgs e)
         {
             if (SelectedScript is null)
             {
@@ -323,7 +323,7 @@ Current Branch:
             BindScripts(_scripts, script);
         }
 
-        private void lvScripts_ItemChecked(object sender, ItemCheckedEventArgs e)
+        private void lvScripts_ItemChecked(object? sender, ItemCheckedEventArgs e)
         {
             if (_handlingCheck)
             {
@@ -336,7 +336,7 @@ Current Branch:
             _handlingCheck = false;
         }
 
-        private void lvScripts_SelectedIndexChanged(object sender, EventArgs e)
+        private void lvScripts_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (lvScripts.SelectedItems.Count < 1 || !(lvScripts.SelectedItems[0].Tag is ScriptInfoProxy script))
             {

@@ -32,7 +32,7 @@ namespace GitUI.CommandsDialogs
             commitPickerSmallControl1.SetSelectedCommitHash(commitHash);
         }
 
-        private void OkClick(object sender, EventArgs e)
+        private void OkClick(object? sender, EventArgs e)
         {
             try
             {

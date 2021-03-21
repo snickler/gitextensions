@@ -30,7 +30,7 @@ namespace GitUI.CommandsDialogs
             Tag = tag;
         }
 
-        private void FormDeleteTagLoad(object sender, EventArgs e)
+        private void FormDeleteTagLoad(object? sender, EventArgs e)
         {
             Tags.DisplayMember = nameof(IGitRef.LocalName);
             Tags.DataSource = Module.GetRefs(tags: true, branches: false);
@@ -39,7 +39,7 @@ namespace GitUI.CommandsDialogs
             EnableOrDisableRemotesCombobox();
         }
 
-        private void OkClick(object sender, EventArgs e)
+        private void OkClick(object? sender, EventArgs e)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void deleteTag_CheckedChanged(object sender, EventArgs e)
+        private void deleteTag_CheckedChanged(object? sender, EventArgs e)
         {
             EnableOrDisableRemotesCombobox();
         }

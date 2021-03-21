@@ -155,13 +155,13 @@ namespace GitUI
             return list;
         }
 
-        private void toolStripBranches_TextUpdate(object sender, EventArgs e)
+        private void toolStripBranches_TextUpdate(object? sender, EventArgs e)
         {
             _filterBeingChanged = true;
             UpdateBranchFilterItems();
         }
 
-        private void toolStripBranches_KeyUp(object sender, KeyEventArgs e)
+        private void toolStripBranches_KeyUp(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
@@ -169,7 +169,7 @@ namespace GitUI
             }
         }
 
-        private void toolStripBranches_DropDown(object sender, EventArgs e)
+        private void toolStripBranches_DropDown(object? sender, EventArgs e)
         {
             UpdateBranchFilterItems();
         }

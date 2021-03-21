@@ -42,7 +42,7 @@ namespace GitUI.CommandsDialogs.SubmodulesDialog
             });
         }
 
-        private void BrowseClick(object sender, EventArgs e)
+        private void BrowseClick(object? sender, EventArgs e)
         {
             var userSelectedPath = OsShellUtil.PickFolder(this, Directory.Text);
 
@@ -52,7 +52,7 @@ namespace GitUI.CommandsDialogs.SubmodulesDialog
             }
         }
 
-        private void AddClick(object sender, EventArgs e)
+        private void AddClick(object? sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(Directory.Text) || string.IsNullOrEmpty(LocalPath.Text))
             {
@@ -68,17 +68,17 @@ namespace GitUI.CommandsDialogs.SubmodulesDialog
             }
         }
 
-        private void DirectorySelectedIndexChanged(object sender, EventArgs e)
+        private void DirectorySelectedIndexChanged(object? sender, EventArgs e)
         {
             DirectoryTextUpdate(this, EventArgs.Empty);
         }
 
-        private void BranchDropDown(object sender, EventArgs e)
+        private void BranchDropDown(object? sender, EventArgs e)
         {
             Branch.DataSource = LoadRemoteRepoBranches(Module.GitExecutable, url: Directory.Text);
         }
 
-        private void DirectoryTextUpdate(object sender, EventArgs e)
+        private void DirectoryTextUpdate(object? sender, EventArgs e)
         {
             string path = PathUtil.GetRepositoryName(Directory.Text);
 

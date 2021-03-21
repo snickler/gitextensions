@@ -607,9 +607,9 @@ namespace GitUI.Editor
             {
                 try
                 {
-                    var path = _fullPathResolver.Resolve(fileName);
+                    string? path = _fullPathResolver.Resolve(fileName);
 
-                    if (!File.Exists(path))
+                    if (path is null || !File.Exists(path))
                     {
                         return null;
                     }
@@ -625,11 +625,11 @@ namespace GitUI.Editor
 
             string GetFileText()
             {
-                var path = File.Exists(fileName)
+                string? path = File.Exists(fileName)
                     ? fileName
                     : _fullPathResolver.Resolve(fileName);
 
-                if (!File.Exists(path))
+                if (path is null || !File.Exists(path))
                 {
                     return $"File {path} does not exist";
                 }
@@ -1180,7 +1180,7 @@ namespace GitUI.Editor
 
         // Event handlers
 
-        private void OnUICommandsChanged(object sender, GitUICommandsChangedEventArgs? e)
+        private void OnUICommandsChanged(object? sender, GitUICommandsChangedEventArgs? e)
         {
             if (e?.OldCommands is not null)
             {
@@ -1197,7 +1197,7 @@ namespace GitUI.Editor
             Encoding = null;
         }
 
-        private void UICommands_PostSettings(object sender, GitUIPostActionEventArgs? e)
+        private void UICommands_PostSettings(object? sender, GitUIPostActionEventArgs? e)
         {
             ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
@@ -1206,7 +1206,7 @@ namespace GitUI.Editor
             }).FileAndForget();
         }
 
-        private void IgnoreWhitespaceAtEolToolStripMenuItem_Click(object sender, EventArgs e)
+        private void IgnoreWhitespaceAtEolToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (IgnoreWhitespace == IgnoreWhitespaceKind.Eol)
             {
@@ -1221,7 +1221,7 @@ namespace GitUI.Editor
             OnExtraDiffArgumentsChanged();
         }
 
-        private void IgnoreWhitespaceChangesToolStripMenuItemClick(object sender, EventArgs e)
+        private void IgnoreWhitespaceChangesToolStripMenuItemClick(object? sender, EventArgs e)
         {
             if (IgnoreWhitespace == IgnoreWhitespaceKind.Change)
             {
@@ -1236,14 +1236,14 @@ namespace GitUI.Editor
             OnExtraDiffArgumentsChanged();
         }
 
-        private void IncreaseNumberOfLinesToolStripMenuItemClick(object sender, EventArgs e)
+        private void IncreaseNumberOfLinesToolStripMenuItemClick(object? sender, EventArgs e)
         {
             NumberOfContextLines++;
             AppSettings.NumberOfContextLines = NumberOfContextLines;
             OnExtraDiffArgumentsChanged();
         }
 
-        private void DecreaseNumberOfLinesToolStripMenuItemClick(object sender, EventArgs e)
+        private void DecreaseNumberOfLinesToolStripMenuItemClick(object? sender, EventArgs e)
         {
             if (NumberOfContextLines > 0)
             {
@@ -1258,7 +1258,7 @@ namespace GitUI.Editor
             OnExtraDiffArgumentsChanged();
         }
 
-        private void ShowSyntaxHighlighting_Click(object sender, System.EventArgs e)
+        private void ShowSyntaxHighlighting_Click(object? sender, System.EventArgs e)
         {
             ShowSyntaxHighlightingInDiff = !ShowSyntaxHighlightingInDiff;
             showSyntaxHighlighting.Checked = ShowSyntaxHighlightingInDiff;
@@ -1266,7 +1266,7 @@ namespace GitUI.Editor
             OnExtraDiffArgumentsChanged();
         }
 
-        private void ShowEntireFileToolStripMenuItemClick(object sender, EventArgs e)
+        private void ShowEntireFileToolStripMenuItemClick(object? sender, EventArgs e)
         {
             ShowEntireFile = !ShowEntireFile;
             showEntireFileButton.Checked = ShowEntireFile;
@@ -1276,19 +1276,19 @@ namespace GitUI.Editor
             OnExtraDiffArgumentsChanged();
         }
 
-        private void _continuousScrollEventManager_BottomScrollReached(object sender, EventArgs e)
+        private void _continuousScrollEventManager_BottomScrollReached(object? sender, EventArgs e)
             => BottomScrollReached?.Invoke(sender, e);
 
-        private void _continuousScrollEventManager_TopScrollReached(object sender, EventArgs e)
+        private void _continuousScrollEventManager_TopScrollReached(object? sender, EventArgs e)
             => TopScrollReached?.Invoke(sender, e);
 
-        private void llShowPreview_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void llShowPreview_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             _NO_TRANSLATE_lblShowPreview.Hide();
             ThreadHelper.JoinableTaskFactory.Run(() => _deferShowFunc?.Invoke() ?? Task.CompletedTask);
         }
 
-        private void PictureBox_MouseWheel(object sender, MouseEventArgs e)
+        private void PictureBox_MouseWheel(object? sender, MouseEventArgs e)
         {
             var isScrollingTowardTop = e.Delta > 0;
             var isScrollingTowardBottom = e.Delta < 0;
@@ -1304,25 +1304,25 @@ namespace GitUI.Editor
             }
         }
 
-        private void OnUICommandsSourceSet(object sender, GitUICommandsSourceEventArgs e)
+        private void OnUICommandsSourceSet(object? sender, GitUICommandsSourceEventArgs e)
         {
             UICommandsSource.UICommandsChanged += OnUICommandsChanged;
             OnUICommandsChanged(UICommandsSource, null);
         }
 
-        private void TreatAllFilesAsTextToolStripMenuItemClick(object sender, EventArgs e)
+        private void TreatAllFilesAsTextToolStripMenuItemClick(object? sender, EventArgs e)
         {
             treatAllFilesAsTextToolStripMenuItem.Checked = !treatAllFilesAsTextToolStripMenuItem.Checked;
             TreatAllFilesAsText = treatAllFilesAsTextToolStripMenuItem.Checked;
             OnExtraDiffArgumentsChanged();
         }
 
-        private void settingsButton_Click(object sender, EventArgs e)
+        private void settingsButton_Click(object? sender, EventArgs e)
         {
             UICommands.StartSettingsDialog(ParentForm, DiffViewerSettingsPage.GetPageReference());
         }
 
-        private void IgnoreAllWhitespaceChangesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void IgnoreAllWhitespaceChangesToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (IgnoreWhitespace == IgnoreWhitespaceKind.AllSpace)
             {
@@ -1337,17 +1337,17 @@ namespace GitUI.Editor
             OnExtraDiffArgumentsChanged();
         }
 
-        private void stageSelectedLinesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void stageSelectedLinesToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             StageSelectedLines();
         }
 
-        private void unstageSelectedLinesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void unstageSelectedLinesToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             UnstageSelectedLines();
         }
 
-        private void resetSelectedLinesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void resetSelectedLinesToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             ResetSelectedLines();
         }
@@ -1609,7 +1609,7 @@ namespace GitUI.Editor
         /// </summary>
         /// <param name="sender">sender object.</param>
         /// <param name="e">event args.</param>
-        private void CopyToolStripMenuItemClick(object sender, EventArgs e)
+        private void CopyToolStripMenuItemClick(object? sender, EventArgs e)
         {
             string code = internalFileViewer.GetSelectedText();
 
@@ -1667,7 +1667,7 @@ namespace GitUI.Editor
         /// </summary>
         /// <param name="sender">sender object.</param>
         /// <param name="e">event args.</param>
-        private void CopyPatchToolStripMenuItemClick(object sender, EventArgs e)
+        private void CopyPatchToolStripMenuItemClick(object? sender, EventArgs e)
         {
             var selectedText = internalFileViewer.GetSelectedText();
 
@@ -1685,12 +1685,12 @@ namespace GitUI.Editor
             }
         }
 
-        private void copyNewVersionToolStripMenuItem_Click(object sender, EventArgs e)
+        private void copyNewVersionToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             CopyNotStartingWith('-');
         }
 
-        private void copyOldVersionToolStripMenuItem_Click(object sender, EventArgs e)
+        private void copyOldVersionToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             CopyNotStartingWith('+');
         }
@@ -1702,7 +1702,7 @@ namespace GitUI.Editor
         /// </summary>
         /// <param name="sender">sender object.</param>
         /// <param name="e">event args.</param>
-        private void NextChangeButtonClick(object sender, EventArgs e)
+        private void NextChangeButtonClick(object? sender, EventArgs e)
         {
             Focus();
 
@@ -1741,7 +1741,7 @@ namespace GitUI.Editor
             ////TextEditor.ActiveTextAreaControl.TextArea.TextView.FirstVisibleLine = totalNumberOfLines - TextEditor.ActiveTextAreaControl.TextArea.TextView.VisibleLineCount;
         }
 
-        private void PreviousChangeButtonClick(object sender, EventArgs e)
+        private void PreviousChangeButtonClick(object? sender, EventArgs e)
         {
             Focus();
 
@@ -1798,13 +1798,13 @@ namespace GitUI.Editor
             ////TextEditor.ActiveTextAreaControl.TextArea.TextView.FirstVisibleLine = 0;
         }
 
-        private void ContinuousScrollToolStripMenuItemClick(object sender, EventArgs e)
+        private void ContinuousScrollToolStripMenuItemClick(object? sender, EventArgs e)
         {
             automaticContinuousScrollToolStripMenuItem.Checked = !automaticContinuousScrollToolStripMenuItem.Checked;
             AppSettings.AutomaticContinuousScroll = automaticContinuousScrollToolStripMenuItem.Checked;
         }
 
-        private void ShowNonprintableCharactersToolStripMenuItemClick(object sender, EventArgs e)
+        private void ShowNonprintableCharactersToolStripMenuItemClick(object? sender, EventArgs e)
         {
             showNonprintableCharactersToolStripMenuItem.Checked = !showNonprintableCharactersToolStripMenuItem.Checked;
             showNonPrintChars.Checked = showNonprintableCharactersToolStripMenuItem.Checked;
@@ -1813,12 +1813,12 @@ namespace GitUI.Editor
             AppSettings.ShowNonPrintingChars = showNonPrintChars.Checked;
         }
 
-        private void FindToolStripMenuItemClick(object sender, EventArgs e)
+        private void FindToolStripMenuItemClick(object? sender, EventArgs e)
         {
             internalFileViewer.Find();
         }
 
-        private void encodingToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void encodingToolStripComboBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
             Encoding encod;
             if (string.IsNullOrEmpty(encodingToolStripComboBox.Text))
@@ -1843,7 +1843,7 @@ namespace GitUI.Editor
             }
         }
 
-        private void fileviewerToolbar_VisibleChanged(object sender, EventArgs e)
+        private void fileviewerToolbar_VisibleChanged(object? sender, EventArgs e)
         {
             if (fileviewerToolbar.Visible)
             {
@@ -1854,7 +1854,7 @@ namespace GitUI.Editor
             }
         }
 
-        private void goToLineToolStripMenuItem_Click(object sender, EventArgs e)
+        private void goToLineToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             using var formGoToLine = new FormGoToLine();
             formGoToLine.SetMaxLineNumber(internalFileViewer.MaxLineNumber);
@@ -1957,9 +1957,9 @@ namespace GitUI.Editor
             public ToolStripButton IgnoreAllWhitespacesButton => _fileViewer.ignoreAllWhitespaces;
             public ToolStripMenuItem IgnoreAllWhitespacesMenuItem => _fileViewer.ignoreAllWhitespaceChangesToolStripMenuItem;
 
-            internal void IgnoreWhitespaceAtEolToolStripMenuItem_Click(object sender, EventArgs e) => _fileViewer.IgnoreWhitespaceAtEolToolStripMenuItem_Click(sender, e);
-            internal void IgnoreWhitespaceChangesToolStripMenuItemClick(object sender, EventArgs e) => _fileViewer.IgnoreWhitespaceChangesToolStripMenuItemClick(sender, e);
-            internal void IgnoreAllWhitespaceChangesToolStripMenuItem_Click(object sender, EventArgs e) => _fileViewer.IgnoreAllWhitespaceChangesToolStripMenuItem_Click(sender, e);
+            internal void IgnoreWhitespaceAtEolToolStripMenuItem_Click(object? sender, EventArgs e) => _fileViewer.IgnoreWhitespaceAtEolToolStripMenuItem_Click(sender, e);
+            internal void IgnoreWhitespaceChangesToolStripMenuItemClick(object? sender, EventArgs e) => _fileViewer.IgnoreWhitespaceChangesToolStripMenuItemClick(sender, e);
+            internal void IgnoreAllWhitespaceChangesToolStripMenuItem_Click(object? sender, EventArgs e) => _fileViewer.IgnoreAllWhitespaceChangesToolStripMenuItem_Click(sender, e);
 
             public void ViewPatch(string? fileName,
                 string text,

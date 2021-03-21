@@ -507,13 +507,13 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             ShowRecentRepositories();
         }
 
-        private void contextMenuStrip_Closed(object sender, ToolStripDropDownClosedEventArgs e)
+        private void contextMenuStrip_Closed(object? sender, ToolStripDropDownClosedEventArgs e)
         {
             _rightClickedItem = null;
             ShowRecentRepositories();
         }
 
-        private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
+        private void contextMenuStrip_Opening(object? sender, CancelEventArgs e)
         {
             var selected = GetSelectedRepository();
 
@@ -537,7 +537,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             contextMenuStripRepository.Tag = new SelectedRepositoryItem(isFavourite: _rightClickedItem.Group != _lvgRecentRepositories, repository: selected);
         }
 
-        private void listView1_DrawItem(object sender, DrawListViewItemEventArgs e)
+        private void listView1_DrawItem(object? sender, DrawListViewItemEventArgs e)
         {
             var spacing1 = DpiUtil.Scale(1f);
             var spacing2 = DpiUtil.Scale(2f);
@@ -598,7 +598,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             }
         }
 
-        private void listView1_MouseClick(object sender, MouseEventArgs e)
+        private void listView1_MouseClick(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -614,7 +614,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             }
         }
 
-        private void listView1_GroupMouseUp(object sender, ListViewGroupMouseEventArgs e)
+        private void listView1_GroupMouseUp(object? sender, ListViewGroupMouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
@@ -635,17 +635,17 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             }
         }
 
-        private void listView1_MouseMove(object sender, MouseEventArgs e)
+        private void listView1_MouseMove(object? sender, MouseEventArgs e)
         {
             HoveredItem = listView1.GetItemAt(e.X, e.Y);
         }
 
-        private void listView1_MouseLeave(object sender, EventArgs e)
+        private void listView1_MouseLeave(object? sender, EventArgs e)
         {
             HoveredItem = null;
         }
 
-        private void mnuConfigure_Click(object sender, EventArgs e)
+        private void mnuConfigure_Click(object? sender, EventArgs e)
         {
             using var frm = new FormRecentReposSettings();
             var result = frm.ShowDialog(this);
@@ -655,7 +655,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             }
         }
 
-        private void RecentRepositoriesList_Load(object sender, EventArgs e)
+        private void RecentRepositoriesList_Load(object? sender, EventArgs e)
         {
             if (!(Parent.FindForm() is FormBrowse form))
             {
@@ -669,7 +669,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             dashboardMenu?.DropDownItems.AddRange(menus);
         }
 
-        private void tsmiCategories_DropDownOpening(object sender, EventArgs e)
+        private void tsmiCategories_DropDownOpening(object? sender, EventArgs e)
         {
             if (sender != tsmiCategories)
             {
@@ -709,7 +709,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             });
         }
 
-        private void tsmiCategory_Click(object sender, EventArgs e)
+        private void tsmiCategory_Click(object? sender, EventArgs e)
         {
             var selectedRepositoryItem = GetSelectedRepositoryItem((sender as ToolStripMenuItem)?.OwnerItem);
             if (selectedRepositoryItem is null)
@@ -722,7 +722,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             ShowRecentRepositories();
         }
 
-        private void tsmiCategoryAdd_Click(object sender, EventArgs e)
+        private void tsmiCategoryAdd_Click(object? sender, EventArgs e)
         {
             RepositoryContextAction((sender as ToolStripMenuItem)?.OwnerItem, selectedRepositoryItem =>
             {
@@ -734,10 +734,10 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             });
         }
 
-        private void tsmiOpenFolder_Click(object sender, EventArgs e)
+        private void tsmiOpenFolder_Click(object? sender, EventArgs e)
             => RepositoryContextAction(sender as ToolStripMenuItem, selectedRepositoryItem => OsShellUtil.OpenWithFileExplorer(selectedRepositoryItem.Repository.Path));
 
-        private void tsmiRemoveFromList_Click(object sender, EventArgs e)
+        private void tsmiRemoveFromList_Click(object? sender, EventArgs e)
         {
             RepositoryContextAction(sender as ToolStripMenuItem, selectedRepositoryItem =>
             {
@@ -759,7 +759,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             });
         }
 
-        private void tsmiRemoveMissingReposFromList_Click(object sender, EventArgs e)
+        private void tsmiRemoveMissingReposFromList_Click(object? sender, EventArgs e)
         {
             RepositoryContextAction(sender as ToolStripMenuItem, selectedRepositoryItem =>
             {
@@ -768,7 +768,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             });
         }
 
-        private void tsmiCategoryRename_Click(object sender, EventArgs e)
+        private void tsmiCategoryRename_Click(object? sender, EventArgs e)
         {
             var categoryGroup = (ListViewGroup)contextMenuStripCategory.Tag;
             string originalName = categoryGroup.Name;
@@ -782,7 +782,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             }
         }
 
-        private void tsmiCategoryDelete_Click(object sender, EventArgs e)
+        private void tsmiCategoryDelete_Click(object? sender, EventArgs e)
         {
             var categoryGroup = (ListViewGroup)contextMenuStripCategory.Tag;
             string name = categoryGroup.Name;
@@ -796,7 +796,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             UpdateCategoryName(name, null);
         }
 
-        private void tsmiCategoryClear_Click(object sender, EventArgs e)
+        private void tsmiCategoryClear_Click(object? sender, EventArgs e)
         {
             var repositories = GetRepositories().ToList();
             string question = string.Format(_clearRecentCategoryQuestion.Text, repositories.Count);
@@ -814,7 +814,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             ShowRecentRepositories();
         }
 
-        private void OnDragDrop(object sender, DragEventArgs e)
+        private void OnDragDrop(object? sender, DragEventArgs e)
         {
             if (e.Data.GetData(DataFormats.FileDrop) is string[] fileNameArray)
             {
@@ -841,7 +841,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             }
         }
 
-        private void OnDragEnter(object sender, DragEventArgs e)
+        private void OnDragEnter(object? sender, DragEventArgs e)
         {
             if (e.Data.GetData(DataFormats.FileDrop) is string[] fileNameArray)
             {

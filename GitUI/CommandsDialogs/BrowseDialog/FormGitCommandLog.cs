@@ -63,7 +63,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
                     });
             }
 
-            void OnCachedCommandsLogChanged(object sender, EventArgs e)
+            void OnCachedCommandsLogChanged(object? sender, EventArgs e)
             {
                 ThreadHelper.JoinableTaskFactory.RunAsync(
                     async () =>
@@ -126,7 +126,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             }
         }
 
-        private void CommandCacheItems_SelectedIndexChanged(object sender, EventArgs e)
+        private void CommandCacheItems_SelectedIndexChanged(object? sender, EventArgs e)
         {
             var command = (string)CommandCacheItems.SelectedItem;
 
@@ -144,26 +144,26 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             }
         }
 
-        private void LogItems_SelectedIndexChanged(object sender, EventArgs e)
+        private void LogItems_SelectedIndexChanged(object? sender, EventArgs e)
         {
             var entry = (CommandLogEntry)LogItems.SelectedItem;
 
             LogOutput.Text = entry.Detail;
         }
 
-        private void TabControl_SelectedIndexChanged(object sender, EventArgs e)
+        private void TabControl_SelectedIndexChanged(object? sender, EventArgs e)
         {
             RefreshLogItems();
             RefreshCommandCacheItems();
         }
 
-        private void alwaysOnTopCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void alwaysOnTopCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
             TopMost = !TopMost;
             chkAlwaysOnTop.Checked = TopMost;
         }
 
-        private void mnuSaveToFile_Click(object sender, EventArgs e)
+        private void mnuSaveToFile_Click(object? sender, EventArgs e)
         {
             using var fileDialog = new SaveFileDialog
             {
@@ -183,7 +183,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             }
         }
 
-        private void mnuClear_Click(object sender, EventArgs e)
+        private void mnuClear_Click(object? sender, EventArgs e)
         {
             CommandLog.Clear();
         }

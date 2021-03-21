@@ -91,7 +91,7 @@ namespace GitUI.UserControls.RevisionGrid
             return gitRevisions.Select(extractRevisionText).Distinct().ToArray();
         }
 
-        private void OnDropDownOpening(object sender, EventArgs e)
+        private void OnDropDownOpening(object? sender, EventArgs e)
         {
             var revisions = _revisionFunc?.Invoke();
             if (revisions is null || revisions.Count == 0)

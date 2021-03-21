@@ -17,29 +17,29 @@ namespace GitUI.UserControls.RevisionGrid
             _maxRevisionGraphCommitsDefaultValue = AppSettings.MaxRevisionGraphCommits;
         }
 
-        private void FormRevisionFilterLoad(object sender, EventArgs e)
+        private void FormRevisionFilterLoad(object? sender, EventArgs e)
         {
             EnableFilters();
         }
 
-        private void SinceCheckCheckedChanged(object sender, EventArgs e)
+        private void SinceCheckCheckedChanged(object? sender, EventArgs e)
         {
             EnableFilters();
         }
 
-        private void OnBranchFilterCheckedChanged(object sender, EventArgs e)
+        private void OnBranchFilterCheckedChanged(object? sender, EventArgs e)
         {
             AppSettings.BranchFilterEnabled = BranchFilterCheck.Checked;
             EnableFilters();
         }
 
-        private void OnShowCurrentBranchOnlyCheckedChanged(object sender, EventArgs e)
+        private void OnShowCurrentBranchOnlyCheckedChanged(object? sender, EventArgs e)
         {
             AppSettings.ShowCurrentBranchOnly = CurrentBranchOnlyCheck.Checked;
             EnableFilters();
         }
 
-        private void OnSimplifyByDecorationCheckedChanged(object sender, EventArgs e)
+        private void OnSimplifyByDecorationCheckedChanged(object? sender, EventArgs e)
         {
             AppSettings.ShowSimplifyByDecoration = SimplifyByDecorationCheck.Checked;
             EnableFilters();
@@ -190,7 +190,7 @@ namespace GitUI.UserControls.RevisionGrid
             BranchFilter.Text = filter?.Trim();
         }
 
-        private void OkClick(object sender, EventArgs e)
+        private void OkClick(object? sender, EventArgs e)
         {
             Close();
         }

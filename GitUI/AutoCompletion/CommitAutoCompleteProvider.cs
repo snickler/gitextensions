@@ -47,7 +47,7 @@ namespace GitUI.AutoCompletion
                 if (regex is not null)
                 {
                     // HACK: need to expose require methods at IGitModule level
-                    var text = await GetChangedFileTextAsync((GitModule)module, file);
+                    string? text = await GetChangedFileTextAsync((GitModule)module, file);
                     var matches = regex.Matches(text);
                     foreach (Match match in matches)
                     {
@@ -98,10 +98,9 @@ namespace GitUI.AutoCompletion
             Validates.NotNull(appDataPath);
 
             var path = PathUtil.Combine(appDataPath, "AutoCompleteRegexes.txt");
-
             if (File.Exists(path))
             {
-                return File.ReadLines(path);
+                return File.ReadLines(path!);
             }
 
             var entryAssembly = Assembly.GetEntryAssembly();
@@ -147,7 +146,7 @@ namespace GitUI.AutoCompletion
             return regexes;
         }
 
-        private static async Task<string?> GetChangedFileTextAsync(GitModule module, GitItemStatus file)
+        private static async Task<string> GetChangedFileTextAsync(GitModule module, GitItemStatus file)
         {
             if (file.IsTracked)
             {
@@ -156,10 +155,11 @@ namespace GitUI.AutoCompletion
 
                 if (changes is not null)
                 {
-                    return changes.Text;
+                    return changes.Text ?? string.Empty;
                 }
 
-                var content = await module.GetFileContentsAsync(file).ConfigureAwaitRunInline();
+                string? content = await module.GetFileContentsAsync(file).ConfigureAwaitRunInline();
+
                 if (content is not null)
                 {
                     return content;
@@ -174,7 +174,7 @@ namespace GitUI.AutoCompletion
             }
             catch
             {
-                return "";
+                return string.Empty;
             }
         }
     }

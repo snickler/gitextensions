@@ -64,7 +64,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void AddToIgnoreClick(object sender, EventArgs e)
+        private void AddToIgnoreClick(object? sender, EventArgs e)
         {
             var patterns = GetCurrentPatterns().ToArray();
             if (patterns.Length == 0)
@@ -117,7 +117,7 @@ namespace GitUI.CommandsDialogs
             return FilePattern.Lines.Where(line => !string.IsNullOrEmpty(line));
         }
 
-        private void FilePattern_TextChanged(object sender, EventArgs e)
+        private void FilePattern_TextChanged(object? sender, EventArgs e)
         {
             _ignoredFilesLoader.Cancel();
             if (_NO_TRANSLATE_Preview.Enabled)

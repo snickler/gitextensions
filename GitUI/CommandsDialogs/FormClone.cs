@@ -193,7 +193,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void OkClick(object sender, EventArgs e)
+        private void OkClick(object? sender, EventArgs e)
         {
             try
             {
@@ -308,7 +308,7 @@ namespace GitUI.CommandsDialogs
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
         }
 
-        private void FromBrowseClick(object sender, EventArgs e)
+        private void FromBrowseClick(object? sender, EventArgs e)
         {
             var userSelectedPath = OsShellUtil.PickFolder(this, _NO_TRANSLATE_From.Text);
 
@@ -320,7 +320,7 @@ namespace GitUI.CommandsDialogs
             FromTextUpdate(sender, e);
         }
 
-        private void ToBrowseClick(object sender, EventArgs e)
+        private void ToBrowseClick(object? sender, EventArgs e)
         {
             var userSelectedPath = OsShellUtil.PickFolder(this, _NO_TRANSLATE_To.Text);
 
@@ -332,12 +332,12 @@ namespace GitUI.CommandsDialogs
             ToTextUpdate(sender, e);
         }
 
-        private void LoadSshKeyClick(object sender, EventArgs e)
+        private void LoadSshKeyClick(object? sender, EventArgs e)
         {
             _puttySshKey = BrowseForPrivateKey.BrowseAndLoad(this);
         }
 
-        private void FormCloneLoad(object sender, EventArgs e)
+        private void FormCloneLoad(object? sender, EventArgs e)
         {
             if (!GitSshHelpers.Plink())
             {
@@ -345,12 +345,12 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FromSelectedIndexChanged(object sender, EventArgs e)
+        private void FromSelectedIndexChanged(object? sender, EventArgs e)
         {
             FromTextUpdate(sender, e);
         }
 
-        private void FromTextUpdate(object sender, EventArgs e)
+        private void FromTextUpdate(object? sender, EventArgs e)
         {
             string path = PathUtil.GetRepositoryName(_NO_TRANSLATE_From.Text);
 
@@ -365,7 +365,7 @@ namespace GitUI.CommandsDialogs
             ToTextUpdate(sender, e);
         }
 
-        private void ToTextUpdate(object sender, EventArgs e)
+        private void ToTextUpdate(object? sender, EventArgs e)
         {
             bool destinationUnfilled = string.IsNullOrEmpty(_NO_TRANSLATE_To.Text) || _NO_TRANSLATE_To.Text.IndexOfAny(System.IO.Path.GetInvalidPathChars()) >= 0;
             bool subDirectoryUnfilled = string.IsNullOrEmpty(_NO_TRANSLATE_NewDirectory.Text) || _NO_TRANSLATE_NewDirectory.Text.IndexOfAny(System.IO.Path.GetInvalidPathChars()) >= 0;
@@ -395,12 +395,12 @@ namespace GitUI.CommandsDialogs
             Info.ForeColor = SystemColors.ControlText;
         }
 
-        private void NewDirectoryTextChanged(object sender, EventArgs e)
+        private void NewDirectoryTextChanged(object? sender, EventArgs e)
         {
             ToTextUpdate(sender, e);
         }
 
-        private void ToSelectedIndexChanged(object sender, EventArgs e)
+        private void ToSelectedIndexChanged(object? sender, EventArgs e)
         {
             ToTextUpdate(sender, e);
         }
@@ -446,7 +446,7 @@ namespace GitUI.CommandsDialogs
             _branchListLoader.LoadAsync(() => Module.GetRemoteServerRefs(from, false, true), UpdateBranches);
         }
 
-        private void Branches_DropDown(object sender, EventArgs e)
+        private void Branches_DropDown(object? sender, EventArgs e)
         {
             LoadBranches();
         }

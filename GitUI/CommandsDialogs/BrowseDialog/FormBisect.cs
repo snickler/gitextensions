@@ -44,7 +44,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             btnSkip.Enabled = inTheMiddleOfBisect;
         }
 
-        private void Start_Click(object sender, EventArgs e)
+        private void Start_Click(object? sender, EventArgs e)
         {
             FormProcess.ShowDialog(this, process: null, arguments: GitCommandHelpers.StartBisectCmd(), Module.WorkingDir, input: null, useDialogSettings: true);
 
@@ -76,23 +76,23 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             }
         }
 
-        private void Good_Click(object sender, EventArgs e)
+        private void Good_Click(object? sender, EventArgs e)
         {
             ContinueBisect(GitBisectOption.Good);
         }
 
-        private void Bad_Click(object sender, EventArgs e)
+        private void Bad_Click(object? sender, EventArgs e)
         {
             ContinueBisect(GitBisectOption.Bad);
         }
 
-        private void Stop_Click(object sender, EventArgs e)
+        private void Stop_Click(object? sender, EventArgs e)
         {
             FormProcess.ShowDialog(this, process: null, arguments: GitCommandHelpers.StopBisectCmd(), Module.WorkingDir, input: null, useDialogSettings: false);
             Close();
         }
 
-        private void btnSkip_Click(object sender, EventArgs e)
+        private void btnSkip_Click(object? sender, EventArgs e)
         {
             ContinueBisect(GitBisectOption.Skip);
         }

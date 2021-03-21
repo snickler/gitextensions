@@ -51,7 +51,7 @@ namespace GitUI.CommandsDialogs.WorktreeDialog
             IsDeleted.DataPropertyName = nameof(WorkTree.IsDeleted);
         }
 
-        private void FormManageWorktree_Load(object sender, EventArgs e)
+        private void FormManageWorktree_Load(object? sender, EventArgs e)
         {
             Initialize();
         }
@@ -187,12 +187,12 @@ namespace GitUI.CommandsDialogs.WorktreeDialog
             Detached
         }
 
-        private void buttonClose_Click(object sender, EventArgs e)
+        private void buttonClose_Click(object? sender, EventArgs e)
         {
             Close();
         }
 
-        private void buttonPruneWorktrees_Click(object sender, EventArgs e)
+        private void buttonPruneWorktrees_Click(object? sender, EventArgs e)
         {
             PruneWorktrees();
         }
@@ -203,7 +203,7 @@ namespace GitUI.CommandsDialogs.WorktreeDialog
             Initialize();
         }
 
-        private void Worktrees_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void Worktrees_CellClick(object? sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex < 5)
             {

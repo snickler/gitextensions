@@ -19,7 +19,7 @@ namespace GitUI.UserControls
 
         private bool _isLoaded;
 
-        private void GotoUserManualControl_Load(object sender, EventArgs e)
+        private void GotoUserManualControl_Load(object? sender, EventArgs e)
         {
             _isLoaded = true;
             UpdateTooltip();
@@ -71,7 +71,7 @@ namespace GitUI.UserControls
             return UserManual.UserManual.UrlFor(ManualSectionSubfolder, ManualSectionAnchorName);
         }
 
-        private void linkLabelHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkLabelHelp_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             OpenManual();
         }

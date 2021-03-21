@@ -56,7 +56,7 @@ namespace GitUI.CommandsDialogs
             SolveMergeConflicts.SetForeColorForBackColor();
         }
 
-        private void FormApplyPatchLoad(object sender, EventArgs e)
+        private void FormApplyPatchLoad(object? sender, EventArgs e)
         {
             EnableButtons();
         }
@@ -159,12 +159,12 @@ namespace GitUI.CommandsDialogs
             return (dialog.ShowDialog(this) == DialogResult.OK) ? dialog.FileName : PatchFile.Text;
         }
 
-        private void BrowsePatch_Click(object sender, EventArgs e)
+        private void BrowsePatch_Click(object? sender, EventArgs e)
         {
             PatchFile.Text = SelectPatchFile(@".");
         }
 
-        private void Apply_Click(object sender, EventArgs e)
+        private void Apply_Click(object? sender, EventArgs e)
         {
             var patchFile = PatchFile.Text;
             var dirText = PatchDir.Text;
@@ -225,13 +225,13 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Mergetool_Click(object sender, EventArgs e)
+        private void Mergetool_Click(object? sender, EventArgs e)
         {
             UICommands.StartResolveConflictsDialog(this);
             EnableButtons();
         }
 
-        private void Skip_Click(object sender, EventArgs e)
+        private void Skip_Click(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -247,7 +247,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Resolved_Click(object sender, EventArgs e)
+        private void Resolved_Click(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -256,7 +256,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Abort_Click(object sender, EventArgs e)
+        private void Abort_Click(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -266,12 +266,12 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void AddFiles_Click(object sender, EventArgs e)
+        private void AddFiles_Click(object? sender, EventArgs e)
         {
             UICommands.StartAddFilesDialog(this);
         }
 
-        private void MergePatch_Load(object sender, EventArgs e)
+        private void MergePatch_Load(object? sender, EventArgs e)
         {
             PatchFile.Select();
 
@@ -280,7 +280,7 @@ namespace GitUI.CommandsDialogs
             SignOff.Checked = AppSettings.ApplyPatchSignOff;
         }
 
-        private void BrowseDir_Click(object sender, EventArgs e)
+        private void BrowseDir_Click(object? sender, EventArgs e)
         {
             var userSelectedPath = OsShellUtil.PickFolder(this);
 
@@ -290,22 +290,22 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void PatchFileMode_CheckedChanged(object sender, EventArgs e)
+        private void PatchFileMode_CheckedChanged(object? sender, EventArgs e)
         {
             EnableButtons();
         }
 
-        private void SolveMergeConflicts_Click(object sender, EventArgs e)
+        private void SolveMergeConflicts_Click(object? sender, EventArgs e)
         {
             Mergetool_Click(sender, e);
         }
 
-        private void IgnoreWhitespace_CheckedChanged(object sender, EventArgs e)
+        private void IgnoreWhitespace_CheckedChanged(object? sender, EventArgs e)
         {
             AppSettings.ApplyPatchIgnoreWhitespace = IgnoreWhitespace.Checked;
         }
 
-        private void SignOff_CheckedChanged(object sender, EventArgs e)
+        private void SignOff_CheckedChanged(object? sender, EventArgs e)
         {
             AppSettings.ApplyPatchSignOff = SignOff.Checked;
         }

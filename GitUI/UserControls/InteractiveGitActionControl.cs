@@ -171,12 +171,12 @@ namespace GitUI.UserControls
             Visible = true;
         }
 
-        private void ResolveButton_Click(object sender, EventArgs e)
+        private void ResolveButton_Click(object? sender, EventArgs e)
         {
             Form?.UICommands.StartResolveConflictsDialog(this);
         }
 
-        private void ContinueButton_Click(object sender, EventArgs e)
+        private void ContinueButton_Click(object? sender, EventArgs e)
         {
             if (Form is null)
             {
@@ -201,7 +201,7 @@ namespace GitUI.UserControls
             Form.UICommands.RepoChangedNotifier.Notify();
         }
 
-        private void AbortButton_Click(object sender, EventArgs e)
+        private void AbortButton_Click(object? sender, EventArgs e)
         {
             if (Form is null)
             {
@@ -226,7 +226,7 @@ namespace GitUI.UserControls
             Form.UICommands.RepoChangedNotifier.Notify();
         }
 
-        private void MoreButton_Click(object sender, EventArgs e)
+        private void MoreButton_Click(object? sender, EventArgs e)
         {
             if (Form is null)
             {

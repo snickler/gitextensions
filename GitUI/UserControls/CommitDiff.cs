@@ -29,13 +29,13 @@ namespace GitUI.UserControls
             splitContainer2.SplitterDistance = DpiUtil.Scale(260);
         }
 
-        private void FileViewer_TopScrollReached(object sender, EventArgs e)
+        private void FileViewer_TopScrollReached(object? sender, EventArgs e)
         {
             DiffFiles.SelectPreviousVisibleItem();
             DiffText.ScrollToBottom();
         }
 
-        private void FileViewer_BottomScrollReached(object sender, EventArgs e)
+        private void FileViewer_BottomScrollReached(object? sender, EventArgs e)
         {
             DiffFiles.SelectNextVisibleItem();
             DiffText.ScrollToTop();
@@ -66,7 +66,7 @@ namespace GitUI.UserControls
             }
         }
 
-        private void DiffFiles_SelectedIndexChanged(object sender, EventArgs e)
+        private void DiffFiles_SelectedIndexChanged(object? sender, EventArgs e)
         {
             ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
@@ -74,7 +74,7 @@ namespace GitUI.UserControls
             }).FileAndForget();
         }
 
-        private void DiffText_ExtraDiffArgumentsChanged(object sender, EventArgs e)
+        private void DiffText_ExtraDiffArgumentsChanged(object? sender, EventArgs e)
         {
             ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {

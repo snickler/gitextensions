@@ -102,14 +102,14 @@ namespace GitUI.CommandsDialogs
             labelMessage.Font = new System.Drawing.Font(labelMessage.Font, System.Drawing.FontStyle.Bold);
         }
 
-        private void FormArchive_Load(object sender, EventArgs e)
+        private void FormArchive_Load(object? sender, EventArgs e)
         {
             buttonArchiveRevision.Focus();
             checkBoxPathFilter_CheckedChanged(this, EventArgs.Empty);
             checkboxRevisionFilter_CheckedChanged(this, EventArgs.Empty);
         }
 
-        private void Save_Click(object sender, EventArgs e)
+        private void Save_Click(object? sender, EventArgs e)
         {
             if (checkboxRevisionFilter.Checked && DiffSelectedRevision is null)
             {
@@ -175,7 +175,7 @@ namespace GitUI.CommandsDialogs
             return _NO_TRANSLATE_radioButtonFormatZip.Checked ? OutputFormat.Zip : OutputFormat.Tar;
         }
 
-        private void btnChooseRevision_Click(object sender, EventArgs e)
+        private void btnChooseRevision_Click(object? sender, EventArgs e)
         {
             using var chooseForm = new FormChooseCommit(UICommands, SelectedRevision?.Guid);
             if (chooseForm.ShowDialog(this) == DialogResult.OK && chooseForm.SelectedRevision is not null)
@@ -184,7 +184,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void checkBoxPathFilter_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxPathFilter_CheckedChanged(object? sender, EventArgs e)
         {
             textBoxPaths.Enabled = checkBoxPathFilter.Checked;
             if (checkBoxPathFilter.Checked)
@@ -193,7 +193,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void btnDiffChooseRevision_Click(object sender, EventArgs e)
+        private void btnDiffChooseRevision_Click(object? sender, EventArgs e)
         {
             using var chooseForm = new FormChooseCommit(UICommands, DiffSelectedRevision is not null ? DiffSelectedRevision.Guid : string.Empty);
             if (chooseForm.ShowDialog(this) == DialogResult.OK && chooseForm.SelectedRevision is not null)
@@ -202,7 +202,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void checkboxRevisionFilter_CheckedChanged(object sender, EventArgs e)
+        private void checkboxRevisionFilter_CheckedChanged(object? sender, EventArgs e)
         {
             btnDiffChooseRevision.Enabled = checkboxRevisionFilter.Checked;
             ////commitSummaryUserControl2.Enabled = checkboxRevisionFilter.Checked;

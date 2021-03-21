@@ -47,7 +47,7 @@ namespace GitUI.CommandsDialogs
             Action.DataPropertyName = nameof(RefLine.Action);
         }
 
-        private void FormReflog_Load(object sender, EventArgs e)
+        private void FormReflog_Load(object? sender, EventArgs e)
         {
             _isDirtyDir = UICommands.Module.IsDirtyDir();
             _currentBranch = UICommands.Module.GetSelectedBranch();
@@ -64,7 +64,7 @@ namespace GitUI.CommandsDialogs
             Branches.DataSource = branches;
         }
 
-        private void Branches_SelectedIndexChanged(object sender, EventArgs e)
+        private void Branches_SelectedIndexChanged(object? sender, EventArgs e)
         {
             ThreadHelper.JoinableTaskFactory.Run(DisplayRefLog);
 
@@ -93,7 +93,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void createABranchOnThisCommitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void createABranchOnThisCommitToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (gridReflog.SelectedCells.Count == 0 && gridReflog.SelectedRows.Count == 0)
             {
@@ -132,7 +132,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void resetCurrentBranchOnThisCommitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void resetCurrentBranchOnThisCommitToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (_isDirtyDir)
             {
@@ -153,22 +153,22 @@ namespace GitUI.CommandsDialogs
             });
         }
 
-        private void copySha1ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void copySha1ToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             ClipboardUtil.TrySetText(GetShaOfRefLine().ToString());
         }
 
-        private void linkCurrentBranch_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkCurrentBranch_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             Branches.SelectedItem = _currentBranch;
         }
 
-        private void linkHead_Click(object sender, EventArgs e)
+        private void linkHead_Click(object? sender, EventArgs e)
         {
             Branches.SelectedIndex = 0;
         }
 
-        private void gridReflog_MouseMove(object sender, MouseEventArgs e)
+        private void gridReflog_MouseMove(object? sender, MouseEventArgs e)
         {
             var hit = gridReflog.HitTest(e.X, e.Y);
 
@@ -184,7 +184,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void gridReflog_MouseClick(object sender, MouseEventArgs e)
+        private void gridReflog_MouseClick(object? sender, MouseEventArgs e)
         {
             contextMenuStripReflog.Show((Control)sender, e.Location);
         }

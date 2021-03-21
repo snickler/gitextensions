@@ -53,7 +53,7 @@ namespace GitUI.CommandsDialogs
             MailFrom.Text = Module.GetEffectiveSetting(SettingKeyString.UserEmail);
         }
 
-        private void Browse_Click(object sender, EventArgs e)
+        private void Browse_Click(object? sender, EventArgs e)
         {
             var userSelectedPath = OsShellUtil.PickFolder(this);
 
@@ -63,7 +63,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FormFormatPath_Load(object sender, EventArgs e)
+        private void FormFormatPath_Load(object? sender, EventArgs e)
         {
             OutputPath.Text = AppSettings.LastFormatPatchDir;
             string selectedHead = Module.GetSelectedBranch();
@@ -74,7 +74,7 @@ namespace GitUI.CommandsDialogs
             RevisionGrid.Load();
         }
 
-        private void OutputPath_TextChanged(object sender, EventArgs e)
+        private void OutputPath_TextChanged(object? sender, EventArgs e)
         {
             if (Directory.Exists(OutputPath.Text))
             {
@@ -82,7 +82,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FormatPatch_Click(object sender, EventArgs e)
+        private void FormatPatch_Click(object? sender, EventArgs e)
         {
             if (SaveToDir.Checked && string.IsNullOrEmpty(OutputPath.Text))
             {
@@ -247,7 +247,7 @@ namespace GitUI.CommandsDialogs
             return true;
         }
 
-        private void SaveToDir_CheckedChanged(object sender, EventArgs e)
+        private void SaveToDir_CheckedChanged(object? sender, EventArgs e)
         {
             OutputPath.Enabled = SaveToDir.Checked;
             MailFrom.Enabled = !SaveToDir.Checked;

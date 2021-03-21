@@ -139,7 +139,7 @@ namespace GitUI.SpellChecker
 
         public event EventHandler? SelectionChanged;
 
-        private void EditNetSpellEnabledChanged(object sender, EventArgs e)
+        private void EditNetSpellEnabledChanged(object? sender, EventArgs e)
         {
             if (Enabled)
             {
@@ -389,14 +389,19 @@ namespace GitUI.SpellChecker
             ThreadHelper.JoinableTaskFactory.RunAsync(
                 async () =>
                 {
-                    var words = await _autoCompleteListTask.GetValueAsync();
+                    IEnumerable<AutoCompleteWord>? words = await _autoCompleteListTask.GetValueAsync();
+                    if (words is null)
+                    {
+                        return;
+                    }
+
                     await this.SwitchToMainThreadAsync(_autoCompleteCancellationTokenSource.Token);
 
                     _spelling.AddAutoCompleteWords(words.Select(x => x.Word));
                 });
         }
 
-        private void SpellingMisspelledWord(object sender, SpellingEventArgs e)
+        private void SpellingMisspelledWord(object? sender, SpellingEventArgs e)
         {
             Validates.NotNull(_customUnderlines);
             _customUnderlines.Lines.Add(new TextPos(e.TextIndex, e.TextIndex + e.Word.Length));
@@ -465,7 +470,7 @@ namespace GitUI.SpellChecker
             }
         }
 
-        private void SpellingDeletedWord(object sender, SpellingEventArgs e)
+        private void SpellingDeletedWord(object? sender, SpellingEventArgs e)
         {
             var start = TextBox.SelectionStart;
             var length = TextBox.SelectionLength;
@@ -486,7 +491,7 @@ namespace GitUI.SpellChecker
             TextBox.Select(start, length);
         }
 
-        private void SpellingReplacedWord(object sender, ReplaceWordEventArgs e)
+        private void SpellingReplacedWord(object? sender, ReplaceWordEventArgs e)
         {
             var start = TextBox.SelectionStart;
             var length = TextBox.SelectionLength;
@@ -507,7 +512,7 @@ namespace GitUI.SpellChecker
             TextBox.Select(start, length);
         }
 
-        private void SpellCheckContextMenuOpening(object sender, CancelEventArgs e)
+        private void SpellCheckContextMenuOpening(object? sender, CancelEventArgs e)
         {
             TextBox.Focus();
             var pos = TextBox.GetCharIndexFromPosition(TextBox.PointToClient(MousePosition));
@@ -551,53 +556,53 @@ namespace GitUI.SpellChecker
             SpellCheckContextMenu.Items.Add(mi);
         }
 
-        private void RemoveWordClick(object sender, EventArgs e)
+        private void RemoveWordClick(object? sender, EventArgs e)
         {
             Validates.NotNull(_spelling);
             _spelling.DeleteWord();
             CheckSpelling();
         }
 
-        private void IgnoreWordClick(object sender, EventArgs e)
+        private void IgnoreWordClick(object? sender, EventArgs e)
         {
             Validates.NotNull(_spelling);
             _spelling.IgnoreWord();
             CheckSpelling();
         }
 
-        private void AddToDictionaryClick(object sender, EventArgs e)
+        private void AddToDictionaryClick(object? sender, EventArgs e)
         {
             Validates.NotNull(_spelling);
             _spelling.Dictionary.Add(_spelling.CurrentWord);
             CheckSpelling();
         }
 
-        private void MarkIllFormedLinesInCommitMsgClick(object sender, EventArgs e)
+        private void MarkIllFormedLinesInCommitMsgClick(object? sender, EventArgs e)
         {
             AppSettings.MarkIllFormedLinesInCommitMsg = !AppSettings.MarkIllFormedLinesInCommitMsg;
             CheckSpelling();
         }
 
-        private void SuggestionToolStripItemClick(object sender, EventArgs e)
+        private void SuggestionToolStripItemClick(object? sender, EventArgs e)
         {
             Validates.NotNull(_spelling);
-            _spelling.ReplaceWord(((ToolStripItem)sender).Text);
+            _spelling.ReplaceWord(((ToolStripItem)sender!).Text);
             CheckSpelling();
         }
 
-        private void DicToolStripMenuItemClick(object sender, EventArgs e)
+        private void DicToolStripMenuItemClick(object? sender, EventArgs e)
         {
             // if a Module is available, then always change the "repository local" setting
             // it will set a dictionary only for this Module (repository) locally
 
             var settings = Module.LocalSettings ?? Settings;
 
-            settings.Dictionary = ((ToolStripItem)sender).Text;
+            settings.Dictionary = ((ToolStripItem)sender!).Text;
             LoadDictionary();
             CheckSpelling();
         }
 
-        private void SpellCheckTimerTick(object sender, EventArgs e)
+        private void SpellCheckTimerTick(object? sender, EventArgs e)
         {
             Validates.NotNull(_customUnderlines);
             if (!_customUnderlines.IsImeStartingComposition)
@@ -609,7 +614,7 @@ namespace GitUI.SpellChecker
             }
         }
 
-        private void TextBoxTextChanged(object sender, EventArgs e)
+        private void TextBoxTextChanged(object? sender, EventArgs e)
         {
             Validates.NotNull(_customUnderlines);
             if (_customUnderlines.IsImeStartingComposition)
@@ -648,7 +653,7 @@ namespace GitUI.SpellChecker
             }
         }
 
-        private void TextBoxLeave(object sender, EventArgs e)
+        private void TextBoxLeave(object? sender, EventArgs e)
         {
             if (ActiveControl != AutoComplete)
             {
@@ -656,7 +661,7 @@ namespace GitUI.SpellChecker
             }
         }
 
-        private void TextBox_KeyUp(object sender, KeyEventArgs e)
+        private void TextBox_KeyUp(object? sender, KeyEventArgs e)
         {
             OnKeyUp(e);
         }
@@ -681,7 +686,7 @@ namespace GitUI.SpellChecker
             IsUndoInProgress = false;
         }
 
-        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        private void TextBox_KeyDown(object? sender, KeyEventArgs e)
         {
             if (!e.Alt && !e.Control && !e.Shift && _keysToSendToAutoComplete.ContainsKey(e.KeyCode) && AutoComplete.Visible)
             {
@@ -734,19 +739,19 @@ namespace GitUI.SpellChecker
             TextBox.Paste(DataFormats.GetFormat(DataFormats.UnicodeText));
         }
 
-        private void TextBox_KeyPress(object sender, KeyPressEventArgs e)
+        private void TextBox_KeyPress(object? sender, KeyPressEventArgs e)
         {
             _disableAutoCompleteTriggerOnTextUpdate = e.KeyChar.IsSeparator();
 
             OnKeyPress(e);
         }
 
-        private void TextBox_SelectionChanged(object sender, EventArgs e)
+        private void TextBox_SelectionChanged(object? sender, EventArgs e)
         {
             SelectionChanged?.Invoke(sender, e);
         }
 
-        private void TextBox_DoubleClick(object sender, EventArgs e)
+        private void TextBox_DoubleClick(object? sender, EventArgs e)
         {
             int charIndexAtMousePosition = TextBox.GetCharIndexFromPosition(TextBox.PointToClient(MousePosition));
             (int start, int length) = _wordAtCursorExtractor.GetWordBounds(TextBox.Text, charIndexAtMousePosition);
@@ -775,28 +780,28 @@ namespace GitUI.SpellChecker
             }
         }
 
-        private void TextBox_LostFocus(object sender, EventArgs e)
+        private void TextBox_LostFocus(object? sender, EventArgs e)
         {
             ShowWatermark();
         }
 
-        private void TextBox_GotFocus(object sender, EventArgs e)
+        private void TextBox_GotFocus(object? sender, EventArgs e)
         {
             HideWatermark();
         }
 
-        private void CutMenuItemClick(object sender, EventArgs e)
+        private void CutMenuItemClick(object? sender, EventArgs e)
         {
             TextBox.Cut();
             CheckSpelling();
         }
 
-        private void CopyMenuItemdClick(object sender, EventArgs e)
+        private void CopyMenuItemdClick(object? sender, EventArgs e)
         {
             TextBox.Copy();
         }
 
-        private void PasteMenuItemClick(object sender, EventArgs e)
+        private void PasteMenuItemClick(object? sender, EventArgs e)
         {
             if (!Clipboard.ContainsText())
             {
@@ -807,13 +812,13 @@ namespace GitUI.SpellChecker
             CheckSpelling();
         }
 
-        private void DeleteMenuItemClick(object sender, EventArgs e)
+        private void DeleteMenuItemClick(object? sender, EventArgs e)
         {
             TextBox.SelectedText = string.Empty;
             CheckSpelling();
         }
 
-        private void SelectAllMenuItemClick(object sender, EventArgs e)
+        private void SelectAllMenuItemClick(object? sender, EventArgs e)
         {
             TextBox.SelectAll();
         }
@@ -997,10 +1002,10 @@ namespace GitUI.SpellChecker
                 return;
             }
 
-            var autoCompleteList = ThreadHelper.JoinableTaskFactory.Run(() => _autoCompleteListTask.GetValueAsync());
-            var list = autoCompleteList.Where(x => x.Matches(word)).Distinct().ToList();
+            IEnumerable<AutoCompleteWord>? autoCompleteList = ThreadHelper.JoinableTaskFactory.Run(() => _autoCompleteListTask.GetValueAsync());
+            List<AutoCompleteWord>? list = autoCompleteList?.Where(x => x.Matches(word)).Distinct().ToList();
 
-            if (list.Count == 0)
+            if (list is null || list.Count == 0)
             {
                 if (AutoComplete.Visible)
                 {
@@ -1062,12 +1067,12 @@ namespace GitUI.SpellChecker
             return cursorPos;
         }
 
-        private void AutoComplete_Click(object sender, EventArgs e)
+        private void AutoComplete_Click(object? sender, EventArgs e)
         {
             AcceptAutoComplete();
         }
 
-        private void AutoCompleteTimer_Tick(object sender, EventArgs e)
+        private void AutoCompleteTimer_Tick(object? sender, EventArgs e)
         {
             Validates.NotNull(_customUnderlines);
             if (!_customUnderlines.IsImeStartingComposition)
@@ -1084,7 +1089,7 @@ namespace GitUI.SpellChecker
             AutoCompleteTimer.Stop();
         }
 
-        private void AutoCompleteToolTipTimer_Tick(object sender, EventArgs e)
+        private void AutoCompleteToolTipTimer_Tick(object? sender, EventArgs e)
         {
             AutoCompleteToolTip.Hide(TextBox);
         }

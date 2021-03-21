@@ -69,13 +69,13 @@ namespace GitUI.HelperDialogs
 
         public GitRevision Revision { get; }
 
-        private void FormResetCurrentBranch_Load(object sender, EventArgs e)
+        private void FormResetCurrentBranch_Load(object? sender, EventArgs e)
         {
             _NO_TRANSLATE_BranchInfo.Text = string.Format(_branchInfo.Text, Module.GetSelectedBranch());
             commitSummaryUserControl1.Revision = Revision;
         }
 
-        private void Ok_Click(object sender, EventArgs e)
+        private void Ok_Click(object? sender, EventArgs e)
         {
             if (Soft.Checked)
             {
@@ -118,13 +118,13 @@ namespace GitUI.HelperDialogs
             Close();
         }
 
-        private void Cancel_Click(object sender, EventArgs e)
+        private void Cancel_Click(object? sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             Close();
         }
 
-        private void FormResetCurrentBranch_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
+        private void FormResetCurrentBranch_HelpButtonClicked(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             string? helpSection = default;
             if (Soft.Checked)

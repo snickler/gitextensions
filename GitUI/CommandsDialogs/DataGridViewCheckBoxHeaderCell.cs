@@ -47,12 +47,12 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void OnCollectionChanged(object sender, CollectionChangeEventArgs e)
+        private void OnCollectionChanged(object? sender, CollectionChangeEventArgs e)
         {
             UpdateCheckedState();
         }
 
-        private void OnCurrentCellDirtyStateChanged(object sender, EventArgs e)
+        private void OnCurrentCellDirtyStateChanged(object? sender, EventArgs e)
         {
             if (DataGridView.CurrentCell.ColumnIndex != OwningColumn.Index || _selfChanging)
             {

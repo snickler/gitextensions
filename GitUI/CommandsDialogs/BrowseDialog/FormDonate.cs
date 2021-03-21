@@ -24,7 +24,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             lblText.AutoSize = true;
         }
 
-        private void PictureBox1Click(object sender, EventArgs e)
+        private void PictureBox1Click(object? sender, EventArgs e)
         {
             OsShellUtil.OpenUrlInDefaultBrowser(DonationUrl);
         }

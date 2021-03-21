@@ -154,12 +154,12 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             }
         }
 
-        private void sortMostRecentRepos_CheckedChanged(object sender, EventArgs e)
+        private void sortMostRecentRepos_CheckedChanged(object? sender, EventArgs e)
         {
             RefreshRepos();
         }
 
-        private void comboMinWidthEdit_ValueChanged(object sender, EventArgs e)
+        private void comboMinWidthEdit_ValueChanged(object? sender, EventArgs e)
         {
             try
             {
@@ -176,18 +176,18 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             }
         }
 
-        private void Ok_Click(object sender, EventArgs e)
+        private void Ok_Click(object? sender, EventArgs e)
         {
             SaveSettings();
             Close();
         }
 
-        private void Abort_Click(object sender, EventArgs e)
+        private void Abort_Click(object? sender, EventArgs e)
         {
             Close();
         }
 
-        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        private void contextMenuStrip1_Opening(object? sender, CancelEventArgs e)
         {
             if (GetSelectedRepo(sender, out var repo))
             {
@@ -240,7 +240,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             return repo is not null;
         }
 
-        private void anchorToMostToolStripMenuItem_Click(object sender, EventArgs e)
+        private void anchorToMostToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (GetSelectedRepo(sender, out var repo))
             {
@@ -249,7 +249,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             }
         }
 
-        private void anchorToLessToolStripMenuItem_Click(object sender, EventArgs e)
+        private void anchorToLessToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (GetSelectedRepo(sender, out var repo))
             {
@@ -258,7 +258,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             }
         }
 
-        private void removeAnchorToolStripMenuItem_Click(object sender, EventArgs e)
+        private void removeAnchorToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (GetSelectedRepo(sender, out var repo))
             {
@@ -267,7 +267,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             }
         }
 
-        private void removeRecentToolStripMenuItem_Click(object sender, EventArgs e)
+        private void removeRecentToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (!GetSelectedRepo(sender, out var repo))
             {
@@ -283,7 +283,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             });
         }
 
-        private void listView_DrawItem(object sender, DrawListViewItemEventArgs e)
+        private void listView_DrawItem(object? sender, DrawListViewItemEventArgs e)
         {
             var listView = (ListView)sender;
 

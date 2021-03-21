@@ -342,7 +342,7 @@ namespace GitUI.BranchTreePanel
             _filterBranchHelper?.SetBranchFilter(branch.FullPath, refresh: true);
         }
 
-        private void contextMenu_Opening(object sender, CancelEventArgs e)
+        private void contextMenu_Opening(object? sender, CancelEventArgs e)
         {
             if (sender is not ContextMenuStrip contextMenu)
             {

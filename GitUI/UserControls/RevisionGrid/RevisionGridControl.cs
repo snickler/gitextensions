@@ -756,7 +756,7 @@ namespace GitUI
         {
             var revisions = GetSelectedRevisions();
             var selectedRev = revisions?.FirstOrDefault();
-            var firstId = revisions is not null && revisions.Count > 1 ? revisions.LastOrDefault().ObjectId : selectedRev?.FirstParentId;
+            ObjectId? firstId = revisions is not null && revisions.Count > 1 ? revisions.LastOrDefault()?.ObjectId : selectedRev?.FirstParentId;
 
             return (firstId, selectedRev);
         }
@@ -1309,7 +1309,7 @@ namespace GitUI
 
         #region Graph event handlers
 
-        private void OnGridViewSelectionChanged(object sender, EventArgs e)
+        private void OnGridViewSelectionChanged(object? sender, EventArgs e)
         {
             _parentChildNavigationHistory.RevisionsSelectionChanged();
 
@@ -1356,7 +1356,7 @@ namespace GitUI
             }
         }
 
-        private void OnGridViewKeyDown(object sender, KeyEventArgs e)
+        private void OnGridViewKeyDown(object? sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
@@ -1376,7 +1376,7 @@ namespace GitUI
             }
         }
 
-        private void OnGridViewKeyUp(object sender, KeyEventArgs e)
+        private void OnGridViewKeyUp(object? sender, KeyEventArgs e)
         {
             var selectedRevision = LatestSelectedRevision;
 
@@ -1421,7 +1421,7 @@ namespace GitUI
             }
         }
 
-        private void OnGridViewMouseDown(object sender, MouseEventArgs e)
+        private void OnGridViewMouseDown(object? sender, MouseEventArgs e)
         {
             switch (e.Button)
             {
@@ -1434,7 +1434,7 @@ namespace GitUI
                     _lastVisibleResizableColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                     break;
 
-                    void OnGridViewMouseCaptureChanged(object ignoredSender, EventArgs ignoredArgs)
+                    void OnGridViewMouseCaptureChanged(object? ignoredSender, EventArgs ignoredArgs)
                     {
                         _gridView.MouseCaptureChanged -= OnGridViewMouseCaptureChanged;
                         _lastVisibleResizableColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None; // None must be set before Fill
@@ -1449,7 +1449,7 @@ namespace GitUI
             return spi is not null;
         }
 
-        private void OnGridViewDoubleClick(object sender, MouseEventArgs e)
+        private void OnGridViewDoubleClick(object? sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left)
             {
@@ -1464,13 +1464,13 @@ namespace GitUI
             }
         }
 
-        private void OnGridViewMouseClick(object sender, MouseEventArgs e)
+        private void OnGridViewMouseClick(object? sender, MouseEventArgs e)
         {
             var hti = _gridView.HitTest(e.X, e.Y);
             _latestSelectedRowIndex = hti.RowIndex;
         }
 
-        private void OnGridViewCellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        private void OnGridViewCellMouseDown(object? sender, DataGridViewCellMouseEventArgs e)
         {
             try
             {
@@ -1520,7 +1520,7 @@ namespace GitUI
             }
         }
 
-        private void CreateTagToolStripMenuItemClick(object sender, EventArgs e)
+        private void CreateTagToolStripMenuItemClick(object? sender, EventArgs e)
         {
             var revision = LatestSelectedRevision;
 
@@ -1531,7 +1531,7 @@ namespace GitUI
             });
         }
 
-        private void ResetCurrentBranchToHereToolStripMenuItemClick(object sender, EventArgs e)
+        private void ResetCurrentBranchToHereToolStripMenuItemClick(object? sender, EventArgs e)
         {
             if (LatestSelectedRevision is null)
             {
@@ -1545,7 +1545,7 @@ namespace GitUI
             });
         }
 
-        private void ResetAnotherBranchToHereToolStripMenuItemClick(object sender, EventArgs e)
+        private void ResetAnotherBranchToHereToolStripMenuItemClick(object? sender, EventArgs e)
         {
             if (LatestSelectedRevision is null)
             {
@@ -1559,7 +1559,7 @@ namespace GitUI
             });
         }
 
-        private void CreateNewBranchToolStripMenuItemClick(object sender, EventArgs e)
+        private void CreateNewBranchToolStripMenuItemClick(object? sender, EventArgs e)
         {
             var revision = LatestSelectedRevision;
 
@@ -1647,7 +1647,7 @@ namespace GitUI
             ForceRefreshRevisions();
         }
 
-        private void ContextMenuOpening(object sender, CancelEventArgs e)
+        private void ContextMenuOpening(object? sender, CancelEventArgs e)
         {
             if (LatestSelectedRevision is null)
             {
@@ -1874,7 +1874,7 @@ namespace GitUI
                 : gitRef.Name;
         }
 
-        private void ToolStripItemClickRebaseBranch(object sender, EventArgs e)
+        private void ToolStripItemClickRebaseBranch(object? sender, EventArgs e)
         {
             if (_rebaseOnTopOf is null)
             {
@@ -1913,7 +1913,7 @@ namespace GitUI
             }
         }
 
-        private void OnRebaseInteractivelyClicked(object sender, EventArgs e)
+        private void OnRebaseInteractivelyClicked(object? sender, EventArgs e)
         {
             if (_rebaseOnTopOf is null)
             {
@@ -1952,7 +1952,7 @@ namespace GitUI
             }
         }
 
-        private void OnRebaseWithAdvOptionsClicked(object sender, EventArgs e)
+        private void OnRebaseWithAdvOptionsClicked(object? sender, EventArgs e)
         {
             if (_rebaseOnTopOf is not null)
             {
@@ -1960,7 +1960,7 @@ namespace GitUI
             }
         }
 
-        private void CheckoutRevisionToolStripMenuItemClick(object sender, EventArgs e)
+        private void CheckoutRevisionToolStripMenuItemClick(object? sender, EventArgs e)
         {
             if (LatestSelectedRevision is not null)
             {
@@ -1968,7 +1968,7 @@ namespace GitUI
             }
         }
 
-        private void ArchiveRevisionToolStripMenuItemClick(object sender, EventArgs e)
+        private void ArchiveRevisionToolStripMenuItemClick(object? sender, EventArgs e)
         {
             var selectedRevisions = GetSelectedRevisions();
             if (selectedRevisions.Count > 2)
@@ -1977,7 +1977,7 @@ namespace GitUI
                 return;
             }
 
-            GitRevision mainRevision = selectedRevisions.FirstOrDefault();
+            GitRevision? mainRevision = selectedRevisions.FirstOrDefault();
             GitRevision? diffRevision = null;
             if (selectedRevisions.Count == 2)
             {
@@ -2037,7 +2037,7 @@ namespace GitUI
             ForceRefreshRevisions();
         }
 
-        private void RevertCommitToolStripMenuItemClick(object sender, EventArgs e)
+        private void RevertCommitToolStripMenuItemClick(object? sender, EventArgs e)
         {
             var revisions = GetSelectedRevisions(SortDirection.Ascending);
             foreach (var rev in revisions)
@@ -2046,13 +2046,13 @@ namespace GitUI
             }
         }
 
-        private void CherryPickCommitToolStripMenuItemClick(object sender, EventArgs e)
+        private void CherryPickCommitToolStripMenuItemClick(object? sender, EventArgs e)
         {
             var revisions = GetSelectedRevisions(SortDirection.Descending);
             UICommands.StartCherryPickDialog(ParentForm, revisions);
         }
 
-        private void FixupCommitToolStripMenuItemClick(object sender, EventArgs e)
+        private void FixupCommitToolStripMenuItemClick(object? sender, EventArgs e)
         {
             if (LatestSelectedRevision is null)
             {
@@ -2062,7 +2062,7 @@ namespace GitUI
             UICommands.StartFixupCommitDialog(ParentForm, LatestSelectedRevision);
         }
 
-        private void SquashCommitToolStripMenuItemClick(object sender, EventArgs e)
+        private void SquashCommitToolStripMenuItemClick(object? sender, EventArgs e)
         {
             if (LatestSelectedRevision is null)
             {
@@ -2145,17 +2145,17 @@ namespace GitUI
 
         #region Bisect
 
-        private void MarkRevisionAsBadToolStripMenuItemClick(object sender, EventArgs e)
+        private void MarkRevisionAsBadToolStripMenuItemClick(object? sender, EventArgs e)
         {
             ContinueBisect(GitBisectOption.Bad);
         }
 
-        private void MarkRevisionAsGoodToolStripMenuItemClick(object sender, EventArgs e)
+        private void MarkRevisionAsGoodToolStripMenuItemClick(object? sender, EventArgs e)
         {
             ContinueBisect(GitBisectOption.Good);
         }
 
-        private void BisectSkipRevisionToolStripMenuItemClick(object sender, EventArgs e)
+        private void BisectSkipRevisionToolStripMenuItemClick(object? sender, EventArgs e)
         {
             ContinueBisect(GitBisectOption.Skip);
         }
@@ -2172,7 +2172,7 @@ namespace GitUI
             RefreshRevisions();
         }
 
-        private void StopBisectToolStripMenuItemClick(object sender, EventArgs e)
+        private void StopBisectToolStripMenuItemClick(object? sender, EventArgs e)
         {
             FormProcess.ShowDialog(ParentForm, process: null, arguments: GitCommandHelpers.StopBisectCmd(), Module.WorkingDir, input: null, useDialogSettings: true);
             RefreshRevisions();
@@ -2335,9 +2335,9 @@ namespace GitUI
             }
         }
 
-        private void renameBranchToolStripMenuItem_Click(object sender, EventArgs e)
+        private void renameBranchToolStripMenuItem_Click(object? sender, EventArgs e)
         {
-            var item = (ToolStripMenuItem)sender;
+            var item = renameBranchToolStripMenuItem;
 
             if (item.DropDown is not null && item.DropDown.Items.Count == 1)
             {
@@ -2345,9 +2345,9 @@ namespace GitUI
             }
         }
 
-        private void deleteBranchTagToolStripMenuItem_Click(object sender, EventArgs e)
+        private void deleteBranchTagToolStripMenuItem_Click(object? sender, EventArgs e)
         {
-            var item = (ToolStripMenuItem)sender;
+            var item = (ToolStripMenuItem)sender!;
 
             if (item.DropDown is not null && item.DropDown.Items.Count == 1)
             {
@@ -2371,7 +2371,7 @@ namespace GitUI
             }
         }
 
-        private void goToMergeBaseCommitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void goToMergeBaseCommitToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             // Artificial commits are replaced with HEAD
             // If only one revision is selected, compare to HEAD
@@ -2467,7 +2467,7 @@ namespace GitUI
             return GetShortcutKeys((int)cmd);
         }
 
-        private void CompareToBranchToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CompareToBranchToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var headCommit = GetSelectedRevisions().FirstOrDefault();
             if (headCommit is null)
@@ -2485,7 +2485,7 @@ namespace GitUI
             }
         }
 
-        private void CompareWithCurrentBranchToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CompareWithCurrentBranchToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var headBranch = Module.GetSelectedBranch(setDefaultIfEmpty: false);
             if (string.IsNullOrWhiteSpace(headBranch))
@@ -2508,13 +2508,13 @@ namespace GitUI
             }
         }
 
-        private void selectAsBaseToolStripMenuItem_Click(object sender, EventArgs e)
+        private void selectAsBaseToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             _baseCommitToCompare = GetSelectedRevisions().FirstOrDefault();
             compareToBaseToolStripMenuItem.Enabled = _baseCommitToCompare is not null;
         }
 
-        private void compareToBaseToolStripMenuItem_Click(object sender, EventArgs e)
+        private void compareToBaseToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (_baseCommitToCompare is null)
             {
@@ -2531,7 +2531,7 @@ namespace GitUI
             UICommands.ShowFormDiff(_baseCommitToCompare.ObjectId, headCommit.ObjectId, _baseCommitToCompare.Subject, headCommit.Subject);
         }
 
-        private void compareToWorkingDirectoryMenuItem_Click(object sender, EventArgs e)
+        private void compareToWorkingDirectoryMenuItem_Click(object? sender, EventArgs e)
         {
             var baseCommit = GetSelectedRevisions().FirstOrDefault();
             if (baseCommit is null)
@@ -2548,7 +2548,7 @@ namespace GitUI
             UICommands.ShowFormDiff(baseCommit.ObjectId, ObjectId.WorkTreeId, baseCommit.Subject, "Working directory");
         }
 
-        private void compareSelectedCommitsMenuItem_Click(object sender, EventArgs e)
+        private void compareSelectedCommitsMenuItem_Click(object? sender, EventArgs e)
         {
             var (first, selected) = getFirstAndSelected();
 
@@ -2566,7 +2566,7 @@ namespace GitUI
             }
         }
 
-        private void diffSelectedCommitsMenuItem_Click(object sender, EventArgs e)
+        private void diffSelectedCommitsMenuItem_Click(object? sender, EventArgs e)
         {
             var item = sender as ToolStripMenuItem;
             if (item?.DropDownItems != null)
@@ -2588,13 +2588,13 @@ namespace GitUI
             }
         }
 
-        private void getHelpOnHowToUseTheseFeaturesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void getHelpOnHowToUseTheseFeaturesToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             OsShellUtil.OpenUrlInDefaultBrowser(
                 UserManual.UserManual.UrlFor("modify_history", "using-autosquash-rebase-feature"));
         }
 
-        private void openBuildReportToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openBuildReportToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var revision = GetSelectedRevisions().FirstOrDefault();
 
@@ -2604,7 +2604,7 @@ namespace GitUI
             }
         }
 
-        private void openPullRequestPageStripMenuItem_Click(object sender, EventArgs e)
+        private void openPullRequestPageStripMenuItem_Click(object? sender, EventArgs e)
         {
             var revision = GetSelectedRevisions().FirstOrDefault();
 
@@ -2614,12 +2614,12 @@ namespace GitUI
             }
         }
 
-        private void editCommitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void editCommitToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             LaunchRebase("e");
         }
 
-        private void rewordCommitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void rewordCommitToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             LaunchRebase("r");
         }
@@ -2646,7 +2646,7 @@ namespace GitUI
 
         #region Drag/drop patch files on revision grid
 
-        private void OnGridViewDragDrop(object sender, DragEventArgs e)
+        private void OnGridViewDragDrop(object? sender, DragEventArgs e)
         {
             if (e.Data.GetData(DataFormats.FileDrop) is Array fileNameArray)
             {
@@ -2670,7 +2670,7 @@ namespace GitUI
             }
         }
 
-        private static void OnGridViewDragEnter(object sender, DragEventArgs e)
+        private static void OnGridViewDragEnter(object? sender, DragEventArgs e)
         {
             if (e.Data.GetData(DataFormats.FileDrop) is Array fileNameArray)
             {

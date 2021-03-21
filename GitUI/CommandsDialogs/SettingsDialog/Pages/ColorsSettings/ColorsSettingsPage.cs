@@ -147,19 +147,19 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             _NO_TRANSLATE_cbSelectTheme.Items.AddRange(formattedThemeIds);
         }
 
-        private void ComboBoxTheme_SelectedIndexChanged(object sender, EventArgs e) =>
+        private void ComboBoxTheme_SelectedIndexChanged(object? sender, EventArgs e) =>
             _controller.HandleSelectedThemeChanged();
 
-        private void ChkUseSystemVisualStyle_CheckedChanged(object sender, EventArgs e) =>
+        private void ChkUseSystemVisualStyle_CheckedChanged(object? sender, EventArgs e) =>
             _controller.HandleUseSystemVisualStyleChanged();
 
-        private void ChkColorblind_CheckedChanged(object sender, EventArgs e) =>
+        private void ChkColorblind_CheckedChanged(object? sender, EventArgs e) =>
             _controller.HandleUseColorblindVariationChanged();
 
-        private void tsmiApplicationFolder_Click(object sender, EventArgs e)
+        private void tsmiApplicationFolder_Click(object? sender, EventArgs e)
             => _controller.ShowAppThemesDirectory();
 
-        private void tsmiUserFolder_Click(object sender, EventArgs e) =>
+        private void tsmiUserFolder_Click(object? sender, EventArgs e) =>
             _controller.ShowUserThemesDirectory();
 
         private struct FormattedThemeId
@@ -171,7 +171,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
 
             public ThemeId ThemeId { get; }
 
-            public override bool Equals(object obj) =>
+            public override bool Equals(object? obj) =>
                 obj is FormattedThemeId other && Equals(other);
 
             public override int GetHashCode() =>

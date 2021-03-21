@@ -48,7 +48,7 @@ namespace GitUI.UserControls
             }
         }
 
-        private void buttonBrowse_Click(object sender, EventArgs e)
+        private void buttonBrowse_Click(object? sender, EventArgs e)
         {
             Validates.NotNull(PathShowingControl);
 

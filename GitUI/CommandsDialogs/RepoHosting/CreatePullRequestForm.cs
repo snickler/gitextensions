@@ -49,7 +49,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             _pullReqTargetsCB.DisplayMember = nameof(IHostedRemote.DisplayData);
         }
 
-        private void CreatePullRequestForm_Load(object sender, EventArgs e)
+        private void CreatePullRequestForm_Load(object? sender, EventArgs e)
         {
             _createBtn.Enabled = false;
             _yourBranchesCB.Text = _strLoading.Text;
@@ -99,7 +99,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             _pullReqTargetsCB_SelectedIndexChanged(this, EventArgs.Empty);
         }
 
-        private void _pullReqTargetsCB_SelectedIndexChanged(object sender, EventArgs e)
+        private void _pullReqTargetsCB_SelectedIndexChanged(object? sender, EventArgs e)
         {
             _currentHostedRemote = (IHostedRemote)_pullReqTargetsCB.SelectedItem;
 
@@ -161,7 +161,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
                 .FileAndForget();
         }
 
-        private void _yourBranchCB_SelectedIndexChanged(object sender, EventArgs e)
+        private void _yourBranchCB_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (_prevTitle == _titleTB.Text && !string.IsNullOrWhiteSpace(_yourBranchesCB.Text) && MyRemote is not null)
             {
@@ -171,7 +171,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             }
         }
 
-        private void _createBtn_Click(object sender, EventArgs e)
+        private void _createBtn_Click(object? sender, EventArgs e)
         {
             if (_currentHostedRemote is null)
             {

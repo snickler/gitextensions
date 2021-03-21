@@ -76,7 +76,7 @@ namespace GitUI
             branches.Text = text;
         }
 
-        private void selectMultipleBranchesButton_Click(object sender, EventArgs e)
+        private void selectMultipleBranchesButton_Click(object? sender, EventArgs e)
         {
             Validates.NotNull(_branchesToSelect);
 

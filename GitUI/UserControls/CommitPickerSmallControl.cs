@@ -73,7 +73,7 @@ namespace GitUI.UserControls
             }
         }
 
-        private void buttonPickCommit_Click(object sender, EventArgs e)
+        private void buttonPickCommit_Click(object? sender, EventArgs e)
         {
             using var chooseForm = new FormChooseCommit(UICommands, SelectedObjectId?.ToString());
             if (chooseForm.ShowDialog(this) == DialogResult.OK && chooseForm.SelectedRevision is not null)
@@ -82,7 +82,7 @@ namespace GitUI.UserControls
             }
         }
 
-        private void textBoxCommitHash_TextLeave(object sender, EventArgs e)
+        private void textBoxCommitHash_TextLeave(object? sender, EventArgs e)
         {
             SetSelectedCommitHash(textBoxCommitHash.Text.Trim());
         }

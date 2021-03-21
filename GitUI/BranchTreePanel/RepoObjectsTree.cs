@@ -214,7 +214,7 @@ namespace GitUI.BranchTreePanel
             }
         }
 
-        private void BeforeDoubleClickExpandCollapse(object sender, CancelEventArgs e)
+        private void BeforeDoubleClickExpandCollapse(object? sender, CancelEventArgs e)
         {
             // If node is an inner node, and overrides OnDoubleClick, then disable expand/collapse
             if (treeMain.SelectedNode?.Tag is Node node
@@ -496,22 +496,22 @@ namespace GitUI.BranchTreePanel
             }
         }
 
-        private void OnBtnSearchClicked(object sender, EventArgs e)
+        private void OnBtnSearchClicked(object? sender, EventArgs e)
         {
             DoSearch();
         }
 
-        private void btnCollapseAll_Click(object sender, EventArgs e)
+        private void btnCollapseAll_Click(object? sender, EventArgs e)
         {
             treeMain.CollapseAll();
         }
 
-        private void OnBranchCriterionChanged(object sender, EventArgs e)
+        private void OnBranchCriterionChanged(object? sender, EventArgs e)
         {
             _searchCriteriaChanged = true;
         }
 
-        private void TxtBranchCriterion_KeyDown(object sender, KeyEventArgs e)
+        private void TxtBranchCriterion_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode != Keys.Enter)
             {
@@ -522,7 +522,7 @@ namespace GitUI.BranchTreePanel
             e.Handled = true;
         }
 
-        private void OnPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        private void OnPreviewKeyDown(object? sender, PreviewKeyDownEventArgs e)
         {
             if (e.KeyCode == Keys.F3)
             {
@@ -530,17 +530,17 @@ namespace GitUI.BranchTreePanel
             }
         }
 
-        private void OnNodeSelected(object sender, TreeViewEventArgs e)
+        private void OnNodeSelected(object? sender, TreeViewEventArgs e)
         {
             Node.OnNode<Node>(e.Node, node => node.OnSelected());
         }
 
-        private void OnNodeClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void OnNodeClick(object? sender, TreeNodeMouseClickEventArgs e)
         {
             Node.OnNode<Node>(e.Node, node => node.OnClick());
         }
 
-        private void OnNodeDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void OnNodeDoubleClick(object? sender, TreeNodeMouseClickEventArgs e)
         {
             // Don't consider-double clicking on the PlusMinus as a double-click event
             // for nodes in tree. This prevents opening inner submodules, for example,
@@ -573,7 +573,7 @@ namespace GitUI.BranchTreePanel
             public ContextMenuStrip TagContextMenu => _repoObjectsTree.menuTag;
             public NativeTreeView TreeView => _repoObjectsTree.treeMain;
 
-            public void OnContextMenuOpening(object sender, CancelEventArgs e) => _repoObjectsTree.contextMenu_Opening(sender, e);
+            public void OnContextMenuOpening(object? sender, CancelEventArgs e) => _repoObjectsTree.contextMenu_Opening(sender, e);
 
             public void ReorderTreeNode(TreeNode node, bool up)
             {

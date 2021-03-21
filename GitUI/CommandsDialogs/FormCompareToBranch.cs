@@ -26,14 +26,14 @@ namespace GitUI.CommandsDialogs
             Activated += OnActivated;
         }
 
-        private void OnActivated(object sender, EventArgs eventArgs)
+        private void OnActivated(object? sender, EventArgs eventArgs)
         {
             branchSelector.Focus();
         }
 
         public string? BranchName { get; private set; }
 
-        private void btnCompare_Click(object sender, EventArgs e)
+        private void btnCompare_Click(object? sender, EventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(branchSelector.SelectedBranchName))
             {

@@ -26,7 +26,7 @@ namespace GitUI.CommandsDialogs
             ToolTip?.SetToolTip(copyButton, tooltip);
         }
 
-        private void copyButton_Click(object sender, EventArgs e)
+        private void copyButton_Click(object? sender, EventArgs e)
         {
             UserEnvironmentInformation.CopyInformation();
         }

@@ -141,7 +141,7 @@ namespace GitUI.CommandsDialogs
             _backgroundLoader?.Dispose();
         }
 
-        private void txtSearchBox_TextChange(object sender, EventArgs e)
+        private void txtSearchBox_TextChange(object? sender, EventArgs e)
         {
             OnTextChanged(e);
             if (_isUpdatingTextFromCode)
@@ -155,7 +155,7 @@ namespace GitUI.CommandsDialogs
             _backgroundLoader.LoadAsync(() => _getCandidates(selectedText), SearchForCandidates);
         }
 
-        private void txtSearchBox_KeyUp(object sender, KeyEventArgs e)
+        private void txtSearchBox_KeyUp(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
@@ -184,7 +184,7 @@ namespace GitUI.CommandsDialogs
             OnTextEntered?.Invoke();
         }
 
-        private void txtSearchBox_KeyDown(object sender, KeyEventArgs e)
+        private void txtSearchBox_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Down)
             {
@@ -216,7 +216,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void listBoxSearchResult_DoubleClick(object sender, EventArgs e)
+        private void listBoxSearchResult_DoubleClick(object? sender, EventArgs e)
         {
             ItemSelectedFromList();
         }

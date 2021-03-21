@@ -67,7 +67,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void SaveClick(object sender, EventArgs e)
+        private void SaveClick(object? sender, EventArgs e)
         {
             SaveFile();
             Close();
@@ -105,7 +105,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FormMailMapFormClosing(object sender, FormClosingEventArgs e)
+        private void FormMailMapFormClosing(object? sender, FormClosingEventArgs e)
         {
             var needToClose = false;
 
@@ -136,7 +136,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FormMailMapLoad(object sender, EventArgs e)
+        private void FormMailMapLoad(object? sender, EventArgs e)
         {
             if (!Module.IsBareRepository())
             {
@@ -152,7 +152,7 @@ namespace GitUI.CommandsDialogs
             return MailMapFile == _NO_TRANSLATE_MailMapText.GetText();
         }
 
-        private void MailMapFileLoaded(object sender, EventArgs e)
+        private void MailMapFileLoaded(object? sender, EventArgs e)
         {
             MailMapFile = _NO_TRANSLATE_MailMapText.GetText();
         }

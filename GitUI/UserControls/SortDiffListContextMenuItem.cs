@@ -74,9 +74,13 @@ namespace GitUI.UserControls
             }
         }
 
-        private void Item_Click(object sender, EventArgs e)
+        private void Item_Click(object? sender, EventArgs e)
         {
-            var item = (ToolStripMenuItem)sender;
+            if (sender is not ToolStripMenuItem item)
+            {
+                return;
+            }
+
             var sortingType = (DiffListSortType)item.Tag;
             _sortService.DiffListSorting = sortingType;
         }

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using GitExtUtils;
 using Microsoft.Win32;
 
@@ -19,7 +19,7 @@ namespace GitUI
             }
 
             // FeatureControl settings are per-process
-            var appName = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+            var appName = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule!.FileName);
 
             const string featureControlRegKey = @"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\";
 
@@ -45,14 +45,14 @@ namespace GitUI
             try
             {
                 int browserVersion;
-                using (var ieKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Internet Explorer",
+                using (RegistryKey? ieKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Internet Explorer",
                     RegistryKeyPermissionCheck.ReadSubTree,
                     System.Security.AccessControl.RegistryRights.QueryValues))
                 {
-                    var version = ieKey.GetValue("svcVersion");
+                    var version = ieKey?.GetValue("svcVersion");
                     if (version is null)
                     {
-                        version = ieKey.GetValue("Version");
+                        version = ieKey?.GetValue("Version");
                         if (version is null)
                         {
                             return false;

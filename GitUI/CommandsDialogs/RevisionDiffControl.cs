@@ -63,19 +63,19 @@ namespace GitUI.CommandsDialogs
             DiffText.LinePatchingBlocksUntilReload = true;
         }
 
-        private void FileViewer_TopScrollReached(object sender, EventArgs e)
+        private void FileViewer_TopScrollReached(object? sender, EventArgs e)
         {
             DiffFiles.SelectPreviousVisibleItem();
             DiffText.ScrollToBottom();
         }
 
-        private void FileViewer_BottomScrollReached(object sender, EventArgs e)
+        private void FileViewer_BottomScrollReached(object? sender, EventArgs e)
         {
             DiffFiles.SelectNextVisibleItem();
             DiffText.ScrollToTop();
         }
 
-        public void UICommands_PostRepositoryChanged(object sender, GitUIEventArgs e)
+        public void UICommands_PostRepositoryChanged(object? sender, GitUIEventArgs e)
         {
             _rememberFileContextMenuController.RememberedDiffFileItem = null;
         }
@@ -440,7 +440,7 @@ namespace GitUI.CommandsDialogs
                 openWithDiffTool: () => firstToSelectedToolStripMenuItem.PerformClick());
         }
 
-        private void DiffFiles_SelectedIndexChanged(object sender, EventArgs e)
+        private void DiffFiles_SelectedIndexChanged(object? sender, EventArgs e)
         {
             ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
@@ -448,7 +448,7 @@ namespace GitUI.CommandsDialogs
             }).FileAndForget();
         }
 
-        private void DiffFiles_DoubleClick(object sender, EventArgs e)
+        private void DiffFiles_DoubleClick(object? sender, EventArgs e)
         {
             FileStatusItem? item = DiffFiles.SelectedItem;
             if (item is null || !item.Item.IsTracked)
@@ -470,7 +470,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void DiffFiles_DataSourceChanged(object sender, EventArgs e)
+        private void DiffFiles_DataSourceChanged(object? sender, EventArgs e)
         {
             if (DiffFiles.GitItemStatuses is null || !DiffFiles.GitItemStatuses.Any())
             {
@@ -478,7 +478,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void DiffText_ExtraDiffArgumentsChanged(object sender, EventArgs e)
+        private void DiffText_ExtraDiffArgumentsChanged(object? sender, EventArgs e)
         {
             ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
@@ -486,12 +486,12 @@ namespace GitUI.CommandsDialogs
             }).FileAndForget();
         }
 
-        private void DiffText_PatchApplied(object sender, EventArgs e)
+        private void DiffText_PatchApplied(object? sender, EventArgs e)
         {
             RequestRefresh();
         }
 
-        private void diffShowInFileTreeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void diffShowInFileTreeToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             Validates.NotNull(_revisionFileTree);
 
@@ -558,12 +558,12 @@ namespace GitUI.CommandsDialogs
             blameToolStripMenuItem.Enabled = _revisionDiffController.ShouldShowMenuBlame(selectionInfo);
         }
 
-        private void DiffContextMenu_Opening(object sender, CancelEventArgs e)
+        private void DiffContextMenu_Opening(object? sender, CancelEventArgs e)
         {
             UpdateStatusOfMenuItems();
         }
 
-        private void blameToolStripMenuItem_Click(object sender, EventArgs e)
+        private void blameToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             FileStatusItem? item = DiffFiles.SelectedItem;
             if (item is null || !item.Item.IsTracked)
@@ -574,7 +574,7 @@ namespace GitUI.CommandsDialogs
             UICommands.StartFileHistoryDialog(this, item.Item.Name, item.SecondRevision, true, true);
         }
 
-        private void StageFileToolStripMenuItemClick(object sender, EventArgs e)
+        private void StageFileToolStripMenuItemClick(object? sender, EventArgs e)
         {
             StageFiles();
         }
@@ -587,7 +587,7 @@ namespace GitUI.CommandsDialogs
             RequestRefresh();
         }
 
-        private void UnstageFileToolStripMenuItemClick(object sender, EventArgs e)
+        private void UnstageFileToolStripMenuItemClick(object? sender, EventArgs e)
         {
             UnstageFiles();
         }
@@ -598,17 +598,17 @@ namespace GitUI.CommandsDialogs
             RequestRefresh();
         }
 
-        private void cherryPickSelectedDiffFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void cherryPickSelectedDiffFileToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             DiffText.CherryPickAllChanges();
         }
 
-        private void copyFilenameToClipboardToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void copyFilenameToClipboardToolStripMenuItem1_Click(object? sender, EventArgs e)
         {
             FormBrowse.CopyFullPathToClipboard(DiffFiles, Module);
         }
 
-        private void findInDiffToolStripMenuItem_Click(object sender, EventArgs e)
+        private void findInDiffToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var candidates = DiffFiles.GitItemStatuses;
 
@@ -634,7 +634,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void fileHistoryDiffToolstripMenuItem_Click(object sender, EventArgs e)
+        private void fileHistoryDiffToolstripMenuItem_Click(object? sender, EventArgs e)
         {
             FileStatusItem? item = DiffFiles.SelectedItem;
             if (item is null || !item.Item.IsTracked)
@@ -645,22 +645,22 @@ namespace GitUI.CommandsDialogs
             UICommands.StartFileHistoryDialog(this, item.Item.Name, item.SecondRevision);
         }
 
-        private void openContainingFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openContainingFolderToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             FormBrowse.OpenContainingFolder(DiffFiles, Module);
         }
 
-        private void firstToSelectedToolStripMenuItem_Click(object sender, EventArgs e)
+        private void firstToSelectedToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             OpenFilesWithDiffTool(RevisionDiffKind.DiffAB, sender);
         }
 
-        private void selectedToLocalToolStripMenuItem_Click(object sender, EventArgs e)
+        private void selectedToLocalToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             OpenFilesWithDiffTool(RevisionDiffKind.DiffBLocal, sender);
         }
 
-        private void firstToLocalToolStripMenuItem_Click(object sender, EventArgs e)
+        private void firstToLocalToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             OpenFilesWithDiffTool(RevisionDiffKind.DiffALocal, sender);
         }
@@ -699,7 +699,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void diffTwoSelectedDiffToolToolStripMenuItem_Click(object sender, EventArgs e)
+        private void diffTwoSelectedDiffToolToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var item = sender as ToolStripMenuItem;
             if (item?.DropDownItems != null)
@@ -727,7 +727,7 @@ namespace GitUI.CommandsDialogs
             Module.OpenFilesWithDifftool(first, second, customTool: toolName);
         }
 
-        private void diffWithRememberedDiffToolToolStripMenuItem_Click(object sender, EventArgs e)
+        private void diffWithRememberedDiffToolToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var item = sender as ToolStripMenuItem;
             if (item?.DropDownItems != null)
@@ -749,12 +749,12 @@ namespace GitUI.CommandsDialogs
             Module.OpenFilesWithDifftool(first, second, customTool: toolName);
         }
 
-        private void rememberSecondDiffToolToolStripMenuItem_Click(object sender, EventArgs e)
+        private void rememberSecondDiffToolToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             _rememberFileContextMenuController.RememberedDiffFileItem = DiffFiles.SelectedItem;
         }
 
-        private void rememberFirstDiffToolToolStripMenuItem_Click(object sender, EventArgs e)
+        private void rememberFirstDiffToolToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (DiffFiles.SelectedItem?.FirstRevision is null)
             {
@@ -775,7 +775,7 @@ namespace GitUI.CommandsDialogs
             _rememberFileContextMenuController.RememberedDiffFileItem = item;
         }
 
-        private void diffEditWorkingDirectoryFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void diffEditWorkingDirectoryFileToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (DiffFiles.SelectedItem is null)
             {
@@ -787,7 +787,7 @@ namespace GitUI.CommandsDialogs
             RequestRefresh();
         }
 
-        private void diffOpenWorkingDirectoryFileWithToolStripMenuItem_Click(object sender, EventArgs e)
+        private void diffOpenWorkingDirectoryFileWithToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (DiffFiles.SelectedItem is null)
             {
@@ -802,12 +802,12 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void diffOpenRevisionFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void diffOpenRevisionFileToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             SaveSelectedItemToTempFile(fileName => OsShellUtil.Open(fileName));
         }
 
-        private void diffOpenRevisionFileWithToolStripMenuItem_Click(object sender, EventArgs e)
+        private void diffOpenRevisionFileWithToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             SaveSelectedItemToTempFile(OsShellUtil.OpenAs);
         }
@@ -861,7 +861,7 @@ namespace GitUI.CommandsDialogs
                 localExists: localExists);
         }
 
-        private void openWithDifftoolToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        private void openWithDifftoolToolStripMenuItem_DropDownOpening(object? sender, EventArgs e)
         {
             ContextMenuDiffToolInfo selectionInfo = GetContextMenuDiffToolInfo();
             var revisions = DiffFiles.SelectedItems.SecondRevs().ToList();
@@ -918,7 +918,7 @@ namespace GitUI.CommandsDialogs
                                                                 && _rememberFileContextMenuController.ShouldEnableFirstItemDiff(diffFiles[0], isSecondRevision: false);
         }
 
-        private void resetFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void resetFileToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             ResetSelectedItemsTo(sender == resetFileToSelectedToolStripMenuItem);
         }
@@ -935,7 +935,7 @@ namespace GitUI.CommandsDialogs
                    && guid != ObjectId.CombinedDiffId;
         }
 
-        private void resetFileToToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        private void resetFileToToolStripMenuItem_DropDownOpening(object? sender, EventArgs e)
         {
             var items = DiffFiles.SelectedItems;
             var selectedIds = items.SecondIds().ToList();
@@ -970,7 +970,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void saveAsToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void saveAsToolStripMenuItem1_Click(object? sender, EventArgs e)
         {
             FileStatusItem? item = DiffFiles.SelectedItem;
             if (item is null)
@@ -1041,12 +1041,12 @@ namespace GitUI.CommandsDialogs
             return true;
         }
 
-        private void diffDeleteFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void diffDeleteFileToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             DeleteSelectedFiles();
         }
 
-        private void diffCommitSubmoduleChanges_Click(object sender, EventArgs e)
+        private void diffCommitSubmoduleChanges_Click(object? sender, EventArgs e)
         {
             var submodules = DiffFiles.SelectedItems.Where(it => it.Item.IsSubmodule).Select(it => it.Item.Name).Distinct().ToList();
 
@@ -1059,7 +1059,7 @@ namespace GitUI.CommandsDialogs
             RequestRefresh();
         }
 
-        private void diffResetSubmoduleChanges_Click(object sender, EventArgs e)
+        private void diffResetSubmoduleChanges_Click(object? sender, EventArgs e)
         {
             var submodules = DiffFiles.SelectedItems.Where(it => it.Item.IsSubmodule).Select(it => it.Item.Name).Distinct().ToList();
 
@@ -1087,7 +1087,7 @@ namespace GitUI.CommandsDialogs
             RequestRefresh();
        }
 
-        private void diffUpdateSubmoduleMenuItem_Click(object sender, EventArgs e)
+        private void diffUpdateSubmoduleMenuItem_Click(object? sender, EventArgs e)
         {
             var submodules = DiffFiles.SelectedItems.Where(it => it.Item.IsSubmodule).Select(it => it.Item.Name).Distinct().ToList();
 
@@ -1095,7 +1095,7 @@ namespace GitUI.CommandsDialogs
             RequestRefresh();
         }
 
-        private void diffStashSubmoduleChangesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void diffStashSubmoduleChangesToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var submodules = DiffFiles.SelectedItems.Where(it => it.Item.IsSubmodule).Select(it => it.Item.Name).Distinct().ToList();
 

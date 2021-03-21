@@ -21,7 +21,7 @@ namespace GitUI.Editor
             lineLabel.Text = lineLabel.Text + " (1 - " + maxLineNumber + "):";
         }
 
-        private void FormGoToLine_Load(object sender, EventArgs e)
+        private void FormGoToLine_Load(object? sender, EventArgs e)
         {
             _NO_TRANSLATE_LineNumberUpDown.Select(0, _NO_TRANSLATE_LineNumberUpDown.ToString().Length);
         }

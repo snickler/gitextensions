@@ -28,7 +28,7 @@ namespace GitUI
         /// </summary>
         public static WaitCursorScope Enter(Cursor? cursor = null)
         {
-            var cursorAtStartOfScope = Cursor.Current;
+            var cursorAtStartOfScope = Cursor.Current!;
 
             Cursor.Current = cursor ?? Cursors.WaitCursor;
 

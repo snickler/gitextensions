@@ -110,7 +110,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             txtHotkey.KeyData = command?.KeyData ?? Keys.None;
         }
 
-        private void ControlHotkeys_Load(object sender, EventArgs e)
+        private void ControlHotkeys_Load(object? sender, EventArgs e)
         {
             if (DesignMode)
             {
@@ -120,12 +120,12 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             ReloadSettings();
         }
 
-        private void cmbSettings_SelectedIndexChanged(object sender, EventArgs e)
+        private void cmbSettings_SelectedIndexChanged(object? sender, EventArgs e)
         {
             SelectedHotkeySettings = cmbSettings.SelectedItem as HotkeySettings;
         }
 
-        private void listMappings_SelectedIndexChanged(object sender, EventArgs e)
+        private void listMappings_SelectedIndexChanged(object? sender, EventArgs e)
         {
             var lvi = listMappings.SelectedItems.Count > 0 ? listMappings.SelectedItems[0] : null;
             if (lvi is not null)
@@ -135,7 +135,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void bApply_Click(object sender, EventArgs e)
+        private void bApply_Click(object? sender, EventArgs e)
         {
             var hotkey = SelectedHotkeyCommand;
             if (hotkey is not null)
@@ -148,7 +148,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void bClear_Click(object sender, EventArgs e)
+        private void bClear_Click(object? sender, EventArgs e)
         {
             var hotkey = SelectedHotkeyCommand;
             if (hotkey is not null)
@@ -162,7 +162,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void bResetToDefaults_Click(object sender, EventArgs e)
+        private void bResetToDefaults_Click(object? sender, EventArgs e)
         {
             Settings = HotkeySettingsManager.CreateDefaultSettings();
         }

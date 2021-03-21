@@ -244,7 +244,7 @@ namespace GitUI
 
             Form form = provideForm();
 
-            void FormClosed(object sender, FormClosedEventArgs e)
+            void FormClosed(object? sender, FormClosedEventArgs e)
             {
                 form.FormClosed -= FormClosed;
                 InvokePostEvent(owner, true, postEvent);

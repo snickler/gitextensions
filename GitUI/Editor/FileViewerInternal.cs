@@ -94,7 +94,7 @@ namespace GitUI.Editor
             _continuousScrollEventManager = continuousScrollEventManager;
         }
 
-        private void SelectionManagerSelectionChanged(object sender, EventArgs e)
+        private void SelectionManagerSelectionChanged(object? sender, EventArgs e)
         {
             string text = TextEditor.ActiveTextAreaControl.TextArea.SelectionManager.SelectedText;
             TextEditor.Document.MarkerStrategy.RemoveAll(m => true);
@@ -517,7 +517,7 @@ namespace GitUI.Editor
             _findAndReplaceForm.SetFileLoader(fileLoader);
         }
 
-        private void TextArea_MouseWheel(object sender, MouseEventArgs e)
+        private void TextArea_MouseWheel(object? sender, MouseEventArgs e)
         {
             var isScrollingTowardTop = e.Delta > 0;
             var isScrollingTowardBottom = e.Delta < 0;

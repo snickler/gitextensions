@@ -129,7 +129,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void SaveClick(object sender, EventArgs e)
+        private void SaveClick(object? sender, EventArgs e)
         {
             SaveGitIgnore();
             Close();
@@ -168,7 +168,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FormGitIgnoreFormClosing(object sender, FormClosingEventArgs e)
+        private void FormGitIgnoreFormClosing(object? sender, FormClosingEventArgs e)
         {
             if (HasUnsavedChanges())
             {
@@ -189,7 +189,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FormGitIgnoreLoad(object sender, EventArgs e)
+        private void FormGitIgnoreLoad(object? sender, EventArgs e)
         {
             if (!Module.IsBareRepository())
             {
@@ -200,7 +200,7 @@ namespace GitUI.CommandsDialogs
             Close();
         }
 
-        private void AddDefaultClick(object sender, EventArgs e)
+        private void AddDefaultClick(object? sender, EventArgs e)
         {
             var defaultIgnorePatterns = File.Exists(DefaultIgnorePatternsFile) ? File.ReadAllLines(DefaultIgnorePatternsFile) : DefaultIgnorePatterns;
 
@@ -224,7 +224,7 @@ namespace GitUI.CommandsDialogs
             _NO_TRANSLATE_GitIgnoreEdit.TextLoaded += GitIgnoreFileLoaded;
         }
 
-        private void AddPattern_Click(object sender, EventArgs e)
+        private void AddPattern_Click(object? sender, EventArgs e)
         {
             SaveGitIgnore();
             UICommands.StartAddToGitIgnoreDialog(this, _localExclude, "*.dll");
@@ -236,22 +236,22 @@ namespace GitUI.CommandsDialogs
             return _originalGitIgnoreFileContent != _NO_TRANSLATE_GitIgnoreEdit.GetText();
         }
 
-        private void GitIgnoreFileLoaded(object sender, EventArgs e)
+        private void GitIgnoreFileLoaded(object? sender, EventArgs e)
         {
             _originalGitIgnoreFileContent = _NO_TRANSLATE_GitIgnoreEdit.GetText();
         }
 
-        private void lnkGitIgnorePatterns_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void lnkGitIgnorePatterns_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             OsShellUtil.OpenUrlInDefaultBrowser(@"https://github.com/github/gitignore");
         }
 
-        private void lnkGitIgnoreGenerate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void lnkGitIgnoreGenerate_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             OsShellUtil.OpenUrlInDefaultBrowser(@"https://www.gitignore.io/");
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void btnCancel_Click(object? sender, EventArgs e)
         {
             Close();
         }

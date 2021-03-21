@@ -1,3 +1,6 @@
+#nullable disable
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -356,14 +359,16 @@ namespace GitUI.Theming
             return hwnd;
         }
 
-        private static void ListView_BeginCreateHandle(object sender, EventArgs args)
+        private static void ListView_BeginCreateHandle(object? sender, EventArgs args)
         {
             InitializingListViews.Add((NativeListView)sender);
         }
 
-        private static void ListView_EndCreateHandle(object sender, EventArgs args)
+        private static void ListView_EndCreateHandle(object? sender, EventArgs args)
         {
             InitializingListViews.Remove((NativeListView)sender);
         }
     }
 }
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable restore

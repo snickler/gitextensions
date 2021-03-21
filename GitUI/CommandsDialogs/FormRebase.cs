@@ -60,7 +60,7 @@ namespace GitUI.CommandsDialogs
             Shown += FormRebase_Shown;
         }
 
-        private void FormRebase_Shown(object sender, EventArgs e)
+        private void FormRebase_Shown(object? sender, EventArgs e)
         {
             patchGrid1.SelectCurrentlyApplyingPatch();
         }
@@ -75,7 +75,7 @@ namespace GitUI.CommandsDialogs
             _startRebaseImmediately = startRebaseImmediately;
         }
 
-        private void FormRebaseLoad(object sender, EventArgs e)
+        private void FormRebaseLoad(object? sender, EventArgs e)
         {
             var selectedHead = Module.GetSelectedBranch();
             Currentbranch.Text = selectedHead;
@@ -175,23 +175,23 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void MergetoolClick(object sender, EventArgs e)
+        private void MergetoolClick(object? sender, EventArgs e)
         {
             UICommands.StartResolveConflictsDialog(this);
             EnableButtons();
         }
 
-        private void chkInteractive_CheckedChanged(object sender, EventArgs e)
+        private void chkInteractive_CheckedChanged(object? sender, EventArgs e)
         {
             chkAutosquash.Enabled = chkInteractive.Checked;
         }
 
-        private void chkIgnoreDate_CheckedChanged(object sender, EventArgs e)
+        private void chkIgnoreDate_CheckedChanged(object? sender, EventArgs e)
         {
             ToggleDateCheckboxMutualExclusions();
         }
 
-        private void chkCommitterDateIsAuthorDate_CheckedChanged(object sender, EventArgs e)
+        private void chkCommitterDateIsAuthorDate_CheckedChanged(object? sender, EventArgs e)
         {
             ToggleDateCheckboxMutualExclusions();
         }
@@ -205,12 +205,12 @@ namespace GitUI.CommandsDialogs
             chkAutosquash.Enabled = chkInteractive.Checked && !chkIgnoreDate.Checked && !chkCommitterDateIsAuthorDate.Checked;
         }
 
-        private void AddFilesClick(object sender, EventArgs e)
+        private void AddFilesClick(object? sender, EventArgs e)
         {
             UICommands.StartAddFilesDialog(this);
         }
 
-        private void ResolvedClick(object sender, EventArgs e)
+        private void ResolvedClick(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -226,7 +226,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void SkipClick(object sender, EventArgs e)
+        private void SkipClick(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -250,7 +250,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void AbortClick(object sender, EventArgs e)
+        private void AbortClick(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -267,7 +267,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void OkClick(object sender, EventArgs e)
+        private void OkClick(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -312,25 +312,25 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void SolveMergeConflictsClick(object sender, EventArgs e)
+        private void SolveMergeConflictsClick(object? sender, EventArgs e)
         {
             MergetoolClick(sender, e);
         }
 
-        private void ShowOptions_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void ShowOptions_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             ShowOptions.Visible = false;
             OptionsPanel.Visible = true;
         }
 
-        private void chkUseFromOnto_CheckedChanged(object sender, EventArgs e)
+        private void chkUseFromOnto_CheckedChanged(object? sender, EventArgs e)
         {
             txtFrom.Enabled = chkSpecificRange.Checked;
             cboTo.Enabled = chkSpecificRange.Checked;
             btnChooseFromRevision.Enabled = chkSpecificRange.Checked;
         }
 
-        private void btnChooseFromRevision_Click(object sender, EventArgs e)
+        private void btnChooseFromRevision_Click(object? sender, EventArgs e)
         {
             using var chooseForm = new FormChooseCommit(UICommands, txtFrom.Text);
             if (chooseForm.ShowDialog(this) == DialogResult.OK && chooseForm.SelectedRevision is not null)
@@ -339,7 +339,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Commit_Click(object sender, EventArgs e)
+        private void Commit_Click(object? sender, EventArgs e)
         {
             UICommands.StartCommitDialog(this);
             EnableButtons();

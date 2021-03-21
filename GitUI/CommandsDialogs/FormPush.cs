@@ -225,7 +225,7 @@ namespace GitUI.CommandsDialogs
             BindRemotesDropDown(selectedRemoteName);
         }
 
-        private void PushClick(object sender, EventArgs e)
+        private void PushClick(object? sender, EventArgs e)
         {
             DialogResult = PushChanges(this) ? DialogResult.OK : DialogResult.None;
         }
@@ -758,7 +758,7 @@ namespace GitUI.CommandsDialogs
             return _gitRefs.Where(r => r.IsRemote && r.Remote == remoteName);
         }
 
-        private void PullClick(object sender, EventArgs e)
+        private void PullClick(object? sender, EventArgs e)
         {
             UICommands.StartPullDialog(this);
         }
@@ -797,7 +797,7 @@ namespace GitUI.CommandsDialogs
             RemoteBranch.ResizeDropDownWidth(AppSettings.BranchDropDownMinWidth, AppSettings.BranchDropDownMaxWidth);
         }
 
-        private void BranchSelectedValueChanged(object sender, EventArgs e)
+        private void BranchSelectedValueChanged(object? sender, EventArgs e)
         {
             if (_NO_TRANSLATE_Branch.Text == AllRefs)
             {
@@ -836,7 +836,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FormPushLoad(object sender, EventArgs e)
+        private void FormPushLoad(object? sender, EventArgs e)
         {
             _NO_TRANSLATE_Remotes.Select();
 
@@ -846,12 +846,12 @@ namespace GitUI.CommandsDialogs
             _createPullRequestCB.Enabled = gitHoster is not null;
         }
 
-        private void AddRemoteClick(object sender, EventArgs e)
+        private void AddRemoteClick(object? sender, EventArgs e)
         {
             OpenRemotesDialogAndRefreshList(_selectedRemote?.Name);
         }
 
-        private void PushToUrlCheckedChanged(object sender, EventArgs e)
+        private void PushToUrlCheckedChanged(object? sender, EventArgs e)
         {
             PushDestination.Enabled = PushToUrl.Checked;
             folderBrowserButton1.Enabled = PushToUrl.Checked;
@@ -879,7 +879,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void RemotesUpdated(object sender, EventArgs e)
+        private void RemotesUpdated(object? sender, EventArgs e)
         {
             _selectedRemote = _NO_TRANSLATE_Remotes.SelectedItem as ConfigFileRemote;
             if (_selectedRemote is null)
@@ -923,7 +923,7 @@ namespace GitUI.CommandsDialogs
             LoadSSHKey.Visible = !string.IsNullOrWhiteSpace(_selectedRemote?.PuttySshKey);
         }
 
-        private void LoadSshKeyClick(object sender, EventArgs e)
+        private void LoadSshKeyClick(object? sender, EventArgs e)
         {
             StartPageant(_selectedRemote?.Name);
         }
@@ -948,7 +948,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void RemotesValidated(object sender, EventArgs e)
+        private void RemotesValidated(object? sender, EventArgs e)
         {
             EnableLoadSshButton();
         }
@@ -965,7 +965,7 @@ namespace GitUI.CommandsDialogs
             TagComboBox.ResizeDropDownWidth(AppSettings.BranchDropDownMinWidth, AppSettings.BranchDropDownMaxWidth);
         }
 
-        private void ForcePushBranchesCheckedChanged(object sender, EventArgs e)
+        private void ForcePushBranchesCheckedChanged(object? sender, EventArgs e)
         {
             if (ForcePushBranches.Checked)
             {
@@ -1127,7 +1127,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private static void BranchTable_ColumnChanged(object sender, DataColumnChangeEventArgs e)
+        private static void BranchTable_ColumnChanged(object? sender, DataColumnChangeEventArgs e)
         {
             switch (e.Column.ColumnName)
             {
@@ -1166,7 +1166,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void TabControlTagBranch_Selected(object sender, TabControlEventArgs e)
+        private void TabControlTagBranch_Selected(object? sender, TabControlEventArgs e)
         {
             if (TabControlTagBranch.SelectedTab == MultipleBranchTab)
             {
@@ -1183,7 +1183,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void BranchGrid_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        private void BranchGrid_CurrentCellDirtyStateChanged(object? sender, EventArgs e)
         {
             // Push grid checkbox changes immediately into the underlying data table.
             if (BranchGrid.CurrentCell is DataGridViewCheckBoxCell)
@@ -1193,7 +1193,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void BranchGrid_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        private void BranchGrid_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
         {
             foreach (DataGridViewRow row in BranchGrid.Rows)
             {
@@ -1205,7 +1205,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void BranchGrid_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        private void BranchGrid_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
         {
             if (e.RowIndex < 0)
             {
@@ -1221,7 +1221,7 @@ namespace GitUI.CommandsDialogs
 
         #endregion
 
-        private void ShowOptions_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void ShowOptions_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             PushOptionsPanel.Visible = true;
             ShowOptions.Visible = false;
@@ -1236,7 +1236,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void _NO_TRANSLATE_Branch_SelectedIndexChanged(object sender, EventArgs e)
+        private void _NO_TRANSLATE_Branch_SelectedIndexChanged(object? sender, EventArgs e)
         {
             RemoteBranch.Enabled = _NO_TRANSLATE_Branch.Text != AllRefs;
         }
@@ -1255,7 +1255,7 @@ namespace GitUI.CommandsDialogs
             base.Dispose(disposing);
         }
 
-        private void ForceWithLeaseCheckedChanged(object sender, EventArgs e)
+        private void ForceWithLeaseCheckedChanged(object? sender, EventArgs e)
         {
             if (ckForceWithLease.Checked)
             {
@@ -1263,7 +1263,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void BranchGrid_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void BranchGrid_ColumnHeaderMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.ColumnIndex == _pushColumnIndex && e.Button == MouseButtons.Left)
             {
@@ -1274,17 +1274,17 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void unselectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        private void unselectAllToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             SetBranchesPushCheckboxesState(_ => false);
         }
 
-        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        private void selectAllToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             SetBranchesPushCheckboxesState(_ => true);
         }
 
-        private void selectTrackedToolStripMenuItem_Click(object sender, EventArgs e)
+        private void selectTrackedToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             SetBranchesPushCheckboxesState(row =>
                 {

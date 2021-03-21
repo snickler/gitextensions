@@ -55,13 +55,13 @@ namespace GitUI.CommandsDialogs
             return form.SelectedAction;
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void btnCancel_Click(object? sender, EventArgs e)
         {
             SelectedAction = ActionEnum.Cancel;
             Close();
         }
 
-        private void btnReset_Click(object sender, EventArgs e)
+        private void btnReset_Click(object? sender, EventArgs e)
         {
             SelectedAction = cbDeleteNewFilesAndDirectories.Checked ? ActionEnum.ResetAndDelete : ActionEnum.Reset;
             Close();

@@ -42,7 +42,7 @@ namespace GitUI.CommandsDialogs
             LoadPatchFile();
         }
 
-        private void GridChangedFiles_SelectionChanged(object sender, EventArgs e)
+        private void GridChangedFiles_SelectionChanged(object? sender, EventArgs e)
         {
             if (GridChangedFiles.SelectedRows.Count == 0)
             {
@@ -59,7 +59,7 @@ namespace GitUI.CommandsDialogs
             ChangesList.ViewFixedPatch(patch.FileNameB, patch.Text ?? "");
         }
 
-        private void BrowsePatch_Click(object sender, EventArgs e)
+        private void BrowsePatch_Click(object? sender, EventArgs e)
         {
             var dialog = new OpenFileDialog
             {

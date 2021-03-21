@@ -57,7 +57,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
             }
         }
 
-        private void ToLeft_Click(object sender, EventArgs e)
+        private void ToLeft_Click(object? sender, EventArgs e)
         {
             if (ListAvailableEncodings.SelectedItem is not null)
             {
@@ -67,7 +67,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
             }
         }
 
-        private void ButtonOk_Click(object sender, EventArgs e)
+        private void ButtonOk_Click(object? sender, EventArgs e)
         {
             AppSettings.AvailableEncodings.Clear();
             foreach (Encoding encoding in ListIncludedEncodings.Items)
@@ -78,12 +78,12 @@ namespace GitUI.CommandsDialogs.SettingsDialog
             DialogResult = DialogResult.OK;
         }
 
-        private void ButtonCancel_Click(object sender, EventArgs e)
+        private void ButtonCancel_Click(object? sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
         }
 
-        private void ToRight_Click(object sender, EventArgs e)
+        private void ToRight_Click(object? sender, EventArgs e)
         {
             if (ListIncludedEncodings.SelectedItem is not null)
             {
@@ -93,7 +93,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
             }
         }
 
-        private void ListIncludedEncodings_SelectedValueChanged(object sender, EventArgs e)
+        private void ListIncludedEncodings_SelectedValueChanged(object? sender, EventArgs e)
         {
             // Get selected encoding
             var encoding = ListIncludedEncodings.SelectedItem as Encoding;
@@ -115,7 +115,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
                     encoding == Encoding.Default);
         }
 
-        private void ListAvailableEncodings_SelectedValueChanged(object sender, EventArgs e)
+        private void ListAvailableEncodings_SelectedValueChanged(object? sender, EventArgs e)
         {
             ToLeft.Enabled = ListAvailableEncodings.SelectedItem is not null;
         }

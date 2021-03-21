@@ -153,7 +153,7 @@ namespace GitUI.CommandsDialogs
             Hotkeys = HotkeySettingsManager.LoadHotkeys(HotkeySettingsName);
         }
 
-        private void Mergetool_Click(object sender, EventArgs e)
+        private void Mergetool_Click(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -166,7 +166,7 @@ namespace GitUI.CommandsDialogs
         private readonly bool _offerCommit;
         private bool _thereWhereMergeConflicts;
 
-        private void FormResolveConflicts_Load(object sender, EventArgs e)
+        private void FormResolveConflicts_Load(object? sender, EventArgs e)
         {
             Initialize();
         }
@@ -267,7 +267,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Rescan_Click(object sender, EventArgs e)
+        private void Rescan_Click(object? sender, EventArgs e)
         {
             Initialize();
         }
@@ -452,7 +452,7 @@ namespace GitUI.CommandsDialogs
             return ItemType.File;
         }
 
-        private void ConflictedFiles_DoubleClick(object sender, EventArgs e)
+        private void ConflictedFiles_DoubleClick(object? sender, EventArgs e)
         {
             OpenMergeTool();
         }
@@ -690,7 +690,7 @@ namespace GitUI.CommandsDialogs
             return false;
         }
 
-        private void Reset_Click(object sender, EventArgs e)
+        private void Reset_Click(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -724,7 +724,7 @@ namespace GitUI.CommandsDialogs
             return '@' + item.ObjectId.ToShortString();
         }
 
-        private void ConflictedFiles_SelectionChanged(object sender, EventArgs e)
+        private void ConflictedFiles_SelectionChanged(object? sender, EventArgs e)
         {
             UpdateConflictedFilesMenu();
         }
@@ -812,7 +812,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void ContextChooseBase_Click(object sender, EventArgs e)
+        private void ContextChooseBase_Click(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -842,7 +842,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void ContextChooseLocal_Click(object sender, EventArgs e)
+        private void ContextChooseLocal_Click(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -871,7 +871,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void ContextChooseRemote_Click(object sender, EventArgs e)
+        private void ContextChooseRemote_Click(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -1249,12 +1249,12 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void OpenMergetool_Click(object sender, EventArgs e)
+        private void OpenMergetool_Click(object? sender, EventArgs e)
         {
             OpenMergeTool();
         }
 
-        private void customMergetool_Click(object sender, EventArgs e)
+        private void customMergetool_Click(object? sender, EventArgs e)
         {
             var item = sender as ToolStripMenuItem;
             if (item?.DropDownItems != null)
@@ -1277,12 +1277,12 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void ContextOpenBaseWith_Click(object sender, EventArgs e)
+        private void ContextOpenBaseWith_Click(object? sender, EventArgs e)
         {
             OpenSideWith("BASE");
         }
 
-        private void ContextOpenLocalWith_Click(object sender, EventArgs e)
+        private void ContextOpenLocalWith_Click(object? sender, EventArgs e)
         {
             OpenSideWith("LOCAL");
         }
@@ -1306,12 +1306,12 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void ContextOpenRemoteWith_Click(object sender, EventArgs e)
+        private void ContextOpenRemoteWith_Click(object? sender, EventArgs e)
         {
             OpenSideWith("REMOTE");
         }
 
-        private void ConflictedFiles_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        private void ConflictedFiles_CellMouseDown(object? sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
@@ -1360,22 +1360,22 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void ContextSaveBaseAs_Click(object sender, EventArgs e)
+        private void ContextSaveBaseAs_Click(object? sender, EventArgs e)
         {
             SaveAs("BASE");
         }
 
-        private void ContextSaveLocalAs_Click(object sender, EventArgs e)
+        private void ContextSaveLocalAs_Click(object? sender, EventArgs e)
         {
             SaveAs("LOCAL");
         }
 
-        private void ContextSaveRemoteAs_Click(object sender, EventArgs e)
+        private void ContextSaveRemoteAs_Click(object? sender, EventArgs e)
         {
             SaveAs("REMOTE");
         }
 
-        private void ContextMarkAsSolved_Click(object sender, EventArgs e)
+        private void ContextMarkAsSolved_Click(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -1384,7 +1384,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void ConflictedFilesContextMenu_Opening(object sender, CancelEventArgs e)
+        private void ConflictedFilesContextMenu_Opening(object? sender, CancelEventArgs e)
         {
             if (ConflictedFiles.SelectedRows.Count == 0)
             {
@@ -1432,7 +1432,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             string fileName = GetFileName();
             string? filePath = _fullPathResolver.Resolve(fileName);
@@ -1442,7 +1442,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void openWithToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openWithToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             string fileName = GetFileName();
             string? filePath = _fullPathResolver.Resolve(fileName);
@@ -1470,12 +1470,12 @@ namespace GitUI.CommandsDialogs
             FormStatus.ShowErrorDialog(this, text, text, output);
         }
 
-        private void merge_Click(object sender, EventArgs e)
+        private void merge_Click(object? sender, EventArgs e)
         {
             OpenMergeTool();
         }
 
-        private void ConflictedFiles_KeyDown(object sender, KeyEventArgs e)
+        private void ConflictedFiles_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
@@ -1484,7 +1484,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void fileHistoryToolStripMenuItem_Click(object sender, EventArgs e)
+        private void fileHistoryToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             UICommands.StartFileHistoryDialog(this, GetFileName());
         }

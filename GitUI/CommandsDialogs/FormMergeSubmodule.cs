@@ -32,7 +32,7 @@ namespace GitUI.CommandsDialogs
             _filename = filename;
         }
 
-        private void FormMergeSubmodule_Load(object sender, EventArgs e)
+        private void FormMergeSubmodule_Load(object? sender, EventArgs e)
         {
             var item = ThreadHelper.JoinableTaskFactory.Run(() => Module.GetConflictAsync(_filename));
 
@@ -42,7 +42,7 @@ namespace GitUI.CommandsDialogs
             tbCurrent.Text = Module.GetSubmodule(_filename).GetCurrentCheckout()?.ToString() ?? "";
         }
 
-        private void btRefresh_Click(object sender, EventArgs e)
+        private void btRefresh_Click(object? sender, EventArgs e)
         {
             tbCurrent.Text = Module.GetSubmodule(_filename).GetCurrentCheckout()?.ToString() ?? "";
         }
@@ -65,19 +65,19 @@ namespace GitUI.CommandsDialogs
             FormStatus.ShowErrorDialog(this, text, text, output);
         }
 
-        private void btStageCurrent_Click(object sender, EventArgs e)
+        private void btStageCurrent_Click(object? sender, EventArgs e)
         {
             StageSubmodule();
             DialogResult = DialogResult.OK;
             Close();
         }
 
-        private void btOpenSubmodule_Click(object sender, EventArgs e)
+        private void btOpenSubmodule_Click(object? sender, EventArgs e)
         {
             GitUICommands.LaunchBrowse(workingDir: Module.GetSubmoduleFullPath(_filename));
         }
 
-        private void btCheckoutBranch_Click(object sender, EventArgs e)
+        private void btCheckoutBranch_Click(object? sender, EventArgs e)
         {
             var revisions = new[] { ObjectId.Parse(tbLocal.Text), ObjectId.Parse(tbRemote.Text) };
             var submoduleCommands = new GitUICommands(Module.GetSubmoduleFullPath(_filename));

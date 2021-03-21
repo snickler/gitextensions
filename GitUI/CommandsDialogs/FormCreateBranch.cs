@@ -70,7 +70,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void BranchNameTextBox_Leave(object sender, EventArgs e)
+        private void BranchNameTextBox_Leave(object? sender, EventArgs e)
         {
             if (!AppSettings.AutoNormaliseBranchName || !BranchNameTextBox.Text.Any(GitBranchNameNormaliser.IsValidChar))
             {
@@ -101,7 +101,7 @@ namespace GitUI.CommandsDialogs
             BranchNameTextBox.Focus();
         }
 
-        private void OkClick(object sender, EventArgs e)
+        private void OkClick(object? sender, EventArgs e)
         {
             // Ok button set as the "AcceptButton" for the form
             // if the user hits [Enter] at any point, we need to trigger BranchNameTextBox Leave event
@@ -158,7 +158,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Orphan_CheckedChanged(object sender, EventArgs e)
+        private void Orphan_CheckedChanged(object? sender, EventArgs e)
         {
             bool isOrphan = Orphan.Checked;
             ClearOrphan.Enabled = isOrphan;
@@ -170,7 +170,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void commitPickerSmallControl1_SelectedObjectIdChanged(object sender, EventArgs e)
+        private void commitPickerSmallControl1_SelectedObjectIdChanged(object? sender, EventArgs e)
         {
             GitRevision revision = Module.GetRevision(commitPickerSmallControl1.SelectedObjectId, shortFormat: true, loadRefs: true);
             commitSummaryUserControl1.Revision = revision;

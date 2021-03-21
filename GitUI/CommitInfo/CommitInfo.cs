@@ -165,7 +165,7 @@ namespace GitUI.CommitInfo
             set => SetRevisionWithChildren(value, null);
         }
 
-        private void RevisionInfoLinkClicked(object sender, LinkClickedEventArgs e)
+        private void RevisionInfoLinkClicked(object? sender, LinkClickedEventArgs e)
         {
             try
             {
@@ -446,11 +446,10 @@ namespace GitUI.CommitInfo
 
                             if (gitRef.IsTag && gitRef.IsDereference)
                             {
-                                string content = WebUtility.HtmlEncode(Module.GetTagMessage(gitRef.LocalName));
-
+                                string? content = Module.GetTagMessage(gitRef.LocalName);
                                 if (content is not null)
                                 {
-                                    result.Add(gitRef.LocalName, content);
+                                    result.Add(gitRef.LocalName, WebUtility.HtmlEncode(content));
                                 }
                             }
                         }
@@ -582,7 +581,7 @@ namespace GitUI.CommitInfo
             }
         }
 
-        private void commitInfoContextMenuStrip_Opening(object sender, CancelEventArgs e)
+        private void commitInfoContextMenuStrip_Opening(object? sender, CancelEventArgs e)
         {
             if ((sender as ContextMenuStrip)?.SourceControl is not RichTextBox rtb)
             {
@@ -597,54 +596,54 @@ namespace GitUI.CommitInfo
             copyLinkToolStripMenuItem.Tag = link;
         }
 
-        private void copyLinkToolStripMenuItem_Click(object sender, EventArgs e)
+        private void copyLinkToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             ClipboardUtil.TrySetText((string)copyLinkToolStripMenuItem.Tag);
         }
 
-        private void showContainedInBranchesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showContainedInBranchesToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.CommitInfoShowContainedInBranchesLocal = !AppSettings.CommitInfoShowContainedInBranchesLocal;
             ReloadCommitInfo();
         }
 
-        private void showContainedInTagsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showContainedInTagsToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.CommitInfoShowContainedInTags = !AppSettings.CommitInfoShowContainedInTags;
             ReloadCommitInfo();
         }
 
-        private void showTagThisCommitDerivesFromMenuItem_Click(object sender, EventArgs e)
+        private void showTagThisCommitDerivesFromMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.CommitInfoShowTagThisCommitDerivesFrom = !AppSettings.CommitInfoShowTagThisCommitDerivesFrom;
             ReloadCommitInfo();
         }
 
-        private void copyCommitInfoToolStripMenuItem_Click(object sender, EventArgs e)
+        private void copyCommitInfoToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var commitInfo = $"{commitInfoHeader.GetPlainText()}{Environment.NewLine}{Environment.NewLine}{rtbxCommitMessage.GetPlainText()}{Environment.NewLine}{RevisionInfo.GetPlainText()}";
             ClipboardUtil.TrySetText(commitInfo);
         }
 
-        private void showContainedInBranchesRemoteToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showContainedInBranchesRemoteToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.CommitInfoShowContainedInBranchesRemote = !AppSettings.CommitInfoShowContainedInBranchesRemote;
             ReloadCommitInfo();
         }
 
-        private void showContainedInBranchesRemoteIfNoLocalToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showContainedInBranchesRemoteIfNoLocalToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.CommitInfoShowContainedInBranchesRemoteIfNoLocal = !AppSettings.CommitInfoShowContainedInBranchesRemoteIfNoLocal;
             ReloadCommitInfo();
         }
 
-        private void showMessagesOfAnnotatedTagsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showMessagesOfAnnotatedTagsToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             AppSettings.ShowAnnotatedTagsMessages = !AppSettings.ShowAnnotatedTagsMessages;
             ReloadCommitInfo();
         }
 
-        private void addNoteToolStripMenuItem_Click(object sender, EventArgs e)
+        private void addNoteToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (_revision is null)
             {
@@ -657,7 +656,7 @@ namespace GitUI.CommitInfo
             ReloadCommitInfo();
         }
 
-        private void _RevisionHeader_MouseDown(object sender, MouseEventArgs e)
+        private void _RevisionHeader_MouseDown(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.XButton1)
             {
@@ -736,7 +735,7 @@ namespace GitUI.CommitInfo
             base.OnLayout(e);
         }
 
-        private void RichTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void RichTextBox_KeyDown(object? sender, KeyEventArgs e)
         {
             if (!e.Control || e.KeyCode != Keys.C || sender is not RichTextBox rtb)
             {
@@ -780,7 +779,7 @@ namespace GitUI.CommitInfo
                 _currentBranch = currentBranch;
             }
 
-            public int Compare(string a, string b)
+            public int Compare(string? a, string? b)
             {
                 int priorityA = GetBranchPriority(a);
                 int priorityB = GetBranchPriority(b);
@@ -788,7 +787,7 @@ namespace GitUI.CommitInfo
                     : priorityA - priorityB;
             }
 
-            private int GetBranchPriority(string branch)
+            private int GetBranchPriority(string? branch)
             {
                 return branch == _currentBranch ? 0
                     : IsImportantLocalBranch() ? 1
@@ -816,12 +815,17 @@ namespace GitUI.CommitInfo
                 _prefix = prefix;
             }
 
-            public int Compare(string a, string b)
+            public int Compare(string? a, string? b)
             {
                 return IndexOf(a) - IndexOf(b);
 
-                int IndexOf(string s)
+                int IndexOf(string? s)
                 {
+                    if (s is null)
+                    {
+                        return -1;
+                    }
+
                     if (s.StartsWith("remotes/"))
                     {
                         s = "refs/" + s;

@@ -44,7 +44,7 @@ namespace GitUI.HelperDialogs
             base.OnLoad(e);
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        private void btnOK_Click(object? sender, EventArgs e)
         {
             var revisions = revisionGrid.GetSelectedRevisions();
 
@@ -57,7 +57,7 @@ namespace GitUI.HelperDialogs
             }
         }
 
-        private void revisionGrid_DoubleClickRevision(object sender, DoubleClickRevisionEventArgs e)
+        private void revisionGrid_DoubleClickRevision(object? sender, DoubleClickRevisionEventArgs e)
         {
             if (e.Revision is not null)
             {
@@ -67,12 +67,12 @@ namespace GitUI.HelperDialogs
             }
         }
 
-        private void buttonGotoCommit_Click(object sender, EventArgs e)
+        private void buttonGotoCommit_Click(object? sender, EventArgs e)
         {
             revisionGrid.MenuCommands.GotoCommitExecute();
         }
 
-        private void linkLabelParent_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkLabelParent_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             var linkLabel = (LinkLabel)sender;
             var parentId = (ObjectId)linkLabel.Tag;
@@ -80,7 +80,7 @@ namespace GitUI.HelperDialogs
             revisionGrid.SetSelectedRevision(parentId);
         }
 
-        private void revisionGrid_SelectionChanged(object sender, EventArgs e)
+        private void revisionGrid_SelectionChanged(object? sender, EventArgs e)
         {
             var revisions = revisionGrid.GetSelectedRevisions();
 

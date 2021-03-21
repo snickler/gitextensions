@@ -71,7 +71,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             AddSettingBinding(DetailedSettings.MergeLogMessagesCount, nbMessages);
         }
 
-        private void chkUseSSL_CheckedChanged(object sender, EventArgs e)
+        private void chkUseSSL_CheckedChanged(object? sender, EventArgs e)
         {
             if (!chkUseSSL.Checked)
             {

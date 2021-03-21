@@ -62,7 +62,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             InitializeComplete();
         }
 
-        private void ViewPullRequestsForm_Load(object sender, EventArgs e)
+        private void ViewPullRequestsForm_Load(object? sender, EventArgs e)
         {
             _fileStatusList.SelectedIndexChanged += _fileStatusList_SelectedIndexChanged;
             _discussionWB.DocumentCompleted += _discussionWB_DocumentCompleted;
@@ -95,7 +95,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
                 });
         }
 
-        private void _selectedOwner_SelectedIndexChanged(object sender, EventArgs e)
+        private void _selectedOwner_SelectedIndexChanged(object? sender, EventArgs e)
         {
             var hostedRemote = _selectHostedRepoCB.SelectedItem as IHostedRemote;
 
@@ -130,13 +130,13 @@ namespace GitUI.CommandsDialogs.RepoHosting
                 .FileAndForget();
         }
 
-        private void FileViewer_TopScrollReached(object sender, EventArgs e)
+        private void FileViewer_TopScrollReached(object? sender, EventArgs e)
         {
             _fileStatusList.SelectPreviousVisibleItem();
             _diffViewer.ScrollToBottom();
         }
 
-        private void FileViewer_BottomScrollReached(object sender, EventArgs e)
+        private void FileViewer_BottomScrollReached(object? sender, EventArgs e)
         {
             _fileStatusList.SelectNextVisibleItem();
             _diffViewer.ScrollToTop();
@@ -256,7 +256,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             }
         }
 
-        private void _pullRequestsList_SelectedIndexChanged(object sender, EventArgs e)
+        private void _pullRequestsList_SelectedIndexChanged(object? sender, EventArgs e)
         {
             var prevPri = _currentPullRequestInfo;
 
@@ -322,7 +322,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             _discussionWB.DocumentText = t;
         }
 
-        private void _discussionWB_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        private void _discussionWB_DocumentCompleted(object? sender, WebBrowserDocumentCompletedEventArgs e)
         {
             if (_discussionWB.Document?.Window is not null && _discussionWB.Document.Body is not null)
             {
@@ -394,7 +394,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             _fileStatusList.SetDiffs(firstRev, secondRev, items: giss);
         }
 
-        private void _fetchBtn_Click(object sender, EventArgs e)
+        private void _fetchBtn_Click(object? sender, EventArgs e)
         {
             if (_currentPullRequestInfo is null)
             {
@@ -414,7 +414,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             Close();
         }
 
-        private void _addAsRemoteAndFetch_Click(object sender, EventArgs e)
+        private void _addAsRemoteAndFetch_Click(object? sender, EventArgs e)
         {
             if (_currentPullRequestInfo is null)
             {
@@ -476,7 +476,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             Close();
         }
 
-        private void _fileStatusList_SelectedIndexChanged(object sender, EventArgs e)
+        private void _fileStatusList_SelectedIndexChanged(object? sender, EventArgs e)
         {
             var gis = _fileStatusList.SelectedItem?.Item;
             if (gis is null)
@@ -497,7 +497,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             }
         }
 
-        private void _closePullRequestBtn_Click(object sender, EventArgs e)
+        private void _closePullRequestBtn_Click(object? sender, EventArgs e)
         {
             if (_currentPullRequestInfo is null)
             {

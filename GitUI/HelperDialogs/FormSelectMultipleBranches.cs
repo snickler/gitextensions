@@ -56,7 +56,7 @@ namespace GitUI.HelperDialogs
             return branches;
         }
 
-        private void okButton_Click(object sender, EventArgs e)
+        private void okButton_Click(object? sender, EventArgs e)
         {
             Close();
         }

@@ -76,7 +76,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FormEditor_FormClosing(object sender, FormClosingEventArgs e)
+        private void FormEditor_FormClosing(object? sender, FormClosingEventArgs e)
         {
             // only offer to save if there's something to save.
             if (HasChanges)
@@ -115,7 +115,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void toolStripSaveButton_Click(object sender, EventArgs e)
+        private void toolStripSaveButton_Click(object? sender, EventArgs e)
         {
             SaveChangesShowException();
         }

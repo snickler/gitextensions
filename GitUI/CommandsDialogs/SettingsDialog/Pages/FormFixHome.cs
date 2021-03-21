@@ -204,7 +204,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void ok_Click(object sender, EventArgs e)
+        private void ok_Click(object? sender, EventArgs e)
         {
             if (otherHome.Checked)
             {
@@ -235,7 +235,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             Close();
         }
 
-        private void otherHomeBrowse_Click(object sender, EventArgs e)
+        private void otherHomeBrowse_Click(object? sender, EventArgs e)
         {
             var userSelectedPath = OsShellUtil.PickFolder(this, Environment.GetEnvironmentVariable("USERPROFILE"));
 

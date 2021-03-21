@@ -34,7 +34,7 @@ namespace GitUI.UserControls
             }
         }
 
-        private void RemotesComboboxControl_Load(object sender, EventArgs e)
+        private void RemotesComboboxControl_Load(object? sender, EventArgs e)
         {
             if (Site is not null && Site.DesignMode)
             {

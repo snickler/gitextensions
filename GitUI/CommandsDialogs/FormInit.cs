@@ -49,7 +49,7 @@ namespace GitUI.CommandsDialogs
             _NO_TRANSLATE_Directory.Text = string.IsNullOrEmpty(dir) ? AppSettings.DefaultCloneDestinationPath : dir;
         }
 
-        private void InitClick(object sender, EventArgs e)
+        private void InitClick(object? sender, EventArgs e)
         {
             var directoryPath = _NO_TRANSLATE_Directory.Text;
 
@@ -104,7 +104,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void BrowseClick(object sender, EventArgs e)
+        private void BrowseClick(object? sender, EventArgs e)
         {
             var userSelectedPath = OsShellUtil.PickFolder(this);
 

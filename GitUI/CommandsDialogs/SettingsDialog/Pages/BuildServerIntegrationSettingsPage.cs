@@ -149,7 +149,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             return (string)BuildServerType.SelectedItem;
         }
 
-        private void BuildServerType_SelectedIndexChanged(object sender, EventArgs e)
+        private void BuildServerType_SelectedIndexChanged(object? sender, EventArgs e)
         {
             ActivateBuildServerSettingsControl();
         }

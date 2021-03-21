@@ -79,31 +79,31 @@ namespace GitUI.CommandsDialogs.CommitDialog
             AppSettings.CommitValidationAutoWrap = checkBoxAutoWrap.Checked;
         }
 
-        private void buttonOk_Click(object sender, EventArgs e)
+        private void buttonOk_Click(object? sender, EventArgs e)
         {
             SaveSettings();
             Close();
         }
 
-        private void buttonCancel_Click(object sender, EventArgs e)
+        private void buttonCancel_Click(object? sender, EventArgs e)
         {
             Close();
         }
 
-        private void textCommitTemplateText_TextChanged(object sender, EventArgs e)
+        private void textCommitTemplateText_TextChanged(object? sender, EventArgs e)
         {
             Validates.NotNull(_commitTemplates);
             _commitTemplates[_NO_TRANSLATE_comboBoxCommitTemplates.SelectedIndex].Text = _NO_TRANSLATE_textCommitTemplateText.Text;
         }
 
-        private void textBoxCommitTemplateName_TextChanged(object sender, EventArgs e)
+        private void textBoxCommitTemplateName_TextChanged(object? sender, EventArgs e)
         {
             Validates.NotNull(_commitTemplates);
             _commitTemplates[_NO_TRANSLATE_comboBoxCommitTemplates.SelectedIndex].Name = _NO_TRANSLATE_textBoxCommitTemplateName.Text;
             RefreshLineInListBox(_NO_TRANSLATE_comboBoxCommitTemplates.SelectedIndex);
         }
 
-        private void comboBoxCommitTemplates_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBoxCommitTemplates_SelectedIndexChanged(object? sender, EventArgs e)
         {
             Validates.NotNull(_commitTemplates);
             _NO_TRANSLATE_textCommitTemplateText.Text = _commitTemplates[_NO_TRANSLATE_comboBoxCommitTemplates.SelectedIndex].Text;

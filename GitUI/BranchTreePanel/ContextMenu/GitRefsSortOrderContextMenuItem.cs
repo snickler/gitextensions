@@ -47,7 +47,7 @@ namespace GitUI.BranchTreePanel.ContextMenu
             }
         }
 
-        private void Item_Click(object sender, EventArgs e)
+        private void Item_Click(object? sender, EventArgs e)
         {
             if (sender is ToolStripMenuItem item)
             {

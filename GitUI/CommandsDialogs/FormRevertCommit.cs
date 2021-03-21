@@ -33,7 +33,7 @@ namespace GitUI.CommandsDialogs
 
         public GitRevision Revision { get; }
 
-        private void FormRevertCommit_Load(object sender, EventArgs e)
+        private void FormRevertCommit_Load(object? sender, EventArgs e)
         {
             commitSummaryUserControl1.Revision = Revision;
 
@@ -65,7 +65,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Revert_Click(object sender, EventArgs e)
+        private void Revert_Click(object? sender, EventArgs e)
         {
             var parentIndex = 0;
             if (_isMerge)

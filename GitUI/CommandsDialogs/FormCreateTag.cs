@@ -57,7 +57,7 @@ namespace GitUI.CommandsDialogs
             _gitTagController = new GitTagController(commands);
         }
 
-        private void FormCreateTag_Load(object sender, EventArgs e)
+        private void FormCreateTag_Load(object? sender, EventArgs e)
         {
             textBoxTagName.Select();
             _currentRemote = Module.GetCurrentRemote();
@@ -69,7 +69,7 @@ namespace GitUI.CommandsDialogs
             pushTag.Text = string.Format(_pushToCaption.Text, _currentRemote);
         }
 
-        private void OkClick(object sender, EventArgs e)
+        private void OkClick(object? sender, EventArgs e)
         {
             try
             {
@@ -135,7 +135,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void AnnotateDropDownChanged(object sender, EventArgs e)
+        private void AnnotateDropDownChanged(object? sender, EventArgs e)
         {
             TagOperation tagOperation = GetSelectedOperation(annotate.SelectedIndex);
             textBoxGpgKey.Enabled = tagOperation == TagOperation.SignWithSpecificKey;

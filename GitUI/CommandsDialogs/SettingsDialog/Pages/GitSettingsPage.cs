@@ -42,7 +42,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             AppSettings.GitBinDir = GitBinPath.Text;
         }
 
-        private void BrowseGitPath_Click(object sender, EventArgs e)
+        private void BrowseGitPath_Click(object? sender, EventArgs e)
         {
             CheckSettingsLogic.SolveGitCommand(GitPath.Text.Trim());
 
@@ -57,7 +57,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void BrowseGitBinPath_Click(object sender, EventArgs e)
+        private void BrowseGitBinPath_Click(object? sender, EventArgs e)
         {
             CheckSettingsLogic.SolveLinuxToolsDir(GitBinPath.Text.Trim());
 
@@ -69,24 +69,24 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void GitPath_TextChanged(object sender, EventArgs e)
+        private void GitPath_TextChanged(object? sender, EventArgs e)
         {
             // If user pastes text or types in the box be sure to validate and save in the settings.
             CheckSettingsLogic.SolveGitCommand(GitPath.Text.Trim());
         }
 
-        private void GitBinPath_TextChanged(object sender, EventArgs e)
+        private void GitBinPath_TextChanged(object? sender, EventArgs e)
         {
             // If user pastes text or types in the box be sure to validate and save in the settings.
             CheckSettingsLogic.SolveLinuxToolsDir(GitBinPath.Text.Trim());
         }
 
-        private void downloadGitForWindows_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void downloadGitForWindows_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             OsShellUtil.OpenUrlInDefaultBrowser(@"https://github.com/gitextensions/gitextensions/wiki/Application-Dependencies#git");
         }
 
-        private void ChangeHomeButton_Click(object sender, EventArgs e)
+        private void ChangeHomeButton_Click(object? sender, EventArgs e)
         {
             PageHost.SaveAll();
             using (var frm = new FormFixHome())

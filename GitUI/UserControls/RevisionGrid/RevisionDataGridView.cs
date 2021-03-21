@@ -118,7 +118,7 @@ namespace GitUI.UserControls.RevisionGrid
 
             return;
 
-            void OnRowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+            void OnRowPrePaint(object? sender, DataGridViewRowPrePaintEventArgs e)
             {
                 if (e.PaintParts.HasFlag(DataGridViewPaintParts.Background) &&
                     e.RowBounds.Width > 0 &&
@@ -273,7 +273,7 @@ namespace GitUI.UserControls.RevisionGrid
             return SystemBrushes.Window;
         }
 
-        private void OnCellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        private void OnCellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
         {
             Debug.Assert(_rowHeight != 0, "_rowHeight != 0");
 

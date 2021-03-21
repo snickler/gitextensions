@@ -102,7 +102,7 @@ namespace GitUI.UserControls
             }
         }
 
-        private void Branches_SelectedIndexChanged(object sender, EventArgs e)
+        private void Branches_SelectedIndexChanged(object? sender, EventArgs e)
         {
             lbChanges.Text = "";
             FireSelectionChangedEvent(sender, e);
@@ -133,7 +133,7 @@ namespace GitUI.UserControls
             }
         }
 
-        private void LocalBranch_CheckedChanged(object sender, EventArgs e)
+        private void LocalBranch_CheckedChanged(object? sender, EventArgs e)
         {
             Branches.Focus();
 
@@ -141,7 +141,7 @@ namespace GitUI.UserControls
             ////BranchTypeChanged();
         }
 
-        private void Remotebranch_CheckedChanged(object sender, EventArgs e)
+        private void Remotebranch_CheckedChanged(object? sender, EventArgs e)
         {
             Branches.Focus();
             if (!_isLoading)
@@ -152,7 +152,7 @@ namespace GitUI.UserControls
             FireSelectionChangedEvent(sender, e);
         }
 
-        private void FireSelectionChangedEvent(object sender, EventArgs e)
+        private void FireSelectionChangedEvent(object? sender, EventArgs e)
         {
             SelectedIndexChanged?.Invoke(sender, e);
         }

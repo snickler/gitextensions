@@ -794,12 +794,12 @@ namespace GitUI.Script
             _splitMenuStrip?.Show(this, new Point(0, Height), ToolStripDropDownDirection.BelowRight);
         }
 
-        private void SplitMenuStrip_Opening(object sender, CancelEventArgs e)
+        private void SplitMenuStrip_Opening(object? sender, CancelEventArgs e)
         {
             _isSplitMenuVisible = true;
         }
 
-        private void SplitMenuStrip_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        private void SplitMenuStrip_Closing(object? sender, ToolStripDropDownClosingEventArgs e)
         {
             _isSplitMenuVisible = false;
 

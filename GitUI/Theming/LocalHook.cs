@@ -218,34 +218,34 @@ namespace EasyHook
         /// if(GlobalACL.Contains(InThreadID))
         /// {
         ///     if(LocalACL.Contains(InThreadID))
-        /// 	{
-        /// 		if(LocalACL.IsExclusive)
-        /// 			return false;
-        /// 	}
-        /// 	else
-        /// 	{
-        /// 		if(GlobalACL.IsExclusive)
-        /// 			return false;
+        ///     {
+        ///         if(LocalACL.IsExclusive)
+        ///             return false;
+        ///     }
+        ///     else
+        ///     {
+        ///         if(GlobalACL.IsExclusive)
+        ///             return false;
         ///
-        /// 		if(!LocalACL.IsExclusive)
-        /// 			return false;
-        /// 	}
+        ///         if(!LocalACL.IsExclusive)
+        ///             return false;
+        ///     }
         /// }
         /// else
         /// {
-        /// 	if(LocalACL.Contains(InThreadID))
-        /// 	{
-        /// 		if(LocalACL.IsExclusive)
-        /// 			return false;
-        /// 	}
-        /// 	else
-        /// 	{
-        /// 		if(!GlobalACL.IsExclusive)
-        /// 			return false;
+        ///     if(LocalACL.Contains(InThreadID))
+        ///     {
+        ///         if(LocalACL.IsExclusive)
+        ///             return false;
+        ///     }
+        ///     else
+        ///     {
+        ///         if(!GlobalACL.IsExclusive)
+        ///             return false;
         ///
-        /// 		if(!LocalACL.IsExclusive)
-        /// 			return false;
-        /// 	}
+        ///         if(!LocalACL.IsExclusive)
+        ///             return false;
+        ///     }
         /// }
         ///
         /// return true;

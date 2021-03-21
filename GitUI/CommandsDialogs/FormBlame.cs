@@ -38,7 +38,7 @@ namespace GitUI.CommandsDialogs
             blameControl1.ConfigureRepositoryHostPlugin(PluginRegistry.TryGetGitHosterForModule(Module));
         }
 
-        private void FormBlameLoad(object sender, EventArgs e)
+        private void FormBlameLoad(object? sender, EventArgs e)
         {
             Text = $"Blame ({FileName})";
         }

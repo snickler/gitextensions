@@ -109,7 +109,7 @@ namespace GitUI.BranchTreePanel
             }
         }
 
-        private void tsbShowBranches_Click(object sender, EventArgs e)
+        private void tsbShowBranches_Click(object? sender, EventArgs e)
         {
             AppSettings.RepoObjectsTreeShowBranches = tsbShowBranches.Checked;
             _searchResult = null;
@@ -124,7 +124,7 @@ namespace GitUI.BranchTreePanel
             }
         }
 
-        private void tsbShowRemotes_Click(object sender, EventArgs e)
+        private void tsbShowRemotes_Click(object? sender, EventArgs e)
         {
             AppSettings.RepoObjectsTreeShowRemotes = tsbShowRemotes.Checked;
             _searchResult = null;
@@ -139,7 +139,7 @@ namespace GitUI.BranchTreePanel
             }
         }
 
-        private void tsbShowTags_Click(object sender, EventArgs e)
+        private void tsbShowTags_Click(object? sender, EventArgs e)
         {
             AppSettings.RepoObjectsTreeShowTags = tsbShowTags.Checked;
             _searchResult = null;
@@ -154,7 +154,7 @@ namespace GitUI.BranchTreePanel
             }
         }
 
-        private void tsbShowSubmodules_Click(object sender, EventArgs e)
+        private void tsbShowSubmodules_Click(object? sender, EventArgs e)
         {
             AppSettings.RepoObjectsTreeShowSubmodules = tsbShowSubmodules.Checked;
             _searchResult = null;

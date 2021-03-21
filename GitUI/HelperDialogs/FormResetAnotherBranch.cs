@@ -49,7 +49,7 @@ namespace GitUI.HelperDialogs
             labelResetBranchWarning.SetForeColorForBackColor();
         }
 
-        private void Application_Idle(object sender, EventArgs e)
+        private void Application_Idle(object? sender, EventArgs e)
         {
             Application.Idle -= Application_Idle;
 
@@ -73,7 +73,7 @@ namespace GitUI.HelperDialogs
                 .ToArray();
         }
 
-        private void FormResetAnotherBranch_Load(object sender, EventArgs e)
+        private void FormResetAnotherBranch_Load(object? sender, EventArgs e)
         {
             _localGitRefs = GetLocalBranchesWithoutCurrent();
 
@@ -85,7 +85,7 @@ namespace GitUI.HelperDialogs
             Application.Idle += Application_Idle;
         }
 
-        private void Ok_Click(object sender, EventArgs e)
+        private void Ok_Click(object? sender, EventArgs e)
         {
             var gitRefToReset = _localGitRefs.FirstOrDefault(b => b.Name == Branches.Text);
             if (gitRefToReset is null)
@@ -103,7 +103,7 @@ namespace GitUI.HelperDialogs
             }
         }
 
-        private void Cancel_Click(object sender, EventArgs e)
+        private void Cancel_Click(object? sender, EventArgs e)
         {
             Close();
         }

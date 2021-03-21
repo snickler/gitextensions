@@ -135,13 +135,13 @@ Send report anyway?");
             return !string.IsNullOrWhiteSpace(text);
         }
 
-        private void QuitButton_Click(object sender, EventArgs e)
+        private void QuitButton_Click(object? sender, EventArgs e)
         {
             DialogResult = DialogResult.Abort;
             Close();
         }
 
-        private void SendAndQuitButton_Click(object sender, EventArgs e)
+        private void SendAndQuitButton_Click(object? sender, EventArgs e)
         {
             var hasUserText = CheckContainsInfo(descriptionTextBox.Text);
             if (!hasUserText)
@@ -166,7 +166,7 @@ Send report anyway?");
             Close();
         }
 
-        private void btnCopy_Click(object sender, EventArgs e)
+        private void btnCopy_Click(object? sender, EventArgs e)
         {
             Validates.NotNull(_lastException);
 

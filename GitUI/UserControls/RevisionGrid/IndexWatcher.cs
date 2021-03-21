@@ -37,7 +37,7 @@ namespace GitUI.UserControls.RevisionGrid
             RefsWatcher.Changed += fileSystemWatcher_Changed;
         }
 
-        private void OnUICommandsChanged(object sender, GitUICommandsChangedEventArgs e)
+        private void OnUICommandsChanged(object? sender, GitUICommandsChangedEventArgs e)
         {
             Clear();
         }
@@ -105,7 +105,7 @@ namespace GitUI.UserControls.RevisionGrid
         private FileSystemWatcher GitIndexWatcher { get; }
         private FileSystemWatcher RefsWatcher { get; }
 
-        private void fileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
+        private void fileSystemWatcher_Changed(object? sender, FileSystemEventArgs e)
         {
             IndexChanged = true;
         }

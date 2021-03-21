@@ -61,7 +61,7 @@ namespace GitUI.UserControls.RevisionGrid
 
         public void TriggerMenuChanged()
         {
-            MenuChanged?.Invoke(this, null);
+            MenuChanged?.Invoke(this, EventArgs.Empty);
 
             foreach (var menuCommand in GetMenuCommandsWithoutSeparators())
             {

@@ -105,7 +105,7 @@ namespace GitUI.CommitInfo
             rtbRevisionHeader.ClientSize = e.NewRectangle.Size;
         }
 
-        private void rtbRevisionHeader_KeyDown(object sender, KeyEventArgs e)
+        private void rtbRevisionHeader_KeyDown(object? sender, KeyEventArgs e)
         {
             if (!e.Control || e.KeyCode != Keys.C || sender is not RichTextBox rtb)
             {
@@ -117,7 +117,7 @@ namespace GitUI.CommitInfo
             e.Handled = true;
         }
 
-        private void rtbRevisionHeader_LinkClicked(object sender, LinkClickedEventArgs e)
+        private void rtbRevisionHeader_LinkClicked(object? sender, LinkClickedEventArgs e)
         {
             try
             {
@@ -129,7 +129,7 @@ namespace GitUI.CommitInfo
             }
         }
 
-        private void rtbRevisionHeader_MouseDown(object sender, MouseEventArgs e)
+        private void rtbRevisionHeader_MouseDown(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.XButton1)
             {

@@ -88,7 +88,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             return open._chosenModule;
         }
 
-        private void LoadClick(object sender, EventArgs e)
+        private void LoadClick(object? sender, EventArgs e)
         {
             _NO_TRANSLATE_Directory.Text = _NO_TRANSLATE_Directory.Text.Trim();
 
@@ -102,7 +102,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             MessageBox.Show(this, _warningOpenFailed.Text, TranslatedStrings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void DirectoryKeyPress(object sender, KeyPressEventArgs e)
+        private void DirectoryKeyPress(object? sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
@@ -110,7 +110,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             }
         }
 
-        private void folderBrowserButton_Click(object sender, EventArgs e)
+        private void folderBrowserButton_Click(object? sender, EventArgs e)
         {
             string? userSelectedPath = OsShellUtil.PickFolder(this, _NO_TRANSLATE_Directory.Text);
             if (!string.IsNullOrEmpty(userSelectedPath))
@@ -120,7 +120,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             }
         }
 
-        private void folderGoUpButton_Click(object sender, EventArgs e)
+        private void folderGoUpButton_Click(object? sender, EventArgs e)
         {
             try
             {
@@ -142,7 +142,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             }
         }
 
-        private void _NO_TRANSLATE_Directory_TextChanged(object sender, EventArgs e)
+        private void _NO_TRANSLATE_Directory_TextChanged(object? sender, EventArgs e)
         {
             try
             {

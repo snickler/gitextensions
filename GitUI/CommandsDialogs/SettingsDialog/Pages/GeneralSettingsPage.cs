@@ -151,7 +151,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             };
         }
 
-        private void DefaultCloneDestinationBrowseClick(object sender, EventArgs e)
+        private void DefaultCloneDestinationBrowseClick(object? sender, EventArgs e)
         {
             var userSelectedPath = OsShellUtil.PickFolder(this, cbDefaultCloneDestination.Text);
 
@@ -161,17 +161,17 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void ShowGitStatus_CheckedChanged(object sender, System.EventArgs e)
+        private void ShowGitStatus_CheckedChanged(object? sender, System.EventArgs e)
         {
             SetSubmoduleStatus();
         }
 
-        private void LlblTelemetryPrivacyLink_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
+        private void LlblTelemetryPrivacyLink_LinkClicked(object? sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
         {
             OsShellUtil.OpenUrlInDefaultBrowser(@"https://github.com/gitextensions/gitextensions/blob/master/PrivacyPolicy.md");
         }
 
-        private void lblCommitsLimit_CheckedChanged(object sender, EventArgs e)
+        private void lblCommitsLimit_CheckedChanged(object? sender, EventArgs e)
         {
             _NO_TRANSLATE_MaxCommits.Enabled = lblCommitsLimit.Checked;
         }

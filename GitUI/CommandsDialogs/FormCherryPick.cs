@@ -35,13 +35,13 @@ namespace GitUI.CommandsDialogs
             InitializeComplete();
         }
 
-        private void Form_Load(object sender, EventArgs e)
+        private void Form_Load(object? sender, EventArgs e)
         {
             LoadSettings();
             OnRevisionChanged();
         }
 
-        private void Form_Closing(object sender, FormClosingEventArgs e)
+        private void Form_Closing(object? sender, FormClosingEventArgs e)
         {
             SaveSettings();
         }
@@ -95,7 +95,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Revert_Click(object sender, EventArgs e)
+        private void Revert_Click(object? sender, EventArgs e)
         {
             var args = new ArgumentBuilder();
             var canExecute = true;
@@ -138,7 +138,7 @@ namespace GitUI.CommandsDialogs
             checkAddReference.Checked = source.checkAddReference.Checked;
         }
 
-        private void btnChooseRevision_Click(object sender, EventArgs e)
+        private void btnChooseRevision_Click(object? sender, EventArgs e)
         {
             using (var chooseForm = new FormChooseCommit(UICommands, Revision?.Guid))
             {

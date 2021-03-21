@@ -624,14 +624,14 @@ namespace GitUI.CommandsDialogs
             new CustomDiffMergeToolProvider().LoadCustomDiffMergeTools(Module, menus, components, isDiff: true);
         }
 
-        private void FileViewer_TopScrollReached(object sender, EventArgs e)
+        private void FileViewer_TopScrollReached(object? sender, EventArgs e)
         {
             var fileStatus = _currentItemStaged ? Staged : Unstaged;
             fileStatus.SelectPreviousVisibleItem();
             SelectedDiff.ScrollToBottom();
         }
 
-        private void FileViewer_BottomScrollReached(object sender, EventArgs e)
+        private void FileViewer_BottomScrollReached(object? sender, EventArgs e)
         {
             var fileStatus = _currentItemStaged ? Staged : Unstaged;
             fileStatus.SelectNextVisibleItem();
@@ -821,7 +821,7 @@ namespace GitUI.CommandsDialogs
             return true;
         }
 
-        private void ShowOnlyMyMessagesToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        private void ShowOnlyMyMessagesToolStripMenuItem_CheckedChanged(object? sender, EventArgs e)
         {
             AppSettings.CommitDialogShowOnlyMyMessages = ShowOnlyMyMessagesToolStripMenuItem.Checked;
         }
@@ -944,7 +944,7 @@ namespace GitUI.CommandsDialogs
             branchNameLabel.Text = $"{currentBranchName} {char.ConvertFromUtf32(0x2192)}";
             remoteNameLabel.Text = pushTo;
 
-            _branchNameLabelOnClick = (object sender, EventArgs e) => ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            _branchNameLabelOnClick = (object? sender, EventArgs e) => ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
                 UICommands.StartRemotesDialog(this, null, currentBranchName);
                 await UpdateBranchNameDisplayAsync();
@@ -1155,7 +1155,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void CommitClick(object sender, EventArgs e)
+        private void CommitClick(object? sender, EventArgs e)
         {
             ExecuteCommitCommand();
         }
@@ -1529,7 +1529,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void UnstageFilesClick(object sender, EventArgs e)
+        private void UnstageFilesClick(object? sender, EventArgs e)
         {
             if (_currentFilesList != Staged)
             {
@@ -1539,7 +1539,7 @@ namespace GitUI.CommandsDialogs
             Unstage();
         }
 
-        private void Staged_DoubleClick(object sender, EventArgs e)
+        private void Staged_DoubleClick(object? sender, EventArgs e)
         {
             if (Module.IsBareRepository())
             {
@@ -1550,7 +1550,7 @@ namespace GitUI.CommandsDialogs
             Unstage();
         }
 
-        private void UnstageAllToolStripMenuItemClick(object sender, EventArgs e)
+        private void UnstageAllToolStripMenuItemClick(object? sender, EventArgs e)
         {
             var lastSelection = _currentFilesList is not null
                 ? _currentSelection
@@ -1588,7 +1588,7 @@ namespace GitUI.CommandsDialogs
             Initialize();
         }
 
-        private void UnstagedSelectionChanged(object sender, EventArgs e)
+        private void UnstagedSelectionChanged(object? sender, EventArgs e)
         {
             if (_currentFilesList != Unstaged || _skipUpdate)
             {
@@ -1605,7 +1605,7 @@ namespace GitUI.CommandsDialogs
             Unstaged.ContextMenuStrip = (item?.Item.IsSubmodule ?? false) ? UnstagedSubmoduleContext : UnstagedFileContext;
         }
 
-        private void UnstagedFileContext_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        private void UnstagedFileContext_Opening(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             // Do not show if no item selected
             e.Cancel = !Unstaged.SelectedItems.Any() || Module.IsBareRepository();
@@ -1629,7 +1629,7 @@ namespace GitUI.CommandsDialogs
             editFileToolStripMenuItem.Visible = singleFileExists;
         }
 
-        private void StagedFileContext_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        private void StagedFileContext_Opening(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             // Do not show if no item selected
             e.Cancel = !Staged.SelectedItems.Any() || Module.IsBareRepository();
@@ -1644,7 +1644,7 @@ namespace GitUI.CommandsDialogs
             stagedEditFileToolStripMenuItem11.Visible = singleFileExists;
         }
 
-        private void UnstagedSubmoduleContext_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        private void UnstagedSubmoduleContext_Opening(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             // Separate menu for single submodule items
             bool allDirectoriesExist = Directory.Exists(_fullPathResolver.Resolve(Unstaged?.SelectedGitItem?.Name));
@@ -1654,7 +1654,7 @@ namespace GitUI.CommandsDialogs
             commitSubmoduleChanges.Enabled = allDirectoriesExist;
         }
 
-        private void Unstaged_Enter(object sender, EnterEventArgs e)
+        private void Unstaged_Enter(object? sender, EnterEventArgs e)
         {
             if (_currentFilesList != Unstaged)
             {
@@ -1669,7 +1669,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Unstaged_FilterChanged(object sender, EventArgs e)
+        private void Unstaged_FilterChanged(object? sender, EventArgs e)
         {
             if (Unstaged.IsFilterActive)
             {
@@ -1683,7 +1683,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Staged_FilterChanged(object sender, EventArgs e)
+        private void Staged_FilterChanged(object? sender, EventArgs e)
         {
             if (Staged.IsFilterActive)
             {
@@ -1854,7 +1854,7 @@ namespace GitUI.CommandsDialogs
             return (headRev, indexRev, workTreeRev);
         }
 
-        private void StageClick(object sender, EventArgs e)
+        private void StageClick(object? sender, EventArgs e)
         {
             if (_currentFilesList != Unstaged || Module.IsBareRepository())
             {
@@ -1868,7 +1868,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Unstaged_DoubleClick(object sender, EventArgs e)
+        private void Unstaged_DoubleClick(object? sender, EventArgs e)
         {
             _currentFilesList = Unstaged;
             Stage(Unstaged.SelectedItems.Items().ToList());
@@ -1892,12 +1892,12 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void StageAllToolStripMenuItemClick(object sender, EventArgs e)
+        private void StageAllToolStripMenuItemClick(object? sender, EventArgs e)
         {
             StageAllAccordingToFilter();
         }
 
-        private void StagedSelectionChanged(object sender, EventArgs e)
+        private void StagedSelectionChanged(object? sender, EventArgs e)
         {
             if (_currentFilesList != Staged || _skipUpdate)
             {
@@ -1912,14 +1912,14 @@ namespace GitUI.CommandsDialogs
             ShowChanges(item, true);
         }
 
-        private void Staged_DataSourceChanged(object sender, EventArgs e)
+        private void Staged_DataSourceChanged(object? sender, EventArgs e)
         {
             int stagedCount = Staged.UnfilteredItemsCount;
             int totalFilesCount = stagedCount + Unstaged.UnfilteredItemsCount;
             commitStagedCount.Text = stagedCount + "/" + totalFilesCount;
         }
 
-        private void Staged_Enter(object sender, EnterEventArgs e)
+        private void Staged_Enter(object? sender, EnterEventArgs e)
         {
             if (_currentFilesList != Staged)
             {
@@ -2070,7 +2070,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void ResetSoftClick(object sender, EventArgs e)
+        private void ResetSoftClick(object? sender, EventArgs e)
         {
             _shouldRescanChanges = false;
             try
@@ -2164,7 +2164,7 @@ namespace GitUI.CommandsDialogs
             Initialize();
         }
 
-        private void DeleteFileToolStripMenuItemClick(object sender, EventArgs e)
+        private void DeleteFileToolStripMenuItemClick(object? sender, EventArgs e)
         {
             try
             {
@@ -2200,7 +2200,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void SolveMergeConflictsClick(object sender, EventArgs e)
+        private void SolveMergeConflictsClick(object? sender, EventArgs e)
         {
             if (UICommands.StartResolveConflictsDialog(this, false))
             {
@@ -2208,7 +2208,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void DeleteSelectedFilesToolStripMenuItemClick(object sender, EventArgs e)
+        private void DeleteSelectedFilesToolStripMenuItemClick(object? sender, EventArgs e)
         {
             if (MessageBox.Show(this, _deleteSelectedFiles.Text, _deleteSelectedFilesCaption.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) !=
                 DialogResult.Yes)
@@ -2231,7 +2231,7 @@ namespace GitUI.CommandsDialogs
             Initialize();
         }
 
-        private void ResetSelectedFilesToolStripMenuItemClick(object sender, EventArgs e)
+        private void ResetSelectedFilesToolStripMenuItemClick(object? sender, EventArgs e)
         {
             if (MessageBox.Show(this, _resetSelectedChangesText.Text, TranslatedStrings.ResetChangesCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) !=
                 DialogResult.Yes)
@@ -2247,29 +2247,29 @@ namespace GitUI.CommandsDialogs
             Initialize();
         }
 
-        private void ResetAllTrackedChangesToolStripMenuItemClick(object sender, EventArgs e)
+        private void ResetAllTrackedChangesToolStripMenuItemClick(object? sender, EventArgs e)
         {
             ResetClick(this, EventArgs.Empty);
         }
 
-        private void resetUnstagedChangesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void resetUnstagedChangesToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             ResetUnStagedClick(this, EventArgs.Empty);
         }
 
-        private void EditGitIgnoreToolStripMenuItemClick(object sender, EventArgs e)
+        private void EditGitIgnoreToolStripMenuItemClick(object? sender, EventArgs e)
         {
             UICommands.StartEditGitIgnoreDialog(this, localExcludes: false);
             Initialize();
         }
 
-        private void EditGitInfoExcludeToolStripMenuItemClick(object sender, EventArgs e)
+        private void EditGitInfoExcludeToolStripMenuItemClick(object? sender, EventArgs e)
         {
             UICommands.StartEditGitIgnoreDialog(this, localExcludes: true);
             Initialize();
         }
 
-        private void DeleteAllUntrackedFilesToolStripMenuItemClick(object sender, EventArgs e)
+        private void DeleteAllUntrackedFilesToolStripMenuItemClick(object? sender, EventArgs e)
         {
             if (MessageBox.Show(this,
                 _deleteUntrackedFiles.Text,
@@ -2285,25 +2285,25 @@ namespace GitUI.CommandsDialogs
             Initialize();
         }
 
-        private void ShowIgnoredFilesToolStripMenuItemClick(object sender, EventArgs e)
+        private void ShowIgnoredFilesToolStripMenuItemClick(object? sender, EventArgs e)
         {
             showIgnoredFilesToolStripMenuItem.Checked = !showIgnoredFilesToolStripMenuItem.Checked;
             RescanChanges();
         }
 
-        private void ShowAssumeUnchangedFilesToolStripMenuItemClick(object sender, EventArgs e)
+        private void ShowAssumeUnchangedFilesToolStripMenuItemClick(object? sender, EventArgs e)
         {
             showAssumeUnchangedFilesToolStripMenuItem.Checked = !showAssumeUnchangedFilesToolStripMenuItem.Checked;
             RescanChanges();
         }
 
-        private void ShowSkipWorktreeFilesToolStripMenuItemClick(object sender, EventArgs e)
+        private void ShowSkipWorktreeFilesToolStripMenuItemClick(object? sender, EventArgs e)
         {
             showSkipWorktreeFilesToolStripMenuItem.Checked = !showSkipWorktreeFilesToolStripMenuItem.Checked;
             RescanChanges();
         }
 
-        private void CommitMessageToolStripMenuItemDropDownOpening(object sender, EventArgs e)
+        private void CommitMessageToolStripMenuItemDropDownOpening(object? sender, EventArgs e)
         {
             var msg = AppSettings.LastCommitMessage;
             var maxCount = AppSettings.CommitDialogNumberOfPreviousMessages;
@@ -2374,7 +2374,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void CommitMessageToolStripMenuItemDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void CommitMessageToolStripMenuItemDropDownItemClicked(object? sender, ToolStripItemClickedEventArgs e)
         {
             if (e.ClickedItem.Tag is not null)
             {
@@ -2382,7 +2382,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void generateListOfChangesInSubmodulesChangesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void generateListOfChangesInSubmodulesChangesToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var stagedFiles = Staged.AllItems.Select(i => i.Item);
 
@@ -2462,12 +2462,12 @@ namespace GitUI.CommandsDialogs
             ReplaceMessage(sb.ToString().TrimEnd());
         }
 
-        private void AddFileToGitIgnoreToolStripMenuItemClick(object sender, EventArgs e)
+        private void AddFileToGitIgnoreToolStripMenuItemClick(object? sender, EventArgs e)
         {
             HandleExcludeFileClick(false);
         }
 
-        private void AddFileToGitInfoExcludeToolStripMenuItemClick(object sender, EventArgs e)
+        private void AddFileToGitInfoExcludeToolStripMenuItemClick(object? sender, EventArgs e)
         {
             HandleExcludeFileClick(true);
         }
@@ -2487,7 +2487,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void AssumeUnchangedToolStripMenuItemClick(object sender, EventArgs e)
+        private void AssumeUnchangedToolStripMenuItemClick(object? sender, EventArgs e)
         {
             if (!Unstaged.SelectedItems.Any())
             {
@@ -2501,7 +2501,7 @@ namespace GitUI.CommandsDialogs
             Initialize();
         }
 
-        private void DoNotAssumeUnchangedToolStripMenuItemClick(object sender, EventArgs e)
+        private void DoNotAssumeUnchangedToolStripMenuItemClick(object? sender, EventArgs e)
         {
             if (!Unstaged.SelectedItems.Any())
             {
@@ -2515,7 +2515,7 @@ namespace GitUI.CommandsDialogs
             Initialize();
         }
 
-        private void SkipWorktreeToolStripMenuItemClick(object sender, EventArgs e)
+        private void SkipWorktreeToolStripMenuItemClick(object? sender, EventArgs e)
         {
             if (!Unstaged.SelectedItems.Any())
             {
@@ -2529,7 +2529,7 @@ namespace GitUI.CommandsDialogs
             Initialize();
         }
 
-        private void DoNotSkipWorktreeToolStripMenuItemClick(object sender, EventArgs e)
+        private void DoNotSkipWorktreeToolStripMenuItemClick(object? sender, EventArgs e)
         {
             if (!Unstaged.SelectedItems.Any())
             {
@@ -2543,12 +2543,12 @@ namespace GitUI.CommandsDialogs
             Initialize();
         }
 
-        private void SelectedDiffExtraDiffArgumentsChanged(object sender, EventArgs e)
+        private void SelectedDiffExtraDiffArgumentsChanged(object? sender, EventArgs e)
         {
             ShowChanges(_currentItem, _currentItemStaged);
         }
 
-        private void SelectedDiff_PatchApplied(object sender, EventArgs e)
+        private void SelectedDiff_PatchApplied(object? sender, EventArgs e)
         {
             if (_currentItemStaged)
             {
@@ -2562,12 +2562,12 @@ namespace GitUI.CommandsDialogs
             RescanChanges();
         }
 
-        private void RescanChangesToolStripMenuItemClick(object sender, EventArgs e)
+        private void RescanChangesToolStripMenuItemClick(object? sender, EventArgs e)
         {
             RescanChanges();
         }
 
-        private void OpenToolStripMenuItemClick(object sender, EventArgs e)
+        private void OpenToolStripMenuItemClick(object? sender, EventArgs e)
         {
             if (!SenderToFileStatusList(sender, out var list) || !list.SelectedItems.Any())
             {
@@ -2584,7 +2584,7 @@ namespace GitUI.CommandsDialogs
             OsShellUtil.Open(path);
         }
 
-        private void OpenWithToolStripMenuItemClick(object sender, EventArgs e)
+        private void OpenWithToolStripMenuItemClick(object? sender, EventArgs e)
         {
             if (!SenderToFileStatusList(sender, out var list) || !list.SelectedItems.Any())
             {
@@ -2601,7 +2601,7 @@ namespace GitUI.CommandsDialogs
             OsShellUtil.OpenAs(path);
         }
 
-        private void FilenameToClipboardToolStripMenuItemClick(object sender, EventArgs e)
+        private void FilenameToClipboardToolStripMenuItemClick(object? sender, EventArgs e)
         {
             if (!SenderToFileStatusList(sender, out var list) || !list.SelectedItems.Any())
             {
@@ -2653,7 +2653,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void openWithDifftoolToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openWithDifftoolToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             OpenFilesWithDiffTool(Unstaged.SelectedItems, sender);
         }
@@ -2663,7 +2663,7 @@ namespace GitUI.CommandsDialogs
             OpenFilesWithDiffTool(_currentItemStaged ? Staged.SelectedItems : Unstaged.SelectedItems);
         }
 
-        private void ResetPartOfFileToolStripMenuItemClick(object sender, EventArgs e)
+        private void ResetPartOfFileToolStripMenuItemClick(object? sender, EventArgs e)
         {
             var items = Unstaged.SelectedItems.Items().ToList();
 
@@ -2686,12 +2686,12 @@ namespace GitUI.CommandsDialogs
                 .FileAndForget();
         }
 
-        private void ResetClick(object sender, EventArgs e)
+        private void ResetClick(object? sender, EventArgs e)
         {
             HandleResetButton(onlyUnstaged: false);
         }
 
-        private void ResetUnStagedClick(object sender, EventArgs e)
+        private void ResetUnStagedClick(object? sender, EventArgs e)
         {
             HandleResetButton(onlyUnstaged: true);
         }
@@ -2716,13 +2716,13 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void ShowUntrackedFilesToolStripMenuItemClick(object sender, EventArgs e)
+        private void ShowUntrackedFilesToolStripMenuItemClick(object? sender, EventArgs e)
         {
             showUntrackedFilesToolStripMenuItem.Checked = !showUntrackedFilesToolStripMenuItem.Checked;
             RescanChanges();
         }
 
-        private void editFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void editFileToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (!SenderToFileStatusList(sender, out var list))
             {
@@ -2746,7 +2746,7 @@ namespace GitUI.CommandsDialogs
             UnstagedSelectionChanged(this, EventArgs.Empty);
         }
 
-        private void CommitAndPush_Click(object sender, EventArgs e)
+        private void CommitAndPush_Click(object? sender, EventArgs e)
         {
             if (CommitAndPush.Text == TranslatedStrings.ButtonPush)
             {
@@ -2769,7 +2769,7 @@ namespace GitUI.CommandsDialogs
                 : $"{committer} {_commitAuthorInfo.Text} {toolAuthor.Text}";
         }
 
-        private bool SenderToFileStatusList(object sender, [NotNullWhen(returnValue: true)] out FileStatusList? list)
+        private bool SenderToFileStatusList(object? sender, [NotNullWhen(returnValue: true)] out FileStatusList? list)
         {
             ToolStripMenuItem? item = sender as ToolStripMenuItem;
             ContextMenuStrip? menu = item?.Owner as ContextMenuStrip;
@@ -2786,7 +2786,7 @@ namespace GitUI.CommandsDialogs
             return list is not null;
         }
 
-        private void ViewFileHistoryMenuItem_Click(object sender, EventArgs e)
+        private void ViewFileHistoryMenuItem_Click(object? sender, EventArgs e)
         {
             if (!SenderToFileStatusList(sender, out var list) || list.SelectedGitItem?.Name is null)
             {
@@ -2803,7 +2803,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Message_KeyUp(object sender, KeyEventArgs e)
+        private void Message_KeyUp(object? sender, KeyEventArgs e)
         {
             // Ctrl + Enter = Commit
             if (e.Control && e.KeyCode == Keys.Enter)
@@ -2818,7 +2818,7 @@ namespace GitUI.CommandsDialogs
             CheckForStagedAndCommit(Amend.Checked, push: false);
         }
 
-        private void Message_KeyDown(object sender, KeyEventArgs e)
+        private void Message_KeyDown(object? sender, KeyEventArgs e)
         {
             // Prevent adding a line break when all we want is to commit
             if (e.Control && e.KeyCode == Keys.Enter)
@@ -2827,7 +2827,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Message_TextChanged(object sender, EventArgs e)
+        private void Message_TextChanged(object? sender, EventArgs e)
         {
             // Format text, except when doing an undo, because
             // this would itself introduce more steps that
@@ -2839,7 +2839,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Message_TextAssigned(object sender, EventArgs e)
+        private void Message_TextAssigned(object? sender, EventArgs e)
         {
             Message_TextChanged(sender, e);
         }
@@ -2981,48 +2981,48 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Message_SelectionChanged(object sender, EventArgs e)
+        private void Message_SelectionChanged(object? sender, EventArgs e)
         {
             commitCursorColumn.Text = Message.CurrentColumn.ToString();
             commitCursorLine.Text = Message.CurrentLine.ToString();
         }
 
-        private void closeDialogAfterEachCommitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void closeDialogAfterEachCommitToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             closeDialogAfterEachCommitToolStripMenuItem.Checked = !closeDialogAfterEachCommitToolStripMenuItem.Checked;
             AppSettings.CloseCommitDialogAfterCommit = closeDialogAfterEachCommitToolStripMenuItem.Checked;
         }
 
-        private void closeDialogAfterAllFilesCommittedToolStripMenuItem_Click(object sender, EventArgs e)
+        private void closeDialogAfterAllFilesCommittedToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             closeDialogAfterAllFilesCommittedToolStripMenuItem.Checked = !closeDialogAfterAllFilesCommittedToolStripMenuItem.Checked;
             AppSettings.CloseCommitDialogAfterLastCommit = closeDialogAfterAllFilesCommittedToolStripMenuItem.Checked;
         }
 
-        private void refreshDialogOnFormFocusToolStripMenuItem_Click(object sender, EventArgs e)
+        private void refreshDialogOnFormFocusToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             refreshDialogOnFormFocusToolStripMenuItem.Checked = !refreshDialogOnFormFocusToolStripMenuItem.Checked;
             AppSettings.RefreshArtificialCommitOnApplicationActivated = refreshDialogOnFormFocusToolStripMenuItem.Checked;
         }
 
-        private void signOffToolStripMenuItem_Click(object sender, EventArgs e)
+        private void signOffToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             signOffToolStripMenuItem.Checked = !signOffToolStripMenuItem.Checked;
         }
 
-        private void toolAuthor_TextChanged(object sender, EventArgs e)
+        private void toolAuthor_TextChanged(object? sender, EventArgs e)
         {
             toolAuthorLabelItem.Enabled = toolAuthorLabelItem.Checked = !string.IsNullOrEmpty(toolAuthor.Text);
         }
 
-        private void toolAuthorLabelItem_Click(object sender, EventArgs e)
+        private void toolAuthorLabelItem_Click(object? sender, EventArgs e)
         {
             toolAuthor.Text = "";
             toolAuthorLabelItem.Enabled = toolAuthorLabelItem.Checked = false;
             UpdateAuthorInfo();
         }
 
-        private void gpgSignCommitChanged(object sender, EventArgs e)
+        private void gpgSignCommitChanged(object? sender, EventArgs e)
         {
             // Change the icon for commit button
             Commit.Image = gpgSignCommitToolStripComboBox.SelectedIndex > 0
@@ -3040,17 +3040,17 @@ namespace GitUI.CommandsDialogs
             toolbarSelectionFilter.Visible = visible;
         }
 
-        private void OnSelectionFilterTextChanged(object sender, EventArgs e)
+        private void OnSelectionFilterTextChanged(object? sender, EventArgs e)
         {
             _selectionFilterSubject.OnNext(selectionFilter.Text);
         }
 
-        private void OnSelectionFilterIndexChanged(object sender, EventArgs e)
+        private void OnSelectionFilterIndexChanged(object? sender, EventArgs e)
         {
             Unstaged.SetSelectionFilter(selectionFilter.Text);
         }
 
-        private void ToggleShowSelectionFilter(object sender, EventArgs e)
+        private void ToggleShowSelectionFilter(object? sender, EventArgs e)
         {
             var visible = !AppSettings.CommitDialogSelectionFilter;
 
@@ -3060,7 +3060,7 @@ namespace GitUI.CommandsDialogs
 
         #endregion
 
-        private void commitSubmoduleChanges_Click(object sender, EventArgs e)
+        private void commitSubmoduleChanges_Click(object? sender, EventArgs e)
         {
             Validates.NotNull(_currentItem);
             var submoduleCommands = new GitUICommands(_fullPathResolver.Resolve(_currentItem.Item.Name.EnsureTrailingPathSeparator()));
@@ -3068,7 +3068,7 @@ namespace GitUI.CommandsDialogs
             Initialize();
         }
 
-        private void resetSubmoduleChanges_Click(object sender, EventArgs e)
+        private void resetSubmoduleChanges_Click(object? sender, EventArgs e)
         {
             var unstagedFiles = Unstaged.SelectedItems.Items().ToList();
             if (unstagedFiles.Count == 0)
@@ -3100,7 +3100,7 @@ namespace GitUI.CommandsDialogs
             Initialize();
         }
 
-        private void updateSubmoduleMenuItem_Click(object sender, EventArgs e)
+        private void updateSubmoduleMenuItem_Click(object? sender, EventArgs e)
         {
             var unstagedFiles = Unstaged.SelectedItems.Items().ToList();
             if (unstagedFiles.Count == 0)
@@ -3116,7 +3116,7 @@ namespace GitUI.CommandsDialogs
             Initialize();
         }
 
-        private void stashSubmoduleChangesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void stashSubmoduleChangesToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var unstagedFiles = Unstaged.SelectedItems.Items().ToList();
             if (unstagedFiles.Count == 0)
@@ -3133,7 +3133,7 @@ namespace GitUI.CommandsDialogs
             Initialize();
         }
 
-        private void commitTemplatesToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        private void commitTemplatesToolStripMenuItem_DropDownOpening(object? sender, EventArgs e)
         {
             var registeredTemplatesCount = _commitTemplateManager.RegisteredTemplates.Count();
             if (_shouldReloadCommitTemplates || _alreadyLoadedTemplatesCount != registeredTemplatesCount)
@@ -3217,7 +3217,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void openContainingFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openContainingFolderToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             OpenContainingFolder(Unstaged);
         }
@@ -3235,17 +3235,17 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void stagedOpenDifftoolToolStripMenuItem9_Click(object sender, EventArgs e)
+        private void stagedOpenDifftoolToolStripMenuItem9_Click(object? sender, EventArgs e)
         {
             OpenFilesWithDiffTool(Staged.SelectedItems, sender);
         }
 
-        private void openFolderToolStripMenuItem10_Click(object sender, EventArgs e)
+        private void openFolderToolStripMenuItem10_Click(object? sender, EventArgs e)
         {
             OpenContainingFolder(Staged);
         }
 
-        private void interactiveAddToolStripMenuItem_Click(object sender, EventArgs e)
+        private void interactiveAddToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var item = Unstaged.SelectedGitItem;
 
@@ -3267,7 +3267,7 @@ namespace GitUI.CommandsDialogs
                 .FileAndForget();
         }
 
-        private void Amend_CheckedChanged(object sender, EventArgs e)
+        private void Amend_CheckedChanged(object? sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(Message.Text) && Amend.Checked)
             {
@@ -3286,7 +3286,7 @@ namespace GitUI.CommandsDialogs
             SetCommitAndPushText();
         }
 
-        private void StageInSuperproject_CheckedChanged(object sender, EventArgs e)
+        private void StageInSuperproject_CheckedChanged(object? sender, EventArgs e)
         {
             if (StageInSuperproject.Visible)
             {
@@ -3294,17 +3294,17 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void commitCommitter_Click(object sender, EventArgs e)
+        private void commitCommitter_Click(object? sender, EventArgs e)
         {
             UICommands.StartSettingsDialog(this, SettingsDialog.Pages.GitConfigSettingsPage.GetPageReference());
         }
 
-        private void toolAuthor_Leave(object sender, EventArgs e)
+        private void toolAuthor_Leave(object? sender, EventArgs e)
         {
             UpdateAuthorInfo();
         }
 
-        private void createBranchToolStripButton_Click(object sender, EventArgs e)
+        private void createBranchToolStripButton_Click(object? sender, EventArgs e)
         {
             var branchCreated = UICommands.StartCreateBranchDialog(this);
             if (!branchCreated)
@@ -3315,7 +3315,7 @@ namespace GitUI.CommandsDialogs
             ThreadHelper.JoinableTaskFactory.RunAsync(() => UpdateBranchNameDisplayAsync());
         }
 
-        private void Message_Enter(object sender, EventArgs e)
+        private void Message_Enter(object? sender, EventArgs e)
         {
             if (Staged.AllItemsCount != 0 && !Staged.SelectedItems.Any())
             {
@@ -3325,13 +3325,13 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void modifyCommitMessageButton_Click(object sender, EventArgs e)
+        private void modifyCommitMessageButton_Click(object? sender, EventArgs e)
         {
             CommitKind = CommitKind.Normal;
             Message.Focus();
         }
 
-        private void stopTrackingThisFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void stopTrackingThisFileToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (Unstaged.SelectedGitItem is null || !Unstaged.SelectedGitItem.IsTracked)
             {

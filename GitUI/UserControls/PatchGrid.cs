@@ -126,7 +126,7 @@ namespace GitUI
             SelectCurrentlyApplyingPatch();
         }
 
-        private void Patches_DoubleClick(object sender, EventArgs e)
+        private void Patches_DoubleClick(object? sender, EventArgs e)
         {
             if (Patches.SelectedRows.Count != 1)
             {

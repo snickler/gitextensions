@@ -110,17 +110,17 @@ namespace GitUI.Blame
                 () => ProcessBlame(fileName, revision, children, controlToMask, line, scrollPos));
         }
 
-        private void commitInfo_CommandClicked(object sender, CommandEventArgs e)
+        private void commitInfo_CommandClicked(object? sender, CommandEventArgs e)
         {
             CommandClick?.Invoke(sender, e);
         }
 
-        private void BlameAuthor_MouseLeave(object sender, EventArgs e)
+        private void BlameAuthor_MouseLeave(object? sender, EventArgs e)
         {
             blameTooltip.Hide(this);
         }
 
-        private void BlameAuthor_MouseMove(object sender, MouseEventArgs e)
+        private void BlameAuthor_MouseMove(object? sender, MouseEventArgs e)
         {
             if (!BlameFile.Focused)
             {
@@ -157,7 +157,7 @@ namespace GitUI.Blame
             }
         }
 
-        private void BlameFile_MouseMove(object sender, MouseEventArgs e)
+        private void BlameFile_MouseMove(object? sender, MouseEventArgs e)
         {
             if (_blame is null)
             {
@@ -223,7 +223,7 @@ namespace GitUI.Blame
             BlameFile.Refresh();
         }
 
-        private void SelectedLineChanged(object sender, SelectedLineEventArgs e)
+        private void SelectedLineChanged(object? sender, SelectedLineEventArgs e)
         {
             int selectedLine = e.SelectedLine;
 
@@ -244,12 +244,12 @@ namespace GitUI.Blame
             CommitInfo.Revision = Module.GetRevision(_lastBlameLine.Commit.ObjectId);
         }
 
-        private void BlameAuthor_HScrollPositionChanged(object sender, EventArgs e)
+        private void BlameAuthor_HScrollPositionChanged(object? sender, EventArgs e)
         {
             BlameAuthor.HScrollPosition = 0;
         }
 
-        private void BlameAuthor_VScrollPositionChanged(object sender, EventArgs e)
+        private void BlameAuthor_VScrollPositionChanged(object? sender, EventArgs e)
         {
             if (!_changingScrollPosition)
             {
@@ -268,7 +268,7 @@ namespace GitUI.Blame
             }
         }
 
-        private void BlameFile_VScrollPositionChanged(object sender, EventArgs e)
+        private void BlameFile_VScrollPositionChanged(object? sender, EventArgs e)
         {
             if (_changingScrollPosition)
             {
@@ -475,7 +475,7 @@ namespace GitUI.Blame
             return gitBlameDisplays;
         }
 
-        private void ActiveTextAreaControlDoubleClick(object sender, EventArgs e)
+        private void ActiveTextAreaControlDoubleClick(object? sender, EventArgs e)
         {
             if (_lastBlameLine is null)
             {
@@ -512,7 +512,7 @@ namespace GitUI.Blame
             return line;
         }
 
-        private void contextMenu_Opened(object sender, EventArgs e)
+        private void contextMenu_Opened(object? sender, EventArgs e)
         {
             Validates.NotNull(_fileName);
             Validates.NotNull(_blameId);
@@ -543,7 +543,7 @@ namespace GitUI.Blame
             return _blame.Lines[line].Commit;
         }
 
-        private void copyLogMessageToolStripMenuItem_Click(object sender, EventArgs e)
+        private void copyLogMessageToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             CopyToClipboard(c => c.Summary);
         }
@@ -560,12 +560,12 @@ namespace GitUI.Blame
             ClipboardUtil.TrySetText(formatter(commit));
         }
 
-        private void copyAllCommitInfoToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        private void copyAllCommitInfoToClipboardToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             CopyToClipboard(c => c.ToString());
         }
 
-        private void copyCommitHashToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        private void copyCommitHashToClipboardToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             CopyToClipboard(c => c.ObjectId.ToString());
         }
@@ -583,7 +583,7 @@ namespace GitUI.Blame
             return selectedRevision is not null;
         }
 
-        private void blameRevisionToolStripMenuItem_Click(object sender, EventArgs e)
+        private void blameRevisionToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (!TryGetSelectedRevision(out var selectedRevision))
             {
@@ -593,7 +593,7 @@ namespace GitUI.Blame
             BlameRevision(selectedRevision.ObjectId);
         }
 
-        private void blamePreviousRevisionToolStripMenuItem_Click(object sender, EventArgs e)
+        private void blamePreviousRevisionToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (!TryGetSelectedRevision(out var selectedRevision) || !selectedRevision.HasParent)
             {
@@ -615,7 +615,7 @@ namespace GitUI.Blame
             frm.ShowDialog(this);
         }
 
-        private void showChangesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showChangesToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var commit = GetBlameCommit();
 

@@ -86,7 +86,7 @@ namespace GitUI.UserControls.RevisionGrid
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private void lbxRefs_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void lbxRefs_MouseDoubleClick(object? sender, MouseEventArgs e)
         {
             AcceptButton.PerformClick();
         }

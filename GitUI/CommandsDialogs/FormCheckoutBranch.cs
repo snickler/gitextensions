@@ -129,7 +129,7 @@ namespace GitUI.CommandsDialogs
 
             return;
 
-            void FormCheckoutBranch_Shown(object sender, EventArgs e)
+            void FormCheckoutBranch_Shown(object? sender, EventArgs e)
             {
                 Shown -= FormCheckoutBranch_Shown;
                 RecalculateSizeConstraints();
@@ -268,7 +268,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void OkClick(object sender, EventArgs e)
+        private void OkClick(object? sender, EventArgs e)
         {
             DialogResult = PerformCheckout(this);
             if (DialogResult == DialogResult.OK)
@@ -436,13 +436,13 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void LocalBranchCheckedChanged(object sender, EventArgs e)
+        private void LocalBranchCheckedChanged(object? sender, EventArgs e)
         {
             // We only need to refresh the dialog once -> RemoteBranchCheckedChanged will trigger this
             ////BranchTypeChanged();
         }
 
-        private void RemoteBranchCheckedChanged(object sender, EventArgs e)
+        private void RemoteBranchCheckedChanged(object? sender, EventArgs e)
         {
             RecalculateSizeConstraints();
 
@@ -454,7 +454,7 @@ namespace GitUI.CommandsDialogs
             Branches_SelectedIndexChanged(sender, e);
         }
 
-        private void rbCreateBranchWithCustomName_CheckedChanged(object sender, EventArgs e)
+        private void rbCreateBranchWithCustomName_CheckedChanged(object? sender, EventArgs e)
         {
             txtCustomBranchName.Enabled = rbCreateBranchWithCustomName.Checked;
             if (rbCreateBranchWithCustomName.Checked)
@@ -463,7 +463,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Branches_SelectedIndexChanged(object sender, EventArgs e)
+        private void Branches_SelectedIndexChanged(object? sender, EventArgs e)
         {
             lbChanges.Text = "";
 
@@ -535,7 +535,7 @@ namespace GitUI.CommandsDialogs
             return _remoteBranches ??= Module.GetRefs(tags: true, branches: true).Where(h => h.IsRemote && !h.IsTag).ToList();
         }
 
-        private void FormCheckoutBranch_Activated(object sender, EventArgs e)
+        private void FormCheckoutBranch_Activated(object? sender, EventArgs e)
         {
             Branches.Focus();
         }
@@ -557,7 +557,7 @@ namespace GitUI.CommandsDialogs
             ResumeLayout();
         }
 
-        private void rbReset_CheckedChanged(object sender, EventArgs e)
+        private void rbReset_CheckedChanged(object? sender, EventArgs e)
         {
             chkSetLocalChangesActionAsDefault.Enabled = !rbReset.Checked;
             if (rbReset.Checked)
@@ -566,7 +566,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void txtCustomBranchName_Leave(object sender, EventArgs e)
+        private void txtCustomBranchName_Leave(object? sender, EventArgs e)
         {
             if (!AppSettings.AutoNormaliseBranchName || !txtCustomBranchName.Text.Any(GitBranchNameNormaliser.IsValidChar))
             {
@@ -579,13 +579,13 @@ namespace GitUI.CommandsDialogs
             txtCustomBranchName.SelectionStart = caretPosition;
         }
 
-        private void Branches_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Branches_Validating(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = Branches.SelectedIndex == -1 || !Branches.Items.Contains(Branches.Text);
             Errors.SetError(Branches, e.Cancel ? _invalidBranchName.ToString() : "");
         }
 
-        private void Branches_TextChanged(object sender, EventArgs e)
+        private void Branches_TextChanged(object? sender, EventArgs e)
         {
             Errors.SetError(Branches, "");
         }

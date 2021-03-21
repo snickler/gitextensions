@@ -41,7 +41,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             AppSettings.MonospaceFont = _monospaceFont;
         }
 
-        private void diffFontChangeButton_Click(object sender, EventArgs e)
+        private void diffFontChangeButton_Click(object? sender, EventArgs e)
         {
             diffFontDialog.Font = _diffFont;
             DialogResult result = diffFontDialog.ShowDialog(this);
@@ -53,7 +53,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void applicationFontChangeButton_Click(object sender, EventArgs e)
+        private void applicationFontChangeButton_Click(object? sender, EventArgs e)
         {
             applicationDialog.Font = _applicationFont;
             DialogResult result = applicationDialog.ShowDialog(this);
@@ -65,7 +65,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void commitFontChangeButton_Click(object sender, EventArgs e)
+        private void commitFontChangeButton_Click(object? sender, EventArgs e)
         {
             commitFontDialog.Font = _commitFont;
             DialogResult result = commitFontDialog.ShowDialog(this);
@@ -77,7 +77,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void monospaceFontChangeButton_Click(object sender, EventArgs e)
+        private void monospaceFontChangeButton_Click(object? sender, EventArgs e)
         {
             monospaceFontDialog.Font = _monospaceFont;
             DialogResult result = monospaceFontDialog.ShowDialog(this);

@@ -343,7 +343,7 @@ See the changes in the commit form.");
             GitUICommands.LaunchBrowse(workingDir: _fullPathResolver.Resolve(item.FileName.EnsureTrailingPathSeparator()) ?? "", selectedId: item.ObjectId);
         }
 
-        private void tvGitTree_AfterSelect(object sender, TreeViewEventArgs e)
+        private void tvGitTree_AfterSelect(object? sender, TreeViewEventArgs e)
         {
             ThreadHelper.JoinableTaskFactory.RunAsync(ViewItem);
 
@@ -379,7 +379,7 @@ See the changes in the commit form.");
             }
         }
 
-        private void tvGitTree_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+        private void tvGitTree_BeforeExpand(object? sender, TreeViewCancelEventArgs e)
         {
             if (e.Node.IsExpanded)
             {
@@ -393,12 +393,12 @@ See the changes in the commit form.");
             }
         }
 
-        private void tvGitTree_DoubleClick(object sender, EventArgs e)
+        private void tvGitTree_DoubleClick(object? sender, EventArgs e)
         {
             OnItemActivated();
         }
 
-        private void tvGitTree_ItemDrag(object sender, ItemDragEventArgs e)
+        private void tvGitTree_ItemDrag(object? sender, ItemDragEventArgs e)
         {
             if (e.Item is TreeNode { Tag: GitItem gitItem })
             {
@@ -414,7 +414,7 @@ See the changes in the commit form.");
             }
         }
 
-        private void tvGitTree_KeyDown(object sender, KeyEventArgs e)
+        private void tvGitTree_KeyDown(object? sender, KeyEventArgs e)
         {
             if (tvGitTree.SelectedNode is null || e.KeyCode != Keys.Enter)
             {
@@ -425,7 +425,7 @@ See the changes in the commit form.");
             e.Handled = true;
         }
 
-        private void blameMenuItem_Click(object sender, EventArgs e)
+        private void blameMenuItem_Click(object? sender, EventArgs e)
         {
             if (tvGitTree.SelectedNode?.Tag is GitItem gitItem)
             {
@@ -433,7 +433,7 @@ See the changes in the commit form.");
             }
         }
 
-        private void copyFilenameToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        private void copyFilenameToClipboardToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (tvGitTree.SelectedNode?.Tag is GitItem gitItem)
             {
@@ -445,7 +445,7 @@ See the changes in the commit form.");
             }
         }
 
-        private void fileHistoryItem_Click(object sender, EventArgs e)
+        private void fileHistoryItem_Click(object? sender, EventArgs e)
         {
             if (tvGitTree.SelectedNode?.Tag is GitItem gitItem)
             {
@@ -453,7 +453,7 @@ See the changes in the commit form.");
             }
         }
 
-        private void findToolStripMenuItem_Click(object sender, EventArgs e)
+        private void findToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             string? selectedItem;
             using (var searchWindow = new SearchWindow<string>(FindFileMatches) { Owner = FindForm() })
@@ -489,7 +489,7 @@ See the changes in the commit form.");
             }
         }
 
-        private void editCheckedOutFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void editCheckedOutFileToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (tvGitTree.SelectedNode?.Tag is not GitItem gitItem || gitItem.ObjectType != GitObjectType.Blob)
             {
@@ -502,17 +502,17 @@ See the changes in the commit form.");
             _refreshGitStatus?.Invoke();
         }
 
-        private void expandToolStripMenuItem_Click(object sender, EventArgs e)
+        private void expandToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             tvGitTree.SelectedNode?.ExpandAll();
         }
 
-        private void collapseAllToolStripMenuItem_Click(object sender, EventArgs e)
+        private void collapseAllToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             tvGitTree.CollapseAll();
         }
 
-        private void fileTreeArchiveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void fileTreeArchiveToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (tvGitTree.SelectedNode?.Tag is GitItem gitItem)
             {
@@ -520,7 +520,7 @@ See the changes in the commit form.");
             }
         }
 
-        private void fileTreeCleanWorkingTreeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void fileTreeCleanWorkingTreeToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             string filePath;
             if (tvGitTree.SelectedNode?.Tag is GitItem gitItem)
@@ -536,7 +536,7 @@ See the changes in the commit form.");
             UICommands.StartCleanupRepositoryDialog(this, filePath);
         }
 
-        private void FileTreeContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        private void FileTreeContextMenu_Opening(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             var gitItem = tvGitTree.SelectedNode?.Tag as GitItem;
             var itemSelected = gitItem is not null;
@@ -621,7 +621,7 @@ See the changes in the commit form.");
             collapseAllToolStripMenuItem.Visible = isFolder;
         }
 
-        private void fileTreeOpenContainingFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        private void fileTreeOpenContainingFolderToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             string? filePath = tvGitTree.SelectedNode?.Tag is GitItem gitItem
                 ? _fullPathResolver.Resolve(gitItem.FileName)
@@ -633,7 +633,7 @@ See the changes in the commit form.");
             }
         }
 
-        private void openFileWithToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openFileWithToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var fileName = SaveSelectedItemToTempFile();
             if (fileName is not null)
@@ -642,7 +642,7 @@ See the changes in the commit form.");
             }
         }
 
-        private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openFileToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var fileName = SaveSelectedItemToTempFile();
             if (fileName is not null)
@@ -651,7 +651,7 @@ See the changes in the commit form.");
             }
         }
 
-        private void openSubmoduleMenuItem_Click(object sender, EventArgs e)
+        private void openSubmoduleMenuItem_Click(object? sender, EventArgs e)
         {
             if (tvGitTree.SelectedNode?.Tag is GitItem { ObjectType: GitObjectType.Commit } gitItem)
             {
@@ -659,7 +659,7 @@ See the changes in the commit form.");
             }
         }
 
-        private void openWithToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openWithToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (tvGitTree.SelectedNode?.Tag is GitItem { ObjectType: GitObjectType.Blob } gitItem)
             {
@@ -673,7 +673,7 @@ See the changes in the commit form.");
             }
         }
 
-        private void openWithDifftoolToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openWithDifftoolToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (tvGitTree.SelectedNode?.Tag is GitItem gitItem)
             {
@@ -681,7 +681,7 @@ See the changes in the commit form.");
             }
         }
 
-        private void diffWithRememberedFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void diffWithRememberedFileToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (!(tvGitTree.SelectedNode?.Tag is GitItem gitItem) || _revision is null)
             {
@@ -696,7 +696,7 @@ See the changes in the commit form.");
             Module.OpenFilesWithDifftool(first, second);
         }
 
-        private void rememberFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void rememberFileToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (!(tvGitTree.SelectedNode?.Tag is GitItem gitItem) || _revision is null)
             {
@@ -707,7 +707,7 @@ See the changes in the commit form.");
             _rememberFileContextMenuController.RememberedDiffFileItem = fsi;
         }
 
-        private void resetToThisRevisionToolStripMenuItem_Click(object sender, EventArgs e)
+        private void resetToThisRevisionToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (tvGitTree.SelectedNode?.Tag is GitItem gitItem && _revision is not null)
             {
@@ -718,7 +718,7 @@ See the changes in the commit form.");
             }
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void saveAsToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (tvGitTree.SelectedNode?.Tag is GitItem { ObjectType: GitObjectType.Blob } gitItem)
             {
@@ -755,7 +755,7 @@ See the changes in the commit form.");
             return null;
         }
 
-        private void assumeUnchangedToolStripMenuItem_Click(object sender, EventArgs e)
+        private void assumeUnchangedToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var selectedFile = GetSelectedFile();
 
@@ -785,7 +785,7 @@ See the changes in the commit form.");
             }
         }
 
-        private void stopTrackingToolStripMenuItem_Click(object sender, EventArgs e)
+        private void stopTrackingToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             var filename = GetSelectedFile();
             if (filename is null)
@@ -810,7 +810,7 @@ See the changes in the commit form.");
             }
         }
 
-        private void tvGitTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void tvGitTree_NodeMouseClick(object? sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {

@@ -75,12 +75,12 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void OpenSSH_CheckedChanged(object sender, EventArgs e)
+        private void OpenSSH_CheckedChanged(object? sender, EventArgs e)
         {
             EnableSshOptions();
         }
 
-        private void Putty_CheckedChanged(object sender, EventArgs e)
+        private void Putty_CheckedChanged(object? sender, EventArgs e)
         {
             groupBox2.Visible = Putty.Checked;
             if (Putty.Checked)
@@ -188,7 +188,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             return false;
         }
 
-        private void Other_CheckedChanged(object sender, EventArgs e)
+        private void Other_CheckedChanged(object? sender, EventArgs e)
         {
             EnableSshOptions();
         }
@@ -207,24 +207,24 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             AutostartPageant.Enabled = Putty.Checked;
         }
 
-        private void OtherSshBrowse_Click(object sender, EventArgs e)
+        private void OtherSshBrowse_Click(object? sender, EventArgs e)
         {
             OtherSsh.Text = CommonLogic.SelectFile(".", "Executable file (*.exe)|*.exe", OtherSsh.Text);
         }
 
-        private void PuttyBrowse_Click(object sender, EventArgs e)
+        private void PuttyBrowse_Click(object? sender, EventArgs e)
         {
             PlinkPath.Text = CommonLogic.SelectFile(".",
                                         "Plink (plink.exe)|plink.exe|TortoiseGitPLink (tortoisegitplink.exe)|tortoisegitplink.exe|TortoisePlink.exe (tortoiseplink.exe)|tortoiseplink.exe",
                                         PlinkPath.Text);
         }
 
-        private void PuttygenBrowse_Click(object sender, EventArgs e)
+        private void PuttygenBrowse_Click(object? sender, EventArgs e)
         {
             PuttygenPath.Text = CommonLogic.SelectFile(".", "PuttyGen (puttygen.exe)|puttygen.exe", PuttygenPath.Text);
         }
 
-        private void PageantBrowse_Click(object sender, EventArgs e)
+        private void PageantBrowse_Click(object? sender, EventArgs e)
         {
             PageantPath.Text = CommonLogic.SelectFile(".", "PAgeant (pageant.exe)|pageant.exe", PageantPath.Text);
         }

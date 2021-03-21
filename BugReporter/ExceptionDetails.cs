@@ -131,19 +131,19 @@ namespace BugReporter
             exceptionDetailsListView.ResumeLayout();
         }
 
-        private void ExceptionDetailsListView_DoubleClick(object sender, EventArgs e)
+        private void ExceptionDetailsListView_DoubleClick(object? sender, EventArgs e)
         {
             using var detailView = new ExceptionDetailView();
             detailView.ShowDialog(exceptionDetailsListView.SelectedItems[0].Text, exceptionDetailsListView.SelectedItems[0].SubItems[1].Text);
         }
 
-        private void ExceptionDetailsListView_ItemMouseHover(object sender, ListViewItemMouseHoverEventArgs e)
+        private void ExceptionDetailsListView_ItemMouseHover(object? sender, ListViewItemMouseHoverEventArgs e)
         {
             toolTip.RemoveAll();
             toolTip.Show(e.Item.SubItems[1].Text, exceptionDetailsListView);
         }
 
-        private void ExceptionTreeView_AfterSelect(object sender, TreeViewEventArgs e)
+        private void ExceptionTreeView_AfterSelect(object? sender, TreeViewEventArgs e)
         {
             DisplayExceptionDetails(e.Node);
         }

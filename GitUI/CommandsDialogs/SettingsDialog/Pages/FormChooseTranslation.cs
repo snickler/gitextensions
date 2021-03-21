@@ -59,7 +59,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void FormChooseTranslation_FormClosing(object sender, FormClosingEventArgs e)
+        private void FormChooseTranslation_FormClosing(object? sender, FormClosingEventArgs e)
         {
             if (string.IsNullOrEmpty(AppSettings.Translation))
             {
@@ -67,7 +67,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void lvTranslations_ItemActivate(object sender, EventArgs e)
+        private void lvTranslations_ItemActivate(object? sender, EventArgs e)
         {
             // take the selection if any, else see the fallback in FormChooseTranslation_FormClosing
             var selectedItems = ((ListView)sender).SelectedItems;

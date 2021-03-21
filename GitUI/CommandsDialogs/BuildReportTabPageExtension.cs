@@ -152,7 +152,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void RevisionPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void RevisionPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(GitRevision.BuildStatus))
             {
@@ -177,7 +177,7 @@ namespace GitUI.CommandsDialogs
             };
         }
 
-        private void BuildReportWebBrowserOnNavigated(object sender,
+        private void BuildReportWebBrowserOnNavigated(object? sender,
                                                       WebBrowserNavigatedEventArgs webBrowserNavigatedEventArgs)
         {
             Validates.NotNull(_buildReportWebBrowser);

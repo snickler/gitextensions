@@ -61,7 +61,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             }
         }
 
-        private void ForkAndCloneForm_Load(object sender, EventArgs e)
+        private void ForkAndCloneForm_Load(object? sender, EventArgs e)
         {
             Init();
         }
@@ -152,7 +152,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
 
         #region GUI Handlers
 
-        private void _searchBtn_Click(object sender, EventArgs e)
+        private void _searchBtn_Click(object? sender, EventArgs e)
         {
             var search = searchTB.Text;
             if (search is null || search.Trim().Length == 0)
@@ -186,7 +186,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
                 .FileAndForget();
         }
 
-        private void _getFromUserBtn_Click(object sender, EventArgs e)
+        private void _getFromUserBtn_Click(object? sender, EventArgs e)
         {
             var search = searchTB.Text;
             if (search is null || search.Trim().Length == 0)
@@ -229,7 +229,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
                 .FileAndForget();
         }
 
-        private void PrepareSearch(object sender, EventArgs e)
+        private void PrepareSearch(object? sender, EventArgs e)
         {
             searchResultsLV.Items.Clear();
             _searchResultsLV_SelectedIndexChanged(sender, e);
@@ -262,7 +262,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             searchBtn.Enabled = true;
         }
 
-        private void _forkBtn_Click(object sender, EventArgs e)
+        private void _forkBtn_Click(object? sender, EventArgs e)
         {
             if (searchResultsLV.SelectedItems.Count != 1)
             {
@@ -284,17 +284,17 @@ namespace GitUI.CommandsDialogs.RepoHosting
             UpdateMyRepos();
         }
 
-        private void _searchTB_Enter(object sender, EventArgs e)
+        private void _searchTB_Enter(object? sender, EventArgs e)
         {
             AcceptButton = searchBtn;
         }
 
-        private void _searchTB_Leave(object sender, EventArgs e)
+        private void _searchTB_Leave(object? sender, EventArgs e)
         {
             AcceptButton = null;
         }
 
-        private void _searchResultsLV_SelectedIndexChanged(object sender, EventArgs e)
+        private void _searchResultsLV_SelectedIndexChanged(object? sender, EventArgs e)
         {
             UpdateCloneInfo();
             if (searchResultsLV.SelectedItems.Count != 1)
@@ -308,7 +308,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             searchResultItemDescription.Text = hostedRepo.Description;
         }
 
-        private void _browseForCloneToDirbtn_Click(object sender, EventArgs e)
+        private void _browseForCloneToDirbtn_Click(object? sender, EventArgs e)
         {
             var initialDir = destinationTB.Text.Length > 0 ? destinationTB.Text : "C:\\";
 
@@ -321,7 +321,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             }
         }
 
-        private void _cloneBtn_Click(object sender, EventArgs e)
+        private void _cloneBtn_Click(object? sender, EventArgs e)
         {
             var repo = CurrentySelectedGitRepo;
 
@@ -331,7 +331,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             }
         }
 
-        private void _openGitupPageBtn_Click(object sender, EventArgs e)
+        private void _openGitupPageBtn_Click(object? sender, EventArgs e)
         {
             if (CurrentySelectedGitRepo is null)
             {
@@ -349,12 +349,12 @@ namespace GitUI.CommandsDialogs.RepoHosting
             }
         }
 
-        private void _closeBtn_Click(object sender, EventArgs e)
+        private void _closeBtn_Click(object? sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
         }
 
-        private void _tabControl_SelectedIndexChanged(object sender, EventArgs e)
+        private void _tabControl_SelectedIndexChanged(object? sender, EventArgs e)
         {
             UpdateCloneInfo();
             if (tabControl.SelectedTab == searchReposPage)
@@ -363,22 +363,22 @@ namespace GitUI.CommandsDialogs.RepoHosting
             }
         }
 
-        private void _myReposLV_SelectedIndexChanged(object sender, EventArgs e)
+        private void _myReposLV_SelectedIndexChanged(object? sender, EventArgs e)
         {
             UpdateCloneInfo();
         }
 
-        private void _createDirTB_TextChanged(object sender, EventArgs e)
+        private void _createDirTB_TextChanged(object? sender, EventArgs e)
         {
             UpdateCloneInfo(false, false);
         }
 
-        private void _destinationTB_TextChanged(object sender, EventArgs e)
+        private void _destinationTB_TextChanged(object? sender, EventArgs e)
         {
             UpdateCloneInfo(false, false);
         }
 
-        private void _addRemoteAsTB_TextChanged(object sender, EventArgs e)
+        private void _addRemoteAsTB_TextChanged(object? sender, EventArgs e)
         {
             UpdateCloneInfo(false, false);
         }
@@ -543,7 +543,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             return null;
         }
 
-        private void _destinationTB_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void _destinationTB_Validating(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             if (destinationTB.Text.IndexOfAny(Path.GetInvalidPathChars()) != -1)
             {
@@ -551,7 +551,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             }
         }
 
-        private void _createDirTB_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void _createDirTB_Validating(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             if (createDirTB.Text.IndexOfAny(Path.GetInvalidPathChars()) != -1)
             {
@@ -559,7 +559,7 @@ namespace GitUI.CommandsDialogs.RepoHosting
             }
         }
 
-        private void ProtocolSelectionChanged(object sender, EventArgs e)
+        private void ProtocolSelectionChanged(object? sender, EventArgs e)
         {
             Validates.NotNull(CurrentySelectedGitRepo);
 

@@ -54,7 +54,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             return new SettingsPageReferenceByType(typeof(RevisionLinksSettingsPage));
         }
 
-        private void _NO_TRANSLATE_Categories_SelectedIndexChanged(object sender, EventArgs e)
+        private void _NO_TRANSLATE_Categories_SelectedIndexChanged(object? sender, EventArgs e)
         {
             CategoryChanged();
         }
@@ -110,7 +110,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void Add_Click(object sender, EventArgs e)
+        private void Add_Click(object? sender, EventArgs e)
         {
             var definition = new ExternalLinkDefinition
             {
@@ -179,7 +179,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             CategoryChanged();
         }
 
-        private void Remove_Click(object sender, EventArgs e)
+        private void Remove_Click(object? sender, EventArgs e)
         {
             if (SelectedLinkDefinition is null)
             {
@@ -202,7 +202,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             CategoryChanged();
         }
 
-        private void _NO_TRANSLATE_Name_Leave(object sender, EventArgs e)
+        private void _NO_TRANSLATE_Name_Leave(object? sender, EventArgs e)
         {
             if (SelectedLinkDefinition is not null)
             {
@@ -213,7 +213,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void EnabledChx_CheckedChanged(object sender, EventArgs e)
+        private void EnabledChx_CheckedChanged(object? sender, EventArgs e)
         {
             if (SelectedLinkDefinition is not null)
             {
@@ -221,7 +221,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void MessageChx_CheckedChanged(object sender, EventArgs e)
+        private void MessageChx_CheckedChanged(object? sender, EventArgs e)
         {
             if (SelectedLinkDefinition is not null)
             {
@@ -236,7 +236,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void _NO_TRANSLATE_SearchPatternEdit_Leave(object sender, EventArgs e)
+        private void _NO_TRANSLATE_SearchPatternEdit_Leave(object? sender, EventArgs e)
         {
             if (SelectedLinkDefinition is not null)
             {
@@ -244,7 +244,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void _NO_TRANSLATE_NestedPatternEdit_Leave(object sender, EventArgs e)
+        private void _NO_TRANSLATE_NestedPatternEdit_Leave(object? sender, EventArgs e)
         {
             if (SelectedLinkDefinition is not null)
             {
@@ -252,7 +252,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void LocalBranchChx_CheckedChanged(object sender, EventArgs e)
+        private void LocalBranchChx_CheckedChanged(object? sender, EventArgs e)
         {
             if (SelectedLinkDefinition is not null)
             {
@@ -267,7 +267,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void RemoteBranchChx_CheckedChanged(object sender, EventArgs e)
+        private void RemoteBranchChx_CheckedChanged(object? sender, EventArgs e)
         {
             if (SelectedLinkDefinition is not null)
             {
@@ -282,7 +282,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void _NO_TRANSLATE_RemotePatern_Leave(object sender, EventArgs e)
+        private void _NO_TRANSLATE_RemotePatern_Leave(object? sender, EventArgs e)
         {
             if (SelectedLinkDefinition is not null)
             {
@@ -290,7 +290,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void chxURL_CheckedChanged(object sender, EventArgs e)
+        private void chxURL_CheckedChanged(object? sender, EventArgs e)
         {
             if (SelectedLinkDefinition is not null)
             {
@@ -305,7 +305,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void chxPushURL_CheckedChanged(object sender, EventArgs e)
+        private void chxPushURL_CheckedChanged(object? sender, EventArgs e)
         {
             if (SelectedLinkDefinition is not null)
             {
@@ -320,7 +320,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void _NO_TRANSLATE_UseRemotes_Leave(object sender, EventArgs e)
+        private void _NO_TRANSLATE_UseRemotes_Leave(object? sender, EventArgs e)
         {
             if (SelectedLinkDefinition is not null)
             {
@@ -328,7 +328,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void chkOnlyFirstRemote_CheckedChanged(object sender, EventArgs e)
+        private void chkOnlyFirstRemote_CheckedChanged(object? sender, EventArgs e)
         {
             if (SelectedLinkDefinition is not null)
             {

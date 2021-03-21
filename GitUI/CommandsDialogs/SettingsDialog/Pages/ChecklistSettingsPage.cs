@@ -171,7 +171,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             return CommonLogic.ConfigFileSettingsSet.GlobalSettings.GetValue(settingName);
         }
 
-        private void translationConfig_Click(object sender, EventArgs e)
+        private void translationConfig_Click(object? sender, EventArgs e)
         {
             using (var frm = new FormChooseTranslation())
             {
@@ -184,7 +184,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             SaveAndRescan_Click(this, EventArgs.Empty);
         }
 
-        private void SshConfig_Click(object sender, EventArgs e)
+        private void SshConfig_Click(object? sender, EventArgs e)
         {
             if (GitSshHelpers.Plink())
             {
@@ -200,13 +200,13 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void GitExtensionsInstall_Click(object sender, EventArgs e)
+        private void GitExtensionsInstall_Click(object? sender, EventArgs e)
         {
             CheckSettingsLogic.SolveGitExtensionsDir();
             CheckSettings();
         }
 
-        private void GitBinFound_Click(object sender, EventArgs e)
+        private void GitBinFound_Click(object? sender, EventArgs e)
         {
             if (!CheckSettingsLogic.SolveLinuxToolsDir())
             {
@@ -221,14 +221,14 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             SaveAndRescan_Click(this, EventArgs.Empty);
         }
 
-        private void ShellExtensionsRegistered_Click(object sender, EventArgs e)
+        private void ShellExtensionsRegistered_Click(object? sender, EventArgs e)
         {
             string path = Path.Combine(AppSettings.GetInstallDir(), CommonLogic.GitExtensionsShellEx32Name);
 
             if (!File.Exists(path))
             {
-                path = Assembly.GetAssembly(GetType()).Location;
-                path = Path.GetDirectoryName(path);
+                path = Assembly.GetAssembly(GetType())!.Location;
+                path = Path.GetDirectoryName(path)!;
                 path = Path.Combine(path, CommonLogic.GitExtensionsShellEx32Name);
             }
 
@@ -244,8 +244,8 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
                         UseShellExecute = true
                     };
 
-                    var process = Process.Start(pi);
-                    process.WaitForExit();
+                    Process? process = Process.Start(pi);
+                    process?.WaitForExit();
 
                     if (IntPtr.Size == 8)
                     {
@@ -254,8 +254,8 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
                         {
                             pi.Arguments = path.Quote();
 
-                            var process64 = Process.Start(pi);
-                            process64.WaitForExit();
+                            Process? process64 = Process.Start(pi);
+                            process64?.WaitForExit();
                         }
                         else
                         {
@@ -276,7 +276,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             CheckSettings();
         }
 
-        private void DiffToolFix_Click(object sender, EventArgs e)
+        private void DiffToolFix_Click(object? sender, EventArgs e)
         {
             Validates.NotNull(_diffMergeToolConfigurationManager);
             var diffTool = _diffMergeToolConfigurationManager.ConfiguredDiffTool;
@@ -289,7 +289,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             SaveAndRescan_Click(this, EventArgs.Empty);
         }
 
-        private void MergeToolFix_Click(object sender, EventArgs e)
+        private void MergeToolFix_Click(object? sender, EventArgs e)
         {
             Validates.NotNull(_diffMergeToolConfigurationManager);
             var mergeTool = _diffMergeToolConfigurationManager.ConfiguredMergeTool;
@@ -307,14 +307,14 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             PageHost.GotoPage(GitConfigSettingsPage.GetPageReference());
         }
 
-        private void UserNameSet_Click(object sender, EventArgs e)
+        private void UserNameSet_Click(object? sender, EventArgs e)
         {
             GotoPageGlobalSettings();
 
             // nice-to-have: jump directly to correct text box
         }
 
-        private void GitFound_Click(object sender, EventArgs e)
+        private void GitFound_Click(object? sender, EventArgs e)
         {
             if (!CheckSettingsLogic.SolveGitCommand())
             {
@@ -330,7 +330,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             SaveAndRescan_Click(this, EventArgs.Empty);
         }
 
-        private void SaveAndRescan_Click(object sender, EventArgs e)
+        private void SaveAndRescan_Click(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -340,7 +340,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void CheckAtStartup_CheckedChanged(object sender, EventArgs e)
+        private void CheckAtStartup_CheckedChanged(object? sender, EventArgs e)
         {
             AppSettings.CheckSettings = CheckAtStartup.Checked;
         }
@@ -656,7 +656,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             settingFixButton.Visible = true;
         }
 
-        private void GcmDetectedFix_Click(object sender, EventArgs e)
+        private void GcmDetectedFix_Click(object? sender, EventArgs e)
         {
             OsShellUtil.OpenUrlInDefaultBrowser(@"https://github.com/gitextensions/gitextensions/wiki/How-To:-fix-GitCredentialWinStore-missing");
         }

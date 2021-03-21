@@ -34,7 +34,7 @@ namespace GitUI.CommandsDialogs.WorktreeDialog
             InitializeComplete();
         }
 
-        private void FormCreateWorktree_Load(object sender, EventArgs e)
+        private void FormCreateWorktree_Load(object? sender, EventArgs e)
         {
             _initialDirectoryPath = GetWorktreeDirectory();
             LoadBranchesAsync();
@@ -88,7 +88,7 @@ namespace GitUI.CommandsDialogs.WorktreeDialog
             base.Dispose(disposing);
         }
 
-        private void comboBoxBranches_KeyUp(object sender, KeyEventArgs e)
+        private void comboBoxBranches_KeyUp(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
@@ -96,7 +96,7 @@ namespace GitUI.CommandsDialogs.WorktreeDialog
             }
         }
 
-        private void createWorktreeButton_Click(object sender, EventArgs e)
+        private void createWorktreeButton_Click(object? sender, EventArgs e)
         {
             CreateWorktree();
         }
@@ -160,12 +160,12 @@ namespace GitUI.CommandsDialogs.WorktreeDialog
             }
         }
 
-        private void ValidateWorktreeOptions(object sender, EventArgs e)
+        private void ValidateWorktreeOptions(object? sender, EventArgs e)
         {
             ValidateWorktreeOptions();
         }
 
-        private void UpdateWorktreePathAndValidateWorktreeOptions(object sender, EventArgs e)
+        private void UpdateWorktreePathAndValidateWorktreeOptions(object? sender, EventArgs e)
         {
             UpdateWorktreePath();
 

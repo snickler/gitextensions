@@ -109,13 +109,13 @@ namespace GitUI.CommandsDialogs.BrowseDialog
 
             return;
 
-            void WorkTreeWatcherError(object sender, ErrorEventArgs e)
+            void WorkTreeWatcherError(object? sender, ErrorEventArgs e)
             {
                 // Called for instance at buffer overflow
                 ScheduleNextUpdateTime(FileChangedUpdateDelay);
             }
 
-            void GitDirChanged(object sender, FileSystemEventArgs e)
+            void GitDirChanged(object? sender, FileSystemEventArgs e)
             {
                 Validates.NotNull(_gitPath);
 
@@ -141,7 +141,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
                 ScheduleNextUpdateTime(FileChangedUpdateDelay);
             }
 
-            void WorkTreeChanged(object sender, FileSystemEventArgs e)
+            void WorkTreeChanged(object? sender, FileSystemEventArgs e)
             {
                 if (e.FullPath.StartsWith(_gitPath))
                 {
@@ -276,7 +276,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
 
             return;
 
-            void commandsSource_GitUICommandsChanged(object sender, GitUICommandsChangedEventArgs e)
+            void commandsSource_GitUICommandsChanged(object? sender, GitUICommandsChangedEventArgs e)
             {
                 var oldCommands = e.OldCommands;
                 if (oldCommands is not null)
@@ -304,17 +304,17 @@ namespace GitUI.CommandsDialogs.BrowseDialog
                 StartWatchingChanges(module.WorkingDir, module.WorkingDirGitDir);
             }
 
-            void GitUICommands_PreCheckout(object sender, GitUIEventArgs e)
+            void GitUICommands_PreCheckout(object? sender, GitUIEventArgs e)
             {
                 CurrentStatus = GitStatusMonitorState.Paused;
             }
 
-            void GitUICommands_PostCheckout(object sender, GitUIPostActionEventArgs e)
+            void GitUICommands_PostCheckout(object? sender, GitUIPostActionEventArgs e)
             {
                 CurrentStatus = GitStatusMonitorState.Running;
             }
 
-            void GitUICommands_PostRepositoryChanged(object sender, GitUIEventArgs e)
+            void GitUICommands_PostRepositoryChanged(object? sender, GitUIEventArgs e)
             {
                 CurrentStatus = GitStatusMonitorState.Inactive;
                 CurrentStatus = GitStatusMonitorState.Running;

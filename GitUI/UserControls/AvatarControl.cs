@@ -147,7 +147,7 @@ namespace GitUI
             }
         }
 
-        private void OnClearCacheClick(object sender, EventArgs e)
+        private void OnClearCacheClick(object? sender, EventArgs e)
         {
             var email = Email;
 
@@ -159,17 +159,17 @@ namespace GitUI
             ClearCache();
         }
 
-        private void OnRegisterGravatarClick(object sender, EventArgs e)
+        private void OnRegisterGravatarClick(object? sender, EventArgs e)
         {
             OsShellUtil.OpenUrlInDefaultBrowser(@"https://www.gravatar.com");
         }
 
-        private void OnDefaultImageDropDownOpening(object sender, EventArgs e)
+        private void OnDefaultImageDropDownOpening(object? sender, EventArgs e)
         {
             UpdateMenuItemSelection(fallbackAvatarStyleToolStripMenuItem.DropDownItems, AppSettings.AvatarFallbackType);
         }
 
-        private void avatarProviderToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        private void avatarProviderToolStripMenuItem_DropDownOpening(object? sender, EventArgs e)
         {
             UpdateMenuItemSelection(avatarProviderToolStripMenuItem.DropDownItems, AppSettings.AvatarProvider);
         }

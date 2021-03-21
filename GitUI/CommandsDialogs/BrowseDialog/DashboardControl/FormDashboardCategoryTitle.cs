@@ -41,7 +41,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
         /// </summary>
         public string? Category { get; private set; }
 
-        private void OkButton_Click(object sender, EventArgs e)
+        private void OkButton_Click(object? sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtCategoryName.Text))
             {
@@ -59,12 +59,12 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             Close();
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void btnCancel_Click(object? sender, EventArgs e)
         {
             Close();
         }
 
-        private void txtCategoryName_TextChanged(object sender, EventArgs e)
+        private void txtCategoryName_TextChanged(object? sender, EventArgs e)
         {
             btnOk.Enabled = txtCategoryName.Text != Category;
         }

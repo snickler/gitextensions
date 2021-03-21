@@ -38,7 +38,7 @@ namespace GitUI.CommandsDialogs
             InitializeComplete();
         }
 
-        private void FormDeleteRemoteBranchLoad(object sender, EventArgs e)
+        private void FormDeleteRemoteBranchLoad(object? sender, EventArgs e)
         {
             Branches.BranchesToSelect = Module.GetRefs(tags: true, branches: true).Where(h => h.IsRemote).ToList();
             foreach (var branch in Module.GetMergedRemoteBranches())
@@ -52,7 +52,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void OkClick(object sender, EventArgs e)
+        private void OkClick(object? sender, EventArgs e)
         {
             try
             {
@@ -107,7 +107,7 @@ namespace GitUI.CommandsDialogs
             Close();
         }
 
-        private void DeleteRemote_CheckedChanged(object sender, EventArgs e)
+        private void DeleteRemote_CheckedChanged(object? sender, EventArgs e)
         {
             Delete.Enabled = DeleteRemote.Checked;
         }

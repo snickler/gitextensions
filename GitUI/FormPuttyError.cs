@@ -26,7 +26,7 @@ namespace GitUI
             InitializeComplete();
         }
 
-        private void LoadSSHKey_Click(object sender, EventArgs e)
+        private void LoadSSHKey_Click(object? sender, EventArgs e)
         {
             var pathLoaded = BrowseForPrivateKey.BrowseAndLoad(this);
             if (!string.IsNullOrEmpty(pathLoaded))

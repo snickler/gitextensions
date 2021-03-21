@@ -93,13 +93,13 @@ namespace GitUI.CommandsDialogs
             base.OnKeyUp(e);
         }
 
-        private void FormStashFormClosing(object sender, FormClosingEventArgs e)
+        private void FormStashFormClosing(object? sender, FormClosingEventArgs e)
         {
             AppSettings.StashKeepIndex = StashKeepIndex.Checked;
             AppSettings.IncludeUntrackedFilesInManualStash = chkIncludeUntrackedFiles.Checked;
         }
 
-        private void FormStashLoad(object sender, EventArgs e)
+        private void FormStashLoad(object? sender, EventArgs e)
         {
             StashKeepIndex.Checked = AppSettings.StashKeepIndex;
             chkIncludeUntrackedFiles.Checked = AppSettings.IncludeUntrackedFilesInManualStash;
@@ -164,13 +164,13 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FileViewer_TopScrollReached(object sender, EventArgs e)
+        private void FileViewer_TopScrollReached(object? sender, EventArgs e)
         {
             Stashed.SelectPreviousVisibleItem();
             View.ScrollToBottom();
         }
 
-        private void FileViewer_BottomScrollReached(object sender, EventArgs e)
+        private void FileViewer_BottomScrollReached(object? sender, EventArgs e)
         {
             Stashed.SelectNextVisibleItem();
             View.ScrollToTop();
@@ -225,13 +225,13 @@ namespace GitUI.CommandsDialogs
             Stashes.Size = new Size(toolStrip1.Width - 15 - refreshToolStripButton.Width - showToolStripLabel.Width - toolStripButton_customMessage.Width, Stashes.Size.Height);
         }
 
-        private void StashedSelectedIndexChanged(object sender, EventArgs e)
+        private void StashedSelectedIndexChanged(object? sender, EventArgs e)
         {
             View.ViewChangesAsync(Stashed.SelectedItem);
             EnablePartialStash();
         }
 
-        private void StashClick(object sender, EventArgs e)
+        private void StashClick(object? sender, EventArgs e)
         {
             if (chkIncludeUntrackedFiles.Checked && !GitVersion.Current.StashUntrackedFilesSupported)
             {
@@ -247,7 +247,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void StashSelectedFiles_Click(object sender, EventArgs e)
+        private void StashSelectedFiles_Click(object? sender, EventArgs e)
         {
             if (chkIncludeUntrackedFiles.Checked && !GitVersion.Current.StashUntrackedFilesSupported)
             {
@@ -263,7 +263,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void ClearClick(object sender, EventArgs e)
+        private void ClearClick(object? sender, EventArgs e)
         {
             using (new WaitCursorScope())
             {
@@ -309,13 +309,13 @@ namespace GitUI.CommandsDialogs
             return ((GitStash)Stashes.SelectedItem).Name;
         }
 
-        private void ApplyClick(object sender, EventArgs e)
+        private void ApplyClick(object? sender, EventArgs e)
         {
             UICommands.StashApply(this, GetStashName());
             Initialize();
         }
 
-        private void StashesSelectedIndexChanged(object sender, EventArgs e)
+        private void StashesSelectedIndexChanged(object? sender, EventArgs e)
         {
             EnablePartialStash();
 
@@ -340,12 +340,12 @@ namespace GitUI.CommandsDialogs
             StashSelectedFiles.Enabled = Stashes.SelectedIndex == 0 && Stashed.SelectedItems.Any();
         }
 
-        private void Stashes_DropDown(object sender, EventArgs e)
+        private void Stashes_DropDown(object? sender, EventArgs e)
         {
             Stashes.ResizeDropDownWidth(Stashes.Size.Width, splitContainer1.Width - (2 * showToolStripLabel.Width));
         }
 
-        private void RefreshClick(object sender, EventArgs e)
+        private void RefreshClick(object? sender, EventArgs e)
         {
             RefreshAll();
         }
@@ -358,23 +358,23 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FormStashShown(object sender, EventArgs e)
+        private void FormStashShown(object? sender, EventArgs e)
         {
             // shown when form is first displayed
             RefreshAll();
         }
 
-        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
+        private void splitContainer1_SplitterMoved(object? sender, SplitterEventArgs e)
         {
             ResizeStashesWidth();
         }
 
-        private void FormStash_Resize(object sender, EventArgs e)
+        private void FormStash_Resize(object? sender, EventArgs e)
         {
             ResizeStashesWidth();
         }
 
-        private void toolStripButton_customMessage_Click(object sender, EventArgs e)
+        private void toolStripButton_customMessage_Click(object? sender, EventArgs e)
         {
             if (toolStripButton_customMessage.Enabled)
             {
@@ -391,7 +391,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void StashMessage_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void StashMessage_MouseDoubleClick(object? sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left)
             {
@@ -407,7 +407,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void toolStripButton_customMessage_EnabledChanged(object sender, EventArgs e)
+        private void toolStripButton_customMessage_EnabledChanged(object? sender, EventArgs e)
         {
             var button = (ToolStripButton)sender;
             if (!button.Enabled)
@@ -420,7 +420,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void View_KeyUp(object sender, KeyEventArgs e)
+        private void View_KeyUp(object? sender, KeyEventArgs e)
         {
             // Close Stash form with escape button while pointer focus is in FileViewer(diff view)
             if (e.KeyCode == Keys.Escape)
@@ -429,12 +429,12 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void CherryPickFileChangesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CherryPickFileChangesToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             View.CherryPickAllChanges();
         }
 
-        private void ContextMenuStripStashedFiles_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        private void ContextMenuStripStashedFiles_Opening(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             cherryPickFileChangesToolStripMenuItem.Enabled = Stashed.SelectedItems.Count() == 1;
         }

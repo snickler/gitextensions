@@ -170,7 +170,7 @@ namespace GitUI.BranchTreePanel
                 _reloadCancellationTokenSequence.Dispose();
             }
 
-            private void UICommands_PostRepositoryChanged(object sender, GitUIEventArgs e)
+            private void UICommands_PostRepositoryChanged(object? sender, GitUIEventArgs e)
             {
                 if (!IsAttached)
                 {

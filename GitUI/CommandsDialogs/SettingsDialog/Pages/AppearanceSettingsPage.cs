@@ -184,7 +184,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             };
         }
 
-        private void Dictionary_DropDown(object sender, EventArgs e)
+        private void Dictionary_DropDown(object? sender, EventArgs e)
         {
             try
             {
@@ -208,32 +208,32 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             }
         }
 
-        private void ClearImageCache_Click(object sender, EventArgs e)
+        private void ClearImageCache_Click(object? sender, EventArgs e)
         {
             ThreadHelper.JoinableTaskFactory.Run(AvatarService.CacheCleaner.ClearCacheAsync);
         }
 
-        private void helpTranslate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void helpTranslate_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             OsShellUtil.OpenUrlInDefaultBrowser(_translationsWikiURL);
         }
 
-        private void downloadDictionary_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void downloadDictionary_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             OsShellUtil.OpenUrlInDefaultBrowser(_spellingWikiURL);
         }
 
-        private void pictureAvatarHelp_Click(object sender, EventArgs e)
+        private void pictureAvatarHelp_Click(object? sender, EventArgs e)
         {
             OsShellUtil.OpenUrlInDefaultBrowser(_gravatarDefaultImageURL);
         }
 
-        private void customAvatarHelp_Click(object sender, EventArgs e)
+        private void customAvatarHelp_Click(object? sender, EventArgs e)
         {
             OsShellUtil.OpenUrlInDefaultBrowser(_customAvatarTemplateURL);
         }
 
-        private void AvatarProvider_SelectedIndexChanged(object sender, EventArgs e)
+        private void AvatarProvider_SelectedIndexChanged(object? sender, EventArgs e)
         {
             ManageAvatarOptionsDisplay();
         }

@@ -123,7 +123,7 @@ namespace GitUI
             txtLookFor.Focus();
         }
 
-        private void btnFindPrevious_Click(object sender, EventArgs e)
+        private void btnFindPrevious_Click(object? sender, EventArgs e)
         {
             ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
@@ -131,7 +131,7 @@ namespace GitUI
             }).FileAndForget();
         }
 
-        private void btnFindNext_Click(object sender, EventArgs e)
+        private void btnFindNext_Click(object? sender, EventArgs e)
         {
             ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
@@ -231,12 +231,12 @@ namespace GitUI
             _editor.ActiveTextAreaControl.Caret.Position = p2;
         }
 
-        private void ScanRegionChanged(object sender, EventArgs e)
+        private void ScanRegionChanged(object? sender, EventArgs e)
         {
             UpdateTitleBar();
         }
 
-        private void btnHighlightAll_Click(object sender, EventArgs e)
+        private void btnHighlightAll_Click(object? sender, EventArgs e)
         {
             Validates.NotNull(_editor);
 
@@ -288,7 +288,7 @@ namespace GitUI
             }
         }
 
-        private void FindAndReplaceForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void FindAndReplaceForm_FormClosing(object? sender, FormClosingEventArgs e)
         {
             // Prevent dispose, as this form can be re-used
             if (e.CloseReason != CloseReason.FormOwnerClosing)
@@ -304,12 +304,12 @@ namespace GitUI
             }
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void btnCancel_Click(object? sender, EventArgs e)
         {
             Close();
         }
 
-        private void btnReplace_Click(object sender, EventArgs e)
+        private void btnReplace_Click(object? sender, EventArgs e)
         {
             Validates.NotNull(_editor);
 
@@ -325,7 +325,7 @@ namespace GitUI
             }).FileAndForget();
         }
 
-        private void btnReplaceAll_Click(object sender, EventArgs e)
+        private void btnReplaceAll_Click(object? sender, EventArgs e)
         {
             Validates.NotNull(_editor);
 
@@ -698,7 +698,7 @@ namespace GitUI
             return substr == _lookFor2;
         }
 
-        private void DocumentOnTextContentChanged(object sender, EventArgs e)
+        private void DocumentOnTextContentChanged(object? sender, EventArgs e)
         {
             ClearScanRegion();
         }

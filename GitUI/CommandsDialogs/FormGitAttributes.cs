@@ -66,7 +66,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void SaveClick(object sender, EventArgs e)
+        private void SaveClick(object? sender, EventArgs e)
         {
             SaveFile();
             Close();
@@ -100,7 +100,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FormGitAttributesClosing(object sender, FormClosingEventArgs e)
+        private void FormGitAttributesClosing(object? sender, FormClosingEventArgs e)
         {
             var needToClose = false;
 
@@ -131,7 +131,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FormGitAttributesLoad(object sender, EventArgs e)
+        private void FormGitAttributesLoad(object? sender, EventArgs e)
         {
             if (!Module.IsBareRepository())
             {
@@ -147,7 +147,7 @@ namespace GitUI.CommandsDialogs
             return GitAttributesFile == _NO_TRANSLATE_GitAttributesText.GetText();
         }
 
-        private void GitAttributesFileLoaded(object sender, EventArgs e)
+        private void GitAttributesFileLoaded(object? sender, EventArgs e)
         {
             GitAttributesFile = _NO_TRANSLATE_GitAttributesText.GetText();
         }

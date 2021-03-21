@@ -15,7 +15,7 @@ namespace GitUI.Editor
             => DateTime.Now - LastScrollEventFiredDate < TimeSpan.FromMilliseconds(AppSettings.AutomaticContinuousScrollDelay);
         private DateTime LastScrollEventFiredDate { get; set; } = DateTime.MinValue;
 
-        public void RaiseBottomScrollReached(object sender, EventArgs e)
+        public void RaiseBottomScrollReached(object? sender, EventArgs e)
         {
             if (IsScrollDisabled || IsScrollTooFast)
             {
@@ -26,7 +26,7 @@ namespace GitUI.Editor
             BottomScrollReached?.Invoke(this, EventArgs.Empty);
         }
 
-        public void RaiseTopScrollReached(object sender, EventArgs e)
+        public void RaiseTopScrollReached(object? sender, EventArgs e)
         {
             if (IsScrollDisabled || IsScrollTooFast)
             {

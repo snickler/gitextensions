@@ -15,7 +15,7 @@ namespace GitUI.HelperDialogs
 
         public IBuildServerCredentials? BuildServerCredentials { get; set; }
 
-        private void buttonOK_Click(object sender, EventArgs e)
+        private void buttonOK_Click(object? sender, EventArgs e)
         {
             BuildServerCredentials ??= new BuildServerCredentials();
 
@@ -26,7 +26,7 @@ namespace GitUI.HelperDialogs
             Close();
         }
 
-        private void FormBuildServerCredentials_Load(object sender, EventArgs e)
+        private void FormBuildServerCredentials_Load(object? sender, EventArgs e)
         {
             if (BuildServerCredentials is not null)
             {
@@ -39,7 +39,7 @@ namespace GitUI.HelperDialogs
             UpdateUI();
         }
 
-        private void authenticationMethodChanged(object sender, EventArgs e)
+        private void authenticationMethodChanged(object? sender, EventArgs e)
         {
             UpdateUI();
         }

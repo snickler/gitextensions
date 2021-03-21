@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -191,7 +191,7 @@ namespace GitUI.CommandsDialogs
             settingsTreeView.ResumeLayout();
         }
 
-        private void OnSettingsPageSelected(object sender, SettingsPageSelectedEventArgs e)
+        private void OnSettingsPageSelected(object? sender, SettingsPageSelectedEventArgs e)
         {
             panelCurrentSettingsPage.Controls.Clear();
 
@@ -276,7 +276,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FormSettings_Shown(object sender, EventArgs e)
+        private void FormSettings_Shown(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -310,12 +310,12 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void buttonCancel_Click(object sender, EventArgs e)
+        private void buttonCancel_Click(object? sender, EventArgs e)
         {
             Close();
         }
 
-        private void buttonDiscard_Click(object sender, EventArgs e)
+        private void buttonDiscard_Click(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -323,7 +323,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void buttonApply_Click(object sender, EventArgs e)
+        private void buttonApply_Click(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {

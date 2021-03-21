@@ -187,13 +187,13 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             }
         }
 
-        protected virtual void OnModuleChanged(object sender, GitModuleEventArgs e)
+        protected virtual void OnModuleChanged(object? sender, GitModuleEventArgs e)
         {
             var handler = GitModuleChanged;
             handler?.Invoke(this, e);
         }
 
-        private void dashboard_ParentChanged(object sender, EventArgs e)
+        private void dashboard_ParentChanged(object? sender, EventArgs e)
         {
             if (Parent is null)
             {
@@ -204,23 +204,23 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             Visible = true;
         }
 
-        private static void TranslateItem_Click(object sender, EventArgs e)
+        private static void TranslateItem_Click(object? sender, EventArgs e)
         {
             OsShellUtil.OpenUrlInDefaultBrowser(@"https://github.com/gitextensions/gitextensions/wiki/Translations");
         }
 
-        private static void GitHubItem_Click(object sender, EventArgs e)
+        private static void GitHubItem_Click(object? sender, EventArgs e)
         {
             OsShellUtil.OpenUrlInDefaultBrowser(@"https://github.com/gitextensions/gitextensions");
         }
 
-        private static void IssuesItem_Click(object sender, EventArgs e)
+        private static void IssuesItem_Click(object? sender, EventArgs e)
         {
             UserEnvironmentInformation.CopyInformation();
             OsShellUtil.OpenUrlInDefaultBrowser(@"https://github.com/gitextensions/gitextensions/issues");
         }
 
-        private void openItem_Click(object sender, EventArgs e)
+        private void openItem_Click(object? sender, EventArgs e)
         {
             GitModule? module = FormOpenDirectory.OpenModule(this, currentModule: null);
             if (module is not null)
@@ -229,17 +229,17 @@ namespace GitUI.CommandsDialogs.BrowseDialog.DashboardControl
             }
         }
 
-        private void cloneItem_Click(object sender, EventArgs e)
+        private void cloneItem_Click(object? sender, EventArgs e)
         {
             UICommands.StartCloneDialog(this, null, false, OnModuleChanged);
         }
 
-        private void createItem_Click(object sender, EventArgs e)
+        private void createItem_Click(object? sender, EventArgs e)
         {
             UICommands.StartInitializeDialog(this, Module.WorkingDir, OnModuleChanged);
         }
 
-        private static void DonateItem_Click(object sender, EventArgs e)
+        private static void DonateItem_Click(object? sender, EventArgs e)
         {
             OsShellUtil.OpenUrlInDefaultBrowser(FormDonate.DonationUrl);
         }

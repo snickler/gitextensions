@@ -172,12 +172,12 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             }
         }
 
-        private void linkChangeLog_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkChangeLog_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             LaunchUrl(LaunchType.ChangeLog);
         }
 
-        private void btnUpdateNow_Click(object sender, EventArgs e)
+        private void btnUpdateNow_Click(object? sender, EventArgs e)
         {
             ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
@@ -216,7 +216,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             }).FileAndForget();
         }
 
-        private void linkDirectDownload_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkDirectDownload_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             LaunchUrl(LaunchType.DirectDownload);
         }

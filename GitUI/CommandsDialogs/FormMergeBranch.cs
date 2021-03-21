@@ -55,7 +55,7 @@ namespace GitUI.CommandsDialogs
             Branches.Select();
         }
 
-        private void FormMergeBranchLoad(object sender, EventArgs e)
+        private void FormMergeBranchLoad(object? sender, EventArgs e)
         {
             var selectedHead = Module.GetSelectedBranch();
             currentBranchLabel.Text = selectedHead;
@@ -84,7 +84,7 @@ namespace GitUI.CommandsDialogs
             Branches.Select();
         }
 
-        private void OkClick(object sender, EventArgs e)
+        private void OkClick(object? sender, EventArgs e)
         {
             Module.EffectiveSettings.NoFastForwardMerge = noFastForward.Checked;
             AppSettings.DontCommitMerge = noCommit.Checked;
@@ -126,7 +126,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void NonDefaultMergeStrategy_CheckedChanged(object sender, EventArgs e)
+        private void NonDefaultMergeStrategy_CheckedChanged(object? sender, EventArgs e)
         {
             _NO_TRANSLATE_mergeStrategy.Visible = NonDefaultMergeStrategy.Checked;
             strategyHelp.Visible = NonDefaultMergeStrategy.Checked;
@@ -137,12 +137,12 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void strategyHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void strategyHelp_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             strategyToolTip.SetToolTip(strategyHelp, _strategyTooltipText.Text);
         }
 
-        private void advanced_CheckedChanged(object sender, EventArgs e)
+        private void advanced_CheckedChanged(object? sender, EventArgs e)
         {
             advancedPanel.Visible = advanced.Checked;
             NonDefaultMergeStrategy_CheckedChanged(this, EventArgs.Empty);
@@ -156,28 +156,28 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void fastForward_CheckedChanged(object sender, EventArgs e)
+        private void fastForward_CheckedChanged(object? sender, EventArgs e)
         {
             helpImageDisplayUserControl1.IsOnHoverShowImage2 = true;
         }
 
-        private void noFastForward_CheckedChanged(object sender, EventArgs e)
+        private void noFastForward_CheckedChanged(object? sender, EventArgs e)
         {
             helpImageDisplayUserControl1.IsOnHoverShowImage2 = false;
         }
 
-        private void addMessages_CheckedChanged(object sender, EventArgs e)
+        private void addMessages_CheckedChanged(object? sender, EventArgs e)
         {
             nbMessages.Enabled = addLogMessages.Checked;
             Module.EffectiveSettings.Detailed.AddMergeLogMessages.Value = addLogMessages.Checked;
         }
 
-        private void addMergeMessage_CheckedChanged(object sender, EventArgs e)
+        private void addMergeMessage_CheckedChanged(object? sender, EventArgs e)
         {
             mergeMessage.Enabled = addMergeMessage.Checked;
         }
 
-        private void nbMessages_ValueChanged(object sender, EventArgs e)
+        private void nbMessages_ValueChanged(object? sender, EventArgs e)
         {
             Module.EffectiveSettings.Detailed.MergeLogMessagesCount.Value = Convert.ToInt32(nbMessages.Value);
         }

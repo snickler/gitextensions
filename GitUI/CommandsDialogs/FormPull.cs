@@ -278,7 +278,7 @@ namespace GitUI.CommandsDialogs
             return result;
         }
 
-        private void MergetoolClick(object sender, EventArgs e)
+        private void MergetoolClick(object? sender, EventArgs e)
         {
             Module.RunMergeTool();
 
@@ -291,7 +291,7 @@ namespace GitUI.CommandsDialogs
             UICommands.StartCommitDialog(this);
         }
 
-        private void BranchesDropDown(object sender, EventArgs e)
+        private void BranchesDropDown(object? sender, EventArgs e)
         {
             if ((PullFromUrl.Checked && string.IsNullOrEmpty(comboBoxPullSource.Text)) &&
                 (PullFromRemote.Checked && string.IsNullOrEmpty(_NO_TRANSLATE_Remotes.Text)))
@@ -344,7 +344,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void PullClick(object sender, EventArgs e)
+        private void PullClick(object? sender, EventArgs e)
         {
             DialogResult dialogResult = PullChanges(this);
 
@@ -954,7 +954,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FormPullLoad(object sender, EventArgs e)
+        private void FormPullLoad(object? sender, EventArgs e)
         {
             _NO_TRANSLATE_Remotes.Select();
 
@@ -972,12 +972,12 @@ namespace GitUI.CommandsDialogs
             Pull.Text = Fetch.Checked ? _buttonFetch.Text : _buttonPull.Text;
         }
 
-        private void StashClick(object sender, EventArgs e)
+        private void StashClick(object? sender, EventArgs e)
         {
             UICommands.StartStashDialog(this);
         }
 
-        private void PullFromRemoteCheckedChanged(object sender, EventArgs e)
+        private void PullFromRemoteCheckedChanged(object? sender, EventArgs e)
         {
             if (!PullFromRemote.Checked)
             {
@@ -1000,7 +1000,7 @@ namespace GitUI.CommandsDialogs
             return _NO_TRANSLATE_Remotes.Text.Equals(AllRemotes, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        private void PullFromUrlCheckedChanged(object sender, EventArgs e)
+        private void PullFromUrlCheckedChanged(object? sender, EventArgs e)
         {
             if (!PullFromUrl.Checked)
             {
@@ -1029,7 +1029,7 @@ namespace GitUI.CommandsDialogs
             });
         }
 
-        private void AddRemoteClick(object sender, EventArgs e)
+        private void AddRemoteClick(object? sender, EventArgs e)
         {
             if (IsPullAll())
             {
@@ -1047,7 +1047,7 @@ namespace GitUI.CommandsDialogs
             _bInternalUpdate = false;
         }
 
-        private void MergeCheckedChanged(object sender, EventArgs e)
+        private void MergeCheckedChanged(object? sender, EventArgs e)
         {
             if (!Merge.Checked)
             {
@@ -1070,7 +1070,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void RebaseCheckedChanged(object sender, EventArgs e)
+        private void RebaseCheckedChanged(object? sender, EventArgs e)
         {
             if (!Rebase.Checked)
             {
@@ -1092,7 +1092,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void FetchCheckedChanged(object sender, EventArgs e)
+        private void FetchCheckedChanged(object? sender, EventArgs e)
         {
             if (!Fetch.Checked)
             {
@@ -1111,12 +1111,12 @@ namespace GitUI.CommandsDialogs
             UpdateFormTitleAndButton();
         }
 
-        private void PullSourceValidating(object sender, CancelEventArgs e)
+        private void PullSourceValidating(object? sender, CancelEventArgs e)
         {
             ResetRemoteHeads();
         }
 
-        private void Remotes_TextChanged(object sender, EventArgs e)
+        private void Remotes_TextChanged(object? sender, EventArgs e)
         {
             if (!_bInternalUpdate)
             {
@@ -1124,7 +1124,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void RemotesValidating(object sender, CancelEventArgs e)
+        private void RemotesValidating(object? sender, CancelEventArgs e)
         {
             ResetRemoteHeads();
 
@@ -1147,7 +1147,7 @@ namespace GitUI.CommandsDialogs
             _heads = null;
         }
 
-        private void localBranch_Leave(object sender, EventArgs e)
+        private void localBranch_Leave(object? sender, EventArgs e)
         {
             if (_branch != localBranch.Text.Trim() && string.IsNullOrWhiteSpace(Branches.Text))
             {
@@ -1155,12 +1155,12 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Prune_CheckedChanged(object sender, EventArgs e)
+        private void Prune_CheckedChanged(object? sender, EventArgs e)
         {
             PruneTags.Checked = Prune.Checked && PruneTags.Checked;
         }
 
-        private void PruneTags_CheckedChanged(object sender, EventArgs e)
+        private void PruneTags_CheckedChanged(object? sender, EventArgs e)
         {
             Prune.Checked = Prune.Checked || PruneTags.Checked;
             AllTags.Checked = AllTags.Checked || PruneTags.Checked;

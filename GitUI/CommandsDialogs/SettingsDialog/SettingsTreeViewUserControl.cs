@@ -92,7 +92,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
             return node;
         }
 
-        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        private void treeView1_AfterSelect(object? sender, TreeViewEventArgs e)
         {
             if (!_isSelectionChangeTriggeredByGoto)
             {
@@ -120,7 +120,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
             }
         }
 
-        private void textBoxFind_TextChanged(object sender, EventArgs e)
+        private void textBoxFind_TextChanged(object? sender, EventArgs e)
         {
             _nodesFoundByTextBox = new List<TreeNode>();
 
@@ -210,7 +210,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
             }
         }
 
-        private void textBoxFind_Enter(object sender, EventArgs e)
+        private void textBoxFind_Enter(object? sender, EventArgs e)
         {
             SetFindPrompt(false);
 
@@ -220,7 +220,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
             }
         }
 
-        private void textBoxFind_Leave(object sender, EventArgs e)
+        private void textBoxFind_Leave(object? sender, EventArgs e)
         {
             SetFindPrompt(true);
         }
@@ -248,7 +248,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
             }
         }
 
-        private void textBoxFind_KeyUp(object sender, KeyEventArgs e)
+        private void textBoxFind_KeyUp(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {

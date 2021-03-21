@@ -106,14 +106,14 @@ namespace GitUI.UserControls
             }
         }
 
-        private void labelMessage_SizeChanged(object sender, EventArgs e)
+        private void labelMessage_SizeChanged(object? sender, EventArgs e)
         {
             labelMessage.Location = new Point(
                 labelMessage.Location.X,
                 (int)(_messageY + (_messageHeight / 2.0) - (labelMessage.Height / 2.0)));
         }
 
-        private void groupBox1_Resize(object sender, EventArgs e)
+        private void groupBox1_Resize(object? sender, EventArgs e)
         {
             labelMessage.MaximumSize = new Size(groupBox1.Width - 15, labelMessage.MaximumSize.Height);
         }

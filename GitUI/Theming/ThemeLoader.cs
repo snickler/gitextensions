@@ -178,7 +178,6 @@ namespace GitUI.Theming
         private static ThemeException StyleRuleThemeException(StyleRule styleRule, string themePath)
             => new ThemeException($"Invalid CSS rule '{styleRule.SelectorText}'", themePath);
 
-
         private class ThemeColors
         {
             public readonly Dictionary<AppColor, Color> AppColors = new Dictionary<AppColor, Color>();

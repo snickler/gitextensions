@@ -30,7 +30,7 @@ namespace GitUI.Script
             txtFilePath.Focus();
         }
 
-        private void btnBrowse_Click(object sender, EventArgs e)
+        private void btnBrowse_Click(object? sender, EventArgs e)
         {
             const string separator = " ";
             using var browseDialog = new OpenFileDialog
@@ -48,7 +48,7 @@ namespace GitUI.Script
             }
         }
 
-        private void btnOk_Click(object sender, EventArgs e)
+        private void btnOk_Click(object? sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(txtFilePath.Text))
             {

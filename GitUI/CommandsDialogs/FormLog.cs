@@ -20,12 +20,12 @@ namespace GitUI.CommandsDialogs
             InitializeComplete();
         }
 
-        private void FormDiffLoad(object sender, EventArgs e)
+        private void FormDiffLoad(object? sender, EventArgs e)
         {
             RevisionGrid.Load();
         }
 
-        private void DiffFilesSelectedIndexChanged(object sender, EventArgs e)
+        private void DiffFilesSelectedIndexChanged(object? sender, EventArgs e)
         {
             ViewSelectedFileDiff();
         }
@@ -38,7 +38,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void RevisionGridSelectionChanged(object sender, EventArgs e)
+        private void RevisionGridSelectionChanged(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -46,18 +46,18 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void DiffViewerExtraDiffArgumentsChanged(object sender, EventArgs e)
+        private void DiffViewerExtraDiffArgumentsChanged(object? sender, EventArgs e)
         {
             ViewSelectedFileDiff();
         }
 
-        private void FileViewer_TopScrollReached(object sender, EventArgs e)
+        private void FileViewer_TopScrollReached(object? sender, EventArgs e)
         {
             DiffFiles.SelectPreviousVisibleItem();
             diffViewer.ScrollToBottom();
         }
 
-        private void FileViewer_BottomScrollReached(object sender, EventArgs e)
+        private void FileViewer_BottomScrollReached(object? sender, EventArgs e)
         {
             DiffFiles.SelectNextVisibleItem();
             diffViewer.ScrollToTop();

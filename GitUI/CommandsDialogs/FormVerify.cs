@@ -84,20 +84,20 @@ namespace GitUI.CommandsDialogs
 
         #region Event Handlers
 
-        private void FormVerifyShown(object sender, EventArgs e)
+        private void FormVerifyShown(object? sender, EventArgs e)
         {
             UpdateLostObjects();
             Warnings.DataSource = _filteredLostObjects;
         }
 
-        private void SaveObjectsClick(object sender, EventArgs e)
+        private void SaveObjectsClick(object? sender, EventArgs e)
         {
             var options = GetOptions();
             FormProcess.ShowDialog(this, process: null, arguments: $"fsck-objects --lost-found{options}", Module.WorkingDir, input: null, useDialogSettings: true);
             UpdateLostObjects();
         }
 
-        private void RemoveClick(object sender, EventArgs e)
+        private void RemoveClick(object? sender, EventArgs e)
         {
             if (MessageBox.Show(this,
                 _removeDanglingObjectsQuestion.Text,
@@ -112,12 +112,12 @@ namespace GitUI.CommandsDialogs
             UpdateLostObjects();
         }
 
-        private void mnuLostObjectView_Click(object sender, EventArgs e)
+        private void mnuLostObjectView_Click(object? sender, EventArgs e)
         {
             ViewCurrentItem();
         }
 
-        private void mnuLostObjectsCreateTag_Click(object sender, EventArgs e)
+        private void mnuLostObjectsCreateTag_Click(object? sender, EventArgs e)
         {
             using var frm = new FormCreateTag(UICommands, GetCurrentGitRevision());
             var dialogResult = frm.ShowDialog(this);
@@ -127,7 +127,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void mnuLostObjectsCreateBranch_Click(object sender, EventArgs e)
+        private void mnuLostObjectsCreateBranch_Click(object? sender, EventArgs e)
         {
             using var frm = new FormCreateBranch(UICommands, GetCurrentGitRevision());
             var dialogResult = frm.ShowDialog(this);
@@ -137,13 +137,13 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void DeleteAllLostAndFoundTagsClick(object sender, EventArgs e)
+        private void DeleteAllLostAndFoundTagsClick(object? sender, EventArgs e)
         {
             DeleteLostFoundTags();
             UpdateLostObjects();
         }
 
-        private void btnRestoreSelectedObjects_Click(object sender, EventArgs e)
+        private void btnRestoreSelectedObjects_Click(object? sender, EventArgs e)
         {
             DeleteLostFoundTags();
             var restoredObjectsCount = CreateLostFoundTags();
@@ -166,22 +166,22 @@ namespace GitUI.CommandsDialogs
             UpdateLostObjects();
         }
 
-        private void UnreachableCheckedChanged(object sender, EventArgs e)
+        private void UnreachableCheckedChanged(object? sender, EventArgs e)
         {
             UpdateLostObjects();
         }
 
-        private void FullCheckCheckedChanged(object sender, EventArgs e)
+        private void FullCheckCheckedChanged(object? sender, EventArgs e)
         {
             UpdateLostObjects();
         }
 
-        private void NoReflogsCheckedChanged(object sender, EventArgs e)
+        private void NoReflogsCheckedChanged(object? sender, EventArgs e)
         {
             UpdateLostObjects();
         }
 
-        private void ShowCommitsCheckedChanged(object sender, EventArgs e)
+        private void ShowCommitsCheckedChanged(object? sender, EventArgs e)
         {
             if (!ShowCommitsAndTags.Checked && !ShowOtherObjects.Checked)
             {
@@ -191,7 +191,7 @@ namespace GitUI.CommandsDialogs
             UpdateFilteredLostObjects();
         }
 
-        private void ShowOtherObjects_CheckedChanged(object sender, EventArgs e)
+        private void ShowOtherObjects_CheckedChanged(object? sender, EventArgs e)
         {
             if (!ShowCommitsAndTags.Checked && !ShowOtherObjects.Checked)
             {
@@ -202,7 +202,7 @@ namespace GitUI.CommandsDialogs
         }
 
         // NOTE: hack to select row under cursor on right click and context menu open
-        private void Warnings_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        private void Warnings_CellMouseDown(object? sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right && e.RowIndex != -1)
             {
@@ -210,7 +210,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Warnings_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void Warnings_CellMouseDoubleClick(object? sender, DataGridViewCellMouseEventArgs e)
         {
             // ignore double click by header, user just wants to change sorting order
             if (e.RowIndex == -1)
@@ -227,7 +227,7 @@ namespace GitUI.CommandsDialogs
             ViewCurrentItem();
         }
 
-        private void Warnings_SelectionChanged(object sender, EventArgs e)
+        private void Warnings_SelectionChanged(object? sender, EventArgs e)
         {
             if (CurrentItem is null || _previewedItem == CurrentItem)
             {
@@ -422,7 +422,7 @@ namespace GitUI.CommandsDialogs
             base.Dispose(disposing);
         }
 
-        private void mnuLostObjects_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        private void mnuLostObjects_Opening(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             if (Warnings is not null && Warnings.SelectedRows.Count != 0 && Warnings.SelectedRows[0].DataBoundItem is not null)
             {
@@ -437,7 +437,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Warnings_KeyDown(object sender, KeyEventArgs e)
+        private void Warnings_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyValue == 13)
             {
@@ -447,7 +447,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void copyHashToolStripMenuItem_Click(object sender, EventArgs e)
+        private void copyHashToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (Warnings is not null && Warnings.SelectedRows.Count != 0 && Warnings.SelectedRows[0].DataBoundItem is not null)
             {
@@ -456,7 +456,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void copyParentHashToolStripMenuItem_Click(object sender, EventArgs e)
+        private void copyParentHashToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (Warnings is not null && Warnings.SelectedRows.Count != 0 && Warnings.SelectedRows[0].DataBoundItem is not null)
             {
@@ -470,7 +470,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void saveAsToolStripMenuItem_Click(object? sender, EventArgs e)
         {
             if (Warnings is null || Warnings.SelectedRows.Count == 0 || Warnings.SelectedRows[0].DataBoundItem is null)
             {

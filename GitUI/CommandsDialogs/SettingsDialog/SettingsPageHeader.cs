@@ -100,7 +100,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog
             }
         }
 
-        private void GlobalRB_CheckedChanged(object sender, EventArgs e)
+        private void GlobalRB_CheckedChanged(object? sender, EventArgs e)
         {
             if (GlobalRB.Checked)
             {

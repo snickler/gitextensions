@@ -48,7 +48,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             AppSettings.AlwaysShowAllCommands = cbAlwaysShowAllCommands.Checked;
         }
 
-        private void chlMenuEntries_SelectedValueChanged(object sender, EventArgs e)
+        private void chlMenuEntries_SelectedValueChanged(object? sender, EventArgs e)
         {
             UpdatePreview();
         }

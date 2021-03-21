@@ -35,7 +35,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             InitializeComplete();
         }
 
-        private void FormGoToCommit_Load(object sender, EventArgs e)
+        private void FormGoToCommit_Load(object? sender, EventArgs e)
         {
             LoadTagsAsync().FileAndForget();
             LoadBranchesAsync().FileAndForget();
@@ -50,7 +50,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             return Module.RevParse(_selectedRevision);
         }
 
-        private void commitExpression_TextChanged(object sender, EventArgs e)
+        private void commitExpression_TextChanged(object? sender, EventArgs e)
         {
             SetSelectedRevisionByFocusedControl();
         }
@@ -61,12 +61,12 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             Close();
         }
 
-        private void goButton_Click(object sender, EventArgs e)
+        private void goButton_Click(object? sender, EventArgs e)
         {
             Go();
         }
 
-        private void linkGitRevParse_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkGitRevParse_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             OsShellUtil.OpenUrlInDefaultBrowser(@"https://git-scm.com/docs/git-rev-parse#_specifying_revisions");
         }
@@ -104,12 +104,12 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             return (IReadOnlyList<IGitRef>)cb.DataSource;
         }
 
-        private void comboBoxTags_Enter(object sender, EventArgs e)
+        private void comboBoxTags_Enter(object? sender, EventArgs e)
         {
             SetSelectedRevisionByFocusedControl();
         }
 
-        private void comboBoxBranches_Enter(object sender, EventArgs e)
+        private void comboBoxBranches_Enter(object? sender, EventArgs e)
         {
             SetSelectedRevisionByFocusedControl();
         }
@@ -134,7 +134,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             }
         }
 
-        private void comboBoxTags_TextChanged(object sender, EventArgs e)
+        private void comboBoxTags_TextChanged(object? sender, EventArgs e)
         {
             if (comboBoxTags.DataSource is null)
             {
@@ -145,7 +145,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             SetSelectedRevisionByFocusedControl();
         }
 
-        private void comboBoxBranches_TextChanged(object sender, EventArgs e)
+        private void comboBoxBranches_TextChanged(object? sender, EventArgs e)
         {
             if (comboBoxBranches.DataSource is null)
             {
@@ -156,7 +156,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             SetSelectedRevisionByFocusedControl();
         }
 
-        private void comboBoxTags_SelectionChangeCommitted(object sender, EventArgs e)
+        private void comboBoxTags_SelectionChangeCommitted(object? sender, EventArgs e)
         {
             if (comboBoxTags.SelectedValue is null)
             {
@@ -168,7 +168,7 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             Go();
         }
 
-        private void comboBoxBranches_SelectionChangeCommitted(object sender, EventArgs e)
+        private void comboBoxBranches_SelectionChangeCommitted(object? sender, EventArgs e)
         {
             if (comboBoxBranches.SelectedValue is null)
             {
@@ -180,17 +180,17 @@ namespace GitUI.CommandsDialogs.BrowseDialog
             Go();
         }
 
-        private void comboBoxTags_KeyUp(object sender, KeyEventArgs e)
+        private void comboBoxTags_KeyUp(object? sender, KeyEventArgs e)
         {
             GoIfEnterKey(sender, e);
         }
 
-        private void comboBoxBranches_KeyUp(object sender, KeyEventArgs e)
+        private void comboBoxBranches_KeyUp(object? sender, KeyEventArgs e)
         {
             GoIfEnterKey(sender, e);
         }
 
-        private void GoIfEnterKey(object sender, KeyEventArgs e)
+        private void GoIfEnterKey(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {

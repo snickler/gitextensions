@@ -178,11 +178,11 @@ namespace GitUI.HelperDialogs
             }).FileAndForget();
         }
 
-        protected virtual void DataReceived(object sender, TextEventArgs e)
+        protected virtual void DataReceived(object? sender, TextEventArgs e)
         {
         }
 
-        private void DataReceivedCore(object sender, TextEventArgs e)
+        private void DataReceivedCore(object? sender, TextEventArgs e)
         {
             if (e.Text.Contains("%") || e.Text.Contains("remote: Counting objects"))
             {

@@ -229,12 +229,12 @@ namespace GitUI.BranchTreePanel
                 return Task.FromResult(new Nodes(null));
             }
 
-            private void Provider_StatusUpdating(object sender, EventArgs e)
+            private void Provider_StatusUpdating(object? sender, EventArgs e)
             {
                 _currentNodes = null;
             }
 
-            private void Provider_StatusUpdated(object sender, SubmoduleStatusEventArgs e)
+            private void Provider_StatusUpdated(object? sender, SubmoduleStatusEventArgs e)
             {
                 _currentSubmoduleInfo = e;
 

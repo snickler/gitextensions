@@ -54,7 +54,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             return new SettingsPageReferenceByType(typeof(FormBrowseRepoSettingsPage));
         }
 
-        private void cboTerminal_SelectionChangeCommitted(object sender, EventArgs e)
+        private void cboTerminal_SelectionChangeCommitted(object? sender, EventArgs e)
         {
             if (!(cboTerminal.SelectedItem is IShellDescriptor shell))
             {
@@ -70,7 +70,7 @@ namespace GitUI.CommandsDialogs.SettingsDialog.Pages
             cboTerminal.SelectedIndex = _cboTerminalPreviousIndex;
         }
 
-        private void cboTerminal_Enter(object sender, EventArgs e)
+        private void cboTerminal_Enter(object? sender, EventArgs e)
         {
             _cboTerminalPreviousIndex = cboTerminal.SelectedIndex;
         }

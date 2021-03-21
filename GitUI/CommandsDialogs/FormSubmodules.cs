@@ -55,7 +55,7 @@ namespace GitUI.CommandsDialogs
             base.OnClosing(e);
         }
 
-        private void AddSubmoduleClick(object sender, EventArgs e)
+        private void AddSubmoduleClick(object? sender, EventArgs e)
         {
             using (var formAddSubmodule = new FormAddSubmodule(UICommands))
             {
@@ -65,7 +65,7 @@ namespace GitUI.CommandsDialogs
             Initialize();
         }
 
-        private void FormSubmodulesShown(object sender, EventArgs e)
+        private void FormSubmodulesShown(object? sender, EventArgs e)
         {
             Initialize();
         }
@@ -131,7 +131,7 @@ namespace GitUI.CommandsDialogs
             _bw.RunWorkerAsync();
         }
 
-        private void SynchronizeSubmoduleClick(object sender, EventArgs e)
+        private void SynchronizeSubmoduleClick(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -140,7 +140,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void UpdateSubmoduleClick(object sender, EventArgs e)
+        private void UpdateSubmoduleClick(object? sender, EventArgs e)
         {
             using (WaitCursorScope.Enter())
             {
@@ -149,7 +149,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void RemoveSubmoduleClick(object sender, EventArgs e)
+        private void RemoveSubmoduleClick(object? sender, EventArgs e)
         {
             if (Submodules.SelectedRows.Count != 1 ||
                 MessageBox.Show(this, _removeSelectedSubmodule.Text, _removeSelectedSubmoduleCaption.Text,
@@ -193,7 +193,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-        private void Pull_Click(object sender, EventArgs e)
+        private void Pull_Click(object? sender, EventArgs e)
         {
             var submodule = Module.GetSubmodule(SubModuleLocalPath.Text);
 

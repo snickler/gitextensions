@@ -51,7 +51,7 @@ namespace GitUI
         // Function to retrieve revisions. Cache so we can reload the view, if AppSettings.ShowDiffForAllParents is changed.
         private Func<ObjectId, GitRevision?>? _getRevision;
 
-        public delegate void EnterEventHandler(object sender, EnterEventArgs e);
+        public delegate void EnterEventHandler(object? sender, EnterEventArgs e);
 
         public event EventHandler? SelectedIndexChanged;
         public event EventHandler? DataSourceChanged;
@@ -1209,12 +1209,12 @@ namespace GitUI
 
         // Event handlers
 
-        private void FileStatusListView_ClientSizeChanged(object sender, EventArgs e)
+        private void FileStatusListView_ClientSizeChanged(object? sender, EventArgs e)
         {
             UpdateColumnWidth();
         }
 
-        private void FileStatusListView_ContextMenu_Opening(object sender, CancelEventArgs e)
+        private void FileStatusListView_ContextMenu_Opening(object? sender, CancelEventArgs e)
         {
             if (SelectedItem?.Item.IsStatusOnly ?? false)
             {
@@ -1301,7 +1301,7 @@ namespace GitUI
             }
         }
 
-        private void FileStatusListView_DoubleClick(object sender, EventArgs e)
+        private void FileStatusListView_DoubleClick(object? sender, EventArgs e)
         {
             if (DoubleClick is null)
             {
@@ -1325,7 +1325,7 @@ namespace GitUI
             }
         }
 
-        private void FileStatusListView_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        private void FileStatusListView_DrawSubItem(object? sender, DrawListViewSubItemEventArgs e)
         {
             var item = e.Item;
             var formatter = new PathFormatter(e.Graphics, FileStatusListView.Font);
@@ -1384,7 +1384,7 @@ namespace GitUI
             }
         }
 
-        private void FileStatusListView_GroupMouseDown(object sender, ListViewGroupMouseEventArgs e)
+        private void FileStatusListView_GroupMouseDown(object? sender, ListViewGroupMouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -1393,7 +1393,7 @@ namespace GitUI
             }
         }
 
-        private void FileStatusListView_KeyDown(object sender, KeyEventArgs e)
+        private void FileStatusListView_KeyDown(object? sender, KeyEventArgs e)
         {
             switch (e.KeyData)
             {
@@ -1412,7 +1412,7 @@ namespace GitUI
             }
         }
 
-        private void FileStatusListView_MouseDown(object sender, MouseEventArgs e)
+        private void FileStatusListView_MouseDown(object? sender, MouseEventArgs e)
         {
             // SELECT
             if (e.Button == MouseButtons.Right)
@@ -1451,7 +1451,7 @@ namespace GitUI
             }
         }
 
-        private void FileStatusListView_MouseMove(object sender, MouseEventArgs e)
+        private void FileStatusListView_MouseMove(object? sender, MouseEventArgs e)
         {
             ListView? listView = sender as ListView;
 
