@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
 using JetBrains.Annotations;
+using Microsoft;
 
 namespace GitUIPluginInterfaces
 {
@@ -201,7 +202,7 @@ namespace GitUIPluginInterfaces
         [MustUseReturnValue]
         public static ObjectId Parse(Stream stream)
         {
-            var buffer = _buffer.Value;
+            var buffer = _buffer.Value!;
 
             stream.ReadBytes(buffer, offset: 0, count: Sha1ByteCount);
 
@@ -317,7 +318,7 @@ namespace GitUIPluginInterfaces
 
             uint HexAsciiBytesToUInt32(int j)
             {
-                var array = bytes.Array;
+                var array = bytes.Array!;
 
                 return (uint)(HexAsciiByteToInt(array[j]) << 28 |
                               HexAsciiByteToInt(array[j + 1]) << 24 |
@@ -419,8 +420,10 @@ namespace GitUIPluginInterfaces
 
         #region IComparable<ObjectId>
 
-        public int CompareTo(ObjectId other)
+        public int CompareTo(ObjectId? other)
         {
+            Assumes.NotNull(other);
+
             var result = 0;
 
             _ = Compare(_i1, other._i1) ||

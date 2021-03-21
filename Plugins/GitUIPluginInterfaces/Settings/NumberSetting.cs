@@ -65,15 +65,7 @@ namespace GitUIPluginInterfaces
             }
         }
 
-        private static string ConvertToString(object? value)
-        {
-            if (value is null)
-            {
-                return string.Empty;
-            }
-
-            return value.ToString();
-        }
+        private static string ConvertToString(object? value) => value?.ToString() ?? string.Empty;
 
         private static object? ConvertFromString(string value)
         {

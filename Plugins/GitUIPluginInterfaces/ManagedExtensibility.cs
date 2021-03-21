@@ -52,7 +52,7 @@ namespace GitUIPluginInterfaces
         {
             var stopwatch = Stopwatch.StartNew();
 
-            string defaultPluginsPath = Path.Combine(new FileInfo(Application.ExecutablePath).Directory.FullName, "Plugins");
+            string defaultPluginsPath = Path.Combine(new FileInfo(Application.ExecutablePath).Directory!.FullName, "Plugins");
             string? userPluginsPath = UserPluginsPath;
 
             var pluginFiles = PluginsPathScanner.GetFiles(defaultPluginsPath, userPluginsPath);
