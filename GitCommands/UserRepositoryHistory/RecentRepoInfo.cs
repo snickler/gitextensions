@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using Microsoft;
 
 namespace GitCommands.UserRepositoryHistory
 {
@@ -52,8 +53,8 @@ namespace GitCommands.UserRepositoryHistory
         public int RecentReposComboMinWidth { get; set; }
 
         // need to be set before shortening using middleDots strategy
-        public Graphics? Graphics { get; set; }
-        public Font? MeasureFont { get; set; }
+        public Graphics Graphics { get; set; } = null!;
+        public Font MeasureFont { get; set; } = null!;
 
         public RecentRepoSplitter()
         {
@@ -181,12 +182,14 @@ namespace GitCommands.UserRepositoryHistory
                 repoInfo.Caption = repoInfo.Repo.Path;
             }
 
-            var existsShortName = orderedRepos.TryGetValue(repoInfo.Caption!, out var list);
+            bool existsShortName = orderedRepos.TryGetValue(repoInfo.Caption!, out List<RecentRepoInfo>? list);
             if (!existsShortName)
             {
                 list = new List<RecentRepoInfo>();
                 orderedRepos.Add(repoInfo.Caption!, list);
             }
+
+            Assumes.NotNull(list);
 
             var tmpList = new List<RecentRepoInfo>();
             if (existsShortName)

@@ -137,9 +137,12 @@ namespace GitCommands.Remotes
         // TODO: moved verbatim from FormPush.cs, perhaps needs refactoring
         public string? GetDefaultPushRemote(ConfigFileRemote remote, string branch)
         {
-            if (remote is null)
+            Requires.NotNull(remote, nameof(remote));
+
+
+            if (remote.Push is null)
             {
-                throw new ArgumentNullException(nameof(remote));
+                throw new ArgumentException(nameof(remote.Push));
             }
 
             var module = GetModule();

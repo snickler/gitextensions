@@ -27,6 +27,7 @@ namespace GitCommands.ExternalLinks
             string? uri;
             try
             {
+                Validates.NotNull(Caption);
                 caption = string.Format(Caption, groupsArray);
                 Validates.NotNull(Format);
                 uri = Format.Replace("%COMMIT_HASH%", revision.Guid);
@@ -36,6 +37,7 @@ namespace GitCommands.ExternalLinks
             catch (Exception e)
             {
                 uri = e.Message + ": " + Format + " " + groupsArray;
+                caption = "!error!";
                 IsValid = false;
             }
 

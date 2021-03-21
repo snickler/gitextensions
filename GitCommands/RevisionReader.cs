@@ -265,7 +265,7 @@ namespace GitCommands
                 return false;
             }
 
-            var array = chunk.Array;
+            var array = chunk.Array!;
             var offset = chunk.Offset + (ObjectId.Sha1CharCount * 2);
             var lastOffset = chunk.Offset + chunk.Count;
 

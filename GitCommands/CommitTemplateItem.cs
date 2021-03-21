@@ -30,8 +30,8 @@ namespace GitCommands
 
         private CommitTemplateItem(SerializationInfo info, StreamingContext context)
         {
-            Name = (string)info.GetValue("Name", typeof(string));
-            Text = (string)info.GetValue("Text", typeof(string));
+            Name = (string)info.GetValue("Name", typeof(string))!;
+            Text = (string)info.GetValue("Text", typeof(string))!;
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)

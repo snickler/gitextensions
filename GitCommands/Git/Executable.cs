@@ -117,7 +117,7 @@ namespace GitCommands
                 }
             }
 
-            private void OnProcessExit(object sender, EventArgs eventArgs)
+            private void OnProcessExit(object? sender, EventArgs eventArgs)
             {
                 lock (_syncRoot)
                 {

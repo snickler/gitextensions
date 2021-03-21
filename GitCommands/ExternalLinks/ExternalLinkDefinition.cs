@@ -54,6 +54,11 @@ namespace GitCommands.ExternalLinks
                 _nestedSearchPattern = value;
                 NestedSearchPatternRegex = new Lazy<Regex?>(() =>
                 {
+                    if (NestedSearchPattern is null)
+                    {
+                        return null;
+                    }
+
                     try
                     {
                         return new Regex(NestedSearchPattern, RegexOptions.Compiled);
@@ -81,6 +86,11 @@ namespace GitCommands.ExternalLinks
                 _remoteSearchPattern = value;
                 RemoteSearchPatternRegex = new Lazy<Regex?>(() =>
                 {
+                    if (RemoteSearchPattern is null)
+                    {
+                        return null;
+                    }
+
                     try
                     {
                         return new Regex(RemoteSearchPattern, RegexOptions.Compiled);
@@ -107,17 +117,22 @@ namespace GitCommands.ExternalLinks
             {
                 _searchPattern = value;
                 SearchPatternRegex = new Lazy<Regex?>(() =>
+                {
+                    if (SearchPattern is null)
                     {
-                        try
-                        {
-                            return new Regex(SearchPattern, RegexOptions.Compiled);
-                        }
-                        catch (Exception e)
-                        {
-                            System.Diagnostics.Debug.Print(e.ToStringWithData());
-                            return null;
-                        }
-                    });
+                        return null;
+                    }
+
+                    try
+                    {
+                        return new Regex(SearchPattern, RegexOptions.Compiled);
+                    }
+                    catch (Exception e)
+                    {
+                        System.Diagnostics.Debug.Print(e.ToStringWithData());
+                        return null;
+                    }
+                });
             }
         }
 
@@ -132,17 +147,22 @@ namespace GitCommands.ExternalLinks
             {
                 _useRemotesPattern = value;
                 UseRemotesRegex = new Lazy<Regex?>(() =>
+                {
+                    if (UseRemotesPattern is null)
                     {
-                        try
-                        {
-                            return new Regex(UseRemotesPattern, RegexOptions.Compiled);
-                        }
-                        catch (Exception e)
-                        {
-                            System.Diagnostics.Debug.Print(e.ToStringWithData());
-                            return null;
-                        }
-                    });
+                        return null;
+                    }
+
+                    try
+                    {
+                        return new Regex(UseRemotesPattern, RegexOptions.Compiled);
+                    }
+                    catch (Exception e)
+                    {
+                        System.Diagnostics.Debug.Print(e.ToStringWithData());
+                        return null;
+                    }
+                });
             }
         }
 

@@ -343,7 +343,7 @@ namespace GitCommands
             return path;
         }
 
-        public static IEnumerable<string> FindAncestors(string path)
+        public static IEnumerable<string> FindAncestors(string? path)
         {
             path = path.RemoveTrailingPathSeparator();
 
@@ -355,7 +355,6 @@ namespace GitCommands
             while (true)
             {
                 path = Path.GetDirectoryName(path);
-
                 if (string.IsNullOrEmpty(path))
                 {
                     yield break;

@@ -11,7 +11,7 @@
             Uri = uri;
         }
 
-        public override bool Equals(object obj) => obj is ExternalLink link && string.Equals(Uri, link.Uri);
+        public override bool Equals(object? obj) => obj is ExternalLink link && string.Equals(Uri, link.Uri);
         public override int GetHashCode() => Uri.GetHashCode();
     }
 }

@@ -15,7 +15,7 @@ namespace GitCommands.ExternalLinks
         /// <summary>
         /// Loads external link definitions from the settings.
         /// </summary>
-        IReadOnlyList<ExternalLinkDefinition>? Load(RepoDistSettings settings);
+        IReadOnlyList<ExternalLinkDefinition> Load(RepoDistSettings settings);
 
         /// <summary>
         /// Saves the provided external link definitions to the settings.
@@ -30,7 +30,7 @@ namespace GitCommands.ExternalLinks
         /// <summary>
         /// Loads external link definitions from the settings.
         /// </summary>
-        public IReadOnlyList<ExternalLinkDefinition>? Load(RepoDistSettings settings)
+        public IReadOnlyList<ExternalLinkDefinition> Load(RepoDistSettings settings)
         {
             var xml = settings.GetString(SettingName, null);
             return LoadFromXmlString(xml);
@@ -72,7 +72,7 @@ namespace GitCommands.ExternalLinks
         }
 
         // TODO: refactor and outsource to the centralised SettingsSerialiser implementations.
-        private static IReadOnlyList<ExternalLinkDefinition>? LoadFromXmlString(string? xmlString)
+        private static IReadOnlyList<ExternalLinkDefinition> LoadFromXmlString(string? xmlString)
         {
             if (string.IsNullOrWhiteSpace(xmlString))
             {
@@ -84,7 +84,8 @@ namespace GitCommands.ExternalLinks
                 var serializer = new XmlSerializer(typeof(List<ExternalLinkDefinition>));
                 using var stringReader = new StringReader(xmlString);
                 using var xmlReader = new XmlTextReader(stringReader);
-                return serializer.Deserialize(xmlReader) as List<ExternalLinkDefinition>;
+                return (serializer.Deserialize(xmlReader) as List<ExternalLinkDefinition>)
+                    ?? (IReadOnlyList<ExternalLinkDefinition>)Array.Empty<ExternalLinkDefinition>();
             }
             catch (Exception ex)
             {

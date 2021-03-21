@@ -26,7 +26,7 @@ namespace GitCommands.DiffMergeTools
                                                        }
                                                    })
                                                    .Where(t => t.IsSubclassOf(typeof(DiffMergeTool)))
-                                                   .Select(t => (DiffMergeTool)Activator.CreateInstance(t));
+                                                   .Select(t => (DiffMergeTool)Activator.CreateInstance(t)!);
             foreach (var tool in diffTools)
             {
                 RegisteredTools.Add(tool.Name, tool);

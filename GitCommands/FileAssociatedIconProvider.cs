@@ -69,10 +69,10 @@ namespace GitCommands
                     // extensions from the registry and using p/invokes and WinAPI, which have
                     // significantly higher maintenance overhead.
 
-                    var fullPath = PathUtil.Combine(workingDirectory, relativeFilePath);
+                    var fullPath = PathUtil.Combine(workingDirectory, relativeFilePath)!;
                     if (!_fileSystem.File.Exists(fullPath))
                     {
-                        tempFile = CreateTempFile(Path.GetFileName(fullPath));
+                        tempFile = CreateTempFile(Path.GetFileName(fullPath)!);
                         fullPath = tempFile;
                     }
 

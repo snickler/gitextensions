@@ -57,7 +57,7 @@ namespace GitCommands.Remotes
             {
                 try
                 {
-                    return Path.GetFileNameWithoutExtension(Path.GetDirectoryName(remoteUrl));
+                    return Path.GetFileNameWithoutExtension(Path.GetDirectoryName(remoteUrl))!;
                 }
                 catch
                 {

@@ -48,7 +48,7 @@ namespace GitCommands.Settings
 
             if (Directory.Exists(dir) && File.Exists(SettingsFilePath))
             {
-                _fileWatcher.Path = dir;
+                _fileWatcher.Path = dir!;
                 _fileWatcher.Filter = Path.GetFileName(SettingsFilePath);
                 _canEnableFileWatcher = true;
                 _fileWatcher.EnableRaisingEvents = _canEnableFileWatcher;
@@ -163,7 +163,7 @@ namespace GitCommands.Settings
                     var parentFolder = Path.GetDirectoryName(SettingsFilePath);
                     if (!Directory.Exists(parentFolder))
                     {
-                        Directory.CreateDirectory(parentFolder);
+                        Directory.CreateDirectory(parentFolder!);
                     }
 
                     File.Copy(tmpFile, SettingsFilePath, true);

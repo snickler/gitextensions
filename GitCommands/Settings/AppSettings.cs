@@ -56,7 +56,7 @@ namespace GitCommands
     public static class AppSettings
     {
         // semi-constants
-        public static Version AppVersion => Assembly.GetCallingAssembly().GetName().Version;
+        public static Version AppVersion => Assembly.GetCallingAssembly().GetName().Version!;
         public static string ProductVersion => Application.ProductVersion;
         public static readonly string ApplicationName = "Git Extensions";
         public static readonly string ApplicationId = ApplicationName.Replace(" ", "");
@@ -66,8 +66,8 @@ namespace GitCommands
         private static readonly ISshPathLocator SshPathLocatorInstance = new SshPathLocator();
         private static string? _documentationBaseUrl;
 
-        public static Lazy<string?> ApplicationDataPath { get; private set; }
-        public static readonly Lazy<string?> LocalApplicationDataPath;
+        public static Lazy<string> ApplicationDataPath { get; private set; }
+        public static readonly Lazy<string> LocalApplicationDataPath;
         public static string SettingsFilePath => Path.Combine(ApplicationDataPath.Value, SettingsFileName);
         public static string UserPluginsPath => Path.Combine(LocalApplicationDataPath.Value, UserPluginsDirectoryName);
 
@@ -82,7 +82,7 @@ namespace GitCommands
 
         static AppSettings()
         {
-            ApplicationDataPath = new Lazy<string?>(() =>
+            ApplicationDataPath = new Lazy<string>(() =>
             {
                 if (IsPortable())
                 {
@@ -94,7 +94,7 @@ namespace GitCommands
                                                   .Replace(ApplicationName, ApplicationId); // 'GitExtensions' has been changed to 'Git Extensions' in v3.0
             });
 
-            LocalApplicationDataPath = new Lazy<string?>(() =>
+            LocalApplicationDataPath = new Lazy<string>(() =>
             {
                 if (IsPortable())
                 {
@@ -212,7 +212,7 @@ namespace GitCommands
                 });
         }
 
-        public static string? GetInstallDir()
+        public static string GetInstallDir()
         {
             if (IsPortable())
             {
@@ -228,7 +228,7 @@ namespace GitCommands
             return dir;
         }
 
-        public static string? GetResourceDir()
+        public static string GetResourceDir()
         {
 #if DEBUG
             string gitExtDir = GetGitExtensionsDirectory()!.TrimEnd('\\').TrimEnd('/');
@@ -1394,7 +1394,7 @@ namespace GitCommands
 
         public static Font CommitFont
         {
-            get => GetFont("commitfont", SystemFonts.MessageBoxFont);
+            get => GetFont("commitfont", SystemFonts.MessageBoxFont!);
             set => SetFont("commitfont", value);
         }
 
@@ -1406,7 +1406,7 @@ namespace GitCommands
 
         public static Font Font
         {
-            get => GetFont("font", SystemFonts.MessageBoxFont);
+            get => GetFont("font", SystemFonts.MessageBoxFont!);
             set => SetFont("font", value);
         }
 
@@ -1740,9 +1740,9 @@ namespace GitCommands
             return _applicationExecutablePath;
         }
 
-        public static string? GetGitExtensionsDirectory()
+        public static string GetGitExtensionsDirectory()
         {
-            return Path.GetDirectoryName(GetGitExtensionsFullPath());
+            return Path.GetDirectoryName(GetGitExtensionsFullPath())!;
         }
 
         private static RegistryKey? _versionIndependentRegKey;
@@ -1870,8 +1870,7 @@ namespace GitCommands
 
         private static IEnumerable<(string name, string value)> GetSettingsFromRegistry()
         {
-            RegistryKey oldSettings = VersionIndependentRegKey.OpenSubKey("GitExtensions");
-
+            using RegistryKey? oldSettings = VersionIndependentRegKey.OpenSubKey("GitExtensions");
             if (oldSettings is null)
             {
                 yield break;
@@ -1879,11 +1878,10 @@ namespace GitCommands
 
             foreach (string name in oldSettings.GetValueNames())
             {
-                object value = oldSettings.GetValue(name, null);
-
+                object? value = oldSettings.GetValue(name, null);
                 if (value is not null)
                 {
-                    yield return (name, value.ToString());
+                    yield return (name, value.ToString()!);
                 }
             }
         }
@@ -2076,7 +2074,7 @@ namespace GitCommands
                 set => _applicationExecutablePath = value;
             }
 
-            public Lazy<string?> ApplicationDataPath
+            public Lazy<string> ApplicationDataPath
             {
                 get => AppSettings.ApplicationDataPath;
                 set => AppSettings.ApplicationDataPath = value;

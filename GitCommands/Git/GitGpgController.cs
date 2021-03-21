@@ -167,6 +167,10 @@ namespace GitCommands.Gpg
 
                 /* Raw message to be checked */
                 string? rawGpgMessage = GetTagVerificationMessage(usefulTagRefs[0], true);
+                if (rawGpgMessage is null)
+                {
+                    return TagStatus.NoTag;
+                }
 
                 /* Look for icon to be shown */
                 if (GoodSignatureTagRegex.IsMatch(rawGpgMessage) && ValidSignatureTagRegex.IsMatch(rawGpgMessage))

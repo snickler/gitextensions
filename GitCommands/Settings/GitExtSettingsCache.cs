@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Xml;
+using Microsoft;
 
 namespace GitCommands.Settings
 {
@@ -81,6 +82,7 @@ namespace GitCommands.Settings
         protected override string GetValueImpl(string key)
         {
             _encodedNameMap.TryGetValue(key, out var value);
+            Assumes.NotNull(value);
             return value;
         }
     }

@@ -208,7 +208,7 @@ namespace GitCommands.Submodules
             bool isCurrentTopProject)
         {
             string path = topProject.WorkingDir;
-            string name = Directory.Exists(path) ? Path.GetFileName(Path.GetDirectoryName(path)) : path;
+            string name = Directory.Exists(path) ? Path.GetFileName(Path.GetDirectoryName(path))! : path;
             name += GetBranchNameSuffix(path, noBranchText);
             result.TopProject = new SubmoduleInfo(text: name, path, bold: isCurrentTopProject);
         }

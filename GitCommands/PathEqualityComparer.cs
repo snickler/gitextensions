@@ -7,10 +7,18 @@ namespace GitCommands
 {
     public class PathEqualityComparer : IEqualityComparer<string>
     {
-        public bool Equals(string path1, string path2)
+        public bool Equals(string? path1, string? path2)
         {
-            path1 = Path.GetFullPath(path1).TrimEnd('\\');
-            path2 = Path.GetFullPath(path2).TrimEnd('\\');
+            if (path1 is not null)
+            {
+                path1 = Path.GetFullPath(path1!).TrimEnd('\\');
+            }
+
+            if (path2 is not null)
+            {
+                path2 = Path.GetFullPath(path2!).TrimEnd('\\');
+            }
+
             var comparison = !EnvUtils.RunningOnWindows()
                 ? StringComparison.InvariantCulture
                 : StringComparison.InvariantCultureIgnoreCase;

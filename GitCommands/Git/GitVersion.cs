@@ -169,7 +169,7 @@ namespace GitCommands
             return true;
         }
 
-        private static int Compare(GitVersion left, GitVersion right)
+        private static int Compare(GitVersion? left, GitVersion? right)
         {
             if (left is null && right is null)
             {
@@ -207,7 +207,7 @@ namespace GitCommands
             return left._d.CompareTo(right._d);
         }
 
-        public int CompareTo(GitVersion other) => Compare(this, other);
+        public int CompareTo(GitVersion? other) => Compare(this, other);
 
         public static bool operator >(GitVersion left, GitVersion right) => Compare(left, right) > 0;
         public static bool operator <(GitVersion left, GitVersion right) => Compare(left, right) < 0;

@@ -1982,7 +1982,7 @@ namespace GitCommands
                 if (File.Exists(rebaseDir + file))
                 {
                     string? key = null;
-                    string value = "";
+                    string? value = "";
                     foreach (var line in File.ReadLines(rebaseDir + file))
                     {
                         var m = HeadersMatch.Match(line);
@@ -1997,6 +1997,8 @@ namespace GitCommands
                         {
                             // decode QuotedPrintable text using .NET internal decoder
                             value = Attachment.CreateAttachmentFromString("", value).Name;
+                            Validates.NotNull(value);
+
                             switch (key)
                             {
                                 case "From":
