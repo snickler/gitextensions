@@ -240,7 +240,7 @@ namespace GitUI
         // Properties
 
         [Browsable(false)]
-        public IEnumerable<FileStatusItem> AllItems => FileStatusListView.ItemTags<FileStatusItem>();
+        public IEnumerable<FileStatusItem?> AllItems => FileStatusListView.ItemTags<FileStatusItem>();
 
         public int AllItemsCount => FileStatusListView.Items.Count;
 
@@ -378,7 +378,12 @@ namespace GitUI
                     ListViewItem? newSelected = null;
                     foreach (ListViewItem item in FileStatusListView.Items)
                     {
-                        var gitItemStatus = item.Tag<FileStatusItem>();
+                        FileStatusItem? gitItemStatus = item.Tag<FileStatusItem>();
+                        if (gitItemStatus is null)
+                        {
+                            continue;
+                        }
+
                         if (gitItemStatus.Item == status)
                         {
                             return item;
@@ -407,7 +412,7 @@ namespace GitUI
                     return;
                 }
 
-                SelectItems(item => value.Contains(item.Tag<FileStatusItem>().Item));
+                SelectItems(item => item.Tag<FileStatusItem>() is FileStatusItem fileStatus && value.Contains(fileStatus.Item));
             }
         }
 
@@ -417,7 +422,7 @@ namespace GitUI
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
-        public IEnumerable<FileStatusItem> SelectedItems
+        public IEnumerable<FileStatusItem?> SelectedItems
         {
             get => FileStatusListView.SelectedItemTags<FileStatusItem>();
             set
@@ -434,7 +439,7 @@ namespace GitUI
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
-        public IEnumerable<FileStatusItem> FirstGroupItems
+        public IEnumerable<FileStatusItem?> FirstGroupItems
         {
             get
             {
@@ -1352,7 +1357,7 @@ namespace GitUI
                     ? SystemColors.HighlightText
                     : SystemColors.WindowText;
 
-                if (!Strings.IsNullOrEmpty(prefix))
+                if (!string.IsNullOrEmpty(prefix))
                 {
                     DrawString(textRect, prefix, grayTextColor);
                     var prefixSize = formatter.MeasureString(prefix);
@@ -1361,7 +1366,7 @@ namespace GitUI
 
                 DrawString(textRect, text, textColor);
 
-                if (!Strings.IsNullOrEmpty(suffix))
+                if (!string.IsNullOrEmpty(suffix))
                 {
                     var textSize = formatter.MeasureString(text);
                     textRect.Offset(textSize.Width, 0);
@@ -1533,7 +1538,7 @@ namespace GitUI
             SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private void FileStatusListView_Scroll(object sender, ScrollEventArgs e)
+        private void FileStatusListView_Scroll(object? sender, ScrollEventArgs e)
         {
             if (e.Type == ScrollEventType.ThumbTrack)
             {
@@ -1543,7 +1548,7 @@ namespace GitUI
             UpdateColumnWidth();
         }
 
-        private void FileStatusList_Enter(object sender, EventArgs e)
+        private void FileStatusList_Enter(object? sender, EventArgs e)
         {
             Enter?.Invoke(this, new EnterEventArgs(_mouseEntered));
             _mouseEntered = false;
@@ -1562,7 +1567,7 @@ namespace GitUI
             FilterFiles(value);
         }
 
-        private void DeleteFilterButton_Click(object sender, EventArgs e)
+        private void DeleteFilterButton_Click(object? sender, EventArgs e)
         {
             SetFilter(string.Empty);
         }
@@ -1643,7 +1648,7 @@ namespace GitUI
             }
         }
 
-        private void FilterComboBox_TextUpdate(object sender, EventArgs e)
+        private void FilterComboBox_TextUpdate(object? sender, EventArgs e)
         {
             // show DeleteFilterButton at once
             SetDeleteFilterButtonVisibility();
@@ -1660,32 +1665,32 @@ namespace GitUI
             _filterSubject.OnNext(filterText);
         }
 
-        private void FilterComboBox_MouseEnter(object sender, EventArgs e)
+        private void FilterComboBox_MouseEnter(object? sender, EventArgs e)
         {
             FilterToolTip.SetToolTip(FilterComboBox, _toolTipText);
         }
 
-        private void FilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void FilterComboBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
             FilterFiles(FilterComboBox.Text);
         }
 
-        private void FilterComboBox_GotFocus(object sender, EventArgs e)
+        private void FilterComboBox_GotFocus(object? sender, EventArgs e)
         {
             SetFilterWatermarkLabelVisibility();
         }
 
-        private void FilterComboBox_LostFocus(object sender, EventArgs e)
+        private void FilterComboBox_LostFocus(object? sender, EventArgs e)
         {
             SetFilterWatermarkLabelVisibility();
         }
 
-        private void FilterWatermarkLabel_Click(object sender, EventArgs e)
+        private void FilterWatermarkLabel_Click(object? sender, EventArgs e)
         {
             FilterComboBox.Focus();
         }
 
-        private void FilterComboBox_SizeChanged(object sender, EventArgs e)
+        private void FilterComboBox_SizeChanged(object? sender, EventArgs e)
         {
             // strangely it does not invalidate itself on resize so its look becomes distorted
             FilterComboBox.Invalidate();
@@ -1740,8 +1745,8 @@ namespace GitUI
                 StatusComparer = gitStatusItemSorter;
             }
 
-            public override int Compare(ListViewItem x, ListViewItem y)
-                => StatusComparer.Compare(((FileStatusItem)x.Tag).Item, ((FileStatusItem)y.Tag).Item);
+            public override int Compare(ListViewItem? x, ListViewItem? y)
+                => StatusComparer.Compare(((FileStatusItem?)x?.Tag)?.Item, ((FileStatusItem?)y?.Tag)?.Item);
         }
 
         private class ImageIndexListSorter : Comparer<ListViewItem>
@@ -1751,7 +1756,7 @@ namespace GitUI
             /// </summary>
             private static readonly GitStatusListSorter ThenBy = new(new GitItemStatusNameComparer());
 
-            public override int Compare(ListViewItem x, ListViewItem y)
+            public override int Compare(ListViewItem? x, ListViewItem? y)
             {
                 if (ReferenceEquals(x, y))
                 {

@@ -10,7 +10,7 @@ namespace GitUI.BranchTreePanel.ContextMenu
     public interface IMenuItemsGenerator<TNode> : IEnumerable<ToolStripItemWithKey>
         where TNode : class, INode
     {
-        bool TryGetMenuItem(MenuItemKey key, out ToolStripItem item);
+        bool TryGetMenuItem(MenuItemKey key, out ToolStripItem? item);
     }
 
     public class ToolStripItemWithKey

@@ -9,7 +9,7 @@ namespace GitUI
     public static class ControlUtil
     {
         private static readonly MethodInfo SetStyleMethod = typeof(TabControl)
-            .GetMethod("SetStyle", BindingFlags.Instance | BindingFlags.NonPublic);
+            .GetMethod("SetStyle", BindingFlags.Instance | BindingFlags.NonPublic)!;
 
         /// <summary>
         /// Enumerates all descendant controls.

@@ -63,21 +63,21 @@ namespace System.Linq
         public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(
             this IEnumerable<TSource> source,
             Func<TSource, TKey> keySelector,
-            Func<TKey, TKey, int> comparer)
+            Func<TKey?, TKey?, int> comparer)
         {
             return source.OrderBy(keySelector, new DelegateComparer<TKey>(comparer));
         }
 
         private sealed class DelegateComparer<T> : IComparer<T>
         {
-            private readonly Func<T, T, int> _comparer;
+            private readonly Func<T?, T?, int> _comparer;
 
-            public DelegateComparer(Func<T, T, int> comparer)
+            public DelegateComparer(Func<T?, T?, int> comparer)
             {
                 _comparer = comparer;
             }
 
-            public int Compare(T x, T y)
+            public int Compare(T? x, T? y)
             {
                 return _comparer(x, y);
             }

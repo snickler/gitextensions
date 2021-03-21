@@ -23,7 +23,7 @@ namespace GitExtUtils.GitUI.Theming
         private void HandlePaint(object s, PaintEventArgs e) =>
             new TabControlPaintContext((TabControl)s, e).Paint();
 
-        private void HandleDisposed(object sender, EventArgs e)
+        private void HandleDisposed(object? sender, EventArgs e)
         {
             _tabs.Paint -= HandlePaint;
             _tabs.Disposed -= HandleDisposed;

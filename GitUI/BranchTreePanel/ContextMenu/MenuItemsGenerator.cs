@@ -57,7 +57,7 @@ namespace GitUI.BranchTreePanel.ContextMenu
         }
         #endregion
 
-        public bool TryGetMenuItem(MenuItemKey key, out ToolStripItem item)
+        public bool TryGetMenuItem(MenuItemKey key, out ToolStripItem? item)
         {
             return _itemsIndex.Value.TryGetValue(key, out item);
         }

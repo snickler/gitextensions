@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JetBrains.Annotations;
+using Microsoft;
 
 namespace GitExtUtils
 {
@@ -11,7 +12,9 @@ namespace GitExtUtils
     /// </summary>
     /// <typeparam name="TKey">Type of keys in the cache.</typeparam>
     /// <typeparam name="TValue">Type of values in the cache.</typeparam>
-    public sealed class MruCache<TKey, TValue> where TValue : notnull
+    public sealed class MruCache<TKey, TValue>
+        where TKey : notnull
+        where TValue : notnull
     {
         private readonly Dictionary<TKey, LinkedListNode<Entry>> _nodeByKey;
         private readonly LinkedList<Entry> _entries = new LinkedList<Entry>();
@@ -62,6 +65,8 @@ namespace GitExtUtils
                 if (_entries.Count == Capacity)
                 {
                     var last = _entries.Last;
+                    Assumes.NotNull(last);
+
                     _entries.RemoveLast();
                     _nodeByKey.Remove(last.Value.Key);
                 }

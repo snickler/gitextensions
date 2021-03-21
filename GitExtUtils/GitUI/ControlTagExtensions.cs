@@ -8,9 +8,9 @@ namespace GitExtUtils.GitUI
         public static bool HasTag<TValue>(this Control control) =>
             control.HasTag<TValue>(typeof(TValue).FullName);
 
-        public static bool HasTag<TValue>(this Control control, string key)
+        public static bool HasTag<TValue>(this Control control, string? key)
         {
-            if (control.Tag is null)
+            if (control.Tag is null || key is null)
             {
                 return false;
             }
@@ -23,9 +23,9 @@ namespace GitExtUtils.GitUI
         public static TValue? GetTag<TValue>(this Control control) =>
             GetTag<TValue>(control, typeof(TValue).FullName);
 
-        public static TValue? GetTag<TValue>(this Control control, string key)
+        public static TValue? GetTag<TValue>(this Control control, string? key)
         {
-            if (control.Tag is null ||
+            if (control.Tag is null || key is null ||
                 !(control.Tag is Dictionary<string, object?> dict) ||
                 !dict.TryGetValue(key, out var result))
             {
@@ -40,8 +40,13 @@ namespace GitExtUtils.GitUI
         public static void SetTag<TValue>(this Control control, TValue value) =>
             control.SetTag(typeof(TValue).FullName, value);
 
-        public static void SetTag<TValue>(this Control control, string key, TValue value)
+        public static void SetTag<TValue>(this Control control, string? key, TValue value)
         {
+            if (key is null)
+            {
+                return;
+            }
+
             switch (control.Tag)
             {
                 case Dictionary<string, object?> dict:

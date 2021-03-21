@@ -15,7 +15,7 @@ namespace GitExtUtils.GitUI.Theming
             IsBuiltin = isBuiltin;
         }
 
-        public override bool Equals(object obj) =>
+        public override bool Equals(object? obj) =>
             obj is ThemeId other && Equals(other);
 
         public override int GetHashCode()

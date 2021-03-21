@@ -33,7 +33,7 @@ namespace GitUI
             }
         }
 
-        private static void HandleKeyDown(object sender, KeyEventArgs e)
+        private static void HandleKeyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyData == (Keys.Control | Keys.Back) && !IsReadOnly(sender))
             {
@@ -56,136 +56,141 @@ namespace GitUI
                         RemoveTextRange(previousBreak, selectionStart - previousBreak);
                     }
                 }
+            }
 
-                void RemoveTextRange(int from, int length)
+            return;
+
+            void RemoveTextRange(int from, int length)
+            {
+                // Call begin / end update to prevent flickering transient state,
+                // after the word is selected and before it is erased.
+                _beginUpdateMethod.Invoke(sender, parameters: null);
+
+                SetSelectionStart(from);
+                SetSelectionLength(length);
+                ClearSelectedText();
+
+                _endUpdateMethod.Invoke(sender, parameters: null);
+
+                (sender as ComboBox)?.Refresh();
+            }
+
+            int FindPreviousBreak(string value, int position)
+            {
+                for (int i = position - 1; i >= 0; i--)
                 {
-                    // Call begin / end update to prevent flickering transient state,
-                    // after the word is selected and before it is erased.
-                    _beginUpdateMethod.Invoke(sender, parameters: null);
-
-                    SetSelectionStart(from);
-                    SetSelectionLength(length);
-                    ClearSelectedText();
-
-                    _endUpdateMethod.Invoke(sender, parameters: null);
-
-                    (sender as ComboBox)?.Refresh();
-                }
-
-                int FindPreviousBreak(string value, int position)
-                {
-                    for (int i = position - 1; i >= 0; i--)
+                    if (i == 0)
                     {
-                        if (i == 0)
-                        {
-                            return i;
-                        }
-
-                        int previousType = GetCharType(value[i - 1]);
-                        int currentType = GetCharType(value[i]);
-
-                        if (previousType != currentType && currentType != ' ')
-                        {
-                            return i;
-                        }
+                        return i;
                     }
 
-                    return -1;
+                    int previousType = GetCharType(value[i - 1]);
+                    int currentType = GetCharType(value[i]);
 
-                    char GetCharType(char c)
+                    if (previousType != currentType && currentType != ' ')
                     {
-                        if (char.IsLetterOrDigit(c))
-                        {
-                            return 'w';
-                        }
-
-                        if (char.IsWhiteSpace(c))
-                        {
-                            return ' ';
-                        }
-
-                        return c;
+                        return i;
                     }
                 }
 
-                string GetText() =>
-                    ((Control)sender).Text;
+                return -1;
 
-                int GetSelectionStart()
+                char GetCharType(char c)
                 {
-                    return sender switch
+                    if (char.IsLetterOrDigit(c))
                     {
-                        TextBoxBase t => t.SelectionStart,
-                        ComboBox cb => cb.SelectionStart,
-                        _ => throw new NotSupportedException()
-                    };
-                }
-
-                void SetSelectionStart(int value)
-                {
-                    switch (sender)
-                    {
-                        case TextBoxBase t:
-                            t.SelectionStart = value;
-                            return;
-                        case ComboBox cb:
-                            cb.SelectionStart = value;
-                            return;
-                        default:
-                            throw new NotSupportedException();
+                        return 'w';
                     }
-                }
 
-                int GetSelectionLength()
-                {
-                    return sender switch
+                    if (char.IsWhiteSpace(c))
                     {
-                        TextBoxBase t => t.SelectionLength,
-                        ComboBox cb => cb.SelectionLength,
-                        _ => throw new NotSupportedException()
-                    };
-                }
-
-                void SetSelectionLength(int value)
-                {
-                    switch (sender)
-                    {
-                        case TextBoxBase t:
-                            t.SelectionLength = value;
-                            return;
-                        case ComboBox cb:
-                            cb.SelectionLength = value;
-                            return;
-                        default:
-                            throw new NotSupportedException();
+                        return ' ';
                     }
-                }
 
-                void ClearSelectedText()
+                    return c;
+                }
+            }
+
+            string GetText() =>
+                ((Control?)sender)?.Text ?? string.Empty;
+
+            int GetSelectionStart()
+            {
+                return sender switch
                 {
-                    switch (sender)
-                    {
-                        case TextBoxBase t:
-                            _setSelectedTextInternalMethod.Invoke(t,
-                                new object[] { string.Empty, /* clear undo */ false });
-                            return;
-                        case ComboBox cb:
-                            cb.SelectedText = string.Empty;
-                            return;
-                        default:
-                            throw new NotSupportedException();
-                    }
+                    TextBoxBase t => t.SelectionStart,
+                    ComboBox cb => cb.SelectionStart,
+                    _ => throw new NotSupportedException()
+                };
+            }
+
+            void SetSelectionStart(int value)
+            {
+                switch (sender)
+                {
+                    case TextBoxBase t:
+                        t.SelectionStart = value;
+                        return;
+                    case ComboBox cb:
+                        cb.SelectionStart = value;
+                        return;
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+
+            int GetSelectionLength()
+            {
+                return sender switch
+                {
+                    TextBoxBase t => t.SelectionLength,
+                    ComboBox cb => cb.SelectionLength,
+                    _ => throw new NotSupportedException()
+                };
+            }
+
+            void SetSelectionLength(int value)
+            {
+                switch (sender)
+                {
+                    case TextBoxBase t:
+                        t.SelectionLength = value;
+                        return;
+                    case ComboBox cb:
+                        cb.SelectionLength = value;
+                        return;
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+
+            void ClearSelectedText()
+            {
+                switch (sender)
+                {
+                    case TextBoxBase t:
+                        _setSelectedTextInternalMethod.Invoke(t,
+                            new object[] { string.Empty, /* clear undo */ false });
+                        return;
+                    case ComboBox cb:
+                        cb.SelectedText = string.Empty;
+                        return;
+                    default:
+                        throw new NotSupportedException();
                 }
             }
         }
 
-        private static void HandleDisposed(object sender, EventArgs e)
+        private static void HandleDisposed(object? sender, EventArgs e)
         {
-            ((Control)sender).Disposed -= HandleDisposed;
-            ((Control)sender).KeyDown -= HandleKeyDown;
+            if (sender is Control control)
+            {
+                control.Disposed -= HandleDisposed;
+                control.KeyDown -= HandleKeyDown;
+            }
         }
 
-        private static bool IsReadOnly(object sender)
+        private static bool IsReadOnly(object? sender)
         {
             return sender switch
             {
@@ -197,7 +202,7 @@ namespace GitUI
 
         private static readonly MethodInfo _beginUpdateMethod =
             typeof(Control).GetMethod("BeginUpdateInternal",
-                BindingFlags.Instance | BindingFlags.NonPublic);
+                BindingFlags.Instance | BindingFlags.NonPublic)!;
 
         // there are 2 EndUpdateInternal methods, we are looking the one with parameterless signature
         private static readonly MethodInfo _endUpdateMethod =
@@ -205,10 +210,10 @@ namespace GitUI
                 BindingFlags.Instance | BindingFlags.NonPublic,
                 binder: null,
                 types: new Type[0],
-                modifiers: new ParameterModifier[0]);
+                modifiers: new ParameterModifier[0])!;
 
         private static readonly MethodInfo _setSelectedTextInternalMethod =
             typeof(TextBoxBase).GetMethod("SetSelectedTextInternal",
-                BindingFlags.Instance | BindingFlags.NonPublic);
+                BindingFlags.Instance | BindingFlags.NonPublic)!;
     }
 }

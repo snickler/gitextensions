@@ -33,9 +33,9 @@ namespace GitUI.UserControls
                 .Distinct();
         }
 
-        public static IEnumerable<GitItemStatus> Items(this IEnumerable<FileStatusItem> l)
+        public static IEnumerable<GitItemStatus> Items(this IEnumerable<FileStatusItem?> l)
         {
-            return l.Select(i => i.Item);
+            return l.Where(i => i is not null).Select(i => i!.Item);
         }
     }
 }
