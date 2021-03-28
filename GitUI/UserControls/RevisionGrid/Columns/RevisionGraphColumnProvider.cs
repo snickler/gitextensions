@@ -475,10 +475,10 @@ namespace GitUI.UserControls.RevisionGrid.Columns
 
     public sealed class GraphCache
     {
-        private Bitmap? _graphBitmap;
+        private Bitmap _graphBitmap = null!;
         private Graphics? _graphBitmapGraphics;
 
-        public Bitmap? GraphBitmap => _graphBitmap;
+        public Bitmap GraphBitmap => _graphBitmap;
         public Graphics? GraphBitmapGraphics => _graphBitmapGraphics;
 
         /// <summary>
@@ -521,7 +521,7 @@ namespace GitUI.UserControls.RevisionGrid.Columns
             if (_graphBitmap is not null)
             {
                 _graphBitmap.Dispose();
-                _graphBitmap = null;
+                _graphBitmap = null!;
             }
 
             if (_graphBitmapGraphics is not null)

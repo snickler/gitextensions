@@ -219,7 +219,7 @@ namespace GitUI.BranchTreePanel
             // If node is an inner node, and overrides OnDoubleClick, then disable expand/collapse
             if (treeMain.SelectedNode?.Tag is Node node
                 && node.Nodes.Count > 0
-                && IsOverride(node.GetType().GetMethod("OnDoubleClick", BindingFlags.Instance | BindingFlags.NonPublic)))
+                && IsOverride(node.GetType().GetMethod("OnDoubleClick", BindingFlags.Instance | BindingFlags.NonPublic)!))
             {
                 e.Cancel = true;
             }
@@ -270,7 +270,7 @@ namespace GitUI.BranchTreePanel
 
             var cancellationToken = _selectionCancellationTokenSequence.Next();
 
-            GitRevision selectedRevision = selectedRevisions.FirstOrDefault();
+            GitRevision? selectedRevision = selectedRevisions.FirstOrDefault();
             string selectedGuid = selectedRevision?.IsArtificial ?? true ? "HEAD" : selectedRevision.Guid;
             ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {

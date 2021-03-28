@@ -53,11 +53,13 @@ namespace GitUI.UserControls.RevisionGrid.Columns
             var imageSize = e.CellBounds.Height - padding - padding;
 
             Image? image;
-            var imageTask = _avatarProvider.GetAvatarAsync(revision.AuthorEmail, revision.Author, imageSize);
+            Task<Image?>? imageTask = _avatarProvider.GetAvatarAsync(revision.AuthorEmail, revision.Author, imageSize);
 
             if (imageTask.Status == TaskStatus.RanToCompletion)
             {
+#pragma warning disable VSTHRD002 // Avoid problematic synchronous waits
                 image = imageTask.Result;
+#pragma warning restore VSTHRD002 // Avoid problematic synchronous waits
             }
             else
             {

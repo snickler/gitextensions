@@ -155,7 +155,7 @@ namespace GitUI
             }
         }
 
-        private static string? FormatOldName(string oldName)
+        private static string? FormatOldName(string? oldName)
         {
             return string.IsNullOrEmpty(oldName) ? null : " (" + oldName + ")";
         }

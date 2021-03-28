@@ -102,7 +102,7 @@ namespace GitUI
         private readonly BuildServerWatcher _buildServerWatcher;
         private readonly Timer _selectionTimer;
         private readonly RevisionGraphColumnProvider _revisionGraphColumnProvider;
-        private readonly DataGridViewColumn _maximizedColumn;
+        private readonly DataGridViewColumn? _maximizedColumn;
         private DataGridViewColumn? _lastVisibleResizableColumn;
 
         private RefFilterOptions _DONT_USE_ME_DIRECTLY_refFilterOptions = RefFilterOptions.All | RefFilterOptions.Boundary;
@@ -1869,6 +1869,7 @@ namespace GitUI
 
         private string GetRefUnambiguousName(IGitRef gitRef)
         {
+            Validates.NotNull(_ambiguousRefs);
             return _ambiguousRefs.Contains(gitRef.Name)
                 ? gitRef.CompleteName
                 : gitRef.Name;

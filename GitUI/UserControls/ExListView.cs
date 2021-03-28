@@ -35,13 +35,13 @@ namespace GitUI.UserControls
         static ExListView()
         {
             ListViewGroupIdProperty = typeof(ListViewGroup).GetProperty("ID",
-                BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.NonPublic);
+                BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.NonPublic)!;
 
             ListViewGroupListProperty = typeof(ListViewGroupCollection).GetProperty("List",
-                BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.NonPublic);
+                BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.NonPublic)!;
 
             ListViewDefaultGroupProperty = typeof(ListView).GetProperty("DefaultGroup",
-                BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.NonPublic);
+                BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.NonPublic)!;
         }
 
         public ExListView()
@@ -301,7 +301,7 @@ namespace GitUI.UserControls
             // technical "Default" group correctly therefore it becomes broken after calling this method
 
             var defaultGroup = ListViewDefaultGroupProperty.GetValue(this);
-            var list = (ArrayList)ListViewGroupListProperty.GetValue(Groups);
+            var list = (ArrayList)ListViewGroupListProperty.GetValue(Groups)!;
             if (list.Count > 0 && list[0] == defaultGroup)
             {
                 throw new InvalidOperationException($"{nameof(BeginGroupInsertion)} was already called");
@@ -314,7 +314,7 @@ namespace GitUI.UserControls
         private void EndGroupInsertion()
         {
             var defaultGroup = ListViewDefaultGroupProperty.GetValue(this);
-            var list = (ArrayList)ListViewGroupListProperty.GetValue(Groups);
+            var list = (ArrayList)ListViewGroupListProperty.GetValue(Groups)!;
 
             if (list.Count == 0 || list[0] != defaultGroup)
             {
@@ -341,7 +341,7 @@ namespace GitUI.UserControls
             {
                 try
                 {
-                    return (int)ListViewGroupIdProperty.GetValue(listViewGroup);
+                    return (int)ListViewGroupIdProperty.GetValue(listViewGroup)!;
                 }
                 catch
                 {

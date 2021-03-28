@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using GitUIPluginInterfaces;
 
@@ -105,7 +106,7 @@ namespace GitUI.UserControls.RevisionGrid.Graph
 
         public bool IsRevisionRelative(ObjectId objectId)
         {
-            if (_nodeByObjectId.TryGetValue(objectId, out RevisionGraphRevision revision))
+            if (_nodeByObjectId.TryGetValue(objectId, out RevisionGraphRevision? revision))
             {
                 return revision.IsRelative;
             }
@@ -113,14 +114,14 @@ namespace GitUI.UserControls.RevisionGrid.Graph
             return false;
         }
 
-        public bool TryGetNode(ObjectId objectId, out RevisionGraphRevision revision)
+        public bool TryGetNode(ObjectId objectId, [NotNullWhen(true)] out RevisionGraphRevision? revision)
         {
             return _nodeByObjectId.TryGetValue(objectId, out revision);
         }
 
         public bool TryGetRowIndex(ObjectId objectId, out int index)
         {
-            if (!TryGetNode(objectId, out RevisionGraphRevision revision))
+            if (!TryGetNode(objectId, out RevisionGraphRevision? revision))
             {
                 index = 0;
                 return false;
@@ -163,7 +164,7 @@ namespace GitUI.UserControls.RevisionGrid.Graph
             }
 
             // Highlight revision
-            if (TryGetNode(id, out RevisionGraphRevision revisionGraphRevision))
+            if (TryGetNode(id, out RevisionGraphRevision? revisionGraphRevision))
             {
                 revisionGraphRevision.MakeRelative();
             }
@@ -174,7 +175,7 @@ namespace GitUI.UserControls.RevisionGrid.Graph
         /// </summary>
         public void Add(GitRevision revision, RevisionNodeFlags types)
         {
-            if (!_nodeByObjectId.TryGetValue(revision.ObjectId, out RevisionGraphRevision revisionGraphRevision))
+            if (!_nodeByObjectId.TryGetValue(revision.ObjectId, out RevisionGraphRevision? revisionGraphRevision))
             {
                 // This revision is added from the log, but not seen before. This is probably a root node (new branch) OR the revisions
                 // are not in topo order. If this the case, we deal with it later.
@@ -199,7 +200,7 @@ namespace GitUI.UserControls.RevisionGrid.Graph
             {
                 foreach (ObjectId parentObjectId in revision.ParentIds)
                 {
-                    if (!_nodeByObjectId.TryGetValue(parentObjectId, out RevisionGraphRevision parentRevisionGraphRevision))
+                    if (!_nodeByObjectId.TryGetValue(parentObjectId, out RevisionGraphRevision? parentRevisionGraphRevision))
                     {
                         // This parent is not loaded before. Create a new (partial) revision. We will complete the info in the revision
                         // when this revision is loaded from the log.

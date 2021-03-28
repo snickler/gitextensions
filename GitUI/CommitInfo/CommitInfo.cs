@@ -781,13 +781,13 @@ namespace GitUI.CommitInfo
 
             public int Compare(string? a, string? b)
             {
-                int priorityA = GetBranchPriority(a);
-                int priorityB = GetBranchPriority(b);
+                int priorityA = GetBranchPriority(a ?? string.Empty);
+                int priorityB = GetBranchPriority(b ?? string.Empty);
                 return priorityA == priorityB ? Comparer<string>.Default.Compare(a, b)
                     : priorityA - priorityB;
             }
 
-            private int GetBranchPriority(string? branch)
+            private int GetBranchPriority(string branch)
             {
                 return branch == _currentBranch ? 0
                     : IsImportantLocalBranch() ? 1

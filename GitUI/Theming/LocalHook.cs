@@ -1,4 +1,14 @@
-﻿// EasyHook (File: EasyHook\LocalHook.cs)
+﻿#pragma warning disable SA1121 // Use built-in type alias
+#pragma warning disable SA1131 // Use readable conditions
+#pragma warning disable SA1308 // Variable names should not be prefixed
+#pragma warning disable SA1312 // Variable names should begin with lower-case letter
+#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+#pragma warning disable IDE1006 // Naming Styles
+#pragma warning disable SX1309 // Field names should begin with underscore
+
+// EasyHook (File: EasyHook\LocalHook.cs)
 //
 // Copyright (c) 2009 Christoph Husse & Copyright (c) 2015 Justin Stenning
 //
@@ -49,11 +59,18 @@ namespace EasyHook
         /// <summary>
         /// Is this ACL an exclusive one? Refer to <see cref="SetExclusiveACL"/> for more information.
         /// </summary>
-        public Boolean IsExclusive { get { return m_IsExclusive; } }
+        public Boolean IsExclusive
+        {
+            get { return m_IsExclusive; }
+        }
+
         /// <summary>
         /// Is this ACL an inclusive one? Refer to <see cref="SetInclusiveACL"/> for more information.
         /// </summary>
-        public Boolean IsInclusive { get { return !IsExclusive; } }
+        public Boolean IsInclusive
+        {
+            get { return !IsExclusive; }
+        }
 
         /// <summary>
         /// Sets an inclusive ACL. This means all threads that are enumerated through <paramref name="InACL"/>
@@ -72,9 +89,13 @@ namespace EasyHook
         public void SetInclusiveACL(Int32[] InACL)
         {
             if (InACL == null)
+            {
                 m_ACL = new Int32[0];
+            }
             else
+            {
                 m_ACL = (Int32[])InACL.Clone();
+            }
 
             m_IsExclusive = false;
 
@@ -101,9 +122,13 @@ namespace EasyHook
         public void SetExclusiveACL(Int32[] InACL)
         {
             if (InACL == null)
+            {
                 m_ACL = new Int32[0];
+            }
             else
+            {
                 m_ACL = (Int32[])InACL.Clone();
+            }
 
             m_IsExclusive = true;
 
@@ -128,9 +153,13 @@ namespace EasyHook
         internal HookAccessControl(IntPtr InHandle)
         {
             if (InHandle == IntPtr.Zero)
+            {
                 m_IsExclusive = true;
+            }
             else
+            {
                 m_IsExclusive = false;
+            }
 
             m_Handle = InHandle;
         }
@@ -158,12 +187,17 @@ namespace EasyHook
             Dispose();
         }
 
-        private LocalHook() { }
+        private LocalHook()
+        {
+        }
 
         /// <summary>
         /// The callback passed to <see cref="Create"/>.
         /// </summary>
-        public Object Callback { get { return m_Callback; } }
+        public Object Callback
+        {
+            get { return m_Callback; }
+        }
 
         /// <summary>
         /// Returns the thread ACL associated with this hook. Refer to <see cref="IsThreadIntercepted"/>
@@ -177,7 +211,9 @@ namespace EasyHook
             get
             {
                 if (IntPtr.Zero == m_Handle)
+                {
                     throw new ObjectDisposedException(typeof(LocalHook).FullName);
+                }
 
                 return m_ThreadACL;
             }
@@ -194,7 +230,9 @@ namespace EasyHook
             get
             {
                 if (IntPtr.Zero == m_Handle)
+                {
                     throw new ObjectDisposedException(typeof(LocalHook).FullName);
+                }
 
                 IntPtr address = IntPtr.Zero;
                 ////NativeAPI.LhGetHookBypassAddress(m_Handle, out address);
@@ -262,7 +300,9 @@ namespace EasyHook
             Boolean Result = false;
 
             if (IntPtr.Zero == m_Handle)
+            {
                 throw new ObjectDisposedException(typeof(LocalHook).FullName);
+            }
 
             ////NativeAPI.LhIsThreadIntercepted(m_Handle, InThreadID, out Result);
 
@@ -273,7 +313,10 @@ namespace EasyHook
         /// Returns the gloabl thread ACL associated with ALL hooks. Refer to <see cref="IsThreadIntercepted"/>
         /// for more information about access negotiation.
         /// </summary>
-        public static HookAccessControl GlobalThreadACL { get { return m_GlobalThreadACL; } }
+        public static HookAccessControl GlobalThreadACL
+        {
+            get { return m_GlobalThreadACL; }
+        }
 
         /// <summary>
         /// If you want to immediately uninstall a hook, the only way is to dispose it. A disposed
@@ -291,7 +334,9 @@ namespace EasyHook
             lock (m_ThreadSafe)
             {
                 if (IntPtr.Zero == m_Handle)
+                {
                     return;
+                }
 
                 ////NativeAPI.LhUninstallHook(m_Handle);
 
@@ -373,14 +418,14 @@ namespace EasyHook
                 ////    GCHandle.ToIntPtr(Result.m_SelfHandle),
                 ////    Result.m_Handle);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Marshal.FreeCoTaskMem(Result.m_Handle);
                 Result.m_Handle = IntPtr.Zero;
 
                 Result.m_SelfHandle.Free();
 
-                throw e;
+                throw;
             }
 
             Result.m_ThreadACL = new HookAccessControl(Result.m_Handle);
@@ -441,3 +486,12 @@ namespace EasyHook
         }
     }
 }
+#pragma warning restore SX1309 // Field names should begin with underscore
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+#pragma warning restore SA1313 // Parameter names should begin with lower-case letter
+#pragma warning restore SA1312 // Variable names should begin with lower-case letter
+#pragma warning restore SA1308 // Variable names should not be prefixed
+#pragma warning restore SA1131 // Use readable conditions
+#pragma warning restore SA1121 // Use built-in type alias
