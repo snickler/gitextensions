@@ -202,12 +202,12 @@ namespace GitExtensions
                 {
                     if (!Directory.Exists(dirArg))
                     {
-                        dirArg = Path.GetDirectoryName(dirArg);
+                        dirArg = Path.GetDirectoryName(dirArg)!;
                     }
 
                     workingDir = GitModule.TryFindGitWorkingDir(dirArg);
 
-                    if (Directory.Exists(workingDir))
+                    if (workingDir is not null && Directory.Exists(workingDir))
                     {
                         workingDir = Path.GetFullPath(workingDir);
                     }
@@ -247,10 +247,10 @@ namespace GitExtensions
             try
             {
                 // perhaps this should be checked for if it is null
-                var in3 = ce.InnerException.InnerException;
+                Exception? in3 = ce.InnerException?.InnerException;
 
                 // saves having to have a reference to System.Xml just to check that we have an XmlException
-                if (in3.GetType().Name == "XmlException")
+                if (in3 is not null && in3.GetType().Name == "XmlException")
                 {
                     var localSettingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GitExtensions");
 
