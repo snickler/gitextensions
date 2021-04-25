@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -208,7 +209,7 @@ Send report anyway?");
                 return;
             }
 
-            var itemsToTranslate = new[] { (itemName, item) };
+            IEnumerable<(string name, object? item)> itemsToTranslate = new (string name, object? item)[] { (itemName, item) };
 
             foreach (var pair in translation)
             {

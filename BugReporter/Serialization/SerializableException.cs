@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Xml.Linq;
@@ -170,14 +171,14 @@ namespace BugReporter.Serialization
             serializer.Serialize(stream, this);
             stream.Position = 0;
             var doc = XDocument.Load(stream);
-            return doc.Root.ToString();
+            return doc.Root!.ToString();
         }
 
         public static SerializableException FromXmlString(string xml)
         {
             var serializer = new XmlSerializer(typeof(SerializableException));
             using StringReader reader = new(xml);
-            SerializableException exception = (SerializableException)serializer.Deserialize(reader);
+            SerializableException exception = (SerializableException)serializer.Deserialize(reader)!;
 
             if (exception.StackTrace?.IndexOf(Environment.NewLine) < 0)
             {
@@ -201,9 +202,9 @@ namespace BugReporter.Serialization
             {
                 var extendedInformation = new SerializableDictionary<string, object>();
 
-                foreach (var property in extendedProperties.Where(property => property.GetValue(exception, null) is not null))
+                foreach (PropertyInfo property in extendedProperties.Where(property => property.GetValue(exception, null) is not null))
                 {
-                    extendedInformation.Add(property.Name, property.GetValue(exception, null));
+                    extendedInformation.Add(property.Name, property.GetValue(exception, null)!);
                 }
 
                 return extendedInformation;

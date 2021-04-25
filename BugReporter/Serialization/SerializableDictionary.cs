@@ -69,7 +69,7 @@ namespace BugReporter.Serialization
         {
             foreach (var key in Keys)
             {
-                writer.WriteStartElement(key.ToString().Replace(" ", ""));
+                writer.WriteStartElement(key.ToString()!.Replace(" ", ""));
 
                 // Check to see if we can actually serialize element
                 if (this[key].GetType().IsSerializable)

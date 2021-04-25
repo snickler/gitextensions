@@ -40,7 +40,7 @@ namespace BugReporter.Info
             serializer.Serialize(stream, this);
             stream.Position = 0;
             var doc = XDocument.Load(stream);
-            return doc.Root.ToString();
+            return doc.Root!.ToString();
         }
     }
 }

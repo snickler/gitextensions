@@ -29,7 +29,7 @@ namespace BugReporter
                 return null;
             }
 
-            if (!Uri.TryCreate(url, UriKind.Absolute, out Uri validatedUri) ||
+            if (!Uri.TryCreate(url, UriKind.Absolute, out Uri? validatedUri) ||
                 !(validatedUri.Scheme == Uri.UriSchemeHttp || validatedUri.Scheme == Uri.UriSchemeHttps))
             {
                 return null;
