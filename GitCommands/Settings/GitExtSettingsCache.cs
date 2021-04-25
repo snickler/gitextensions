@@ -82,8 +82,7 @@ namespace GitCommands.Settings
         protected override string GetValueImpl(string key)
         {
             _encodedNameMap.TryGetValue(key, out var value);
-            Assumes.NotNull(value);
-            return value;
+            return value ?? string.Empty;
         }
     }
 }
