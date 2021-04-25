@@ -84,7 +84,7 @@ namespace EasyHook
         /// </remarks>
         /// <param name="InACL">Threads to be explicitly included in negotiation.</param>
         /// <exception cref="ArgumentException">
-        /// The limit of 128 access entries is exceeded!
+        /// The limit of 128 access entries is exceeded!.
         /// </exception>
         public void SetInclusiveACL(Int32[] InACL)
         {
@@ -117,7 +117,7 @@ namespace EasyHook
         /// </remarks>
         /// <param name="InACL">Threads to be explicitly included in negotiation.</param>
         /// <exception cref="ArgumentException">
-        /// The limit of 128 access entries is exceeded!
+        /// The limit of 128 access entries is exceeded!.
         /// </exception>
         public void SetExclusiveACL(Int32[] InACL)
         {
@@ -321,13 +321,13 @@ namespace EasyHook
         /// <summary>
         /// If you want to immediately uninstall a hook, the only way is to dispose it. A disposed
         /// hook is guaranteed to never invoke your handler again but may still consume
-        /// memory even for process life-time!
+        /// memory even for process life-time!.
         /// </summary>
         /// <remarks>
         /// As we are living in a manged world, you don't have to dispose a hook because the next
         /// garbage collection will do it for you, assuming that your code does not reference it
         /// anymore. But there are times when you want to uninstall it excplicitly, with no delay.
-        /// If you dispose a disposed or not installed hook, nothing will happen!
+        /// If you dispose a disposed or not installed hook, nothing will happen!.
         /// </remarks>
         public void Dispose()
         {
@@ -443,7 +443,7 @@ namespace EasyHook
         /// this is the anwser. You will only be able to hook native code from a managed
         /// environment if you have access to a method like this, returning the native
         /// entry point. Please note that you will also hook any managed code, which
-        /// of course ultimately relies on the native windows API!
+        /// of course ultimately relies on the native windows API!.
         /// </remarks>
         /// <param name="InModule">A system DLL name like "kernel32.dll" or a full qualified path to any DLL.</param>
         /// <param name="InSymbolName">An exported symbol name like "CreateFileW".</param>

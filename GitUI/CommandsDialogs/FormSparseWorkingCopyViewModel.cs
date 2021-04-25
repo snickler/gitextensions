@@ -162,7 +162,7 @@ namespace GitUI.CommandsDialogs
         {
             // Don't abort if !IsWithUnsavedChanges because we have to run IsRefreshWorkingCopyOnSave in either case (e.g. if edited by hand or got outdated)
 
-            // Special case: turning off sparse for a repo — this won't just go smoothly, looks like git still reads the sparse checkout rules, so emptying or deleting them with turning off will just leave you with what you had before
+            // Special case: turning off sparse for a repo ï¿½ this won't just go smoothly, looks like git still reads the sparse checkout rules, so emptying or deleting them with turning off will just leave you with what you had before
             SaveChangesTurningOffSparseSpecialCase();
 
             // Enabled state for the repo
@@ -231,7 +231,7 @@ namespace GitUI.CommandsDialogs
             }
 
             // Adjust the rules
-            // Comment out all existing nonempty lines, add the single “/*” line to make a total pass filter
+            // Comment out all existing nonempty lines, add the single ï¿½/*ï¿½ line to make a total pass filter
             RulesText = new[] { "/*" }.Concat(RulesText.LazySplit('\n', StringSplitOptions.RemoveEmptyEntries).Select(l => (string.IsNullOrWhiteSpace(l) || (l[0] == '#')) ? l : "#" + l)).Join(Environment.NewLine);
         }
 
@@ -246,7 +246,7 @@ namespace GitUI.CommandsDialogs
             }
 
             /// <summary>
-            /// Empty rule set vs. got some stuff there
+            /// Empty rule set vs. got some stuff there.
             /// </summary>
             public bool IsCurrentRuleSetEmpty { get; }
         }
