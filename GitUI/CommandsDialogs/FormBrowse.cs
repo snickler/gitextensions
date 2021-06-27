@@ -410,20 +410,14 @@ namespace GitUI.CommandsDialogs
                             const int imgDim = 32;
                             const int dotDim = 15;
                             const int pad = 2;
-                            using (var bmp = new Bitmap(imgDim, imgDim))
-                            {
-                                using (var g = Graphics.FromImage(bmp))
-                                {
-                                    g.SmoothingMode = SmoothingMode.AntiAlias;
-                                    g.Clear(Color.Transparent);
-                                    g.FillEllipse(brush, new Rectangle(imgDim - dotDim - pad, imgDim - dotDim - pad, dotDim, dotDim));
-                                }
+                            using var bmp = new Bitmap(imgDim, imgDim);
+                            using var g = Graphics.FromImage(bmp);
+                            g.SmoothingMode = SmoothingMode.AntiAlias;
+                            g.Clear(Color.Transparent);
+                            g.FillEllipse(brush, new Rectangle(imgDim - dotDim - pad, imgDim - dotDim - pad, dotDim, dotDim));
 
-                                using (var overlay = Icon.FromHandle(bmp.GetHicon()))
-                                {
-                                    TaskbarManager.Instance.SetOverlayIcon(overlay, "");
-                                }
-                            }
+                            using Icon overlay = bmp.BitmapToIcon();
+                            TaskbarManager.Instance.SetOverlayIcon(overlay, "");
 
                             var repoStateVisualiser = new RepoStateVisualiser();
                             var (image, _) = repoStateVisualiser.Invoke(status);
@@ -852,7 +846,7 @@ namespace GitUI.CommandsDialogs
             repoObjectsTree.SelectionChanged(selectedRevisions);
         }
 
-#region IBrowseRepo
+        #region IBrowseRepo
 
         public void GoToRef(string refName, bool showNoRevisionMsg, bool toggleSelection = false)
         {
@@ -862,7 +856,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-#endregion
+        #endregion
 
         private void ShowDashboard()
         {
@@ -1242,7 +1236,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-#region Working directory combo box
+        #region Working directory combo box
 
         /// <summary>Updates the text shown on the combo button itself.</summary>
         private void RefreshWorkingDirComboText()
@@ -1336,7 +1330,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-#endregion
+        #endregion
 
         private void FillFileTree(GitRevision revision)
         {
@@ -2216,7 +2210,7 @@ namespace GitUI.CommandsDialogs
             return true;
         }
 
-#region Hotkey commands
+        #region Hotkey commands
 
         public static readonly string HotkeySettingsName = "Browse";
 
@@ -2470,7 +2464,7 @@ namespace GitUI.CommandsDialogs
             return ExecuteCommand((int)cmd);
         }
 
-#endregion
+        #endregion
 
         public static void OpenContainingFolder(FileStatusList diffFiles, GitModule module)
         {
@@ -2736,7 +2730,7 @@ namespace GitUI.CommandsDialogs
             PreventToolStripSplitButtonClosing(sender as ToolStripSplitButton);
         }
 
-#region Submodules
+        #region Submodules
 
         private ToolStripItem CreateSubmoduleMenuItem(SubmoduleInfo info, string textFormat = "{0}")
         {
@@ -2944,7 +2938,7 @@ namespace GitUI.CommandsDialogs
             toolStripButtonLevelUp.DropDownItems.Clear();
         }
 
-#endregion
+        #endregion
 
         private void toolStripButtonLevelUp_ButtonClick(object sender, EventArgs e)
         {
@@ -3095,7 +3089,7 @@ namespace GitUI.CommandsDialogs
             }
         }
 
-#region Layout management
+        #region Layout management
 
         private void toggleSplitViewLayout_Click(object sender, EventArgs e)
         {
@@ -3223,7 +3217,7 @@ namespace GitUI.CommandsDialogs
             RevisionsSplitContainer.ResumeLayout(performLayout: true);
         }
 
-#endregion
+        #endregion
 
         private void manageWorktreeToolStripMenuItem_Click(object sender, EventArgs e)
         {
