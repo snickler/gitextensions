@@ -61,41 +61,38 @@ namespace GitUITests.UserControls
                 .Should().Throw<InvalidOperationException>();
         }
 
-        [TestCase(false)]
-        [TestCase(true)]
-        public void ApplyBranchFilter_should_invoke_RevisionGridFilter_with_no_branches(bool refresh)
+        [Test]
+        public void ApplyBranchFilter_should_invoke_RevisionGridFilter_with_no_branches()
         {
             _filterToolBar.GetTestAccessor().tscboBranchFilter.Items.Count.Should().Be(0);
 
-            _filterToolBar.GetTestAccessor().ApplyCustomBranchFilter(refresh);
+            _filterToolBar.GetTestAccessor().ApplyCustomBranchFilter();
 
-            _revisionGridFilter.Received().SetAndApplyBranchFilter(string.Empty, refresh);
+            _revisionGridFilter.Received().SetAndApplyBranchFilter(string.Empty, requireRefresh: true);
             _filterToolBar.GetTestAccessor()._isApplyingFilter.Should().BeFalse();
         }
 
-        [TestCase(false)]
-        [TestCase(true)]
-        public void ApplyBranchFilter_should_invoke_RevisionGridFilter_with_NoResultsFound(bool refresh)
+        [Test]
+        public void ApplyBranchFilter_should_invoke_RevisionGridFilter_with_NoResultsFound()
         {
             _filterToolBar.GetTestAccessor().tscboBranchFilter.Items.AddRange(new[] { "one", "two" });
             _filterToolBar.GetTestAccessor().tscboBranchFilter.Text = TranslatedStrings.NoResultsFound;
 
-            _filterToolBar.GetTestAccessor().ApplyCustomBranchFilter(refresh);
+            _filterToolBar.GetTestAccessor().ApplyCustomBranchFilter();
 
-            _revisionGridFilter.Received().SetAndApplyBranchFilter(string.Empty, refresh);
+            _revisionGridFilter.Received().SetAndApplyBranchFilter(string.Empty, requireRefresh: true);
             _filterToolBar.GetTestAccessor()._isApplyingFilter.Should().BeFalse();
         }
 
-        [TestCase(false)]
-        [TestCase(true)]
-        public void ApplyBranchFilter_should_invoke_RevisionGridFilter_with_branches(bool refresh)
+        [Test]
+        public void ApplyBranchFilter_should_invoke_RevisionGridFilter_with_branches()
         {
             _filterToolBar.GetTestAccessor().tscboBranchFilter.Items.AddRange(new[] { "one", "two" });
             _filterToolBar.GetTestAccessor().tscboBranchFilter.Text = "on";
 
-            _filterToolBar.GetTestAccessor().ApplyCustomBranchFilter(refresh);
+            _filterToolBar.GetTestAccessor().ApplyCustomBranchFilter();
 
-            _revisionGridFilter.Received().SetAndApplyBranchFilter("on", refresh);
+            _revisionGridFilter.Received().SetAndApplyBranchFilter("on", requireRefresh: true);
             _filterToolBar.GetTestAccessor()._isApplyingFilter.Should().BeFalse();
         }
 

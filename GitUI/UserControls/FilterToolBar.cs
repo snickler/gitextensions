@@ -78,7 +78,7 @@ namespace GitUI.UserControls
         /// <summary>
         ///  Applies custom branch filters supplied via the filter textbox.
         /// </summary>
-        private void ApplyCustomBranchFilter(bool refresh)
+        private void ApplyCustomBranchFilter()
         {
             if (_isApplyingFilter)
             {
@@ -96,7 +96,7 @@ namespace GitUI.UserControls
                 filter = string.Empty;
             }
 
-            RevisionGridFilter.SetAndApplyBranchFilter(filter, refresh);
+            RevisionGridFilter.SetAndApplyBranchFilter(filter, requireRefresh: true);
 
             _isApplyingFilter = false;
         }
@@ -268,7 +268,6 @@ namespace GitUI.UserControls
         public void SetBranchFilter(string? filter, bool refresh)
         {
             tscboBranchFilter.Text = filter;
-            ApplyCustomBranchFilter(refresh);
         }
 
         public void SetFocus()
@@ -340,16 +339,6 @@ namespace GitUI.UserControls
             RevisionGridFilter.ShowRevisionFilterDialog();
         }
 
-        private void tscboBranchFilter_Click(object sender, EventArgs e)
-        {
-            if (tscboBranchFilter.Items.Count == 0)
-            {
-                return;
-            }
-
-            tscboBranchFilter.DroppedDown = true;
-        }
-
         private void tscboBranchFilter_DropDown(object sender, EventArgs e)
         {
             UpdateBranchFilterItems();
@@ -359,20 +348,11 @@ namespace GitUI.UserControls
         {
             if (e.KeyCode == Keys.Enter)
             {
-                ApplyCustomBranchFilter(refresh: _filterBeingChanged);
+                ApplyCustomBranchFilter();
             }
         }
 
-        private void tscboBranchFilter_TextChanged(object sender, EventArgs e)
-        {
-            _filterBeingChanged = true;
-        }
-
-        private void tscboBranchFilter_TextUpdate(object sender, EventArgs e)
-        {
-            _filterBeingChanged = true;
-            UpdateBranchFilterItems();
-        }
+        private void tscboBranchFilter_SelectedIndexChanged(object sender, EventArgs e) => ApplyCustomBranchFilter();
 
         private void tsmiShowBranchesAll_Click(object sender, EventArgs e) => ApplyPresetBranchesFilter(RevisionGridFilter.ShowAllBranches);
 
@@ -423,7 +403,7 @@ namespace GitUI.UserControls
 
             public IRevisionGridFilter RevisionGridFilter => _control.RevisionGridFilter;
 
-            public void ApplyCustomBranchFilter(bool refresh) => _control.ApplyCustomBranchFilter(refresh);
+            public void ApplyCustomBranchFilter() => _control.ApplyCustomBranchFilter();
 
             public void ApplyRevisionFilter() => _control.ApplyRevisionFilter();
 

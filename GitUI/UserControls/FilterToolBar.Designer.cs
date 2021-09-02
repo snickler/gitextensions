@@ -142,11 +142,9 @@ namespace GitUI.UserControls
             this.tscboBranchFilter.Name = "tscboBranchFilter";
             this.tscboBranchFilter.Size = new System.Drawing.Size(100, 23);
             this.tscboBranchFilter.Tag = "ToolBar_group:Branch filter";
-            this.tscboBranchFilter.Click += new System.EventHandler(this.tscboBranchFilter_Click);
             this.tscboBranchFilter.DropDown += new System.EventHandler(this.tscboBranchFilter_DropDown);
             this.tscboBranchFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tscboBranchFilter_KeyUp);
-            this.tscboBranchFilter.TextChanged += new System.EventHandler(this.tscboBranchFilter_TextChanged);
-            this.tscboBranchFilter.TextUpdate += new System.EventHandler(this.tscboBranchFilter_TextUpdate);
+            this.tscboBranchFilter.SelectedIndexChanged += new System.EventHandler(this.tscboBranchFilter_SelectedIndexChanged);
             // 
             // tsmiBranchLocal
             // 
