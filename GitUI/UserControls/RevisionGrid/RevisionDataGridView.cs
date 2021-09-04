@@ -475,6 +475,11 @@ namespace GitUI.UserControls.RevisionGrid
 
                 try
                 {
+                    if (_backgroundQueue.IsEmpty)
+                    {
+                        continue;
+                    }
+
                     CancellationToken timeoutToken = CancellationToken.None;
                     Func<CancellationToken, Task> backgroundOperation;
                     CancellationToken backgroundOperationCancellation;
