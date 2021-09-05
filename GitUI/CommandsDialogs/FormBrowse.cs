@@ -3219,20 +3219,18 @@ namespace GitUI.CommandsDialogs
         {
             private readonly FormBrowse _form;
 
-            public FullBleedTabControl CommitInfoTabControl => _form.CommitInfoTabControl;
-
-            public TabPage DiffTabPage => _form.DiffTabPage;
-
-            public RevisionDiffControl RevisionDiffControl => _form.revisionDiff;
-
-            public TabPage TreeTabPage => _form.TreeTabPage;
-
             public TestAccessor(FormBrowse form)
             {
                 _form = form;
             }
 
+            public FullBleedTabControl CommitInfoTabControl => _form.CommitInfoTabControl;
+            public TabPage DiffTabPage => _form.DiffTabPage;
             public RepoObjectsTree RepoObjectsTree => _form.repoObjectsTree;
+            public RevisionDiffControl RevisionDiffControl => _form.revisionDiff;
+            public RevisionGridControl RevisionGrid => _form.RevisionGridControl;
+            public TabPage TreeTabPage => _form.TreeTabPage;
+            public FilterToolBar ToolStripFilters => _form.ToolStripFilters;
 
             public void PopulateFavouriteRepositoriesMenu(ToolStripDropDownItem container, IList<Repository> repositoryHistory)
             {

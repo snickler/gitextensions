@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -206,6 +207,8 @@ namespace GitExtensions.UITests.CommandsDialogs
 
         private TreeNode GetRemoteNode(FormBrowse form)
         {
+            ProcessUntil(() => form.GetTestAccessor().RevisionGrid.GetTestAccessor().IsRefreshingRevisions.ToString(), false.ToString());
+
             var treeView = form.GetTestAccessor().RepoObjectsTree.GetTestAccessor().TreeView;
             var remotesNode = treeView.Nodes.OfType<TreeNode>().FirstOrDefault(n => n.Text == TranslatedStrings.Remotes);
             remotesNode.Should().NotBeNull();
@@ -227,6 +230,25 @@ namespace GitExtensions.UITests.CommandsDialogs
             UITest.RunForm(
                 showForm: () => _commands.StartBrowseDialog(owner: null).Should().BeTrue(),
                 testDriverAsync);
+        }
+
+        private static void ProcessUntil(Func<string> getCurrent, string expected, int maxIterations = 100)
+        {
+            string current = "";
+            for (int iteration = 0; iteration < maxIterations; ++iteration)
+            {
+                current = getCurrent();
+                if (current == expected)
+                {
+                    Debug.WriteLine($"{nameof(ProcessUntil)} '{expected}' in iteration {iteration}");
+                    return;
+                }
+
+                Application.DoEvents();
+                Thread.Sleep(5);
+            }
+
+            Assert.Fail($"{current} != {expected} in {maxIterations} iterations");
         }
     }
 }
