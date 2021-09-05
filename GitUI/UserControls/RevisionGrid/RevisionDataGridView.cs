@@ -483,13 +483,13 @@ namespace GitUI.UserControls.RevisionGrid
                             return;
                         }
 
-                        if (cancellationToken.IsCancellationRequested)
-                        {
-                            // Normal cancellation of background queue during clear
-                            return;
-                        }
-
                         continue;
+                    }
+
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        // Normal cancellation of background queue during clear
+                        return;
                     }
 
                     CancellationToken timeoutToken = CancellationToken.None;
