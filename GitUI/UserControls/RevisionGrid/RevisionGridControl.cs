@@ -29,6 +29,7 @@ using GitUI.Script;
 using GitUI.UserControls;
 using GitUI.UserControls.RevisionGrid;
 using GitUI.UserControls.RevisionGrid.Columns;
+using GitUI.UserControls.RevisionGrid.Graph;
 using GitUIPluginInterfaces;
 using Microsoft;
 using Microsoft.VisualStudio.Threading;
@@ -93,7 +94,8 @@ namespace GitUI
         private readonly TranslationString _noMergeBaseCommit = new("There is no common ancestor for the selected commits.");
         private readonly TranslationString _invalidDiffContainsFilter = new("Filter text '{0}' not valid for \"Diff contains\" filter.");
 
-        private FormRevisionFilter _formRevisionFilter;
+        private readonly AdvancedFilterInfo _advancedFilterInfo = new();
+        ////private FormRevisionFilter _formRevisionFilter;
         private readonly NavigationHistory _navigationHistory = new();
         private readonly Control _loadingControlAsync;
         private readonly Control _loadingControlSync;
@@ -315,7 +317,6 @@ namespace GitUI
                 //// _loadingControlSync handled by this.Controls
                 //// _loadingControlAsync handled by this.Controls
                 //// _navigationHistory not disposable
-                _formRevisionFilter.Dispose();
 
                 components?.Dispose();
 
@@ -414,12 +415,12 @@ namespace GitUI
 
         public void DisableFilters()
         {
-            _formRevisionFilter.DisableFilters();
+            _advancedFilterInfo.DisableFilters();
         }
 
         public void SetPathFilter(string path)
         {
-            _formRevisionFilter.SetPathFilter(path);
+            _advancedFilterInfo.FileFilter = path;
         }
 
         private void InitiateRefAction(IReadOnlyList<IGitRef>? refs, Action<IGitRef> action, FormQuickGitRefSelector.Action actionLabel)
@@ -559,17 +560,19 @@ namespace GitUI
 
         public void SetAndApplyBranchFilter(string filter, bool requireRefresh)
         {
-            AppSettings.BranchFilterEnabled = !string.IsNullOrWhiteSpace(filter);
+            string newFilter = filter?.Trim() ?? string.Empty;
+
+            AppSettings.BranchFilterEnabled = !string.IsNullOrWhiteSpace(newFilter);
 
             // ShowCurrentBranchOnly depends on BranchFilterEnabled, and to show the current branch
             // both flags must be set simultaneously (check SetShowBranches implementation).
             // And since we set a filter - we can't be showing the current branch.
             AppSettings.ShowCurrentBranchOnly = false;
 
-            requireRefresh = requireRefresh && _formRevisionFilter.SetBranchFilter(filter);
-
+            requireRefresh = requireRefresh && !string.Equals(newFilter, _advancedFilterInfo.BranchFilter, StringComparison.Ordinal); // _advancedFilterInfo.SetBranchFilter(filter);
             if (requireRefresh)
             {
+                _advancedFilterInfo.BranchFilter = newFilter;
                 ForceRefreshRevisions();
             }
             else
@@ -660,9 +663,9 @@ namespace GitUI
                 ReloadHotkeys();
             }
 
-            _formRevisionFilter?.Dispose();
-            Debug.Assert(UICommands is not null, "UICommands must be set");
-            _formRevisionFilter = new(UICommands);
+            ////_formRevisionFilter?.Dispose();
+            ////Debug.Assert(UICommands is not null, "UICommands must be set");
+            ////_formRevisionFilter = new(UICommands);
 
             ForceRefreshRevisions();
             LoadCustomDifftools();
@@ -929,6 +932,13 @@ namespace GitUI
             _loadingControlAsync.BringToFront();
         }
 
+        private string GetBranchFilter()
+        {
+            return !AppSettings.BranchFilterEnabled || AppSettings.ShowCurrentBranchOnly
+                                ? string.Empty
+                                : _advancedFilterInfo.BranchFilter;
+        }
+
         public void ForceRefreshRevisions()
         {
             ThreadHelper.AssertOnUIThread();
@@ -948,8 +958,7 @@ namespace GitUI
             {
                 _revisionGraphColumnProvider.RevisionGraphDrawStyle = RevisionGraphDrawStyleEnum.DrawNonRelativesGray;
 
-                // Apply filter from revision filter dialog
-                _branchFilter = _formRevisionFilter.GetBranchFilter();
+                _branchFilter = GetBranchFilter();
                 SetShowBranches();
 
                 _initialLoad = true;
@@ -1017,11 +1026,10 @@ namespace GitUI
                 RefFilterOptions = refFilterOptions;
 
                 var formFilter = RevisionGridInMemFilter.CreateIfNeeded(
-                    _formRevisionFilter.GetInMemAuthorFilter(),
-                    _formRevisionFilter.GetInMemCommitterFilter(),
-                    _formRevisionFilter.GetInMemMessageFilter(),
-                    _formRevisionFilter.GetIgnoreCase());
-
+                    _advancedFilterInfo.GetInMemAuthorFilter(),
+                    _advancedFilterInfo.GetInMemCommitterFilter(),
+                    _advancedFilterInfo.GetInMemMessageFilter(),
+                    _advancedFilterInfo.IgnoreCase);
                 var toolStripFilter = RevisionGridInMemFilter.CreateIfNeeded(
                     InMemAuthorFilter,
                     InMemCommitterFilter,
@@ -1069,15 +1077,15 @@ namespace GitUI
                 _gridView.SelectionChanged += OnGridViewSelectionChanged;
                 _gridView.ResumeLayout();
 
-                string pathFilter = BuildPathFilter(_formRevisionFilter.GetPathFilter());
+                string pathFilter = BuildPathFilter(_advancedFilterInfo.GetFileFilter());
                 _revisionReader.Execute(
                     Module,
                     refs,
                     revisions,
-                    _formRevisionFilter.GetMaxCount(),
+                    _advancedFilterInfo.HasCommitsLimit ? _advancedFilterInfo.CommitsLimit : AppSettings.MaxRevisionGraphCommits,
                     refFilterOptions,
                     _branchFilter,
-                    _formRevisionFilter.GetRevisionFilter() + QuickRevisionFilter,
+                    _advancedFilterInfo.GetRevisionFilter() + QuickRevisionFilter,
                     pathFilter,
                     predicate);
 
@@ -1418,7 +1426,7 @@ namespace GitUI
         {
             return (inclBranchFilter && !string.IsNullOrEmpty(_branchFilter)) ||
                    !(string.IsNullOrEmpty(QuickRevisionFilter) &&
-                     !_formRevisionFilter.FilterEnabled() &&
+                     !_advancedFilterInfo.FilterEnabled() &&
                      string.IsNullOrEmpty(InMemAuthorFilter) &&
                      string.IsNullOrEmpty(InMemCommitterFilter) &&
                      string.IsNullOrEmpty(InMemMessageFilter));
@@ -1823,9 +1831,10 @@ namespace GitUI
             AppSettings.BranchFilterEnabled = false;
             AppSettings.ShowCurrentBranchOnly = false;
 
-            bool refresh = _formRevisionFilter.SetBranchFilter(string.Empty);
+            bool refresh = !string.IsNullOrEmpty(_advancedFilterInfo.BranchFilter); // _advancedFilterInfo.SetBranchFilter(string.Empty);
             if (refresh)
             {
+                _advancedFilterInfo.BranchFilter = string.Empty;
                 ForceRefreshRevisions();
             }
             else
@@ -1859,7 +1868,7 @@ namespace GitUI
             IsShowCurrentBranchOnlyChecked = AppSettings.BranchFilterEnabled && AppSettings.ShowCurrentBranchOnly;
             IsShowFilteredBranchesChecked = AppSettings.BranchFilterEnabled && !AppSettings.ShowCurrentBranchOnly;
 
-            _branchFilter = _formRevisionFilter?.GetBranchFilter() ?? string.Empty;
+            _branchFilter = GetBranchFilter() ?? string.Empty;
 
             if (!AppSettings.BranchFilterEnabled)
             {
@@ -1882,8 +1891,25 @@ namespace GitUI
 
         public void ShowRevisionFilterDialog()
         {
-            _formRevisionFilter.ShowDialog(ParentForm);
-            ForceRefreshRevisions();
+            using FormRevisionFilter form = new(UICommands);
+
+            _advancedFilterInfo.ByBranchFilter = AppSettings.BranchFilterEnabled;
+            _advancedFilterInfo.ShowCurrentBranchOnly = AppSettings.ShowCurrentBranchOnly;
+            _advancedFilterInfo.ShowSimplifyByDecoration = AppSettings.ShowSimplifyByDecoration;
+            _advancedFilterInfo.CommitsLimit = AppSettings.MaxRevisionGraphCommits;
+            form.Bind(_advancedFilterInfo);
+
+            if (form.ShowDialog(ParentForm) == DialogResult.OK)
+            {
+                AppSettings.BranchFilterEnabled = _advancedFilterInfo.ByBranchFilter;
+                AppSettings.ShowCurrentBranchOnly = _advancedFilterInfo.ShowCurrentBranchOnly;
+                AppSettings.ShowSimplifyByDecoration = _advancedFilterInfo.ShowSimplifyByDecoration;
+                AppSettings.MaxRevisionGraphCommits = _advancedFilterInfo.CommitsLimit;
+
+                OnFilterChanged();
+
+                ForceRefreshRevisions();
+            }
         }
 
         private void ContextMenuOpening(object sender, CancelEventArgs e)
