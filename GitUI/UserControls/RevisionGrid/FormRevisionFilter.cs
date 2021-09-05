@@ -30,9 +30,9 @@ namespace GitUI.UserControls.RevisionGrid
             _filterInfo = filterInfo;
 
             SinceCheck.Checked = _filterInfo.ByDateFrom;
-            Since.Value = _filterInfo.DateFrom;
+            Since.Value = _filterInfo.DateFrom == DateTime.MinValue ? DateTime.Today : _filterInfo.DateFrom;
             CheckUntil.Checked = _filterInfo.ByDateTo;
-            Until.Value = _filterInfo.DateTo = Until.Value;
+            Until.Value = _filterInfo.DateTo == DateTime.MinValue ? DateTime.Today : _filterInfo.DateTo;
             AuthorCheck.Checked = _filterInfo.ByAuthor;
             Author.Text = _filterInfo.Author;
             CommitterCheck.Checked = _filterInfo.ByCommitter;
