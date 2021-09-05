@@ -415,6 +415,7 @@ namespace GitUI
 
         public void SetPathFilter(string path)
         {
+            _advancedFilterInfo.ByFileFilter = !string.IsNullOrWhiteSpace(path);
             _advancedFilterInfo.FileFilter = path;
         }
 
@@ -500,6 +501,7 @@ namespace GitUI
             requireRefresh = requireRefresh && !string.Equals(newFilter, _advancedFilterInfo.BranchFilter, StringComparison.Ordinal); // _advancedFilterInfo.SetBranchFilter(filter);
             if (requireRefresh)
             {
+                _advancedFilterInfo.ByBranchFilter = true;
                 _advancedFilterInfo.BranchFilter = newFilter;
                 ForceRefreshRevisions();
             }
@@ -1724,6 +1726,7 @@ namespace GitUI
             bool refresh = !string.IsNullOrEmpty(_advancedFilterInfo.BranchFilter); // _advancedFilterInfo.SetBranchFilter(string.Empty);
             if (refresh)
             {
+                _advancedFilterInfo.ByBranchFilter = false;
                 _advancedFilterInfo.BranchFilter = string.Empty;
                 ForceRefreshRevisions();
             }

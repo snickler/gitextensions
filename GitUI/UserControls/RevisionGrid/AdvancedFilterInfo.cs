@@ -106,7 +106,7 @@ namespace GitUI.UserControls.RevisionGrid
         /// <returns><see langword="true"/> if the current filter has changed; otherwise <see langword="false"/>.</returns>
         public bool Apply(RevisionFilter filter)
         {
-            if (filter.FilterByAuthor)
+            if (filter.FilterByAuthor && !string.IsNullOrWhiteSpace(filter.Text))
             {
                 if (ByAuthor && string.Equals(Author, filter.Text, StringComparison.CurrentCulture))
                 {
@@ -118,7 +118,7 @@ namespace GitUI.UserControls.RevisionGrid
                 return true;
             }
 
-            if (filter.FilterByCommitter)
+            if (filter.FilterByCommitter && !string.IsNullOrWhiteSpace(filter.Text))
             {
                 if (ByCommitter && string.Equals(Committer, filter.Text, StringComparison.CurrentCulture))
                 {
@@ -130,7 +130,7 @@ namespace GitUI.UserControls.RevisionGrid
                 return true;
             }
 
-            if (filter.FilterByCommit)
+            if (filter.FilterByCommit && !string.IsNullOrWhiteSpace(filter.Text))
             {
                 if (ByMessage && string.Equals(Message, filter.Text, StringComparison.CurrentCulture))
                 {
@@ -142,7 +142,7 @@ namespace GitUI.UserControls.RevisionGrid
                 return true;
             }
 
-            if (filter.FilterByDiffContent)
+            if (filter.FilterByDiffContent && !string.IsNullOrWhiteSpace(filter.Text))
             {
                 if (ByDiffContent && string.Equals(DiffContent, filter.Text, StringComparison.CurrentCulture))
                 {
@@ -187,22 +187,22 @@ namespace GitUI.UserControls.RevisionGrid
         {
             ArgumentBuilder filter = new();
 
-            if (ByAuthor)
+            if (ByAuthor && !string.IsNullOrWhiteSpace(Author))
             {
                 filter.Add($"--author=\"{Author}\"");
             }
 
-            if (ByCommitter)
+            if (ByCommitter && !string.IsNullOrWhiteSpace(Committer))
             {
                 filter.Add($"--committer=\"{Committer}\"");
             }
 
-            if (ByMessage)
+            if (ByMessage && !string.IsNullOrEmpty(Message))
             {
                 filter.Add($"--grep=\"{Message}\"");
             }
 
-            if (ByDiffContent)
+            if (ByDiffContent && !string.IsNullOrEmpty(DiffContent))
             {
                 filter.Add($"-G\"{DiffContent}\"");
             }
