@@ -477,6 +477,12 @@ namespace GitUI.UserControls.RevisionGrid
                 {
                     if (_backgroundQueue.IsEmpty)
                     {
+                        if (_backgroundQueue.IsCompleted)
+                        {
+                            // Normal completion of background work
+                            return;
+                        }
+
                         if (cancellationToken.IsCancellationRequested)
                         {
                             // Normal cancellation of background queue during clear
