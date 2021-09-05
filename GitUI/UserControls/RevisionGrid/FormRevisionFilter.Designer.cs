@@ -257,7 +257,7 @@
             this.SinceCheck.Name = "SinceCheck";
             this.SinceCheck.Size = new System.Drawing.Size(14, 14);
             this.SinceCheck.UseVisualStyleBackColor = true;
-            this.SinceCheck.CheckedChanged += new System.EventHandler(this.SinceCheckCheckedChanged);
+            this.SinceCheck.CheckedChanged += new System.EventHandler(this.option_CheckedChanged);
             // 
             // CheckUntil
             // 
@@ -267,7 +267,7 @@
             this.CheckUntil.Name = "CheckUntil";
             this.CheckUntil.Size = new System.Drawing.Size(14, 14);
             this.CheckUntil.UseVisualStyleBackColor = true;
-            this.CheckUntil.CheckedChanged += new System.EventHandler(this.SinceCheckCheckedChanged);
+            this.CheckUntil.CheckedChanged += new System.EventHandler(this.option_CheckedChanged);
             // 
             // AuthorCheck
             // 
@@ -277,7 +277,7 @@
             this.AuthorCheck.Name = "AuthorCheck";
             this.AuthorCheck.Size = new System.Drawing.Size(14, 14);
             this.AuthorCheck.UseVisualStyleBackColor = true;
-            this.AuthorCheck.CheckedChanged += new System.EventHandler(this.SinceCheckCheckedChanged);
+            this.AuthorCheck.CheckedChanged += new System.EventHandler(this.option_CheckedChanged);
             // 
             // CommitterCheck
             // 
@@ -287,7 +287,7 @@
             this.CommitterCheck.Name = "CommitterCheck";
             this.CommitterCheck.Size = new System.Drawing.Size(14, 14);
             this.CommitterCheck.UseVisualStyleBackColor = true;
-            this.CommitterCheck.CheckedChanged += new System.EventHandler(this.SinceCheckCheckedChanged);
+            this.CommitterCheck.CheckedChanged += new System.EventHandler(this.option_CheckedChanged);
             // 
             // MessageCheck
             // 
@@ -297,7 +297,7 @@
             this.MessageCheck.Name = "MessageCheck";
             this.MessageCheck.Size = new System.Drawing.Size(14, 14);
             this.MessageCheck.UseVisualStyleBackColor = true;
-            this.MessageCheck.CheckedChanged += new System.EventHandler(this.SinceCheckCheckedChanged);
+            this.MessageCheck.CheckedChanged += new System.EventHandler(this.option_CheckedChanged);
             // 
             // IgnoreCase
             // 
@@ -318,7 +318,7 @@
             this.LimitCheck.Name = "LimitCheck";
             this.LimitCheck.Size = new System.Drawing.Size(14, 14);
             this.LimitCheck.UseVisualStyleBackColor = true;
-            this.LimitCheck.CheckedChanged += new System.EventHandler(this.SinceCheckCheckedChanged);
+            this.LimitCheck.CheckedChanged += new System.EventHandler(this.option_CheckedChanged);
             // 
             // label8
             // 
@@ -338,7 +338,7 @@
             this.FileFilterCheck.Name = "FileFilterCheck";
             this.FileFilterCheck.Size = new System.Drawing.Size(14, 14);
             this.FileFilterCheck.UseVisualStyleBackColor = true;
-            this.FileFilterCheck.CheckedChanged += new System.EventHandler(this.SinceCheckCheckedChanged);
+            this.FileFilterCheck.CheckedChanged += new System.EventHandler(this.option_CheckedChanged);
             // 
             // FileFilter
             // 
@@ -365,7 +365,7 @@
             this.BranchFilterCheck.Name = "BranchFilterCheck";
             this.BranchFilterCheck.Size = new System.Drawing.Size(14, 14);
             this.BranchFilterCheck.UseVisualStyleBackColor = true;
-            this.BranchFilterCheck.CheckedChanged += new System.EventHandler(this.OnBranchFilterCheckedChanged);
+            this.BranchFilterCheck.CheckedChanged += new System.EventHandler(this.option_CheckedChanged);
             // 
             // BranchFilter
             // 
@@ -383,7 +383,7 @@
             this.CurrentBranchOnlyCheck.Size = new System.Drawing.Size(285, 19);
             this.CurrentBranchOnlyCheck.Text = "Show current branch only";
             this.CurrentBranchOnlyCheck.UseVisualStyleBackColor = true;
-            this.CurrentBranchOnlyCheck.CheckedChanged += new System.EventHandler(this.OnShowCurrentBranchOnlyCheckedChanged);
+            this.CurrentBranchOnlyCheck.CheckedChanged += new System.EventHandler(this.option_CheckedChanged);
             // 
             // SimplifyByDecorationCheck
             // 
@@ -394,7 +394,7 @@
             this.SimplifyByDecorationCheck.Size = new System.Drawing.Size(285, 19);
             this.SimplifyByDecorationCheck.Text = "Simplify by decoration";
             this.SimplifyByDecorationCheck.UseVisualStyleBackColor = true;
-            this.SimplifyByDecorationCheck.CheckedChanged += new System.EventHandler(this.OnSimplifyByDecorationCheckedChanged);
+            this.SimplifyByDecorationCheck.CheckedChanged += new System.EventHandler(this.option_CheckedChanged);
             // 
             // FormRevisionFilter
             // 
@@ -407,7 +407,6 @@
             this.Name = "FormRevisionFilter";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Filter";
-            this.Load += new System.EventHandler(this.FormRevisionFilterLoad);
             this.MainPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this._NO_TRANSLATE_Limit)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);

@@ -1077,7 +1077,7 @@ namespace GitUI
                 _gridView.SelectionChanged += OnGridViewSelectionChanged;
                 _gridView.ResumeLayout();
 
-                string pathFilter = BuildPathFilter(_advancedFilterInfo.GetFileFilter());
+                string pathFilter = BuildPathFilter(_advancedFilterInfo.FileFilter);
                 _revisionReader.Execute(
                     Module,
                     refs,
@@ -1426,7 +1426,7 @@ namespace GitUI
         {
             return (inclBranchFilter && !string.IsNullOrEmpty(_branchFilter)) ||
                    !(string.IsNullOrEmpty(QuickRevisionFilter) &&
-                     !_advancedFilterInfo.FilterEnabled() &&
+                     !_advancedFilterInfo.HasFilter &&
                      string.IsNullOrEmpty(InMemAuthorFilter) &&
                      string.IsNullOrEmpty(InMemCommitterFilter) &&
                      string.IsNullOrEmpty(InMemMessageFilter));
@@ -1868,7 +1868,7 @@ namespace GitUI
             IsShowCurrentBranchOnlyChecked = AppSettings.BranchFilterEnabled && AppSettings.ShowCurrentBranchOnly;
             IsShowFilteredBranchesChecked = AppSettings.BranchFilterEnabled && !AppSettings.ShowCurrentBranchOnly;
 
-            _branchFilter = GetBranchFilter() ?? string.Empty;
+            _branchFilter = GetBranchFilter();
 
             if (!AppSettings.BranchFilterEnabled)
             {
