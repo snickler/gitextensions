@@ -1,5 +1,4 @@
 ﻿using System;
-using GitCommands;
 using GitExtUtils;
 
 namespace GitUI.UserControls.RevisionGrid
@@ -11,6 +10,7 @@ namespace GitUI.UserControls.RevisionGrid
         private string _author;
         private string _committer;
         private string _message;
+        private string _content;
         private string _fileFilter;
         private string _branchFilter;
 
@@ -54,6 +54,14 @@ namespace GitUI.UserControls.RevisionGrid
             set => _message = value ?? string.Empty;
         }
 
+        public bool ByDiffContent { get; set; }
+
+        public string DiffContent
+        {
+            get => ByDiffContent ? _content : string.Empty;
+            set => _content = value ?? string.Empty;
+        }
+
         public bool IgnoreCase { get; set; }
 
         public bool HasCommitsLimit { get; set; }
@@ -91,6 +99,64 @@ namespace GitUI.UserControls.RevisionGrid
                    ByBranchFilter;
         }
 
+        /// <summary>
+        ///  Applies the conditions from the supplied <paramref name="filter"/> only those are different from the current filter conditions.
+        /// </summary>
+        /// <param name="filter">The filter to apply.</param>
+        /// <returns><see langword="true"/> if the current filter has changed; otherwise <see langword="false"/>.</returns>
+        public bool Apply(RevisionFilter filter)
+        {
+            if (filter.FilterByAuthor)
+            {
+                if (ByAuthor && string.Equals(Author, filter.Text, StringComparison.CurrentCulture))
+                {
+                    return false;
+                }
+
+                ByAuthor = filter.FilterByAuthor;
+                Author = filter.Text;
+                return true;
+            }
+
+            if (filter.FilterByCommitter)
+            {
+                if (ByCommitter && string.Equals(Committer, filter.Text, StringComparison.CurrentCulture))
+                {
+                    return false;
+                }
+
+                ByCommitter = filter.FilterByCommitter;
+                Committer = filter.Text;
+                return true;
+            }
+
+            if (filter.FilterByCommit)
+            {
+                if (ByMessage && string.Equals(Message, filter.Text, StringComparison.CurrentCulture))
+                {
+                    return false;
+                }
+
+                ByMessage = filter.FilterByCommit;
+                Message = filter.Text;
+                return true;
+            }
+
+            if (filter.FilterByDiffContent)
+            {
+                if (ByDiffContent && string.Equals(DiffContent, filter.Text, StringComparison.CurrentCulture))
+                {
+                    return false;
+                }
+
+                ByDiffContent = filter.FilterByDiffContent;
+                DiffContent = filter.Text;
+                return true;
+            }
+
+            return false;
+        }
+
         public void DisableFilters()
         {
             ByDateFrom = false;
@@ -104,36 +170,41 @@ namespace GitUI.UserControls.RevisionGrid
 
         public string GetInMemAuthorFilter()
         {
-            return (ByAuthor && !GitVersion.Current.IsRegExStringCmdPassable(Author)) ? Author : "";
+            return ByAuthor ? Author : "";
         }
 
         public string GetInMemCommitterFilter()
         {
-            return (ByCommitter && !GitVersion.Current.IsRegExStringCmdPassable(Committer)) ? Committer : "";
+            return ByCommitter ? Committer : "";
         }
 
         public string GetInMemMessageFilter()
         {
-            return (ByMessage && !GitVersion.Current.IsRegExStringCmdPassable(Message)) ? Message : "";
+            return ByMessage ? Message : "";
         }
 
         public ArgumentString GetRevisionFilter()
         {
             ArgumentBuilder filter = new();
 
-            if (ByAuthor && GitVersion.Current.IsRegExStringCmdPassable(Author))
+            if (ByAuthor)
             {
                 filter.Add($"--author=\"{Author}\"");
             }
 
-            if (ByCommitter && GitVersion.Current.IsRegExStringCmdPassable(Committer))
+            if (ByCommitter)
             {
                 filter.Add($"--committer=\"{Committer}\"");
             }
 
-            if (ByMessage && GitVersion.Current.IsRegExStringCmdPassable(Message))
+            if (ByMessage)
             {
                 filter.Add($"--grep=\"{Message}\"");
+            }
+
+            if (ByDiffContent)
+            {
+                filter.Add($"-G\"{DiffContent}\"");
             }
 
             if (!filter.IsEmpty && IgnoreCase)
